@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:iit_app/screens/account.dart';
 import 'package:iit_app/screens/settings.dart';
 import 'package:iit_app/screens/create.dart';
-import 'package:iit_app/user_data.dart';
+import 'package:iit_app/model/user_data.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
