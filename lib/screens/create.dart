@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../model/workshop_create.dart';
+import 'package:iit_app/model/workshop_create.dart';
 import 'dart:async';
 
 class CreateScreen extends StatefulWidget {
@@ -16,12 +16,12 @@ class _CreateScreenState extends State {
     final DateTime picked = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
-        firstDate: new DateTime(2016),
-        lastDate: new DateTime(2020));
+        firstDate: new DateTime(2018),
+        lastDate: new DateTime(2022));
 
     if (picked != null && picked != DateTime.now()) {
       setState(() {
-        _workshop.date = picked.toString().substring(0, 10);
+        _workshop.date = convertDate(picked);
       });
     }
   }
@@ -34,7 +34,7 @@ class _CreateScreenState extends State {
 
     if (picked != null && picked != TimeOfDay.now()) {
       setState(() {
-        _workshop.time = picked.toString().substring(10, 15);
+        _workshop.time = converTime(picked);
       });
     }
   }
@@ -136,17 +136,26 @@ class _CreateScreenState extends State {
                               onPressed: () {
                                 final form = _formKey.currentState;
                                 if (form.validate()) {
-                                  form.save();
-                                  _workshop.save();
-                                  _showDialog(context);
+                                  if (_workshop.selectedCouncil == null)
+                                    Scaffold.of(context).showSnackBar(SnackBar(
+                                        content:
+                                            Text('Please select council')));
+                                  else if (_workshop.selectedClub == null)
+                                    Scaffold.of(context).showSnackBar(SnackBar(
+                                        content: Text('Please select club')));
+                                  else {
+                                    form.save();
+                                    _workshop.save();
+                                    Scaffold.of(context).showSnackBar(SnackBar(
+                                        content: Text('Submitting form')));
+                                    Future.delayed(
+                                        Duration(seconds: 1),
+                                        () => Navigator.of(context)
+                                            .pushNamed('/'));
+                                  }
                                 }
                               },
                               child: Text('Create'))),
                     ])))));
-  }
-
-  _showDialog(BuildContext context) {
-    Scaffold.of(context)
-        .showSnackBar(SnackBar(content: Text('Submitting form')));
   }
 }

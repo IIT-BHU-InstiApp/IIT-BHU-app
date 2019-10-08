@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:iit_app/screens/account.dart';
 import 'package:iit_app/screens/settings.dart';
 import 'package:iit_app/screens/create.dart';
+import 'package:iit_app/model/workshop_create.dart';
 import 'package:iit_app/model/user_data.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
-  HomeScreenState createState() => HomeScreenState();
+  _HomeScreenState createState() => _HomeScreenState();
 }
 
-class HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> {
   User _user = new User(2);
   Drawer getNavDrawer(BuildContext context) {
     ListTile getNavItem(var icon, String s, String routeName) {
@@ -54,7 +55,7 @@ class HomeScreenState extends State<HomeScreen> {
     String title,
     String date,
     String time,
-    String imgPath,
+    String club,
     int goingGlobal,
     User user,
   }) {
@@ -73,7 +74,8 @@ class HomeScreenState extends State<HomeScreen> {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20.0),
                     image: DecorationImage(
-                        image: AssetImage(imgPath), fit: BoxFit.cover)),
+                        image: AssetImage(Workshop.imgPath[club]),
+                        fit: BoxFit.cover)),
               ),
               // make the shade a bit deeper.
               Container(
@@ -190,126 +192,121 @@ class HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       drawer: getNavDrawer(context),
-      // appBar: AppBar(
-      //   title: Text('Home'),
-      //   leading: Builder(
-      //     builder: (context) => IconButton(
-      //       icon: new Icon(Icons.menu),
-      //       onPressed: () => Scaffold.of(context).openDrawer(),
-      //     ),
-      //   ),
-      // ),
-      body: ListView(
-        children: <Widget>[
-          Padding(
-            padding: EdgeInsets.all(15.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Icon(Icons.donut_large),
-                Stack(
-                  children: <Widget>[
-                    Container(height: 60.0, width: 60.0),
-                    Container(
-                      height: 50.0,
-                      width: 50.0,
-                      decoration: BoxDecoration(
-                          image: DecorationImage(
-                              image: AssetImage('assets/profile_test.jpg'),
-                              fit: BoxFit.cover),
-                          borderRadius: BorderRadius.circular(25.0)),
-                    ),
-                    Positioned(
-                      left: 5.0,
-                      top: 40.0,
-                      child: Container(
-                        height: 15.0,
-                        width: 15.0,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(7.5),
-                            color: Colors.green,
-                            border: Border.all(
-                                color: Colors.white,
-                                style: BorderStyle.solid,
-                                width: 1.0)),
-                      ),
-                    )
-                  ],
-                )
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 15.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  'The Official',
-                  style: TextStyle(
-                      fontFamily: 'Opensans',
-                      fontSize: 50.0,
-                      color: Color(0xFFFD6F4F)),
-                ),
-                Text(
-                  'IIT(BHU) App',
-                  style: TextStyle(
-                    fontFamily: 'Opensans',
-                    fontSize: 40.0,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(30, 50, 30, 15),
-            child: Container(
-              width: MediaQuery.of(context).size.width,
+      body: Builder(
+        builder: (context) => ListView(
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.all(15.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text('Most Popular Workshops',
-                      style: TextStyle(
-                        fontFamily: 'Opensans',
-                        fontSize: 20.0,
-                      )),
                   IconButton(
-                      icon: Icon(Icons.more_horiz, color: Colors.black),
-                      onPressed: () => print(_user.going)),
+                    icon: Icon(Icons.menu),
+                    onPressed: () => Scaffold.of(context).openDrawer(),
+                  ),
+                  Stack(
+                    children: <Widget>[
+                      Container(height: 60.0, width: 60.0),
+                      Container(
+                        height: 50.0,
+                        width: 50.0,
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                                image: AssetImage('assets/profile_test.jpg'),
+                                fit: BoxFit.cover),
+                            borderRadius: BorderRadius.circular(25.0)),
+                      ),
+                      Positioned(
+                        left: 5.0,
+                        top: 40.0,
+                        child: Container(
+                          height: 15.0,
+                          width: 15.0,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(7.5),
+                              color: Colors.green,
+                              border: Border.all(
+                                  color: Colors.white,
+                                  style: BorderStyle.solid,
+                                  width: 1.0)),
+                        ),
+                      )
+                    ],
+                  )
                 ],
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 15.0),
-            child: Container(
-              height: 300.0,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
+            Padding(
+              padding: const EdgeInsets.only(left: 15.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  _buildCard(
-                      title: 'Dev Extravaganza',
-                      date: '24th Sept',
-                      time: '12:40pm',
-                      imgPath: 'assets/COPS.png',
-                      goingGlobal: 204,
-                      user: _user),
-                  _buildCard(
-                      title: 'Intro to Arduino',
-                      date: '26th Sept',
-                      time: '6:30pm',
-                      imgPath: 'assets/Robotics.jpg',
-                      goingGlobal: 119,
-                      user: _user),
+                  Text(
+                    'The Official',
+                    style: TextStyle(
+                        fontFamily: 'Opensans',
+                        fontSize: 50.0,
+                        color: Color(0xFFFD6F4F)),
+                  ),
+                  Text(
+                    'IIT(BHU) App',
+                    style: TextStyle(
+                      fontFamily: 'Opensans',
+                      fontSize: 40.0,
+                    ),
+                  ),
                 ],
               ),
             ),
-          )
-        ],
+            Padding(
+              padding: const EdgeInsets.fromLTRB(30, 50, 30, 15),
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text('Most Popular Workshops:',
+                        style: TextStyle(
+                          fontFamily: 'Opensans',
+                          fontSize: 20.0,
+                        )),
+                    // IconButton(
+                    //     icon: Icon(Icons.more_horiz, color: Colors.black),
+                    //     onPressed: () => print(_user.going)),
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 15.0),
+              child: Container(
+                height: 300.0,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: <Widget>[
+                    _buildCard(
+                        title: 'Dev Extravaganza',
+                        date: '24th Sept',
+                        time: '12:40pm',
+                        club: 'COPS',
+                        goingGlobal: 204,
+                        user: _user),
+                    _buildCard(
+                        title: 'Intro to Arduino',
+                        date: '26th Sept',
+                        time: '6:30pm',
+                        club: 'Robotics',
+                        goingGlobal: 119,
+                        user: _user),
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
