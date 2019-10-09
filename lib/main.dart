@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iit_app/screens/account.dart';
 import 'package:iit_app/screens/home.dart';
+import 'package:iit_app/screens/loginPage.dart';
 import 'package:iit_app/screens/settings.dart';
 import 'package:iit_app/screens/create.dart';
 
@@ -11,6 +12,7 @@ void main() {
     home: HomeScreen(), // route for home is '/' implicitly
     routes: <String, WidgetBuilder>{
       // define the routes
+      LoginPage.routeName: (BuildContext context) => LoginPage(),
       SettingsScreen.routeName: (BuildContext context) => SettingsScreen(),
       AccountScreen.routeName: (BuildContext context) => AccountScreen(),
       CreateScreen.routeName: (BuildContext context) => CreateScreen(),

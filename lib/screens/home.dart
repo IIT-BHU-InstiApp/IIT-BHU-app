@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iit_app/screens/account.dart';
+import 'package:iit_app/screens/loginPage.dart';
 import 'package:iit_app/screens/settings.dart';
 import 'package:iit_app/screens/create.dart';
 import 'package:iit_app/model/workshop_create.dart';
@@ -13,7 +14,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   User _user = new User(2);
   Drawer getNavDrawer(BuildContext context) {
-    ListTile getNavItem(var icon, String s, String routeName) {
+    ListTile getNavItem(var icon, String s, String routeName,
+        {bool replacement = false}) {
       return ListTile(
         leading: Icon(icon),
         title: Text(s),
@@ -22,7 +24,10 @@ class _HomeScreenState extends State<HomeScreen> {
             // pop closes the drawer
             Navigator.of(context).pop();
             // navigate to the route
-            Navigator.of(context).pushNamed(routeName);
+            if (replacement)
+              Navigator.of(context).pushReplacementNamed(routeName);
+            else
+              Navigator.of(context).pushNamed(routeName);
           });
         },
       );
@@ -32,9 +37,10 @@ class _HomeScreenState extends State<HomeScreen> {
       child: ListView(
         children: <Widget>[
           DrawerHeader(child: Text("Header")),
+          getNavItem(Icons.arrow_right, 'Login', LoginPage.routeName),
           getNavItem(Icons.plus_one, "Create Workshop", CreateScreen.routeName),
           getNavItem(Icons.settings, "Settings", SettingsScreen.routeName),
-          getNavItem(Icons.home, "Home", "/"),
+          getNavItem(Icons.home, "Home", "/", replacement: true),
           getNavItem(Icons.account_box, "Account", AccountScreen.routeName),
           AboutListTile(
               child: Text("About"),

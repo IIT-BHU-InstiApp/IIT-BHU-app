@@ -17,6 +17,9 @@ environment:
   sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
+  firebase_auth:
+  # cloud_firestore:
+  google_sign_in: 
   flutter:
     sdk: flutter
 
@@ -45,6 +48,7 @@ flutter:
    - assets/profile_test.jpg
    - assets/COPS.png
    - assets/Robotics.jpg
+   - assets/google_logo.png
   #  - assets/workshop_sample1.jpg
   #  - images/a_dot_ham.jpeg
 
