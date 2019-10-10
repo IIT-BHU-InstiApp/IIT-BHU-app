@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:iit_app/screens/account.dart';
-import 'package:iit_app/screens/loginPage.dart';
 import 'package:iit_app/screens/settings.dart';
 import 'package:iit_app/screens/create.dart';
-import 'package:iit_app/model/workshop_create.dart';
-import 'package:iit_app/model/user_data.dart';
-import 'package:iit_app/screens/detailPage.dart';
+import 'package:iit_app/data/workshop.dart';
+import 'package:iit_app/data/user.dart';
+import 'package:iit_app/pages/detail.dart';
+import 'package:iit_app/pages/login.dart';
 
 
 class HomeScreen extends StatefulWidget {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:iit_app/model/workshop_create.dart';
+import 'package:iit_app/data/workshop.dart';
 
 class DetailPage extends StatelessWidget {
   static const String routeName = "/details";

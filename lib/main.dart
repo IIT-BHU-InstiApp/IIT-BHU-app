@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iit_app/screens/account.dart';
 import 'package:iit_app/screens/home.dart';
-import 'package:iit_app/screens/loginPage.dart';
+import 'package:iit_app/pages/login.dart';
 import 'package:iit_app/screens/settings.dart';
 import 'package:iit_app/screens/create.dart';
 

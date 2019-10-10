@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:iit_app/model/workshop_create.dart';
+import 'package:iit_app/data/workshop.dart';
+import 'package:iit_app/screens/home.dart';
 import 'dart:async';
 
 class CreateScreen extends StatefulWidget {
@@ -151,7 +152,7 @@ class _CreateScreenState extends State {
                                     Future.delayed(
                                         Duration(seconds: 1),
                                         () => Navigator.of(context)
-                                            .pushNamed('/'));
+                                            .pushNamed(HomeScreen.routeName));
                                   }
                                 }
                               },

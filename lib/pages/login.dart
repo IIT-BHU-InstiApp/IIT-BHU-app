@@ -1,7 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/material.dart';
 import 'package:iit_app/screens/home.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginPage extends StatefulWidget {
   static const String routeName = "/Login";
@@ -12,10 +12,10 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
-    String _email;
-    String _password;
+    // String _email;
+    // String _password;
 
-    GoogleSignIn googleAuth = new GoogleSignIn();
+    // GoogleSignIn googleAuth = new GoogleSignIn();
 
     return new Scaffold(
         resizeToAvoidBottomPadding: false,
