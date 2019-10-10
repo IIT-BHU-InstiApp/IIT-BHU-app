@@ -5,6 +5,8 @@ import 'package:iit_app/screens/settings.dart';
 import 'package:iit_app/screens/create.dart';
 import 'package:iit_app/model/workshop_create.dart';
 import 'package:iit_app/model/user_data.dart';
+import 'package:iit_app/screens/detailPage.dart';
+
 
 class HomeScreen extends StatefulWidget {
   static const String routeName = '/Home';
@@ -69,10 +71,16 @@ class _HomeScreenState extends State<HomeScreen> {
     return Padding(
         padding: EdgeInsets.all(10.0),
         child: InkWell(
-          // onTap: () {
-          //   Navigator.of(context)
-          //       .push(MaterialPageRoute(builder: (context) => DetailPage()));
-          // },
+          onTap: () {
+            Workshop w = new Workshop();
+            w.date = date;
+            w.title = title;
+            w.time = time;
+            w.selectedClub = club;
+            w.goingGlobal = goingGlobal;
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (context) => DetailPage(w)));
+          },
           child: Stack(
             children: <Widget>[
               Container(

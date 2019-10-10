@@ -20,6 +20,7 @@ class Workshop {
   String selectedCouncil;
   String selectedClub;
   String description;
+  int goingGlobal = 0;
   bool showGoing = true; //default value is true
 
   Workshop() {
