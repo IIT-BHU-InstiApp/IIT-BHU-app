@@ -17,8 +17,8 @@ class Workshop {
   String title;
   String date;
   String time;
-  String selectedCouncil;
-  String selectedClub;
+  String council;
+  String club;
   String description;
   int goingGlobal = 0;
   bool showGoing = true; //default value is true
@@ -31,7 +31,7 @@ class Workshop {
   save() {
     print('saving user using a web service');
     print(
-        '$selectedCouncil, $selectedClub, $title, $description, $showGoing, $date, $time');
+        '$council, $club, $title, $description, $showGoing, $date, $time');
   }
 }
 

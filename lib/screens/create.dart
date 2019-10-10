@@ -42,6 +42,7 @@ class _CreateScreenState extends State {
 
   @override
   Widget build(BuildContext context) {
+    print("CREATE build");
     return Scaffold(
         appBar: AppBar(title: Text('Create Workshop')),
         body: Container(
@@ -61,15 +62,15 @@ class _CreateScreenState extends State {
                         }).toList(),
                         onChanged: (value) {
                           setState(() {
-                            _workshop.selectedCouncil = value;
-                            _workshop.selectedClub = null;
+                            _workshop.council = value;
+                            _workshop.club = null;
                           });
                         },
-                        value: _workshop.selectedCouncil,
+                        value: _workshop.council,
                         hint: Text('Select Council'),
                       ),
                       DropdownButton<String>(
-                        items: Workshop.clubs[_workshop.selectedCouncil]
+                        items: Workshop.clubs[_workshop.council]
                             .map((String dropDownStringItem) {
                           return DropdownMenuItem<String>(
                             value: dropDownStringItem,
@@ -78,10 +79,10 @@ class _CreateScreenState extends State {
                         }).toList(),
                         onChanged: (value) {
                           setState(() {
-                            _workshop.selectedClub = value;
+                            _workshop.club = value;
                           });
                         },
-                        value: _workshop.selectedClub,
+                        value: _workshop.club,
                         hint: Text('Select Club'),
                       ),
                       TextFormField(
@@ -137,11 +138,11 @@ class _CreateScreenState extends State {
                               onPressed: () {
                                 final form = _formKey.currentState;
                                 if (form.validate()) {
-                                  if (_workshop.selectedCouncil == null)
+                                  if (_workshop.council == null)
                                     Scaffold.of(context).showSnackBar(SnackBar(
                                         content:
                                             Text('Please select council')));
-                                  else if (_workshop.selectedClub == null)
+                                  else if (_workshop.club == null)
                                     Scaffold.of(context).showSnackBar(SnackBar(
                                         content: Text('Please select club')));
                                   else {

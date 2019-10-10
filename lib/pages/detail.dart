@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:iit_app/data/workshop.dart';
 
 class DetailPage extends StatelessWidget {
-  static const String routeName = "/details";
   Workshop workshop;
   DetailPage(Workshop w) {
     workshop = w;
@@ -56,7 +55,7 @@ class DetailPage extends StatelessWidget {
                 bottomLeft: Radius.circular(35.0),
                 bottomRight: Radius.circular(35.0)),
             image: DecorationImage(
-                image: AssetImage(Workshop.imgPath[workshop.selectedClub]), fit: BoxFit.cover)
+                image: AssetImage(Workshop.imgPath[workshop.club]), fit: BoxFit.cover)
           ),
         ),
         Positioned(
@@ -180,7 +179,7 @@ class DetailPage extends StatelessWidget {
                   child: Container(
                     width: 250.0,
                     child: Text(
-                        'Here Goes the description',
+                        workshop.description,
                         style: TextStyle(
                             color: Color(0xFF6A6A6A),
                             fontFamily: 'Opensans',

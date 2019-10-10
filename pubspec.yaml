@@ -19,7 +19,7 @@ environment:
 dependencies:
   firebase_auth:
   # cloud_firestore:
-  # firebase_storage:
+  firebase_storage:
   google_sign_in: 
   # image_picker:
   flutter:

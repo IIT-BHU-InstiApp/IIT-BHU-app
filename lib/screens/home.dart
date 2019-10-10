@@ -7,7 +7,6 @@ import 'package:iit_app/data/user.dart';
 import 'package:iit_app/pages/detail.dart';
 import 'package:iit_app/pages/login.dart';
 
-
 class HomeScreen extends StatefulWidget {
   static const String routeName = '/Home';
   @override
@@ -23,15 +22,13 @@ class _HomeScreenState extends State<HomeScreen> {
         leading: Icon(icon),
         title: Text(s),
         onTap: () {
-          setState(() {
-            // pop closes the drawer
-            Navigator.of(context).pop();
-            // navigate to the route
-            if (replacement)
-              Navigator.of(context).pushReplacementNamed(routeName);
-            else
-              Navigator.of(context).pushNamed(routeName);
-          });
+          // pop closes the drawer
+          Navigator.of(context).pop();
+          // navigate to the route
+          if (replacement)
+            Navigator.of(context).pushReplacementNamed(routeName);
+          else
+            Navigator.of(context).pushNamed(routeName);
         },
       );
     }
@@ -42,7 +39,8 @@ class _HomeScreenState extends State<HomeScreen> {
           DrawerHeader(child: Text("Header")),
           getNavItem(Icons.plus_one, "Create Workshop", CreateScreen.routeName),
           getNavItem(Icons.settings, "Settings", SettingsScreen.routeName),
-          getNavItem(Icons.home, "Home", HomeScreen.routeName, replacement: true),
+          getNavItem(Icons.home, "Home", HomeScreen.routeName,
+              replacement: true),
           getNavItem(Icons.account_box, "Account", AccountScreen.routeName),
           getNavItem(Icons.exit_to_app, 'Logout', LoginPage.routeName),
           AboutListTile(
@@ -61,23 +59,13 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   _buildCard({
-    String title,
-    String date,
-    String time,
-    String club,
-    int goingGlobal,
+    Workshop w,
     User user,
   }) {
     return Padding(
         padding: EdgeInsets.all(10.0),
         child: InkWell(
           onTap: () {
-            Workshop w = new Workshop();
-            w.date = date;
-            w.title = title;
-            w.time = time;
-            w.selectedClub = club;
-            w.goingGlobal = goingGlobal;
             Navigator.of(context)
                 .push(MaterialPageRoute(builder: (context) => DetailPage(w)));
           },
@@ -89,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20.0),
                     image: DecorationImage(
-                        image: AssetImage(Workshop.imgPath[club]),
+                        image: AssetImage(Workshop.imgPath[w.club]),
                         fit: BoxFit.cover)),
               ),
               // make the shade a bit deeper.
@@ -122,7 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     color: Colors.white, size: 12.0),
                                 SizedBox(width: 4.0),
                                 Text(
-                                  date,
+                                  w.date,
                                   style: TextStyle(color: Colors.white),
                                 )
                               ],
@@ -147,7 +135,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     color: Colors.white, size: 12.0),
                                 SizedBox(width: 4.0),
                                 Text(
-                                  time,
+                                  w.time,
                                   style: TextStyle(color: Colors.white),
                                 )
                               ],
@@ -162,7 +150,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 left: 10.0,
                 child: Container(
                   width: 150.0,
-                  child: Text(title,
+                  child: Text(w.title,
                       style: TextStyle(
                           fontFamily: 'Opensans',
                           fontSize: 17.0,
@@ -173,33 +161,42 @@ class _HomeScreenState extends State<HomeScreen> {
               Positioned(
                   top: 230.0,
                   left: 10.0,
-                  child: Row(children: [
-                    Text('People going',
-                        style: TextStyle(
-                            fontFamily: 'Opensans',
-                            fontSize: 13.0,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w100)),
-                    SizedBox(width: 30.0),
-                    IconButton(
-                      padding: EdgeInsets.fromLTRB(13.0, 0, 0, 0),
-                      icon: Icon(
-                        Icons.people,
-                        size: 30,
-                      ),
-                      color: user.going[title] ? Colors.blue : Colors.white,
-                      onPressed: () {
-                        setState(() {
-                          user.going[title] = !user.going[title];
-                          print(user.going[title]);
-                        });
-                      },
-                    ),
-                    Text(
-                      goingGlobal.toString(),
-                      style: TextStyle(color: Colors.white54, fontSize: 10.0),
-                    ),
-                  ]))
+                  child: w.showGoing
+                      ? Row(children: [
+                          Text('People going',
+                              style: TextStyle(
+                                  fontFamily: 'Opensans',
+                                  fontSize: 13.0,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w100)),
+                          SizedBox(width: 30.0),
+                          IconButton(
+                            padding: EdgeInsets.fromLTRB(13.0, 0, 0, 0),
+                            icon: Icon(
+                              Icons.people,
+                              size: 30,
+                            ),
+                            color: user.going[w.title]
+                                ? Colors.blue
+                                : Colors.white,
+                            onPressed: () {
+                              setState(() {
+                                user.going[w.title] = !user.going[w.title];
+                                print(user.going[w.title]);
+                              });
+                            },
+                          ),
+                          Text(
+                            w.goingGlobal.toString(),
+                            style: TextStyle(
+                                color: Colors.white54, fontSize: 10.0),
+                          ),
+                        ])
+                      : Text(
+                          'Be present!',
+                          style:
+                              TextStyle(color: Colors.white54, fontSize: 10.0),
+                        ))
             ],
           ),
         ));
@@ -207,6 +204,26 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Get User Details (for I am going or not?)
+    // Get all Workshop JSONS
+    // for every json: convert json to workshop object ; List<Widget> cardList = List.append(_buildCard(workshop))
+    var w1 = Workshop();
+    w1.title = 'Dev Extravaganza';
+    w1.date = '24th Sept';
+    w1.time = '12:40pm';
+    w1.club = 'COPS';
+    w1.goingGlobal = 204;
+    w1.showGoing = true;
+    w1.description = 'Description of the Dev Workshop';
+    var w2 = Workshop();
+    w2.title = 'Intro to Arduino';
+    w2.date = '26th Sept';
+    w2.time = '6:00pm';
+    w2.club = 'Robotics';
+    w2.goingGlobal = 119;
+    w2.showGoing = false;
+    w2.description = 'Description of the Robotics Workshop';
+
     return Scaffold(
       drawer: getNavDrawer(context),
       body: Builder(
@@ -302,20 +319,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: ListView(
                   scrollDirection: Axis.horizontal,
                   children: <Widget>[
-                    _buildCard(
-                        title: 'Dev Extravaganza',
-                        date: '24th Sept',
-                        time: '12:40pm',
-                        club: 'COPS',
-                        goingGlobal: 204,
-                        user: _user),
-                    _buildCard(
-                        title: 'Intro to Arduino',
-                        date: '26th Sept',
-                        time: '6:30pm',
-                        club: 'Robotics',
-                        goingGlobal: 119,
-                        user: _user),
+                    _buildCard(w: w1, user: _user),
+                    _buildCard(w: w2, user: _user),
                   ],
                 ),
               ),
