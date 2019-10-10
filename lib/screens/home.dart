@@ -214,12 +214,14 @@ class _HomeScreenState extends State<HomeScreen> {
     w1.club = 'COPS';
     w1.goingGlobal = 204;
     w1.showGoing = true;
+    w1.council = 'SNTC';
     w1.description = 'Description of the Dev Workshop';
     var w2 = Workshop();
     w2.title = 'Intro to Arduino';
     w2.date = '26th Sept';
     w2.time = '6:00pm';
     w2.club = 'Robotics';
+    w2.council = 'SNTC';
     w2.goingGlobal = 119;
     w2.showGoing = false;
     w2.description = 'Description of the Robotics Workshop';

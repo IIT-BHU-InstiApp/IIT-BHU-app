@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iit_app/data/workshop.dart';
+import 'package:iit_app/screens/home.dart';
 
 class DetailPage extends StatelessWidget {
   Workshop workshop;
@@ -197,7 +198,7 @@ class DetailPage extends StatelessWidget {
               children: <Widget>[
                 Row(
                   children: <Widget>[
-                    Icon(Icons.arrow_back_ios, color: Colors.white, size: 15.0),
+                    IconButton(icon: Icon(Icons.arrow_back_ios, color: Colors.lightGreen, size: 15.0), onPressed: () => Navigator.of(context).pushReplacementNamed(HomeScreen.routeName),),
                     SizedBox(width: 20.0),
                     Container(
                         height: 40.0,
@@ -212,7 +213,7 @@ class DetailPage extends StatelessWidget {
                               Icon(Icons.star, color: Colors.white, size: 12.0),
                               SizedBox(width: 5.0),
                               Text(
-                                '4.3',
+                                workshop.council,
                                 style: TextStyle(color: Colors.white),
                               )
                             ],
