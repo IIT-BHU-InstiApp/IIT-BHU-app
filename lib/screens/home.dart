@@ -7,6 +7,7 @@ import 'package:iit_app/model/workshop_create.dart';
 import 'package:iit_app/model/user_data.dart';
 
 class HomeScreen extends StatefulWidget {
+  static const String routeName = '/Home';
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -37,11 +38,11 @@ class _HomeScreenState extends State<HomeScreen> {
       child: ListView(
         children: <Widget>[
           DrawerHeader(child: Text("Header")),
-          getNavItem(Icons.arrow_right, 'Login', LoginPage.routeName),
           getNavItem(Icons.plus_one, "Create Workshop", CreateScreen.routeName),
           getNavItem(Icons.settings, "Settings", SettingsScreen.routeName),
-          getNavItem(Icons.home, "Home", "/", replacement: true),
+          getNavItem(Icons.home, "Home", HomeScreen.routeName, replacement: true),
           getNavItem(Icons.account_box, "Account", AccountScreen.routeName),
+          getNavItem(Icons.exit_to_app, 'Logout', LoginPage.routeName),
           AboutListTile(
               child: Text("About"),
               applicationName: "Gymkhana IIT(BHU)",

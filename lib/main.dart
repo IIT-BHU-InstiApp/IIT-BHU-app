@@ -9,9 +9,10 @@ import 'package:iit_app/screens/create.dart';
 void main() {
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
-    home: HomeScreen(), // route for home is '/' implicitly
+    home: LoginPage(), // route for home is '/' implicitly
     routes: <String, WidgetBuilder>{
       // define the routes
+      HomeScreen.routeName: (BuildContext context) => HomeScreen(),
       LoginPage.routeName: (BuildContext context) => LoginPage(),
       SettingsScreen.routeName: (BuildContext context) => SettingsScreen(),
       AccountScreen.routeName: (BuildContext context) => AccountScreen(),

@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:iit_app/screens/home.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginPage extends StatefulWidget {
@@ -29,7 +30,7 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(height: 15),
             OutlineButton(
               splashColor: Colors.grey,
-              onPressed: () {},
+              onPressed: () => Navigator.of(context).pushReplacementNamed(HomeScreen.routeName),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(40)),
               highlightElevation: 0,
