@@ -19,7 +19,9 @@ environment:
 dependencies:
   firebase_auth:
   # cloud_firestore:
+  # firebase_storage:
   google_sign_in: 
+  # image_picker:
   flutter:
     sdk: flutter
 
@@ -30,7 +32,12 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: "^0.7.0"
 
+flutter_icons:
+  image_path: "assets/App_icon.png" 
+  android: true
+  ios: true
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
