@@ -17,11 +17,11 @@ environment:
   sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
-  firebase_auth:
-  # cloud_firestore:
-  firebase_storage:
-  google_sign_in: 
-  # image_picker:
+  # firebase_auth:
+  cloud_firestore: ^0.8.2+3 
+  # firebase_storage:
+  # google_sign_in: 
+  image_picker: ^0.4.12+1
   flutter:
     sdk: flutter
 

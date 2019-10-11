@@ -3,10 +3,8 @@ import 'package:iit_app/data/workshop.dart';
 import 'package:iit_app/screens/home.dart';
 
 class DetailPage extends StatelessWidget {
-  Workshop workshop;
-  DetailPage(Workshop w) {
-    workshop = w;
-  }
+  final Workshop workshop;
+  DetailPage(this.workshop);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
