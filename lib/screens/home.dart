@@ -257,7 +257,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         width: 50.0,
                         decoration: BoxDecoration(
                             image: DecorationImage(
-                                image: AssetImage('assets/profile_test.jpg'),
+                                image: googleSignIn.currentUser == null
+                                    ? AssetImage('assets/profile_test.jpg')
+                                    : NetworkImage(profilePhoto),
                                 fit: BoxFit.cover),
                             borderRadius: BorderRadius.circular(25.0)),
                       ),
