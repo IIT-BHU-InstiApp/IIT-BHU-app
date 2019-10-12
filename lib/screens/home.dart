@@ -7,6 +7,7 @@ import 'package:iit_app/data/workshop.dart';
 import 'package:iit_app/pages/detail.dart';
 import 'package:iit_app/pages/login.dart';
 import 'package:iit_app/services/crud.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String routeName = '/Home';
@@ -60,8 +61,20 @@ class _HomeScreenState extends State<HomeScreen> {
               applicationVersion: "v1.0.0",
               applicationIcon: Icon(Icons.business),
               aboutBoxChildren: <Widget>[
-                Text('Front End: @nishantkr18'),
-                Text('Back End: @nishantwrp, @krashish8')
+                Text('Front End'),
+                InkWell(
+                  child: new Text('@nishantkr18'),
+                  onTap: () => launch('https://github.com/nishantkr18'),
+                ),
+                Text('Back End:'),
+                InkWell(
+                  child: new Text('@nishantwrp'),
+                  onTap: () => launch('https://github.com/nishantwrp'),
+                ),
+                InkWell(
+                  child: new Text('@krashish8'),
+                  onTap: () => launch('https://github.com/krashish8'),
+                ),
               ],
               icon: Icon(Icons.info)),
         ],
