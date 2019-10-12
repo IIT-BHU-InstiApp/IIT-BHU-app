@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:iit_app/screens/account.dart';
 import 'package:iit_app/screens/settings.dart';
@@ -6,6 +7,7 @@ import 'package:iit_app/data/workshop.dart';
 import 'package:iit_app/data/user.dart';
 import 'package:iit_app/pages/detail.dart';
 import 'package:iit_app/pages/login.dart';
+import 'package:iit_app/services/crud.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String routeName = '/Home';
@@ -15,6 +17,9 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   User _user = new User(2);
+  CrudMethods crudObj = new CrudMethods();
+  QuerySnapshot workshops;
+
   Drawer getNavDrawer(BuildContext context) {
     ListTile getNavItem(var icon, String s, String routeName,
         {bool replacement = false}) {
@@ -211,28 +216,20 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
+  void initState() {
+    crudObj.getData().then((results) {
+      setState(() {
+        workshops = results;
+      });
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     // Get User Details (for I am going or not?)
     // Get all Workshop JSONS
     // for every json: convert json to workshop object ; List<Widget> cardList = List.append(_buildCard(workshop))
-    var w1 = Workshop();
-    w1.title = 'Dev Extravaganza';
-    w1.date = '24th Sept';
-    w1.time = '12:40pm';
-    w1.club = 'COPS';
-    w1.goingGlobal = 204;
-    w1.showGoing = true;
-    w1.council = 'SNTC';
-    w1.description = 'Description of the Dev Workshop';
-    var w2 = Workshop();
-    w2.title = 'Intro to Arduino';
-    w2.date = '26th Sept';
-    w2.time = '6:00pm';
-    w2.club = 'Robotics';
-    w2.council = 'SNTC';
-    w2.goingGlobal = 119;
-    w2.showGoing = false;
-    w2.description = 'Description of the Robotics Workshop';
 
     return Scaffold(
       drawer: getNavDrawer(context),
@@ -328,13 +325,19 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: const EdgeInsets.only(left: 15.0),
               child: Container(
                 height: 300.0,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: <Widget>[
-                    _buildCard(w: w1, user: _user),
-                    _buildCard(w: w2, user: _user),
-                  ],
-                ),
+                child: (workshops != null)
+                    ? ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: workshops.documents.length,
+                        itemBuilder: (context, i) {
+                          print(workshops.documents[i].data['clubs']);
+                          return _buildCard(
+                              w: Workshop.createWorkshopFromMap(
+                                  workshops.documents[i].data),
+                              user: _user);
+                        },
+                      )
+                    : Text('Loading'),
               ),
             )
           ],

@@ -9,7 +9,6 @@ class LoginPage extends StatefulWidget {
   _LoginPageState createState() => new _LoginPageState();
 }
 
-final FirebaseAuth _auth = FirebaseAuth.instance;
 final GoogleSignIn googleSignIn = GoogleSignIn();
 String profilePhoto;
 
@@ -25,12 +24,12 @@ Future<String> signInWithGoogle() async {
     idToken: googleSignInAuthentication.idToken,
   );
 
-  final FirebaseUser user = (await _auth.signInWithCredential(credential)).user;
+  final FirebaseUser user = (await FirebaseAuth.instance.signInWithCredential(credential)).user;
 
   assert(!user.isAnonymous);
   assert(await user.getIdToken() != null);
 
-  final FirebaseUser currentUser = await _auth.currentUser();
+  final FirebaseUser currentUser = await FirebaseAuth.instance.currentUser();
   assert(user.uid == currentUser.uid);
 
   return 'signInWithGoogle succeeded: $user';

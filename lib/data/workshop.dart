@@ -28,10 +28,30 @@ class Workshop {
     time = converTime(TimeOfDay.now());
   }
 
-  save() {
-    print('saving user using a web service');
-    print(
-        '$council, $club, $title, $description, $showGoing, $date, $time');
+  Map<String, dynamic> createMap() {
+    return {
+      'title': title,
+      'date': date,
+      'time': time,
+      'council': council,
+      'club': club,
+      'description': description,
+      'goingGlobal': goingGlobal,
+      'showGoing': showGoing
+    };
+  }
+
+  static Workshop createWorkshopFromMap(Map<String, dynamic> map) {
+    Workshop w = new Workshop();
+    w.club = map['club'];
+    w.council = map['council'];
+    w.title = map['title'];
+    w.date = map['date'];
+    w.time = map['time'];
+    w.description = map['description'];
+    w.goingGlobal = map['goingGlobal'];
+    w.showGoing = map['showGoing'];
+    return w;
   }
 }
 

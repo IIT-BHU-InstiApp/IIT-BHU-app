@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:iit_app/data/workshop.dart';
 import 'package:iit_app/screens/home.dart';
 import 'dart:async';
+import 'package:iit_app/services/crud.dart';
 
 class CreateScreen extends StatefulWidget {
   static const String routeName = "/Create";
@@ -12,6 +13,8 @@ class CreateScreen extends StatefulWidget {
 class _CreateScreenState extends State {
   final _formKey = GlobalKey<FormState>();
   final _workshop = Workshop();
+
+  CrudMethods crudObj = new CrudMethods();
 
   Future<Null> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
@@ -42,7 +45,6 @@ class _CreateScreenState extends State {
 
   @override
   Widget build(BuildContext context) {
-    print("CREATE build");
     return Scaffold(
         appBar: AppBar(title: Text('Create Workshop')),
         body: Container(
@@ -147,13 +149,16 @@ class _CreateScreenState extends State {
                                         content: Text('Please select club')));
                                   else {
                                     form.save();
-                                    _workshop.save();
                                     Scaffold.of(context).showSnackBar(SnackBar(
                                         content: Text('Submitting form')));
-                                    Future.delayed(
-                                        Duration(seconds: 1),
-                                        () => Navigator.of(context)
-                                            .pushNamed(HomeScreen.routeName));
+                                    crudObj
+                                        .addData(_workshop.createMap())
+                                        .then((result) {
+                                      Navigator.of(context)
+                                          .pushNamed(HomeScreen.routeName);
+                                    }).catchError((e) {
+                                      print(e);
+                                    });
                                   }
                                 }
                               },
