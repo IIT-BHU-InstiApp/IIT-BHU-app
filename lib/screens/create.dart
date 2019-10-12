@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:iit_app/data/workshop.dart';
-import 'package:iit_app/screens/home.dart';
 import 'dart:async';
 import 'package:iit_app/services/crud.dart';
 

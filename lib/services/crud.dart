@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class CrudMethods {
-  bool isLoggedIn() {
+  static bool isLoggedIn() {
     if (FirebaseAuth.instance.currentUser() != null)
       return true;
     else

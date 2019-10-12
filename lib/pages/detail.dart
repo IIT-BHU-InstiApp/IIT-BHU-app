@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iit_app/data/workshop.dart';
-import 'package:iit_app/screens/home.dart';
+import 'package:iit_app/pages/login.dart';
 
 class DetailPage extends StatelessWidget {
   final Workshop workshop;
@@ -156,7 +156,9 @@ class DetailPage extends StatelessWidget {
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20.0),
                               image: DecorationImage(
-                                  image: AssetImage('assets/profile_test.jpg'),
+                                  image: googleSignIn.currentUser == null
+                                      ? AssetImage('assets/profile_test.jpg')
+                                      : NetworkImage(profilePhoto),
                                   fit: BoxFit.cover)),
                         ),
                         Positioned(
