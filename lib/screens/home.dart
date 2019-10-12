@@ -42,7 +42,15 @@ class _HomeScreenState extends State<HomeScreen> {
           getNavItem(Icons.home, "Home", HomeScreen.routeName,
               replacement: true),
           getNavItem(Icons.account_box, "Account", AccountScreen.routeName),
-          getNavItem(Icons.exit_to_app, 'Logout', LoginPage.routeName),
+          ListTile(
+            leading: Icon(Icons.exit_to_app),
+            title: Text('Log Out'),
+            onTap: () {
+              Navigator.of(context).pop();
+              signOutGoogle();
+              Navigator.of(context).pushReplacementNamed(LoginPage.routeName);
+            },
+          ),
           AboutListTile(
               child: Text("About"),
               applicationName: "Gymkhana IIT(BHU)",
