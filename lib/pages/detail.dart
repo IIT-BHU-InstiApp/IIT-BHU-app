@@ -2,16 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:iit_app/data/workshop.dart';
 import 'package:iit_app/pages/login.dart';
 
-class DetailPage extends StatelessWidget {
+class DetailPage extends StatefulWidget {
   final Workshop workshop;
   DetailPage(this.workshop);
+  @override
+  _DetailPage createState() => _DetailPage(workshop);
+}
+
+class _DetailPage extends State<DetailPage> {
+  final Workshop workshop;
+  _DetailPage(this.workshop);
+  bool going = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(children: [
         Container(
           height: MediaQuery.of(context).size.height,
-          color: Colors.green,
+          color: going ? Colors.blue : Colors.green,
         ),
         Positioned(
           bottom: 18.0,
@@ -33,7 +41,11 @@ class DetailPage extends StatelessWidget {
                       icon: Icon(Icons.people),
                       color: Colors.white,
                       iconSize: 30.0,
-                      onPressed: () {},
+                      onPressed: () {
+                        setState(() {
+                          going = !going;
+                        });
+                      },
                     ),
                   ],
                 ),

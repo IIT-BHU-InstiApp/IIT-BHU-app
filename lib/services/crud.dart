@@ -17,7 +17,7 @@ class CrudMethods {
       //     .catchError((e) => print(e));
       Firestore.instance.runTransaction((Transaction crudTransaction) async {
         CollectionReference reference =
-            await Firestore.instance.collection('workshop');
+            Firestore.instance.collection('workshop');
         reference.add(workshopData);
       });
     } else
@@ -25,6 +25,6 @@ class CrudMethods {
   }
 
   getData() async {
-    return await Firestore.instance.collection('workshop').getDocuments();
+    return Firestore.instance.collection('workshop').snapshots();
   }
 }

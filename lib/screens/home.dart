@@ -16,7 +16,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   CrudMethods crudObj = new CrudMethods();
-  QuerySnapshot workshops;
+  Stream workshops;
 
   Drawer getNavDrawer(BuildContext context) {
     ListTile getNavItem(var icon, String s, String routeName,
@@ -69,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-_buildCard({Workshop w}) {
+  _buildCard({Workshop w}) {
     return Padding(
         padding: EdgeInsets.all(10.0),
         child: InkWell(
@@ -321,13 +321,18 @@ _buildCard({Workshop w}) {
               child: Container(
                 height: 300.0,
                 child: (workshops != null)
-                    ? ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: workshops.documents.length,
-                        itemBuilder: (context, i) {
-                          return _buildCard(
-                              w: Workshop.createWorkshopFromMap(
-                                  workshops.documents[i].data));
+                    ? StreamBuilder(
+                        stream: workshops,
+                        builder: (context, snapshot) {
+                          return ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: snapshot.data.documents.length,
+                            itemBuilder: (context, i) {
+                              return _buildCard(
+                                  w: Workshop.createWorkshopFromMap(
+                                      snapshot.data.documents[i].data));
+                            },
+                          );
                         },
                       )
                     : Text('Loading'),
