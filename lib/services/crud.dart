@@ -10,12 +10,17 @@ class CrudMethods {
   }
 
   Future<void> addData(workshopData) async {
-    if (isLoggedIn())
-      Firestore.instance
-          .collection('workshop')
-          .add(workshopData)
-          .catchError((e) => print(e));
-    else
+    if (isLoggedIn()) {
+      // Firestore.instance
+      //     .collection('workshop')
+      //     .add(workshopData)
+      //     .catchError((e) => print(e));
+      Firestore.instance.runTransaction((Transaction crudTransaction) async {
+        CollectionReference reference =
+            await Firestore.instance.collection('workshop');
+        reference.add(workshopData);
+      });
+    } else
       print('You need to be logged in');
   }
 

@@ -69,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  _buildCard({Workshop w}) {
+_buildCard({Workshop w}) {
     return Padding(
         padding: EdgeInsets.all(10.0),
         child: InkWell(
