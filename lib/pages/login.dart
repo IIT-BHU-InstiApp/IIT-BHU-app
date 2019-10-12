@@ -1,5 +1,5 @@
-// import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:google_sign_in/google_sign_in.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/material.dart';
 import 'package:iit_app/screens/home.dart';
 
@@ -9,14 +9,40 @@ class LoginPage extends StatefulWidget {
   _LoginPageState createState() => new _LoginPageState();
 }
 
+final FirebaseAuth _auth = FirebaseAuth.instance;
+final GoogleSignIn googleSignIn = GoogleSignIn();
+
+Future<String> signInWithGoogle() async {
+  final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
+  final GoogleSignInAuthentication googleSignInAuthentication =
+      await googleSignInAccount.authentication;
+
+  final AuthCredential credential = GoogleAuthProvider.getCredential(
+    accessToken: googleSignInAuthentication.accessToken,
+    idToken: googleSignInAuthentication.idToken,
+  );
+
+  final FirebaseUser user = await _auth.signInWithCredential(credential);
+
+  assert(!user.isAnonymous);
+  assert(await user.getIdToken() != null);
+
+  final FirebaseUser currentUser = await _auth.currentUser();
+  assert(user.uid == currentUser.uid);
+
+  return 'signInWithGoogle succeeded: $user';
+}
+
+void signOutGoogle() async {
+  await googleSignIn.signOut();
+
+  print("User Sign Out");
+}
+
+
 class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
-    // String _email;
-    // String _password;
-
-    // GoogleSignIn googleAuth = new GoogleSignIn();
-
     return new Scaffold(
         resizeToAvoidBottomPadding: false,
         body: ListView(
@@ -30,7 +56,12 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(height: 15),
             OutlineButton(
               splashColor: Colors.grey,
-              onPressed: () => Navigator.of(context).pushReplacementNamed(HomeScreen.routeName),
+              onPressed: () {
+                signInWithGoogle().whenComplete(() {
+                  Navigator.of(context)
+                      .pushReplacementNamed(HomeScreen.routeName);
+                });
+              },
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(40)),
               highlightElevation: 0,
@@ -66,20 +97,6 @@ class _LoginPageState extends State<LoginPage> {
                   'Login Using Institute ID.',
                   style: TextStyle(fontFamily: 'Montserrat'),
                 ),
-                // SizedBox(width: 5.0),
-                // InkWell(
-                //   // onTap: () {
-                //   //   Navigator.of(context).pushNamed('/signup');
-                //   // },
-                //   child: Text(
-                //     'Register',
-                //     style: TextStyle(
-                //         color: Colors.green,
-                //         fontFamily: 'Montserrat',
-                //         fontWeight: FontWeight.bold,
-                //         decoration: TextDecoration.underline),
-                //   ),
-                // )
               ],
             )
           ],
