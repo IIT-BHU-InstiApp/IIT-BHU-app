@@ -4,7 +4,6 @@ import 'package:iit_app/screens/account.dart';
 import 'package:iit_app/screens/settings.dart';
 import 'package:iit_app/screens/create.dart';
 import 'package:iit_app/data/workshop.dart';
-import 'package:iit_app/data/user.dart';
 import 'package:iit_app/pages/detail.dart';
 import 'package:iit_app/pages/login.dart';
 import 'package:iit_app/services/crud.dart';
@@ -16,7 +15,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  User _user = new User(2);
   CrudMethods crudObj = new CrudMethods();
   QuerySnapshot workshops;
 
@@ -71,10 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  _buildCard({
-    Workshop w,
-    User user,
-  }) {
+  _buildCard({Workshop w}) {
     return Padding(
         padding: EdgeInsets.all(10.0),
         child: InkWell(
@@ -189,13 +184,13 @@ class _HomeScreenState extends State<HomeScreen> {
                               Icons.people,
                               size: 30,
                             ),
-                            color: user.going[w.title]
-                                ? Colors.blue
-                                : Colors.white,
+                            // color: user.going[w.title]
+                            //     ? Colors.blue
+                            //     : Colors.white,
                             onPressed: () {
                               setState(() {
-                                user.going[w.title] = !user.going[w.title];
-                                print(user.going[w.title]);
+                                // user.going[w.title] = !user.going[w.title];
+                                // print(user.going[w.title]);
                               });
                             },
                           ),
@@ -316,7 +311,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         )),
                     // IconButton(
                     //     icon: Icon(Icons.more_horiz, color: Colors.black),
-                    //     onPressed: () => print(_user.going)),
+                    //     onPressed: () {}),
                   ],
                 ),
               ),
@@ -330,11 +325,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         scrollDirection: Axis.horizontal,
                         itemCount: workshops.documents.length,
                         itemBuilder: (context, i) {
-                          print(workshops.documents[i].data['clubs']);
                           return _buildCard(
                               w: Workshop.createWorkshopFromMap(
-                                  workshops.documents[i].data),
-                              user: _user);
+                                  workshops.documents[i].data));
                         },
                       )
                     : Text('Loading'),

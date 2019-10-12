@@ -50,12 +50,12 @@ class DetailPage extends StatelessWidget {
         Container(
           height: MediaQuery.of(context).size.height - 310.0,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(35.0),
-                bottomRight: Radius.circular(35.0)),
-            image: DecorationImage(
-                image: AssetImage(Workshop.imgPath[workshop.club]), fit: BoxFit.cover)
-          ),
+              borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(35.0),
+                  bottomRight: Radius.circular(35.0)),
+              image: DecorationImage(
+                  image: AssetImage(Workshop.imgPath[workshop.club]),
+                  fit: BoxFit.cover)),
         ),
         Positioned(
           top: MediaQuery.of(context).size.height - 300.0,
@@ -76,7 +76,9 @@ class DetailPage extends StatelessWidget {
                             children: <Widget>[
                               Icon(Icons.date_range,
                                   size: 12.0, color: Colors.grey),
-                              SizedBox(width: 5,),
+                              SizedBox(
+                                width: 5,
+                              ),
                               Text(
                                 workshop.date,
                                 style: TextStyle(
@@ -86,12 +88,16 @@ class DetailPage extends StatelessWidget {
                               )
                             ],
                           ),
-                          SizedBox(height: 2.5,),
+                          SizedBox(
+                            height: 2.5,
+                          ),
                           Row(
                             children: <Widget>[
                               Icon(Icons.timelapse,
                                   size: 12.0, color: Colors.grey),
-                              SizedBox(width: 5,),
+                              SizedBox(
+                                width: 5,
+                              ),
                               Text(
                                 workshop.time,
                                 style: TextStyle(
@@ -177,8 +183,7 @@ class DetailPage extends StatelessWidget {
                   padding: EdgeInsets.only(top: 15.0, left: 15.0),
                   child: Container(
                     width: 250.0,
-                    child: Text(
-                        workshop.description,
+                    child: Text(workshop.description,
                         style: TextStyle(
                             color: Color(0xFF6A6A6A),
                             fontFamily: 'Opensans',
@@ -196,7 +201,11 @@ class DetailPage extends StatelessWidget {
               children: <Widget>[
                 Row(
                   children: <Widget>[
-                    IconButton(icon: Icon(Icons.arrow_back_ios, color: Colors.lightGreen, size: 15.0), onPressed: () => Navigator.of(context).pushReplacementNamed(HomeScreen.routeName),),
+                    IconButton(
+                      icon: Icon(Icons.arrow_back_ios,
+                          color: Colors.lightGreen, size: 15.0),
+                      onPressed: () => Navigator.pop(context),
+                    ),
                     SizedBox(width: 20.0),
                     Container(
                         height: 40.0,

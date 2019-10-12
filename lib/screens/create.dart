@@ -154,8 +154,7 @@ class _CreateScreenState extends State {
                                     crudObj
                                         .addData(_workshop.createMap())
                                         .then((result) {
-                                      Navigator.of(context)
-                                          .pushNamed(HomeScreen.routeName);
+                                      Navigator.pop(context);
                                     }).catchError((e) {
                                       print(e);
                                     });

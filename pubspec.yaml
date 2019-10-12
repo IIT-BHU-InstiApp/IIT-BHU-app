@@ -49,6 +49,14 @@ flutter:
    - assets/COPS.png
    - assets/Robotics.jpg
    - assets/google_logo.png
+   - assets/AMC.png
+   - assets/Astro.jpeg
+   - assets/Biz.jpeg
+   - assets/CSI.png
+   - assets/google_logo.png
+   - assets/iitbhu.jpeg
+   - assets/SAE.jpg
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
