@@ -25,6 +25,8 @@ samples, guidance on mobile development, and a full API reference.
 - [ ] show proper loading effect in workshop cards.
 - [ ] add location option in workshop create page.
 - [ ] add previous workshops tab to view past workshops
+- [ ] all pervious workshops of the same series should be linked so that a person can easily navigate to all previous workshops of the series.
+- [ ] include a timer for every workshop in the workshop card view.
 - [ ] add image_picker and use in workshop create page.
 - [ ] add delete functionality of user created workshops in Account screen.
 - [ ] show id admin or not in the Account screen.
