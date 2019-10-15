@@ -19,6 +19,7 @@ samples, guidance on mobile development, and a full API reference.
 
 # TO DO:
 
+- [ ] add chat features in each of the workshop details, for which notifications will be sent only to participants of chat.
 - [ ] replace create workshop with + in home page.
 - [ ] make + available only for admin user.
 - [ ] add logout option as a drop-down menu option for profile picture.
