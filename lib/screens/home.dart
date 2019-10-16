@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:iit_app/screens/account.dart';
 import 'package:iit_app/screens/settings.dart';
@@ -41,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: ListView(
         children: <Widget>[
           DrawerHeader(child: Text("Header")),
-          getNavItem(Icons.plus_one, "Create Workshop", CreateScreen.routeName),
+          // getNavItem(Icons.plus_one, "Create Workshop", CreateScreen.routeName),
           getNavItem(Icons.settings, "Settings", SettingsScreen.routeName),
           getNavItem(Icons.home, "Home", HomeScreen.routeName,
               replacement: true),
@@ -241,6 +240,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       drawer: getNavDrawer(context),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Navigator.of(context).pushNamed(CreateScreen.routeName),
+        child: Icon(Icons.add_box),
+      ),
       body: Builder(
         builder: (context) => ListView(
           children: <Widget>[
