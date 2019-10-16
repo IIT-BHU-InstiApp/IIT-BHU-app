@@ -10,14 +10,16 @@ class LoginPage extends StatefulWidget {
 }
 
 final GoogleSignIn googleSignIn = GoogleSignIn();
-String profilePhoto;
+String photoUrl;
+String displayName;
 
 Future<String> signInWithGoogle() async {
   final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
   final GoogleSignInAuthentication googleSignInAuthentication =
       await googleSignInAccount.authentication;
 
-  profilePhoto = googleSignInAccount.photoUrl;
+  photoUrl = googleSignInAccount.photoUrl;
+  displayName = googleSignInAccount.displayName;
 
   final AuthCredential credential = GoogleAuthProvider.getCredential(
     accessToken: googleSignInAuthentication.accessToken,

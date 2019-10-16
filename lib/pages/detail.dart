@@ -170,7 +170,7 @@ class _DetailPage extends State<DetailPage> {
                               image: DecorationImage(
                                   image: googleSignIn.currentUser == null
                                       ? AssetImage('assets/profile_test.jpg')
-                                      : NetworkImage(profilePhoto),
+                                      : NetworkImage(photoUrl),
                                   fit: BoxFit.cover)),
                         ),
                         Positioned(
