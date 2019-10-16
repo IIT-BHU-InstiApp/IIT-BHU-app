@@ -232,129 +232,151 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
   }
 
+  Future<bool> _onPopHome() {
+    return showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text('Do you really want to exit?'),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('No'),
+                  onPressed: () => Navigator.pop(context, false),
+                ),
+                FlatButton(
+                  child: Text('Yes'),
+                  onPressed: () => Navigator.pop(context, true),
+                )
+              ],
+            ));
+  }
+
   @override
   Widget build(BuildContext context) {
     // Get User Details (for I am going or not?)
     // Get all Workshop JSONS
     // for every json: convert json to workshop object ; List<Widget> cardList = List.append(_buildCard(workshop))
 
-    return Scaffold(
-      drawer: getNavDrawer(context),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.of(context).pushNamed(CreateScreen.routeName),
-        child: Icon(Icons.add_box),
-      ),
-      body: Builder(
-        builder: (context) => ListView(
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.all(15.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  IconButton(
-                    icon: Icon(Icons.menu),
-                    onPressed: () => Scaffold.of(context).openDrawer(),
-                  ),
-                  Stack(
-                    children: <Widget>[
-                      Container(height: 60.0, width: 60.0),
-                      Container(
-                        height: 50.0,
-                        width: 50.0,
-                        decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image: googleSignIn.currentUser == null
-                                    ? AssetImage('assets/profile_test.jpg')
-                                    : NetworkImage(profilePhoto),
-                                fit: BoxFit.cover),
-                            borderRadius: BorderRadius.circular(25.0)),
-                      ),
-                      Positioned(
-                        left: 5.0,
-                        top: 40.0,
-                        child: Container(
-                          height: 15.0,
-                          width: 15.0,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(7.5),
-                              color: Colors.green,
-                              border: Border.all(
-                                  color: Colors.white,
-                                  style: BorderStyle.solid,
-                                  width: 1.0)),
-                        ),
-                      )
-                    ],
-                  )
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 15.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    'The Official',
-                    style: TextStyle(
-                        fontFamily: 'Opensans',
-                        fontSize: 50.0,
-                        color: Color(0xFFFD6F4F)),
-                  ),
-                  Text(
-                    'IIT(BHU) App',
-                    style: TextStyle(
-                      fontFamily: 'Opensans',
-                      fontSize: 40.0,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(30, 50, 30, 15),
-              child: Container(
-                width: MediaQuery.of(context).size.width,
+    return WillPopScope(
+      onWillPop: _onPopHome,
+      child: Scaffold(
+        drawer: getNavDrawer(context),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () =>
+              Navigator.of(context).pushNamed(CreateScreen.routeName),
+          child: Icon(Icons.add_box),
+        ),
+        body: Builder(
+          builder: (context) => ListView(
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.all(15.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text('Most Popular Workshops:',
-                        style: TextStyle(
-                          fontFamily: 'Opensans',
-                          fontSize: 20.0,
-                        )),
-                    // IconButton(
-                    //     icon: Icon(Icons.more_horiz, color: Colors.black),
-                    //     onPressed: () {}),
+                    IconButton(
+                      icon: Icon(Icons.menu),
+                      onPressed: () => Scaffold.of(context).openDrawer(),
+                    ),
+                    Stack(
+                      children: <Widget>[
+                        Container(height: 60.0, width: 60.0),
+                        Container(
+                          height: 50.0,
+                          width: 50.0,
+                          decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  image: googleSignIn.currentUser == null
+                                      ? AssetImage('assets/profile_test.jpg')
+                                      : NetworkImage(profilePhoto),
+                                  fit: BoxFit.cover),
+                              borderRadius: BorderRadius.circular(25.0)),
+                        ),
+                        Positioned(
+                          left: 5.0,
+                          top: 40.0,
+                          child: Container(
+                            height: 15.0,
+                            width: 15.0,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(7.5),
+                                color: Colors.green,
+                                border: Border.all(
+                                    color: Colors.white,
+                                    style: BorderStyle.solid,
+                                    width: 1.0)),
+                          ),
+                        )
+                      ],
+                    )
                   ],
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 15.0),
-              child: Container(
-                height: 300.0,
-                child: (workshops != null)
-                    ? StreamBuilder(
-                        stream: workshops,
-                        builder: (context, snapshot) {
-                          return ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: snapshot.data.documents.length,
-                            itemBuilder: (context, i) {
-                              return _buildCard(
-                                  w: Workshop.createWorkshopFromMap(
-                                      snapshot.data.documents[i].data));
-                            },
-                          );
-                        },
-                      )
-                    : Text('Loading'),
+              Padding(
+                padding: const EdgeInsets.only(left: 15.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      'The Official',
+                      style: TextStyle(
+                          fontFamily: 'Opensans',
+                          fontSize: 50.0,
+                          color: Color(0xFFFD6F4F)),
+                    ),
+                    Text(
+                      'IIT(BHU) App',
+                      style: TextStyle(
+                        fontFamily: 'Opensans',
+                        fontSize: 40.0,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            )
-          ],
+              Padding(
+                padding: const EdgeInsets.fromLTRB(30, 50, 30, 15),
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text('Most Popular Workshops:',
+                          style: TextStyle(
+                            fontFamily: 'Opensans',
+                            fontSize: 20.0,
+                          )),
+                      // IconButton(
+                      //     icon: Icon(Icons.more_horiz, color: Colors.black),
+                      //     onPressed: () {}),
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 15.0),
+                child: Container(
+                  height: 300.0,
+                  child: (workshops != null)
+                      ? StreamBuilder(
+                          stream: workshops,
+                          builder: (context, snapshot) {
+                            return ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: snapshot.data.documents.length,
+                              itemBuilder: (context, i) {
+                                return _buildCard(
+                                    w: Workshop.createWorkshopFromMap(
+                                        snapshot.data.documents[i].data));
+                              },
+                            );
+                          },
+                        )
+                      : Text('Loading'),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
