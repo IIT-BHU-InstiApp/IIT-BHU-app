@@ -335,7 +335,7 @@ class _HomeScreenState extends State<HomeScreen> {
     // Get User Details (for I am going or not?)
     // Get all Workshop JSONS
     // for every json: convert json to workshop object ; List<Widget> cardList = List.append(_buildCard(workshop))
-
+    
     return WillPopScope(
       onWillPop: _onPopHome,
       child: Scaffold(
@@ -431,7 +431,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Text('Most Popular Workshops:',
+                      Text('Workshops today:',
                           style: TextStyle(
                             fontFamily: 'Opensans',
                             fontSize: 20.0,
@@ -464,7 +464,48 @@ class _HomeScreenState extends State<HomeScreen> {
                         )
                       : Text('Loading'),
                 ),
-              )
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(30, 50, 30, 15),
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text('Workshops this week:',
+                          style: TextStyle(
+                            fontFamily: 'Opensans',
+                            fontSize: 20.0,
+                          )),
+                      // IconButton(
+                      //     icon: Icon(Icons.more_horiz, color: Colors.black),
+                      //     onPressed: () {}),
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 15.0),
+                child: Container(
+                  height: 300.0,
+                  child: (workshops != null)
+                      ? StreamBuilder(
+                          stream: workshops,
+                          builder: (context, snapshot) {
+                            return ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: snapshot.data.documents.length,
+                              itemBuilder: (context, i) {
+                                return _buildCard(
+                                    w: Workshop.createWorkshopFromMap(
+                                        snapshot.data.documents[i].data));
+                              },
+                            );
+                          },
+                        )
+                      : Text('Loading'),
+                ),
+              ),
             ],
           ),
         ),
