@@ -23,6 +23,7 @@ samples, guidance on mobile development, and a full API reference.
 - [x] replace create workshop with + in home page.
 - [ ] make + available only for admin user.
 - [x] add logout option on profile photo.
+- [x] add exit confirm.
 - [ ] redirect to homescreen if previously logged in(save the state of the app).
 - [ ] notification for every new workshop created.
 - [ ] show snackbak at transition from login to home screen.

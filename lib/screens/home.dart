@@ -314,6 +314,8 @@ class _HomeScreenState extends State<HomeScreen> {
     return showDialog(
         context: context,
         builder: (context) => AlertDialog(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0)),
               title: Text('Do you really want to exit?'),
               actions: <Widget>[
                 FlatButton(
