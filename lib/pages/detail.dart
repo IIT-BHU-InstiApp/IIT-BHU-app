@@ -18,40 +18,6 @@ class _DetailPage extends State<DetailPage> {
     return Scaffold(
       body: Stack(children: [
         Container(
-          height: MediaQuery.of(context).size.height,
-          color: going ? Colors.blue : Colors.green,
-        ),
-        Positioned(
-          bottom: 18.0,
-          child: Container(
-              width: MediaQuery.of(context).size.width,
-              child: Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Icon(Icons.arrow_forward_ios,
-                        color: Colors.white.withOpacity(0.3), size: 11.0),
-                    Icon(Icons.arrow_forward_ios,
-                        color: Colors.white.withOpacity(0.5), size: 12.0),
-                    Icon(Icons.arrow_forward_ios,
-                        color: Colors.white.withOpacity(0.7), size: 13.0),
-                    Icon(Icons.arrow_forward_ios,
-                        color: Colors.white.withOpacity(0.9), size: 14.0),
-                    IconButton(
-                      icon: Icon(Icons.people),
-                      color: Colors.white,
-                      iconSize: 30.0,
-                      onPressed: () {
-                        setState(() {
-                          going = !going;
-                        });
-                      },
-                    ),
-                  ],
-                ),
-              )),
-        ),
-        Container(
           height: MediaQuery.of(context).size.height - 75.0,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.only(
@@ -122,24 +88,33 @@ class _DetailPage extends State<DetailPage> {
                           SizedBox(
                             height: 7.0,
                           ),
-                          Text(workshop.title,
-                              style: TextStyle(
-                                  fontFamily: 'Opensans',
-                                  fontSize: 27.0,
-                                  fontWeight: FontWeight.w600))
+                          Container(
+                            width: MediaQuery.of(context).size.width - 90.0,
+                            child: Text(workshop.title,
+                                style: TextStyle(
+                                    fontFamily: 'Opensans',
+                                    fontSize: 27.0,
+                                    fontWeight: FontWeight.w600)),
+                          )
                         ],
                       ),
                       Container(
-                        height: 60.0,
-                        width: 40.0,
+                        height: 80.0,
+                        width: 50.0,
                         decoration: BoxDecoration(
-                            color: Colors.grey.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(20.0)),
+                            color: Colors.grey.withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(25.0)),
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            Icon(Icons.favorite_border,
-                                color: Colors.black, size: 20.0),
+                            SizedBox(height: 7.0),
+                            Text(workshop.goingGlobal.toString()),
+                            InkWell(
+                              child: Icon(Icons.people,
+                                  color: going ? Colors.blue : Colors.black,
+                                  size: 25.0),
+                              onTap: () => setState(() => going = !going),
+                            ),
                             SizedBox(height: 7.0)
                           ],
                         ),
@@ -211,38 +186,32 @@ class _DetailPage extends State<DetailPage> {
           child: Container(
             width: MediaQuery.of(context).size.width - 15.0,
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    IconButton(
-                      icon: Icon(Icons.arrow_back_ios,
-                          color: Colors.lightGreen, size: 15.0),
-                      onPressed: () => Navigator.pop(context),
-                    ),
-                    SizedBox(width: 20.0),
-                    Container(
-                        height: 40.0,
-                        width: 60.0,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20.0),
-                            color: Colors.black.withOpacity(0.2)),
-                        child: Center(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Icon(Icons.star, color: Colors.white, size: 12.0),
-                              SizedBox(width: 5.0),
-                              Text(
-                                workshop.council,
-                                style: TextStyle(color: Colors.white),
-                              )
-                            ],
-                          ),
-                        ))
-                  ],
+                IconButton(
+                  icon: Icon(Icons.arrow_back_ios,
+                      color: Colors.lightGreen, size: 15.0),
+                  onPressed: () => Navigator.pop(context),
                 ),
-                Icon(Icons.file_upload, color: Colors.white)
+                SizedBox(width: 20.0),
+                Container(
+                    height: 40.0,
+                    width: 60.0,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20.0),
+                        color: Colors.black.withOpacity(0.2)),
+                    child: Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Icon(Icons.star, color: Colors.white, size: 12.0),
+                          SizedBox(width: 5.0),
+                          Text(
+                            workshop.council,
+                            style: TextStyle(color: Colors.white),
+                          )
+                        ],
+                      ),
+                    ))
               ],
             ),
           ),
