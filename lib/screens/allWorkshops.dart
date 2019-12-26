@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-class SettingsScreen extends StatelessWidget {
+class AllWorkshopsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Settings"),
+        title: Text("All Workshops"),
       ),
       body: Container(
           child: Center(
-        child: Text("Settings Screen"),
+        child: Text("search for all the available workshops.. Under DEVELOPMENT"),
       )),
     );
   }

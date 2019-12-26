@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-class SettingsScreen extends StatelessWidget {
+class ComplaintsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Settings"),
+        title: Text("Complaints & Suggestions"),
       ),
       body: Container(
           child: Center(
-        child: Text("Settings Screen"),
+        child: Text("submit your complaints here.. Under DEVELOPMENT"),
       )),
     );
   }

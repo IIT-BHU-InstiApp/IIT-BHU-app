@@ -4,7 +4,6 @@ import 'dart:async';
 import 'package:iit_app/services/crud.dart';
 
 class CreateScreen extends StatefulWidget {
-  static const String routeName = "/Create";
   @override
   _CreateScreenState createState() => _CreateScreenState();
 }

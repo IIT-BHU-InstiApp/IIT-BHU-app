@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:iit_app/screens/account.dart';
-import 'package:iit_app/screens/settings.dart';
-import 'package:iit_app/screens/create.dart';
 import 'package:iit_app/data/workshop.dart';
 import 'package:iit_app/pages/detail.dart';
 import 'package:iit_app/pages/login.dart';
+import 'package:iit_app/pages/about.dart';
 import 'package:iit_app/services/crud.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class HomeScreen extends StatefulWidget {
-  static const String routeName = '/Home';
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -40,42 +36,14 @@ class _HomeScreenState extends State<HomeScreen> {
       child: ListView(
         children: <Widget>[
           DrawerHeader(child: Text("Header")),
-          // getNavItem(Icons.plus_one, "Create Workshop", CreateScreen.routeName),
-          getNavItem(Icons.settings, "Settings", SettingsScreen.routeName),
-          getNavItem(Icons.home, "Home", HomeScreen.routeName,
+          getNavItem(Icons.home, "Home", '/home',
               replacement: true),
-          getNavItem(Icons.account_box, "Account", AccountScreen.routeName),
-          // ListTile(
-          //   leading: Icon(Icons.exit_to_app),
-          //   title: Text('Log Out'),
-          //   onTap: () {
-          //     Navigator.of(context).pop();
-          //     signOutGoogle();
-          //     Navigator.of(context).pushReplacementNamed(LoginPage.routeName);
-          //   },
-          // ),
-          AboutListTile(
-              child: Text("About"),
-              applicationName: "Gymkhana IIT(BHU)",
-              applicationVersion: "v1.0.0",
-              applicationIcon: Icon(Icons.business),
-              aboutBoxChildren: <Widget>[
-                Text('Front End'),
-                InkWell(
-                  child: new Text('@nishantkr18'),
-                  onTap: () => launch('https://github.com/nishantkr18'),
-                ),
-                Text('Back End:'),
-                InkWell(
-                  child: new Text('@nishantwrp'),
-                  onTap: () => launch('https://github.com/nishantwrp'),
-                ),
-                InkWell(
-                  child: new Text('@krashish8'),
-                  onTap: () => launch('https://github.com/krashish8'),
-                ),
-              ],
-              icon: Icon(Icons.info)),
+          getNavItem(Icons.local_dining, "Mess management", '/mess'),
+          getNavItem(Icons.group_work, "All Workshops", '/allWorkshops'),
+          getNavItem(Icons.account_box, "Account", '/account'),
+          getNavItem(Icons.comment, "Complaints & Suggestions", '/complaints'),
+          getNavItem(Icons.settings, "Settings", '/settings'),
+          AboutPageListTile.getAboutPageListTile(),
         ],
       ),
     );
@@ -302,7 +270,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             Navigator.of(context).pop();
                             signOutGoogle();
                             Navigator.of(context)
-                                .pushReplacementNamed(LoginPage.routeName);
+                                .pushReplacementNamed('/login');
                           },
                           color: Colors.transparent)
                     ],
@@ -335,14 +303,14 @@ class _HomeScreenState extends State<HomeScreen> {
     // Get User Details (for I am going or not?)
     // Get all Workshop JSONS
     // for every json: convert json to workshop object ; List<Widget> cardList = List.append(_buildCard(workshop))
-    
+
     return WillPopScope(
       onWillPop: _onPopHome,
       child: Scaffold(
         drawer: getNavDrawer(context),
         floatingActionButton: FloatingActionButton(
           onPressed: () =>
-              Navigator.of(context).pushNamed(CreateScreen.routeName),
+              Navigator.of(context).pushNamed('/create'),
           child: Icon(Icons.add_box),
         ),
         body: Builder(
@@ -403,28 +371,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 15.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      'The Official',
-                      style: TextStyle(
-                          fontFamily: 'Opensans',
-                          fontSize: 50.0,
-                          color: Color(0xFFFD6F4F)),
-                    ),
-                    Text(
-                      'IIT(BHU) App',
-                      style: TextStyle(
-                        fontFamily: 'Opensans',
-                        fontSize: 40.0,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
                 padding: const EdgeInsets.fromLTRB(30, 50, 30, 15),
                 child: Container(
                   width: MediaQuery.of(context).size.width,
@@ -432,47 +378,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text('Workshops today:',
-                          style: TextStyle(
-                            fontFamily: 'Opensans',
-                            fontSize: 20.0,
-                          )),
-                      // IconButton(
-                      //     icon: Icon(Icons.more_horiz, color: Colors.black),
-                      //     onPressed: () {}),
-                    ],
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 15.0),
-                child: Container(
-                  height: 300.0,
-                  child: (workshops != null)
-                      ? StreamBuilder(
-                          stream: workshops,
-                          builder: (context, snapshot) {
-                            return ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: snapshot.data.documents.length,
-                              itemBuilder: (context, i) {
-                                return _buildCard(
-                                    w: Workshop.createWorkshopFromMap(
-                                        snapshot.data.documents[i].data));
-                              },
-                            );
-                          },
-                        )
-                      : Text('Loading'),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(30, 50, 30, 15),
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text('Workshops this week:',
                           style: TextStyle(
                             fontFamily: 'Opensans',
                             fontSize: 20.0,

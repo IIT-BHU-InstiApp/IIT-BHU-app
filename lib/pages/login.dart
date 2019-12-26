@@ -1,10 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/material.dart';
-import 'package:iit_app/screens/home.dart';
 
 class LoginPage extends StatefulWidget {
-  static const String routeName = "/Login";
   @override
   _LoginPageState createState() => new _LoginPageState();
 }
@@ -64,7 +62,7 @@ class _LoginPageState extends State<LoginPage> {
               onPressed: () {
                 signInWithGoogle().whenComplete(() {
                   Navigator.of(context)
-                      .pushReplacementNamed(HomeScreen.routeName);
+                      .pushReplacementNamed('/home');
                 });
               },
               shape: RoundedRectangleBorder(
