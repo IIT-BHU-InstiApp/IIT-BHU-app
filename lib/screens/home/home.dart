@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:iit_app/data/workshop.dart';
-import 'package:iit_app/pages/detail.dart';
 import 'package:iit_app/pages/login.dart';
 import 'package:iit_app/pages/about.dart';
+import 'package:iit_app/screens/home/home_widgets.dart';
 import 'package:iit_app/services/crud.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -36,8 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: ListView(
         children: <Widget>[
           DrawerHeader(child: Text("Header")),
-          getNavItem(Icons.home, "Home", '/home',
-              replacement: true),
+          getNavItem(Icons.home, "Home", '/home', replacement: true),
           getNavItem(Icons.local_dining, "Mess management", '/mess'),
           getNavItem(Icons.group_work, "All Workshops", '/allWorkshops'),
           getNavItem(Icons.account_box, "Account", '/account'),
@@ -49,147 +48,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  _buildCard({Workshop w}) {
-    return Padding(
-        padding: EdgeInsets.all(10.0),
-        child: InkWell(
-          onTap: () {
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => DetailPage(w)));
-          },
-          child: Stack(
-            children: <Widget>[
-              Container(
-                height: 275.0,
-                width: 200.0,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20.0),
-                    image: DecorationImage(
-                        image: AssetImage(Workshop.imgPath[w.club]),
-                        fit: BoxFit.cover)),
-              ),
-              // make the shade a bit deeper.
-              Container(
-                height: 275.0,
-                width: 200.0,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20.0),
-                    color: Colors.black.withOpacity(0.5)),
-              ),
-              Positioned(
-                  top: 20.0,
-                  left: 10.0,
-                  child: Column(
-                    children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          Container(
-                            height: 25,
-                            // width: 60.0,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20.0),
-                              // color: Colors.black.withOpacity(0.5)
-                            ),
-                            child: Center(
-                                child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Icon(Icons.date_range,
-                                    color: Colors.white, size: 12.0),
-                                SizedBox(width: 4.0),
-                                Text(
-                                  w.date,
-                                  style: TextStyle(color: Colors.white),
-                                )
-                              ],
-                            )),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Container(
-                            height: 25,
-                            // width: 60.0,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20.0),
-                              // color: Colors.black.withOpacity(0.5)
-                            ),
-                            child: Center(
-                                child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Icon(Icons.timer,
-                                    color: Colors.white, size: 12.0),
-                                SizedBox(width: 4.0),
-                                Text(
-                                  w.time,
-                                  style: TextStyle(color: Colors.white),
-                                )
-                              ],
-                            )),
-                          ),
-                        ],
-                      ),
-                    ],
-                  )),
-              Positioned(
-                top: 200.0,
-                left: 10.0,
-                child: Container(
-                  width: 150.0,
-                  child: Text(w.title,
-                      style: TextStyle(
-                          fontFamily: 'Opensans',
-                          fontSize: 17.0,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600)),
-                ),
-              ),
-              Positioned(
-                  top: 230.0,
-                  left: 10.0,
-                  child: w.showGoing
-                      ? Row(children: [
-                          Text('People going',
-                              style: TextStyle(
-                                  fontFamily: 'Opensans',
-                                  fontSize: 13.0,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w100)),
-                          SizedBox(width: 30.0),
-                          IconButton(
-                            padding: EdgeInsets.fromLTRB(13.0, 0, 0, 0),
-                            icon: Icon(
-                              Icons.people,
-                              size: 30,
-                            ),
-                            // color: user.going[w.title]
-                            //     ? Colors.blue
-                            //     : Colors.white,
-                            onPressed: () {
-                              setState(() {
-                                // user.going[w.title] = !user.going[w.title];
-                                // print(user.going[w.title]);
-                              });
-                            },
-                          ),
-                          Text(
-                            w.goingGlobal.toString(),
-                            style: TextStyle(
-                                color: Colors.white54, fontSize: 10.0),
-                          ),
-                        ])
-                      : Text(
-                          'Be present!',
-                          style:
-                              TextStyle(color: Colors.white54, fontSize: 10.0),
-                        ))
-            ],
-          ),
-        ));
-  }
-
   @override
   void initState() {
     crudObj.getData().then((results) {
@@ -198,84 +56,6 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     });
     super.initState();
-  }
-
-  Future<bool> _logOut(context, details) {
-    return showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (BuildContext context) {
-          return Dialog(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0)),
-              child: Container(
-                  height: 350.0,
-                  width: 200.0,
-                  decoration:
-                      BoxDecoration(borderRadius: BorderRadius.circular(20.0)),
-                  child: Column(
-                    children: <Widget>[
-                      Stack(
-                        children: <Widget>[
-                          Container(height: 150.0),
-                          Container(
-                            height: 100.0,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(10.0),
-                                  topRight: Radius.circular(10.0),
-                                ),
-                                color: Colors.teal),
-                          ),
-                          Positioned(
-                              top: 50.0,
-                              left: 94.0,
-                              child: Container(
-                                height: 90.0,
-                                width: 90.0,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(45.0),
-                                    border: Border.all(
-                                        color: Colors.white,
-                                        style: BorderStyle.solid,
-                                        width: 2.0),
-                                    image: DecorationImage(
-                                        image: details[0], fit: BoxFit.cover)),
-                              ))
-                        ],
-                      ),
-                      SizedBox(height: 20.0),
-                      Padding(
-                          padding: EdgeInsets.all(10.0),
-                          child: Text(
-                            details[1],
-                            style: TextStyle(
-                              fontFamily: 'Quicksand',
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.w300,
-                            ),
-                          )),
-                      SizedBox(height: 15.0),
-                      FlatButton(
-                          child: Center(
-                            child: Text(
-                              'Log Out',
-                              style: TextStyle(
-                                  fontFamily: 'Montserrat',
-                                  fontSize: 14.0,
-                                  color: Colors.teal),
-                            ),
-                          ),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                            signOutGoogle();
-                            Navigator.of(context)
-                                .pushReplacementNamed('/login');
-                          },
-                          color: Colors.transparent)
-                    ],
-                  )));
-        });
   }
 
   Future<bool> _onPopHome() {
@@ -309,8 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Scaffold(
         drawer: getNavDrawer(context),
         floatingActionButton: FloatingActionButton(
-          onPressed: () =>
-              Navigator.of(context).pushNamed('/create'),
+          onPressed: () => Navigator.of(context).pushNamed('/create'),
           child: Icon(Icons.add_box),
         ),
         body: Builder(
@@ -333,14 +112,14 @@ class _HomeScreenState extends State<HomeScreen> {
                           height: 50.0,
                           width: 50.0,
                           child: GestureDetector(
-                            onTap: () => _logOut(
+                            onTap: () { return HomeWidgets.getLogOutDialog(
                                 context,
                                 googleSignIn.currentUser == null
                                     ? [
                                         AssetImage('assets/profile_test.jpg'),
                                         ''
                                       ]
-                                    : [NetworkImage(photoUrl), displayName]),
+                                    : [NetworkImage(photoUrl), displayName]);}
                           ),
                           decoration: BoxDecoration(
                               image: DecorationImage(
@@ -382,9 +161,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             fontFamily: 'Opensans',
                             fontSize: 20.0,
                           )),
-                      // IconButton(
-                      //     icon: Icon(Icons.more_horiz, color: Colors.black),
-                      //     onPressed: () {}),
+                      IconButton(
+                          icon: Icon(Icons.more_horiz, color: Colors.black),
+                          onPressed: () {}),
                     ],
                   ),
                 ),
@@ -401,7 +180,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               scrollDirection: Axis.horizontal,
                               itemCount: snapshot.data.documents.length,
                               itemBuilder: (context, i) {
-                                return _buildCard(
+                                return HomeWidgets.getWorkshopCard(context,
                                     w: Workshop.createWorkshopFromMap(
                                         snapshot.data.documents[i].data));
                               },
