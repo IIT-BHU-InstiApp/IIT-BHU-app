@@ -1,7 +1,3 @@
-# iit_app
-
-*WITH THIS APP ANYONE WILL BE ABLE TO KNOW ALL DETAILS AND CURRENT HAPPENINGS OF ANY CLUB IN ORDER TO BE UPDATED WITH THE CLUB.*
-
 # TO DO:
 
 - [ ] notification for every new workshop created.
