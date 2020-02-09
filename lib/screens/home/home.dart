@@ -196,8 +196,8 @@ class _HomeScreenState extends State<HomeScreen>
               )
             ],
             bottom: TabBar(
-              unselectedLabelColor: Colors.black,
-              labelColor: Colors.red,
+              unselectedLabelColor: Colors.grey,
+              labelColor: Colors.black,
               tabs: [
                 new Tab(text: 'Latest', ),
                 new Tab(text: 'Interested'),
