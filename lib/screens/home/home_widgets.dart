@@ -3,7 +3,6 @@ import 'package:iit_app/data/workshop.dart';
 import 'package:iit_app/pages/detail.dart';
 import 'package:iit_app/pages/login.dart';
 
-
 class HomeWidgets {
   static final Color textPaleColor = Color(0xFFAFAFAF);
   static final Color textColor = Color(0xFF004681);
@@ -93,8 +92,7 @@ class HomeWidgets {
         child: Stack(
           children: <Widget>[
             Container(
-              height: 275.0,
-              width: 200.0,
+              height: 175.0,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20.0),
                   image: DecorationImage(
@@ -103,8 +101,8 @@ class HomeWidgets {
             ),
             // make the shade a bit deeper.
             Container(
-              height: 275.0,
-              width: 200.0,
+              height: 175.0,
+              width: 500.0,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20.0),
                   color: Colors.black.withOpacity(0.5)),
@@ -167,40 +165,25 @@ class HomeWidgets {
                   ],
                 )),
             Positioned(
-              top: 200.0,
-              left: 10.0,
+              top: 120.0,
+              left: 1.0,
+              right: 1.0,
               child: Container(
-                width: 150.0,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black),
+                  color: Colors.white,
+                ),
+                width: 500.0,
+                height: 35.0,
                 child: Text(w.title,
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                         fontFamily: 'Opensans',
-                        fontSize: 17.0,
-                        color: Colors.white,
+                        fontSize: 25.0,
+                        color: Colors.grey[800],
                         fontWeight: FontWeight.w600)),
               ),
             ),
-            Positioned(
-                top: 230.0,
-                left: 10.0,
-                child: w.showGoing
-                    ? Row(children: [
-                        Text('People going',
-                            style: TextStyle(
-                                fontFamily: 'Opensans',
-                                fontSize: 13.0,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w100)),
-                        SizedBox(width: 30.0),
-                        Text(
-                          w.goingGlobal.toString(),
-                          style:
-                              TextStyle(color: Colors.white54, fontSize: 10.0),
-                        ),
-                      ])
-                    : Text(
-                        'Be present!',
-                        style: TextStyle(color: Colors.white54, fontSize: 10.0),
-                      ))
           ],
         ),
       ));

@@ -41,7 +41,14 @@ class _HomeScreenState extends State<HomeScreen> {
     return Drawer(
       child: ListView(
         children: <Widget>[
-          DrawerHeader(child: Text("Header")),
+          UserAccountsDrawerHeader(
+              accountName: Text("nishantkr.ece18"),
+              accountEmail: Text("nishantkr.ece18@itbhu.ac.in"),
+              currentAccountPicture: Image(
+                  image: googleSignIn.currentUser == null
+                      ? AssetImage('assets/profile_test.jpg')
+                      : NetworkImage(photoUrl),
+                  fit: BoxFit.cover)),
           getNavItem(Icons.home, "Home", '/home', replacement: true),
           getNavItem(Icons.local_dining, "Mess management", '/mess'),
           getNavItem(Icons.group_work, "All Workshops", '/allWorkshops'),
@@ -117,7 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   ListView _buildPosts(BuildContext context, BuiltList<BuiltPost> posts) {
     return ListView.builder(
-      scrollDirection: Axis.horizontal,
+      scrollDirection: Axis.vertical,
       itemCount: posts.length,
       padding: EdgeInsets.all(8),
       itemBuilder: (context, index) {
@@ -150,26 +157,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    IconButton(
-                      icon: Icon(Icons.menu),
-                      onPressed: () => Scaffold.of(context).openDrawer(),
-                    ),
                     Stack(
                       children: <Widget>[
                         Container(height: 60.0, width: 60.0),
                         Container(
                           height: 50.0,
                           width: 50.0,
-                          child: GestureDetector(onTap: () {
-                            return HomeWidgets.getLogOutDialog(
-                                context,
-                                googleSignIn.currentUser == null
-                                    ? [
-                                        AssetImage('assets/profile_test.jpg'),
-                                        ''
-                                      ]
-                                    : [NetworkImage(photoUrl), displayName]);
-                          }),
+                          child: GestureDetector(
+                              onTap: () => Scaffold.of(context).openDrawer()),
                           decoration: BoxDecoration(
                               image: DecorationImage(
                                   image: googleSignIn.currentUser == null
@@ -192,8 +187,31 @@ class _HomeScreenState extends State<HomeScreen> {
                                     style: BorderStyle.solid,
                                     width: 1.0)),
                           ),
-                        )
+                        ),
                       ],
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 5.0),
+                    ),
+                    Expanded(
+                      child: TextField(
+                        decoration: InputDecoration(
+                            //labelText: 'Search',
+                            hintText: 'Search',
+                            prefixIcon: Icon(Icons.search),
+                            border: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(25.0)))),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(right: 5.0),
+                    ),
+                    SizedBox(
+                      child: IconButton(
+                        icon: Icon(Icons.notifications_active),
+                        onPressed: () {},
+                      ),
                     )
                   ],
                 ),
@@ -217,28 +235,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 15.0),
-                child: Container(
-                  height: 300.0,
-                  child: _buildBody(context),
-                  // (workshops != null)
-                  //     ? StreamBuilder(
-                  //         stream: workshops,
-                  //         builder: (context, snapshot) {
-                  //           return ListView.builder(
-                  //             scrollDirection: Axis.vertical,
-                  //             itemCount: snapshot.data.documents.length,
-                  //             itemBuilder: (context, i) {
-                  //               return HomeWidgets.getWorkshopCard(context,
-                  //                   w: Workshop.createWorkshopFromMap(
-                  //                       snapshot.data.documents[i].data));
-                  //             },
-                  //           );
-                  //         },
-                  //       )
-                  //     : Text('Loading'),
-                ),
+              Container(
+                height: 400,
+                child: _buildBody(context),
               ),
             ],
           ),
