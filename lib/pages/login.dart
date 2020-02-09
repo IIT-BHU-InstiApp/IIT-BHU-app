@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -10,6 +12,7 @@ class LoginPage extends StatefulWidget {
 final GoogleSignIn googleSignIn = GoogleSignIn();
 String photoUrl;
 String displayName;
+String responseIdToken;
 
 Future<String> signInWithGoogle() async {
   final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
@@ -23,14 +26,17 @@ Future<String> signInWithGoogle() async {
     accessToken: googleSignInAuthentication.accessToken,
     idToken: googleSignInAuthentication.idToken,
   );
-
-  final FirebaseUser user = (await FirebaseAuth.instance.signInWithCredential(credential)).user;
+  final FirebaseUser user =
+      (await FirebaseAuth.instance.signInWithCredential(credential)).user;
 
   assert(!user.isAnonymous);
+  String idToken = (await user.getIdToken()).token;
   assert(await user.getIdToken() != null);
 
   final FirebaseUser currentUser = await FirebaseAuth.instance.currentUser();
   assert(user.uid == currentUser.uid);
+
+  verifyToken(idToken);
 
   return 'signInWithGoogle succeeded: $user';
 }
@@ -41,11 +47,24 @@ void signOutGoogle() async {
   print("User Sign Out");
 }
 
+void verifyToken(String token) {
+  var url = "https://workshops-app-backend.herokuapp.com/login/";
+  var client = http.Client();
+  var request = http.Request('POST', Uri.parse(url));
+  var body = {'id_token': token};
+  request.bodyFields = body;
+  client.send(request).then((response) {
+    response.stream.bytesToString().then((value) {
+      responseIdToken = json.decode(value)['token'];
+    }).catchError((error) {
+      print(error.toString());
+    });
+  });
+}
 
 class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
-
     return new Scaffold(
         resizeToAvoidBottomPadding: false,
         body: ListView(
@@ -61,8 +80,7 @@ class _LoginPageState extends State<LoginPage> {
               splashColor: Colors.grey,
               onPressed: () {
                 signInWithGoogle().whenComplete(() {
-                  Navigator.of(context)
-                      .pushReplacementNamed('/home');
+                  Navigator.of(context).pushReplacementNamed('/home');
                 });
               },
               shape: RoundedRectangleBorder(

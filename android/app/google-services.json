@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "573112617509",
-    "firebase_url": "https://app-iit-bhu.firebaseio.com",
-    "project_id": "app-iit-bhu",
-    "storage_bucket": "app-iit-bhu.appspot.com"
+    "project_number": "897714770024",
+    "firebase_url": "https://iit-bhu-workshops-app.firebaseio.com",
+    "project_id": "iit-bhu-workshops-app",
+    "storage_bucket": "iit-bhu-workshops-app.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:573112617509:android:0da1f6f8afd337f7c00dcc",
+        "mobilesdk_app_id": "1:897714770024:android:3a3fa293e0e2e38827abdd",
         "android_client_info": {
           "package_name": "com.example.iit_app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "573112617509-3rbf7msespph517pelnbejuoo30mgmua.apps.googleusercontent.com",
+          "client_id": "897714770024-1avrl0339v8dhbo4a5o9m56lj86nd36a.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.iit_app",
@@ -23,20 +23,20 @@
           }
         },
         {
-          "client_id": "573112617509-6om8ffonq0d54983lit3dtqoma0pqdju.apps.googleusercontent.com",
+          "client_id": "897714770024-4s4ns1sp5a106go47ag97mcs68u2h2p2.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBIxE2AAW0foslrWkbFnEouy-sJTu-St3k"
+          "current_key": "AIzaSyCOtLJG_dWAHTXjArWliiiZrR5_25P6k94"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "573112617509-6om8ffonq0d54983lit3dtqoma0pqdju.apps.googleusercontent.com",
+              "client_id": "897714770024-4s4ns1sp5a106go47ag97mcs68u2h2p2.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

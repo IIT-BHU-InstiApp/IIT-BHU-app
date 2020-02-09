@@ -57,6 +57,14 @@ class _HomeScreenState extends State<HomeScreen>
           getNavItem(Icons.account_box, "Account", '/account'),
           getNavItem(Icons.comment, "Complaints & Suggestions", '/complaints'),
           getNavItem(Icons.settings, "Settings", '/settings'),
+          ListTile(
+            leading: Icon(Icons.exit_to_app),
+            title: Text('LogOut'),
+            onTap: () => {
+              signOutGoogle(),
+              Navigator.of(context).pushReplacementNamed('/login')
+            },
+          ),
           AboutPageListTile.getAboutPageListTile(),
         ],
       ),
@@ -146,29 +154,28 @@ class _HomeScreenState extends State<HomeScreen>
     return WillPopScope(
       onWillPop: _onPopHome,
       child: Scaffold(
-        backgroundColor: Colors.white70,
+          backgroundColor: Colors.white70,
           appBar: AppBar(
             backgroundColor: Colors.white,
             automaticallyImplyLeading: false,
             actions: <Widget>[
-              
               Padding(
                 padding: const EdgeInsets.only(top: 8.0, left: 8),
                 child: Container(
-                      height: 30.0,
-                      width: 40.0,
-                      child: Builder(
-                        builder: (context) => GestureDetector(
-                            onTap: () => Scaffold.of(context).openDrawer()),
-                      ),
-                      decoration: BoxDecoration(
-                          image: DecorationImage(
-                              image: googleSignIn.currentUser == null
-                                  ? AssetImage('assets/profile_test.jpg')
-                                  : NetworkImage(photoUrl),
-                              fit: BoxFit.cover),
-                          borderRadius: BorderRadius.circular(10.0)),
-                    ),
+                  height: 30.0,
+                  width: 40.0,
+                  child: Builder(
+                    builder: (context) => GestureDetector(
+                        onTap: () => Scaffold.of(context).openDrawer()),
+                  ),
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: googleSignIn.currentUser == null
+                              ? AssetImage('assets/profile_test.jpg')
+                              : NetworkImage(photoUrl),
+                          fit: BoxFit.cover),
+                      borderRadius: BorderRadius.circular(10.0)),
+                ),
               ),
               Padding(
                 padding: EdgeInsets.only(left: 8.0),
@@ -199,7 +206,9 @@ class _HomeScreenState extends State<HomeScreen>
               unselectedLabelColor: Colors.grey,
               labelColor: Colors.black,
               tabs: [
-                new Tab(text: 'Latest', ),
+                new Tab(
+                  text: 'Latest',
+                ),
                 new Tab(text: 'Interested'),
               ],
               controller: _tabController,
