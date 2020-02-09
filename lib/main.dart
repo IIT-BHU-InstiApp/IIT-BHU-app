@@ -9,23 +9,32 @@ import 'package:iit_app/screens/settings.dart';
 import 'package:iit_app/screens/create.dart';
 import 'package:iit_app/services/crud.dart';
 
-void main() {
-  runApp(MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: CrudMethods.isLoggedIn()
-        ? HomeScreen()
-        : LoginPage(), // route for home is '/' implicitly
-    routes: <String, WidgetBuilder>{
-      // define the routes
-      '/home': (BuildContext context) => HomeScreen(),
-      '/mess': (BuildContext context) => MessScreen(),
-      '/allWorkshops': (BuildContext context) => AllWorkshopsScreen(),
-      '/account': (BuildContext context) => AccountScreen(),
-      '/complaints': (BuildContext context) => ComplaintsScreen(),
-      '/settings': (BuildContext context) => SettingsScreen(),
+import 'package:logging/logging.dart';
+import 'package:provider/provider.dart';
 
-      '/login': (BuildContext context) => LoginPage(),
-      '/create': (BuildContext context) => CreateScreen(),
-    },
+import 'data/post_api_service.dart';
+
+void main() {
+  runApp(Provider(
+    builder: (_) => PostApiService.create(),
+    dispose: (_, PostApiService service) => service.client.dispose(),
+    child: MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: CrudMethods.isLoggedIn()
+          ? HomeScreen()
+          : LoginPage(), // route for home is '/' implicitly
+      routes: <String, WidgetBuilder>{
+        // define the routes
+        '/home': (BuildContext context) => HomeScreen(),
+        '/mess': (BuildContext context) => MessScreen(),
+        '/allWorkshops': (BuildContext context) => AllWorkshopsScreen(),
+        '/account': (BuildContext context) => AccountScreen(),
+        '/complaints': (BuildContext context) => ComplaintsScreen(),
+        '/settings': (BuildContext context) => SettingsScreen(),
+
+        '/login': (BuildContext context) => LoginPage(),
+        '/create': (BuildContext context) => CreateScreen(),
+      },
+    ),
   ));
 }

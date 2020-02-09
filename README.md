@@ -1,5 +1,4 @@
 # TO DO:
-
 - [ ] notification for every new workshop created.
 - [ ] add chat features in each of the workshop details, for which notifications will be sent only to participants of chat.
 - [ ] make + available only for admin user.

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iit_app/model/built_post.dart';
 
 class Workshop {
   static const councils = ['SnTC', 'FMC', 'Cultural', 'Social Service', 'Sports'];
@@ -66,16 +67,16 @@ class Workshop {
     };
   }
 
-  static Workshop createWorkshopFromMap(Map<String, dynamic> map) {
+  static Workshop createWorkshopFromMap(dynamic map) {
     Workshop w = new Workshop();
-    w.club = map['club'];
-    w.council = map['council'];
-    w.title = map['title'];
-    w.date = map['date'];
-    w.time = map['time'];
-    w.description = map['description'];
-    w.goingGlobal = map['goingGlobal'];
-    w.showGoing = map['showGoing'];
+    w.club = 'COPS';
+    w.council = 'SnTC';
+    w.title = map.title;
+    w.date = map.date;
+    w.time = map.time;
+    w.description = 'ejnfe';
+    w.goingGlobal = 45;
+    w.showGoing = true;
     return w;
   }
 }

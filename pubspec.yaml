@@ -27,10 +27,18 @@ dependencies:
   google_sign_in: ^4.0.7
   cloud_firestore: ^0.12.9+2
   url_launcher: ^5.1.6
+  chopper: ^2.4.2
+  provider: ^3.0.0+1
+  connectivity: ^0.4.3+2
+  built_value: ^6.7.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  chopper_generator: ^2.4.2
+  built_value_generator: ^6.7.0
+  # No version number means the latest version
+  build_runner:
 
 
 # For information on the generic Dart part of this file, see the
