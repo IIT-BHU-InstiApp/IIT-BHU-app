@@ -16,9 +16,11 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen>
+    with SingleTickerProviderStateMixin {
   CrudMethods crudObj = new CrudMethods();
   Stream workshops;
+  TabController _tabController;
 
   Drawer getNavDrawer(BuildContext context) {
     ListTile getNavItem(var icon, String s, String routeName,
@@ -63,6 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
+    _tabController = new TabController(length: 2, vsync: this);
     crudObj.getData().then((results) {
       setState(() {
         workshops = results;
@@ -143,106 +146,83 @@ class _HomeScreenState extends State<HomeScreen> {
     return WillPopScope(
       onWillPop: _onPopHome,
       child: Scaffold(
-        drawer: getNavDrawer(context),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () => Navigator.of(context).pushNamed('/create'),
-          child: Icon(Icons.add_box),
-        ),
-        body: Builder(
-          builder: (context) => ListView(
-            children: <Widget>[
+        backgroundColor: Colors.white70,
+          appBar: AppBar(
+            backgroundColor: Colors.white,
+            automaticallyImplyLeading: false,
+            actions: <Widget>[
+              
               Padding(
-                padding: EdgeInsets.all(15.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Stack(
-                      children: <Widget>[
-                        Container(height: 60.0, width: 60.0),
-                        Container(
-                          height: 50.0,
-                          width: 50.0,
-                          child: GestureDetector(
-                              onTap: () => Scaffold.of(context).openDrawer()),
-                          decoration: BoxDecoration(
-                              image: DecorationImage(
-                                  image: googleSignIn.currentUser == null
-                                      ? AssetImage('assets/profile_test.jpg')
-                                      : NetworkImage(photoUrl),
-                                  fit: BoxFit.cover),
-                              borderRadius: BorderRadius.circular(25.0)),
-                        ),
-                        Positioned(
-                          left: 5.0,
-                          top: 40.0,
-                          child: Container(
-                            height: 15.0,
-                            width: 15.0,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(7.5),
-                                color: Colors.green,
-                                border: Border.all(
-                                    color: Colors.white,
-                                    style: BorderStyle.solid,
-                                    width: 1.0)),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 5.0),
-                    ),
-                    Expanded(
-                      child: TextField(
-                        decoration: InputDecoration(
-                            //labelText: 'Search',
-                            hintText: 'Search',
-                            prefixIcon: Icon(Icons.search),
-                            border: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(25.0)))),
+                padding: const EdgeInsets.only(top: 8.0, left: 8),
+                child: Container(
+                      height: 30.0,
+                      width: 40.0,
+                      child: Builder(
+                        builder: (context) => GestureDetector(
+                            onTap: () => Scaffold.of(context).openDrawer()),
                       ),
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: googleSignIn.currentUser == null
+                                  ? AssetImage('assets/profile_test.jpg')
+                                  : NetworkImage(photoUrl),
+                              fit: BoxFit.cover),
+                          borderRadius: BorderRadius.circular(10.0)),
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(right: 5.0),
-                    ),
-                    SizedBox(
-                      child: IconButton(
-                        icon: Icon(Icons.notifications_active),
-                        onPressed: () {},
-                      ),
-                    )
-                  ],
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 8.0),
+              ),
+              Expanded(
+                child: TextField(
+                  decoration: InputDecoration(
+                      //labelText: 'Search',
+                      hintText: 'Search',
+                      prefixIcon: Icon(Icons.search),
+                      border: OutlineInputBorder(
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(25.0)))),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(30, 50, 30, 15),
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text('Workshops today:',
-                          style: TextStyle(
-                            fontFamily: 'Opensans',
-                            fontSize: 20.0,
-                          )),
-                      IconButton(
-                          icon: Icon(Icons.more_horiz, color: Colors.black),
-                          onPressed: () {}),
-                    ],
-                  ),
+                padding: EdgeInsets.only(right: 5.0),
+              ),
+              SizedBox(
+                child: IconButton(
+                  color: Colors.black,
+                  icon: Icon(Icons.notifications_active),
+                  onPressed: () {},
                 ),
+              )
+            ],
+            bottom: TabBar(
+              unselectedLabelColor: Colors.black,
+              labelColor: Colors.red,
+              tabs: [
+                new Tab(text: 'Latest', ),
+                new Tab(text: 'Interested'),
+              ],
+              controller: _tabController,
+            ),
+          ),
+          drawer: getNavDrawer(context),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () => Navigator.of(context).pushNamed('/create'),
+            child: Icon(Icons.add_box),
+          ),
+          body: TabBarView(
+            children: <Widget>[
+              Container(
+                height: 400,
+                child: _buildBody(context),
               ),
               Container(
                 height: 400,
                 child: _buildBody(context),
               ),
             ],
-          ),
-        ),
-      ),
+            controller: _tabController,
+          )),
     );
   }
 }

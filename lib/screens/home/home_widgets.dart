@@ -83,7 +83,7 @@ class HomeWidgets {
       });
 
   static Widget getWorkshopCard(BuildContext context, {Workshop w}) => Padding(
-      padding: EdgeInsets.all(10.0),
+      padding: EdgeInsets.symmetric(horizontal: 3, vertical: 10),
       child: InkWell(
         onTap: () {
           Navigator.of(context)
