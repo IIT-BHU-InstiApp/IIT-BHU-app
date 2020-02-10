@@ -32,6 +32,10 @@ dependencies:
   connectivity: ^0.4.3+2
   built_value: ^6.7.0
 
+  sqflite: ^1.2.0
+  path_provider: ^1.5.1
+  
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

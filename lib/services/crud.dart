@@ -1,11 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:iit_app/pages/login.dart';
+import 'package:iit_app/model/appConstants.dart';
 
 class CrudMethods {
   static bool isLoggedIn() {
-    signInWithGoogle();
-    if (FirebaseAuth.instance.currentUser() != null)
+    if (AppConstants.currentUser != null)
       return true;
     else
       return false;

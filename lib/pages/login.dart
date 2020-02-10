@@ -2,7 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:iit_app/data/post_api_service.dart';
 import 'dart:convert';
+
+import 'package:iit_app/model/appConstants.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -35,6 +38,12 @@ Future<String> signInWithGoogle() async {
   assert(await user.getIdToken() != null);
 
   currentUser = await FirebaseAuth.instance.currentUser();
+
+  // ! getting all the necessary elements after log in
+  AppConstants.currentUser = currentUser;
+  AppConstants.service = PostApiService.create();
+  await AppConstants.populateWorkshops();
+
   assert(user.uid == currentUser.uid);
 
   verifyToken(idToken);
@@ -79,10 +88,16 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(height: 15),
             OutlineButton(
               splashColor: Colors.grey,
-              onPressed: () {
-                signInWithGoogle().whenComplete(() {
+              onPressed: () async {
+                await signInWithGoogle();
+                if (AppConstants.currentUser == null) {
+                  Navigator.of(context).pushReplacementNamed('/login');
+                } else {
                   Navigator.of(context).pushReplacementNamed('/home');
-                });
+                }
+                // signInWithGoogle().whenComplete(() {
+                //   Navigator.of(context).pushReplacementNamed('/home');
+                // });
               },
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(40)),
