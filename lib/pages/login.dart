@@ -13,6 +13,7 @@ final GoogleSignIn googleSignIn = GoogleSignIn();
 String photoUrl;
 String displayName;
 String responseIdToken;
+FirebaseUser currentUser;
 
 Future<String> signInWithGoogle() async {
   final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
@@ -33,7 +34,7 @@ Future<String> signInWithGoogle() async {
   String idToken = (await user.getIdToken()).token;
   assert(await user.getIdToken() != null);
 
-  final FirebaseUser currentUser = await FirebaseAuth.instance.currentUser();
+  currentUser = await FirebaseAuth.instance.currentUser();
   assert(user.uid == currentUser.uid);
 
   verifyToken(idToken);

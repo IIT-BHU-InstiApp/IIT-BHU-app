@@ -7,12 +7,12 @@ import 'mobile_data_interceptor.dart';
 
 part 'post_api_service.chopper.dart';
 
-@ChopperApi(baseUrl: '/workshops')
+@ChopperApi(baseUrl: '')
 abstract class PostApiService extends ChopperService {
-  @Get()
-  Future<Response<BuiltList<BuiltPost>>> getPosts();
+  @Get(path: '/workshops')
+  Future<Response<BuiltList<BuiltPost>>> getUpcomingWorkshops();
 
-  @Get(path: '/{id}')
+  @Get(path: '/workshops/{id}')
   Future<Response<BuiltPost>> getPost(@Path('id') int id);
 
   @Post()

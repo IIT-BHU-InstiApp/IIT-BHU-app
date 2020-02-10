@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:iit_app/data/workshop.dart';
 import 'package:iit_app/pages/login.dart';
@@ -108,7 +109,7 @@ class _HomeScreenState extends State<HomeScreen>
     return FutureBuilder<Response<BuiltList<BuiltPost>>>(
       // In real apps, use some sort of state management (BLoC is cool)
       // to prevent duplicate requests when the UI rebuilds
-      future: Provider.of<PostApiService>(context).getPosts(),
+      future: Provider.of<PostApiService>(context).getUpcomingWorkshops(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasError) {
@@ -198,7 +199,13 @@ class _HomeScreenState extends State<HomeScreen>
                 child: IconButton(
                   color: Colors.black,
                   icon: Icon(Icons.notifications_active),
-                  onPressed: () {},
+                  onPressed: () {
+                    print(photoUrl);
+                    FirebaseAuth.instance.currentUser().then((value) {
+                      print(value);
+
+                    });
+                  },
                 ),
               )
             ],

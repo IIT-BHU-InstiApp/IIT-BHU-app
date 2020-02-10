@@ -14,7 +14,7 @@ class _$PostApiService extends PostApiService {
 
   final definitionType = PostApiService;
 
-  Future<Response<BuiltList<BuiltPost>>> getPosts() {
+  Future<Response<BuiltList<BuiltPost>>> getUpcomingWorkshops() {
     final $url = '/workshops';
     final $request = Request('GET', $url, client.baseUrl);
     return client.send<BuiltList<BuiltPost>, BuiltPost>($request);
@@ -27,7 +27,7 @@ class _$PostApiService extends PostApiService {
   }
 
   Future<Response<BuiltPost>> postPost(BuiltPost body) {
-    final $url = '/workshops';
+    final $url = '';
     final $body = body;
     final $request = Request('POST', $url, client.baseUrl, body: $body);
     return client.send<BuiltPost, BuiltPost>($request);
