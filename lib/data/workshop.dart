@@ -2,13 +2,39 @@ import 'package:flutter/material.dart';
 import 'package:iit_app/model/built_post.dart';
 
 class Workshop {
-  static const councils = ['SnTC', 'FMC', 'Cultural', 'Social Service', 'Sports'];
+  static const councils = [
+    'SnTC',
+    'FMC',
+    'Cultural',
+    'Social Service',
+    'Sports'
+  ];
   static Map<String, List<String>> clubs = {
     null: [],
     councils[0]: ['COPS', 'Robotics', 'SAE', 'AMC', 'CSI', 'Biz', 'Astro'],
-    councils[1]: ['Photography', 'Animation', 'Cinematography', 'Creative Design', 'Outreach', 'Media'],
-    councils[2]: ['IMC', 'WMC', 'Dramatics', 'FAC', 'Literary', 'Quiz', 'Dance'],
-    councils[3]: ['Social Projects', 'Sahyog', 'Kashi Utkarsh', 'Health and Hygiene'],
+    councils[1]: [
+      'Photography',
+      'Animation',
+      'Cinematography',
+      'Creative Design',
+      'Outreach',
+      'Media'
+    ],
+    councils[2]: [
+      'IMC',
+      'WMC',
+      'Dramatics',
+      'FAC',
+      'Literary',
+      'Quiz',
+      'Dance'
+    ],
+    councils[3]: [
+      'Social Projects',
+      'Sahyog',
+      'Kashi Utkarsh',
+      'Health and Hygiene'
+    ],
     councils[4]: ['Sports'],
   };
   static Map<String, String> imgPath = {
@@ -37,8 +63,6 @@ class Workshop {
     clubs[councils[3]][2]: 'assets/iitbhu.jpeg',
     clubs[councils[3]][3]: 'assets/iitbhu.jpeg',
     clubs[councils[4]][0]: 'assets/iitbhu.jpeg',
-
-
   };
   String title;
   String date;
@@ -48,6 +72,7 @@ class Workshop {
   String description;
   int goingGlobal = 0;
   bool showGoing = true; //default value is true
+  int id;
 
   Workshop() {
     date = convertDate(DateTime.now());
@@ -63,7 +88,8 @@ class Workshop {
       'club': club,
       'description': description,
       'goingGlobal': goingGlobal,
-      'showGoing': showGoing
+      'showGoing': showGoing,
+      'id': id,
     };
   }
 
@@ -77,6 +103,7 @@ class Workshop {
     w.description = 'ejnfe';
     w.goingGlobal = 45;
     w.showGoing = true;
+    w.id = 0;
     return w;
   }
 }

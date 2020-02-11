@@ -1,18 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:iit_app/pages/login.dart';
+import 'package:iit_app/data/post_api_service.dart';
+import 'package:iit_app/model/appConstants.dart';
 
 class CrudMethods {
-  static bool isLoggedIn() {
-    signInWithGoogle();
-    if (FirebaseAuth.instance.currentUser() != null)
+  static Future<bool> isLoggedIn() async {
+    AppConstants.currentUser = await FirebaseAuth.instance.currentUser();
+    // print(AppConstants.currentUser);
+    if (AppConstants.currentUser != null) {
+      AppConstants.service = PostApiService.create();
+      await AppConstants.populateWorkshops();
       return true;
-    else
+    } else
       return false;
   }
 
   Future<void> addData(workshopData) async {
-    if (isLoggedIn()) {
+    bool isLoggedin = await isLoggedIn();
+    if (isLoggedin) {
       // Firestore.instance
       //     .collection('workshop')
       //     .add(workshopData)
