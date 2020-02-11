@@ -41,9 +41,9 @@ class _HomeScreenState extends State<HomeScreen>
               accountName: Text(AppConstants.currentUser.displayName),
               accountEmail: Text(AppConstants.currentUser.email),
               currentAccountPicture: Image(
-                  image: googleSignIn.currentUser == null
+                  image: AppConstants.currentUser == null
                       ? AssetImage('assets/profile_test.jpg')
-                      : NetworkImage(photoUrl),
+                      : NetworkImage(AppConstants.currentUser.photoUrl),
                   fit: BoxFit.cover)),
           getNavItem(Icons.home, "Home", '/home', replacement: true),
           getNavItem(Icons.local_dining, "Mess management", '/mess'),
@@ -54,8 +54,8 @@ class _HomeScreenState extends State<HomeScreen>
           ListTile(
             leading: Icon(Icons.exit_to_app),
             title: Text('LogOut'),
-            onTap: () => {
-              signOutGoogle(),
+            onTap: () async => {
+              await signOutGoogle(),
               Navigator.of(context).pushReplacementNamed('/login')
             },
           ),
@@ -73,7 +73,13 @@ class _HomeScreenState extends State<HomeScreen>
         workshops = results;
       });
     });
+    fetchUpdatedDetails();
     super.initState();
+  }
+
+  void fetchUpdatedDetails() async {
+    await AppConstants.updateAndPopulateWorkshops();
+    setState(() {});
   }
 
   Future<bool> _onPopHome() {
@@ -173,9 +179,9 @@ class _HomeScreenState extends State<HomeScreen>
                   ),
                   decoration: BoxDecoration(
                       image: DecorationImage(
-                          image: googleSignIn.currentUser == null
+                          image: AppConstants.currentUser == null
                               ? AssetImage('assets/profile_test.jpg')
-                              : NetworkImage(photoUrl),
+                              : NetworkImage(AppConstants.currentUser.photoUrl),
                           fit: BoxFit.cover),
                       borderRadius: BorderRadius.circular(10.0)),
                 ),
@@ -202,7 +208,7 @@ class _HomeScreenState extends State<HomeScreen>
                   color: Colors.black,
                   icon: Icon(Icons.notifications_active),
                   onPressed: () {
-                    print(photoUrl);
+                    print(AppConstants.currentUser.photoUrl);
                     print(AppConstants.currentUser);
                     // FirebaseAuth.instance.currentUser().then((value) {
                     //   print(value);

@@ -18,8 +18,8 @@ class AppConstants {
     DatabaseHelper helper = DatabaseHelper.instance;
     var database = await helper.workshopInfoDatabase;
 
-    workshops = await helper.getAllWorkshopsInfo();
-    print(workshops);
+    workshops = await helper.getAllWorkshopsInfo(db: database);
+    print(' workshops is empty: ${(workshops.isEmpty == true).toString()}');
 
     if (workshops.isEmpty == true) {
       // insert all workshop information for the first time
@@ -35,12 +35,39 @@ class AppConstants {
         await helper.insertWorkshopInfoIntoDatabase(post: post);
       }
 
-      print(posts);
+      // print(posts);
+      // print('printing fetched workshop infos');
+      // for (var workshop in workshops) {
+      //   print(workshop.createMap());
+      // }
+
+      workshops = await helper.getAllWorkshopsInfo(db: database);
     }
-    print('printing fetched workshop infos');
-    workshops = await helper.getAllWorkshopsInfo();
-    for (var workshop in workshops) {
-      print(workshop.createMap());
+    // helper.closeDatabase(db: database);
+    print('workshops after fetching : $workshops');
+  }
+
+  static updateAndPopulateWorkshops() async {
+    DatabaseHelper helper = DatabaseHelper.instance;
+    var database = await helper.workshopInfoDatabase;
+
+    await helper.deleteWorkshopInfo(db: database);
+
+    print('fetching workshops infos from json');
+
+    Response<BuiltList<BuiltPost>> snapshots =
+        await service.getUpcomingWorkshops();
+
+    final posts = snapshots.body;
+
+    for (var post in posts) {
+      await helper.insertWorkshopInfoIntoDatabase(post: post);
     }
+
+    workshops = await helper.getAllWorkshopsInfo(db: database);
+    print('------------------------------------');
+    // workshops = [];
+    print('workshops after updation: $workshops');
+    // helper.closeDatabase(db: database);
   }
 }

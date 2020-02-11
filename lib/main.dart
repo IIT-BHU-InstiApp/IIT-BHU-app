@@ -14,19 +14,19 @@ import 'package:provider/provider.dart';
 
 import 'data/post_api_service.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  bool logStatus = await CrudMethods.isLoggedIn();
+  print(logStatus);
   runApp(
     Provider(
       builder: (_) => PostApiService.create(),
       dispose: (_, PostApiService service) => service.client.dispose(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        home:
-            // CrudMethods.isLoggedIn()
-            //     ? HomeScreen()
-            //     :
-            LoginPage(), // route for home is '/' implicitly
+        home: logStatus
+            ? HomeScreen()
+            : LoginPage(), // route for home is '/' implicitly
         routes: <String, WidgetBuilder>{
           // define the routes
           '/home': (BuildContext context) => HomeScreen(),

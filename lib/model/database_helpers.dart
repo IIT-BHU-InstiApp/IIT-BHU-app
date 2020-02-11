@@ -119,9 +119,7 @@ class DatabaseHelper {
     await db.insert(workshopString, workshopInfoToMap(workshop));
   }
 
-  Future<List<Workshop>> getAllWorkshopsInfo() async {
-    Database db = await workshopInfoDatabase;
-
+  Future<List<Workshop>> getAllWorkshopsInfo({@required Database db}) async {
     List<Map> maps = await db.query(
       workshopString,
       columns: [
@@ -144,4 +142,10 @@ class DatabaseHelper {
     }
     return workshops;
   }
+
+  Future deleteWorkshopInfo({@required Database db}) async {
+    await db.delete(workshopString);
+  }
+
+  Future closeDatabase({@required Database db}) async => db.close();
 }
