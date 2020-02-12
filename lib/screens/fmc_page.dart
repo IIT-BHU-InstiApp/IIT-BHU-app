@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 //import 'package:flutter/foundation.dart';
 
-void main() {
+/*void main() {
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
     color: Colors.grey[300],
     home: FMC(),
   ));
-}
+}*/
 
 class FMC extends StatefulWidget {
   @override
@@ -82,7 +82,7 @@ class _FMCState extends State<FMC> {
 
   String description = 'Description';
   String descriptionText =
-      'We can’t connect to the server at www.google.com. We can’t connect to the server at www.google.com.  We can’t connect to the server at www.google.com.';
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ';
   final headingStyle = TextStyle(
       fontSize: 30.0,
       color: Colors.black,
