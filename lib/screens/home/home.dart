@@ -164,94 +164,180 @@ class _HomeScreenState extends State<HomeScreen>
     return WillPopScope(
       onWillPop: _onPopHome,
       child: Scaffold(
-          backgroundColor: Colors.white70,
-          appBar: AppBar(
-            backgroundColor: Colors.white,
-            automaticallyImplyLeading: false,
-            actions: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(top: 8.0, left: 8),
-                child: Container(
-                  height: 30.0,
-                  width: 40.0,
-                  child: Builder(
-                    builder: (context) => GestureDetector(
-                        onTap: () => Scaffold.of(context).openDrawer()),
-                  ),
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: AppConstants.currentUser == null
-                              ? AssetImage('assets/profile_test.jpg')
-                              : NetworkImage(AppConstants.currentUser.photoUrl),
-                          fit: BoxFit.cover),
-                      borderRadius: BorderRadius.circular(10.0)),
+        backgroundColor: Colors.white70,
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          automaticallyImplyLeading: false,
+          actions: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0, left: 8),
+              child: Container(
+                height: 30.0,
+                width: 40.0,
+                child: Builder(
+                  builder: (context) => GestureDetector(
+                      onTap: () => Scaffold.of(context).openDrawer()),
                 ),
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: AppConstants.currentUser == null
+                            ? AssetImage('assets/profile_test.jpg')
+                            : NetworkImage(AppConstants.currentUser.photoUrl),
+                        fit: BoxFit.cover),
+                    borderRadius: BorderRadius.circular(10.0)),
               ),
-              Padding(
-                padding: EdgeInsets.only(left: 8.0),
-              ),
-              Expanded(
-                child: TextField(
-                  decoration: InputDecoration(
-                      //labelText: 'Search',
-                      hintText: 'Search',
-                      prefixIcon: Icon(Icons.search),
-                      border: OutlineInputBorder(
-                          borderRadius:
-                              BorderRadius.all(Radius.circular(25.0)))),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(right: 5.0),
-              ),
-              SizedBox(
-                child: IconButton(
-                  color: Colors.black,
-                  icon: Icon(Icons.notifications_active),
-                  onPressed: () {
-                    print(AppConstants.currentUser.photoUrl);
-                    print(AppConstants.currentUser);
-                    // FirebaseAuth.instance.currentUser().then((value) {
-                    //   print(value);
-                    // });
-                  },
-                ),
-              )
-            ],
-            bottom: TabBar(
-              unselectedLabelColor: Colors.grey,
-              labelColor: Colors.black,
-              tabs: [
-                new Tab(
-                  text: 'Latest',
-                ),
-                new Tab(text: 'Interested'),
-              ],
-              controller: _tabController,
             ),
-          ),
-          drawer: getNavDrawer(context),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () => Navigator.of(context).pushNamed('/council'),
-            child: Icon(Icons.add_box),
-          ),
-          body: TabBarView(
-            children: <Widget>[
-              Container(
-                height: 400,
-                child:
-                    // _buildBody(context),
-                    _buildPosts(context),
+            Padding(
+              padding: EdgeInsets.only(left: 8.0),
+            ),
+            Expanded(
+              child: TextField(
+                decoration: InputDecoration(
+                    //labelText: 'Search',
+                    hintText: 'Search',
+                    prefixIcon: Icon(Icons.search),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(25.0)))),
               ),
-              Container(
-                height: 400,
-                child:
-                    // _buildBody(context),
-                    _buildPosts(context),
+            ),
+            Padding(
+              padding: EdgeInsets.only(right: 5.0),
+            ),
+            SizedBox(
+              child: IconButton(
+                color: Colors.black,
+                icon: Icon(Icons.notifications_active),
+                onPressed: () {
+                  print(AppConstants.currentUser.photoUrl);
+                  print(AppConstants.currentUser);
+                  // FirebaseAuth.instance.currentUser().then((value) {
+                  //   print(value);
+                  // });
+                },
               ),
+            )
+          ],
+          bottom: TabBar(
+            unselectedLabelColor: Colors.grey,
+            labelColor: Colors.black,
+            tabs: [
+              new Tab(
+                text: 'Latest',
+              ),
+              new Tab(text: 'Interested'),
             ],
             controller: _tabController,
-          )),
+          ),
+        ),
+        drawer: getNavDrawer(context),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () => Navigator.of(context).pushNamed('/council'),
+          child: Icon(Icons.add_box),
+        ),
+        body: Stack(
+          //shrinkWrap: true,
+          children: <Widget>[
+            Container(
+             // height: 300,
+              child: TabBarView(
+                children: <Widget>[
+                  Container(
+                    height: 400,
+                    child:
+                        // _buildBody(context),
+                        _buildPosts(context),
+                  ),
+                  Container(
+                    height: 400,
+                    child:
+                        // _buildBody(context),
+                        _buildPosts(context),
+                  ),
+                ],
+                controller: _tabController,
+              ),
+            ),
+            SizedBox(
+              height: 60,
+            ),
+            // Column(
+            //   children: <Widget>[
+
+            //   ],
+            // )
+            Positioned(
+              bottom: 100,
+              left: 30,
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      RaisedButton(
+                        child: Text("SNTC"),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        onPressed: () {},
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                          left: 35,
+                        ),
+                      ),
+                      RaisedButton(
+                        child: Text("Cultural"),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        onPressed: () {},
+                      )
+                    ],
+                  ),
+                  SizedBox(height: 30),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  RaisedButton(
+                    child: Text("FMC"),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    onPressed: () {},
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      left: 20,
+                    ),
+                  ),
+                  RaisedButton(
+                    child: Text("Sports"),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    onPressed: () {},
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      left: 20,
+                    ),
+                  ),
+                  RaisedButton(
+                    child: Text("SSC"),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    onPressed: () {},
+                  )
+                ],
+              ),
+                ],
+              ),
+            ),
+            
+          ],
+        ),
+      ),
     );
   }
 }
