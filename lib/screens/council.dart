@@ -1,20 +1,6 @@
 import 'package:flutter/material.dart';
-//import 'package:flutter/foundation.dart';
 
-/*void main() {
-  runApp(MaterialApp(
-    debugShowCheckedModeBanner: false,
-    color: Colors.grey[300],
-    home: FMC(),
-  ));
-}*/
-
-class FMC extends StatefulWidget {
-  @override
-  _FMCState createState() => _FMCState();
-}
-
-class _FMCState extends State<FMC> {
+class CouncilScreen extends StatelessWidget {
   Widget clubTemplate({String clubName, String image}) {
     return ListTile(
       leading: Container(
@@ -80,8 +66,8 @@ class _FMCState extends State<FMC> {
     );
   }
 
-  String description = 'Description';
-  String descriptionText =
+  final String description = 'Description';
+  final String descriptionText =
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ';
   final headingStyle = TextStyle(
       fontSize: 30.0,

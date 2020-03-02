@@ -51,6 +51,7 @@ class _HomeScreenState extends State<HomeScreen>
           getNavItem(Icons.account_box, "Account", '/account'),
           getNavItem(Icons.comment, "Complaints & Suggestions", '/complaints'),
           getNavItem(Icons.settings, "Settings", '/settings'),
+          getNavItem(Icons.add, "Create Workshop", '/create'),
           ListTile(
             leading: Icon(Icons.exit_to_app),
             title: Text('LogOut'),
@@ -231,7 +232,7 @@ class _HomeScreenState extends State<HomeScreen>
           ),
           drawer: getNavDrawer(context),
           floatingActionButton: FloatingActionButton(
-            onPressed: () => Navigator.of(context).pushNamed('/create'),
+            onPressed: () => Navigator.of(context).pushNamed('/council'),
             child: Icon(Icons.add_box),
           ),
           body: TabBarView(

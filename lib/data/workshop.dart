@@ -11,7 +11,7 @@ class Workshop {
   ];
   static Map<String, List<String>> clubs = {
     null: [],
-    councils[0]: ['COPS', 'Robotics', 'SAE', 'AMC', 'CSI', 'Biz', 'Astro'],
+    councils[0]: ['COPS', 'Robotics Club', 'SAE', 'AMC', 'CSI', 'Biz', 'Astro'],
     councils[1]: [
       'Photography',
       'Animation',
