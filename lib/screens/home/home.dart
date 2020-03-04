@@ -230,111 +230,40 @@ class _HomeScreenState extends State<HomeScreen>
           ),
         ),
         drawer: getNavDrawer(context),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () => Navigator.of(context).pushNamed('/council'),
-          child: Icon(Icons.add_box),
-        ),
         body: Stack(
           //shrinkWrap: true,
           children: <Widget>[
             Container(
-             // height: 300,
-              child: TabBarView(
-                children: <Widget>[
-                  Container(
-                    height: 400,
-                    child:
-                        // _buildBody(context),
-                        _buildPosts(context),
-                  ),
-                  Container(
-                    height: 400,
-                    child:
-                        // _buildBody(context),
-                        _buildPosts(context),
-                  ),
-                ],
-                controller: _tabController,
-              ),
+              child: TabBarView(controller: _tabController, children: <Widget>[
+                Container(height: 400, child: _buildPosts(context)),
+                Container(height: 400, child: _buildPosts(context))
+              ]),
             ),
-            SizedBox(
-              height: 60,
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    HomeWidgets.councilButton(context, name: 'SnTC'),
+                    Padding(padding: EdgeInsets.only(left: 35)),
+                    HomeWidgets.councilButton(context, name: 'Cultural'),
+                  ],
+                ),
+                SizedBox(height: 30),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    HomeWidgets.councilButton(context, name: 'FMC'),
+                    Padding(padding: EdgeInsets.only(left: 20)),
+                    HomeWidgets.councilButton(context, name: 'Sports'),
+                    Padding(padding: EdgeInsets.only(left: 20)),
+                    HomeWidgets.councilButton(context, name: 'SSC'),
+                  ],
+                ),
+              ],
             ),
-            // Column(
-            //   children: <Widget>[
-
-            //   ],
-            // )
-            Positioned(
-              bottom: 100,
-              left: 30,
-              child: Column(
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      RaisedButton(
-                        child: Text("SNTC"),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        onPressed: () {},
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                          left: 35,
-                        ),
-                      ),
-                      RaisedButton(
-                        child: Text("Cultural"),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        onPressed: () {},
-                      )
-                    ],
-                  ),
-                  SizedBox(height: 30),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  RaisedButton(
-                    child: Text("FMC"),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    onPressed: () {},
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                      left: 20,
-                    ),
-                  ),
-                  RaisedButton(
-                    child: Text("Sports"),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    onPressed: () {},
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                      left: 20,
-                    ),
-                  ),
-                  RaisedButton(
-                    child: Text("SSC"),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    onPressed: () {},
-                  )
-                ],
-              ),
-                ],
-              ),
-            ),
-            
           ],
         ),
       ),

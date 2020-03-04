@@ -187,4 +187,13 @@ class HomeWidgets {
           ],
         ),
       ));
+
+  static Widget councilButton(BuildContext context, {String name}) =>
+      RaisedButton(
+        child: Text(name),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(50),
+        ),
+        onPressed: () {Navigator.of(context).pushNamed('/council');},
+      );
 }
