@@ -14,10 +14,13 @@ import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 
 import 'data/post_api_service.dart';
+import 'model/appConstants.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  AppConstants.service = PostApiService.create();
   bool logStatus = await CrudMethods.isLoggedIn();
+  print('log status: $logStatus');
   print(logStatus);
   runApp(
     Provider(

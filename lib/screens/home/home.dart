@@ -74,13 +74,31 @@ class _HomeScreenState extends State<HomeScreen>
         workshops = results;
       });
     });
-    fetchUpdatedDetails();
+    fetchWorkshops();
     super.initState();
+  }
+
+  void fetchWorkshops() async {
+    await AppConstants.populateWorkshops();
+    setState(() {
+      AppConstants.firstTimeFetching = false;
+    });
+    fetchUpdatedDetails();
   }
 
   void fetchUpdatedDetails() async {
     await AppConstants.updateAndPopulateWorkshops();
     setState(() {});
+  }
+
+  void refresh() async {
+    setState(() {
+      AppConstants.refreshingHomePage = true;
+    });
+    await AppConstants.updateAndPopulateWorkshops();
+    setState(() {
+      AppConstants.refreshingHomePage = false;
+    });
   }
 
   Future<bool> _onPopHome() {
@@ -239,7 +257,9 @@ class _HomeScreenState extends State<HomeScreen>
             children: <Widget>[
               Container(
                 height: 400,
-                child:
+                child: AppConstants.firstTimeFetching
+                    ? Center(child: CircularProgressIndicator())
+                    :
                     // _buildBody(context),
                     _buildPosts(context),
               ),
