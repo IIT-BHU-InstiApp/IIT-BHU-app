@@ -8,8 +8,7 @@ class CrudMethods {
     AppConstants.currentUser = await FirebaseAuth.instance.currentUser();
     // print(AppConstants.currentUser);
     if (AppConstants.currentUser != null) {
-      AppConstants.service = PostApiService.create();
-      await AppConstants.populateWorkshops();
+      // AppConstants.service = PostApiService.create();
       return true;
     } else
       return false;
