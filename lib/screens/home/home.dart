@@ -74,7 +74,9 @@ class _HomeScreenState extends State<HomeScreen>
         workshops = results;
       });
     });
+
     fetchWorkshops();
+    fetchCouncils();
     super.initState();
   }
 
@@ -84,6 +86,11 @@ class _HomeScreenState extends State<HomeScreen>
       AppConstants.firstTimeFetching = false;
     });
     fetchUpdatedDetails();
+  }
+
+  void fetchCouncils() async {
+    await AppConstants.populateCouncils();
+    setState(() {});
   }
 
   void fetchUpdatedDetails() async {
@@ -265,30 +272,19 @@ class _HomeScreenState extends State<HomeScreen>
                   ],
                 ),
               ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      HomeWidgets.councilButton(context, name: 'SnTC'),
-                      Padding(padding: EdgeInsets.only(left: 35)),
-                      HomeWidgets.councilButton(context, name: 'Cultural'),
-                    ],
-                  ),
-                  SizedBox(height: 30),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      HomeWidgets.councilButton(context, name: 'FMC'),
-                      Padding(padding: EdgeInsets.only(left: 20)),
-                      HomeWidgets.councilButton(context, name: 'Sports'),
-                      Padding(padding: EdgeInsets.only(left: 20)),
-                      HomeWidgets.councilButton(context, name: 'SSC'),
-                    ],
-                  ),
-                ],
+              Container(
+                padding: EdgeInsets.fromLTRB(5, 400, 5, 20),
+                child: AppConstants.councils == null
+                    ? Center(child: CircularProgressIndicator())
+                    : ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) {
+                          return HomeWidgets.councilButton(context,
+                              name: AppConstants.councils[index].name.toString().substring(0,4),
+                              councilId: AppConstants.councils[index].id);
+                        },
+                        itemCount: AppConstants.councils.length,
+                      ),
               ),
             ],
           ),

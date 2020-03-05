@@ -15,6 +15,7 @@ class AppConstants {
   static PostApiService service;
 
   static List<Workshop> workshops;
+  static var councils;
 
   static Future<bool> isWorkshopDatabaseEmpty() async {
     DatabaseHelper helper = DatabaseHelper.instance;
@@ -28,6 +29,12 @@ class AppConstants {
     } else {
       return false;
     }
+  }
+
+  static Future<void> populateCouncils() async {
+    Response<BuiltList<BuiltAllCouncilsPost>> snapshots =
+        await service.getAllCouncils();
+    councils = snapshots.body;
   }
 
   static Future<void> populateWorkshops() async {
