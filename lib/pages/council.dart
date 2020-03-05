@@ -1,41 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:iit_app/data/workshop.dart';
 
 class CouncilPage extends StatelessWidget {
-  final dynamic council;
-  final String descriptionText =
-      'Loremquis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ';
-  CouncilPage(this.council);
-  Widget clubTemplate({String clubName, String image}) {
-    return ListTile(
-      leading: Container(
-        height: 50.0,
-        width: 50.0,
-        decoration: BoxDecoration(
-            //color: Colors.black,
-            image: DecorationImage(
-              image: AssetImage('assets/fmc.jpeg'),
-              fit: BoxFit.cover,
-            ),
-            borderRadius: BorderRadius.all(Radius.circular(30.0)),
-            border: Border.all(color: Colors.blue, width: 2.0)),
-      ),
-      title: Container(
-        child: Card(
-          shape: RoundedRectangleBorder(
-            side: BorderSide(color: Colors.blue, width: 2.0),
-            borderRadius: BorderRadius.circular(15.0),
-          ),
-          color: Colors.black,
-          child: Container(
-              height: 50.0,
-              child: Center(
-                child: Text(clubName,
-                    style: TextStyle(color: Colors.white, fontSize: 25.0)),
-              )),
-        ),
-      ),
-    );
-  }
+  final council;
+  final List<String> secyNames, designation, clubNames;
+  CouncilPage(this.council, this.clubNames, this.secyNames, this.designation);
 
   final space = SizedBox(height: 8.0);
   Widget template({String imageVal, String name, String desg}) {
@@ -119,7 +88,7 @@ class CouncilPage extends StatelessWidget {
                               style: headingStyle,
                             ),
                             divide,
-                            Text(descriptionText, style: generalTextStyle),
+                            Text(council.description, style: generalTextStyle),
                             space,
                           ],
                         ),
@@ -129,9 +98,15 @@ class CouncilPage extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
-                            template(desg: 'GenSec', name: 'Ayush Kumar'),
-                            template(desg: 'GenSec', name: 'Ayush Kumar'),
-                            template(desg: 'GenSec', name: 'Ayush Kumar'),
+                            template(
+                              desg: designation[0],
+                              name: secyNames[0],
+                            ),
+                            template(
+                              desg: designation[1],
+                              name: secyNames[1],
+                            ),
+                            template(desg: designation[2], name: secyNames[2]),
                           ],
                         ),
                       ),
@@ -155,14 +130,48 @@ class CouncilPage extends StatelessWidget {
                 ),
                 Container(
                   color: Colors.white,
-                  child: Column(
-                    children: <Widget>[
-                      // clubTemplate(clubName: this.club),
-                      clubTemplate(clubName: 'Creative Design Club'),
-                      clubTemplate(clubName: 'Creative Design Club'),
-                      clubTemplate(clubName: 'Creative Design Club'),
-                      clubTemplate(clubName: 'Creative Design Club'),
-                    ],
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: clubNames.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        onTap: () {
+                          Navigator.pushNamed(context, '/club');
+                        },
+                        leading: Container(
+                          height: 50.0,
+                          width: 50.0,
+                          decoration: BoxDecoration(
+                              //color: Colors.black,
+                              image: DecorationImage(
+                                image: AssetImage('assets/fmc.jpeg'),
+                                fit: BoxFit.cover,
+                              ),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(30.0)),
+                              border:
+                                  Border.all(color: Colors.blue, width: 2.0)),
+                        ),
+                        title: Container(
+                          child: Card(
+                            shape: RoundedRectangleBorder(
+                              side: BorderSide(color: Colors.blue, width: 2.0),
+                              borderRadius: BorderRadius.circular(15.0),
+                            ),
+                            color: Colors.black,
+                            child: Container(
+                              height: 50.0,
+                              child: Center(
+                                child: Text('${clubNames[index]}',
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 25.0)),
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 ),
               ],
