@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 
 class CouncilPage extends StatelessWidget {
-  final String club;
-  final String description = 'Description';
+  final dynamic council;
   final String descriptionText =
       'Loremquis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ';
-  CouncilPage(this.club);
+  CouncilPage(this.council);
   Widget clubTemplate({String clubName, String image}) {
     return ListTile(
       leading: Container(
@@ -116,7 +115,7 @@ class CouncilPage extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             Text(
-                              description,
+                              council.description,
                               style: headingStyle,
                             ),
                             divide,
@@ -158,7 +157,7 @@ class CouncilPage extends StatelessWidget {
                   color: Colors.white,
                   child: Column(
                     children: <Widget>[
-                      clubTemplate(clubName: this.club),
+                      // clubTemplate(clubName: this.club),
                       clubTemplate(clubName: 'Creative Design Club'),
                       clubTemplate(clubName: 'Creative Design Club'),
                       clubTemplate(clubName: 'Creative Design Club'),

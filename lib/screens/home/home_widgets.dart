@@ -2,6 +2,7 @@ import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
 import 'package:iit_app/data/post_api_service.dart';
 import 'package:iit_app/data/workshop.dart';
+import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/pages/detail.dart';
 import 'package:iit_app/pages/council.dart';
@@ -193,20 +194,18 @@ class HomeWidgets {
         ),
       ));
 
-  static Widget councilButton(BuildContext context, {String name}) =>
-      RaisedButton(
-        child: Text(name),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(50),
+  static Widget councilButton(BuildContext context, {String name, int councilId}) =>
+      Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: FloatingActionButton(
+          child: Text(name),
+          shape: CircleBorder(),
+          onPressed: () async {
+            Response<BuiltCouncilPost> snapshots = await AppConstants.service.getCouncil(councilId);
+            print(snapshots.body);
+            // Navigator.of(context)
+            //     .push(MaterialPageRoute(builder: (context) => CouncilPage(name)));
+          },
         ),
-        onPressed: () async{
-          PostApiService service = PostApiService.create();
-          // Response<BuiltList<BuiltAllCouncilsPost>> snapshots = await service.getAllCouncils();
-
-          Response<BuiltCouncilPost> snapshots = await service.getCouncil(1);
-          print(snapshots);
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => CouncilPage(name)));
-        },
       );
 }
