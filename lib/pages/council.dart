@@ -115,7 +115,7 @@ class CouncilPage extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             Text(
-                              council.description,
+                              'council.description',
                               style: headingStyle,
                             ),
                             divide,

@@ -197,14 +197,14 @@ class HomeWidgets {
   static Widget councilButton(BuildContext context, {String name, int councilId}) =>
       Padding(
         padding: const EdgeInsets.all(5.0),
-        child: FloatingActionButton(
+        child: RaisedButton(
           child: Text(name),
           shape: CircleBorder(),
           onPressed: () async {
             Response<BuiltCouncilPost> snapshots = await AppConstants.service.getCouncil(councilId);
             print(snapshots.body);
-            // Navigator.of(context)
-            //     .push(MaterialPageRoute(builder: (context) => CouncilPage(name)));
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (context) => CouncilPage(snapshots.body)));
           },
         ),
       );
