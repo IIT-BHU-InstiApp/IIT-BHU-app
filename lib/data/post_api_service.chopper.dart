@@ -20,10 +20,11 @@ class _$PostApiService extends PostApiService {
     return client.send<BuiltList<BuiltPost>, BuiltPost>($request);
   }
 
-  Future<Response<BuiltPost>> getPost(int id) {
+  Future<Response<BuiltWorkshopDetailPost>> getPost(int id) {
     final $url = '/workshops/${id}';
     final $request = Request('GET', $url, client.baseUrl);
-    return client.send<BuiltPost, BuiltPost>($request);
+    return client
+        .send<BuiltWorkshopDetailPost, BuiltWorkshopDetailPost>($request);
   }
 
   Future<Response<BuiltList<BuiltAllCouncilsPost>>> getAllCouncils() {
@@ -37,6 +38,25 @@ class _$PostApiService extends PostApiService {
     final $url = '/councils/${id}';
     final $request = Request('GET', $url, client.baseUrl);
     return client.send<BuiltCouncilPost, BuiltCouncilPost>($request);
+  }
+
+  Future<Response<BuiltClubPost>> getClub(int id) {
+    final $url = '/clubs/${id}';
+    final $request = Request('GET', $url, client.baseUrl);
+    return client.send<BuiltClubPost, BuiltClubPost>($request);
+  }
+
+  Future<Response<BuiltClubPost>> getProfile() {
+    final $url = '/profile';
+    final $request = Request('GET', $url, client.baseUrl);
+    return client.send<BuiltClubPost, BuiltClubPost>($request);
+  }
+
+  Future<Response<BuiltList<BuiltTeamMemberPost>>> getTeam() {
+    final $url = '/team';
+    final $request = Request('GET', $url, client.baseUrl);
+    return client
+        .send<BuiltList<BuiltTeamMemberPost>, BuiltTeamMemberPost>($request);
   }
 
   Future<Response<BuiltPost>> postPost(BuiltPost body) {

@@ -203,8 +203,8 @@ class HomeWidgets {
           onPressed: () async {
             Response<BuiltCouncilPost> snapshots = await AppConstants.service.getCouncil(councilId);
             print(snapshots.body);
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => CouncilPage(snapshots.body)));
+            // Navigator.of(context)
+            //     .push(MaterialPageRoute(builder: (context) => CouncilPage(snapshots.body)));
           },
         ),
       );
