@@ -1,37 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:iit_app/data/workshop.dart';
 
 class CouncilScreen extends StatelessWidget {
-  Widget clubTemplate({String clubName, String image}) {
-    return ListTile(
-      leading: Container(
-        height: 50.0,
-        width: 50.0,
-        decoration: BoxDecoration(
-            //color: Colors.black,
-            image: DecorationImage(
-              image: AssetImage('assets/fmc.jpeg'),
-              fit: BoxFit.cover,
-            ),
-            borderRadius: BorderRadius.all(Radius.circular(30.0)),
-            border: Border.all(color: Colors.blue, width: 2.0)),
-      ),
-      title: Container(
-        child: Card(
-          shape: RoundedRectangleBorder(
-            side: BorderSide(color: Colors.blue, width: 2.0),
-            borderRadius: BorderRadius.circular(15.0),
-          ),
-          color: Colors.black,
-          child: Container(
-              height: 50.0,
-              child: Center(
-                child: Text(clubName,
-                    style: TextStyle(color: Colors.white, fontSize: 25.0)),
-              )),
-        ),
-      ),
-    );
-  }
+  final String descriptionText;
+  final councilName;
+  final List<String> secyNames,designation,clubNames;
+  CouncilScreen({this.descriptionText,this.clubNames,this.secyNames,this.designation,this.councilName});
+  /*final List<String> clubs = [
+    'Design',
+    'Design',
+    'Design',
+    'Design',
+    'Design',
+    'Design',
+  ];*/
+ 
 
   final space = SizedBox(height: 8.0);
   Widget template({String imageVal, String name, String desg}) {
@@ -67,8 +50,8 @@ class CouncilScreen extends StatelessWidget {
   }
 
   final String description = 'Description';
-  final String descriptionText =
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ';
+  //final String descriptionText =
+      //'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ';
   final headingStyle = TextStyle(
       fontSize: 30.0,
       color: Colors.black,
@@ -128,9 +111,9 @@ class CouncilScreen extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
-                            template(desg: 'GenSec', name: 'Ayush Kumar'),
-                            template(desg: 'GenSec', name: 'Ayush Kumar'),
-                            template(desg: 'GenSec', name: 'Ayush Kumar'),
+                            template(desg: designation[0], name: secyNames[0],),
+                            template(desg: designation[1], name: secyNames[1],),
+                            template(desg: designation[2], name: secyNames[2]),
                           ],
                         ),
                       ),
@@ -154,14 +137,48 @@ class CouncilScreen extends StatelessWidget {
                 ),
                 Container(
                   color: Colors.white,
-                  child: Column(
-                    children: <Widget>[
-                      clubTemplate(clubName: 'Creative Design Club'),
-                      clubTemplate(clubName: 'Creative Design Club'),
-                      clubTemplate(clubName: 'Creative Design Club'),
-                      clubTemplate(clubName: 'Creative Design Club'),
-                      clubTemplate(clubName: 'Creative Design Club'),
-                    ],
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: clubNames.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        onTap: () {
+                          Navigator.pushNamed(context, '/club');
+                        },
+                        leading: Container(
+                          height: 50.0,
+                          width: 50.0,
+                          decoration: BoxDecoration(
+                              //color: Colors.black,
+                              image: DecorationImage(
+                                image: AssetImage('assets/fmc.jpeg'),
+                                fit: BoxFit.cover,
+                              ),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(30.0)),
+                              border:
+                                  Border.all(color: Colors.blue, width: 2.0)),
+                        ),
+                        title: Container(
+                          child: Card(
+                            shape: RoundedRectangleBorder(
+                              side: BorderSide(color: Colors.blue, width: 2.0),
+                              borderRadius: BorderRadius.circular(15.0),
+                            ),
+                            color: Colors.black,
+                            child: Container(
+                              height: 50.0,
+                              child: Center(
+                                child: Text('${clubNames[index]}',
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 25.0)),
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 ),
               ],
