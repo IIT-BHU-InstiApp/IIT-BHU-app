@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 
-class CouncilScreen extends StatelessWidget {
+class CouncilPage extends StatelessWidget {
+  final String club;
+  final String description = 'Description';
+  final String descriptionText =
+      'Loremquis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ';
+  CouncilPage(this.club);
   Widget clubTemplate({String clubName, String image}) {
     return ListTile(
       leading: Container(
@@ -66,9 +71,6 @@ class CouncilScreen extends StatelessWidget {
     );
   }
 
-  final String description = 'Description';
-  final String descriptionText =
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ';
   final headingStyle = TextStyle(
       fontSize: 30.0,
       color: Colors.black,
@@ -156,7 +158,7 @@ class CouncilScreen extends StatelessWidget {
                   color: Colors.white,
                   child: Column(
                     children: <Widget>[
-                      clubTemplate(clubName: 'Creative Design Club'),
+                      clubTemplate(clubName: this.club),
                       clubTemplate(clubName: 'Creative Design Club'),
                       clubTemplate(clubName: 'Creative Design Club'),
                       clubTemplate(clubName: 'Creative Design Club'),

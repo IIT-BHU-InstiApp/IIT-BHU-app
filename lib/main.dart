@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iit_app/screens/account.dart';
-import 'package:iit_app/screens/council.dart';
+import 'package:iit_app/pages/council.dart';
 import 'package:iit_app/screens/allWorkshops.dart';
 import 'package:iit_app/screens/complaints.dart';
 import 'package:iit_app/screens/home/home.dart';
@@ -37,7 +37,6 @@ void main() async {
           '/mess': (BuildContext context) => MessScreen(),
           '/allWorkshops': (BuildContext context) => AllWorkshopsScreen(),
           '/account': (BuildContext context) => AccountScreen(),
-          '/council': (BuildContext context) => CouncilScreen(),
           '/complaints': (BuildContext context) => ComplaintsScreen(),
           '/settings': (BuildContext context) => SettingsScreen(),
 

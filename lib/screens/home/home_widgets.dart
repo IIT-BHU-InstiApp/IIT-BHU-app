@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iit_app/data/workshop.dart';
 import 'package:iit_app/pages/detail.dart';
+import 'package:iit_app/pages/council.dart';
 import 'package:iit_app/pages/login.dart';
 
 class HomeWidgets {
@@ -194,6 +195,9 @@ class HomeWidgets {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(50),
         ),
-        onPressed: () {Navigator.of(context).pushNamed('/council');},
+        onPressed: () {
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => CouncilPage(name)));
+        },
       );
 }
