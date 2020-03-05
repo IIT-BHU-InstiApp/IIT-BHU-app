@@ -6,6 +6,17 @@ import 'built_post.dart';
 
 part 'serializers.g.dart';
 
-@SerializersFor(const [BuiltPost, BuiltCouncilPost, BuiltAllCouncilsPost, SecyPost, ClubListPost])
+@SerializersFor(const [
+  BuiltPost,
+  BuiltCouncilPost,
+  BuiltAllCouncilsPost,
+  SecyPost,
+  ClubListPost,
+  BuiltClubPost,
+  WorkshopPost,
+  BuiltWorkshopDetailPost,
+  BuiltProfilePost,
+  BuiltTeamMemberPost,
+])
 final Serializers serializers =
     (_$serializers.toBuilder()..addPlugin(StandardJsonPlugin())).build();

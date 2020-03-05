@@ -199,7 +199,7 @@ class HomeWidgets {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(50),
         ),
-        onPressed: () async{
+        onPressed: () async {
           PostApiService service = PostApiService.create();
           // Response<BuiltList<BuiltAllCouncilsPost>> snapshots = await service.getAllCouncils();
 
