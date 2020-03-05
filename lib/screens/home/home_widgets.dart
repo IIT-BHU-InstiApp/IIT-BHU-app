@@ -1,7 +1,11 @@
+import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
+import 'package:iit_app/data/post_api_service.dart';
 import 'package:iit_app/data/workshop.dart';
+import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/pages/detail.dart';
 import 'package:iit_app/pages/council.dart';
+import 'package:built_collection/built_collection.dart';
 import 'package:iit_app/pages/login.dart';
 
 class HomeWidgets {
@@ -195,7 +199,12 @@ class HomeWidgets {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(50),
         ),
-        onPressed: () {
+        onPressed: () async{
+          PostApiService service = PostApiService.create();
+          // Response<BuiltList<BuiltAllCouncilsPost>> snapshots = await service.getAllCouncils();
+
+          Response<BuiltCouncilPost> snapshots = await service.getCouncil(1);
+          print(snapshots);
           Navigator.of(context)
               .push(MaterialPageRoute(builder: (context) => CouncilPage(name)));
         },

@@ -26,6 +26,19 @@ class _$PostApiService extends PostApiService {
     return client.send<BuiltPost, BuiltPost>($request);
   }
 
+  Future<Response<BuiltList<BuiltAllCouncilsPost>>> getAllCouncils() {
+    final $url = '/councils';
+    final $request = Request('GET', $url, client.baseUrl);
+    return client
+        .send<BuiltList<BuiltAllCouncilsPost>, BuiltAllCouncilsPost>($request);
+  }
+
+  Future<Response<BuiltCouncilPost>> getCouncil(int id) {
+    final $url = '/councils/${id}';
+    final $request = Request('GET', $url, client.baseUrl);
+    return client.send<BuiltCouncilPost, BuiltCouncilPost>($request);
+  }
+
   Future<Response<BuiltPost>> postPost(BuiltPost body) {
     final $url = '';
     final $body = body;
