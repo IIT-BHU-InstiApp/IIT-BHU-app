@@ -2,11 +2,12 @@ import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
+import 'package:iit_app/screens/clubs.dart';
 
 class CouncilPage extends StatefulWidget {
   final int councilId;
 
-  const CouncilPage({Key key, this.councilId}) : super(key: key);
+  const CouncilPage({Key key, @required this.councilId}) : super(key: key);
 
   @override
   _CouncilPageState createState() => _CouncilPageState();
@@ -193,7 +194,13 @@ class _CouncilPageState extends State<CouncilPage> {
                           itemBuilder: (context, index) {
                             return ListTile(
                               onTap: () {
-                                Navigator.pushNamed(context, '/club');
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => ClubPage(
+                                      clubId: councilData.clubs[index].id,
+                                    ),
+                                  ),
+                                );
                               },
                               leading: Container(
                                 height: 50.0,
