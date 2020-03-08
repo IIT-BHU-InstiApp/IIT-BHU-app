@@ -3,10 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:iit_app/data/post_api_service.dart';
 import 'package:iit_app/data/workshop.dart';
 import 'package:iit_app/model/appConstants.dart';
-import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/pages/detail.dart';
 import 'package:iit_app/pages/council.dart';
-import 'package:built_collection/built_collection.dart';
 import 'package:iit_app/pages/login.dart';
 
 class HomeWidgets {
@@ -194,18 +192,25 @@ class HomeWidgets {
         ),
       ));
 
-  static Widget councilButton(BuildContext context, {String name, int councilId}) =>
+  static Widget councilButton(BuildContext context,
+          {String name, int councilId, String imageUrl}) =>
       Padding(
         padding: const EdgeInsets.all(5.0),
-        child: RaisedButton(
-          child: Text(name),
-          shape: CircleBorder(),
-          onPressed: () async {
-            Response<BuiltCouncilPost> snapshots = await AppConstants.service.getCouncil(councilId);
-            print(snapshots.body);
-            // Navigator.of(context)
-            //     .push(MaterialPageRoute(builder: (context) => CouncilPage(snapshots.body)));
-          },
+        child: Hero(
+          tag: 'councilId: $councilId',
+          child: RaisedButton(
+            child: Text(name),
+            shape: CircleBorder(),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => CouncilPage(
+                    councilId: councilId,
+                  ),
+                ),
+              );
+            },
+          ),
         ),
       );
 }

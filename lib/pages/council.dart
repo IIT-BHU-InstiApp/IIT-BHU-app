@@ -1,13 +1,36 @@
+import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
-import 'package:iit_app/data/workshop.dart';
+import 'package:iit_app/model/appConstants.dart';
+import 'package:iit_app/model/built_post.dart';
+import 'package:iit_app/screens/clubs.dart';
 
-class CouncilPage extends StatelessWidget {
-  final council;
-  final List<String> secyNames, designation, clubNames;
-  CouncilPage(this.council, this.clubNames, this.secyNames, this.designation);
+class CouncilPage extends StatefulWidget {
+  final int councilId;
+
+  const CouncilPage({Key key, @required this.councilId}) : super(key: key);
+
+  @override
+  _CouncilPageState createState() => _CouncilPageState();
+}
+
+class _CouncilPageState extends State<CouncilPage> {
+  var councilData;
+  @override
+  void initState() {
+    fetchCouncilById();
+    super.initState();
+  }
+
+  void fetchCouncilById() async {
+    Response<BuiltCouncilPost> snapshots =
+        await AppConstants.service.getCouncil(widget.councilId);
+    print(snapshots.body);
+    councilData = snapshots.body;
+    setState(() {});
+  }
 
   final space = SizedBox(height: 8.0);
-  Widget template({String imageVal, String name, String desg}) {
+  Widget template({String imageUrl, String name, String desg}) {
     return Expanded(
       child: Container(
           child: Wrap(
@@ -18,7 +41,9 @@ class CouncilPage extends StatelessWidget {
               space,
               Center(
                   child: CircleAvatar(
-                backgroundImage: AssetImage('assets/fmc.jpeg'),
+                backgroundImage: imageUrl == null
+                    ? AssetImage('assets/AMC.png')
+                    : NetworkImage(imageUrl),
                 radius: 50.0,
                 backgroundColor: Colors.transparent,
               )),
@@ -58,18 +83,28 @@ class CouncilPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               //scrollDirection: Axis.vertical,
               children: <Widget>[
-                Card(
-                  semanticContainer: true,
-                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                  ),
-                  child: Image(
-                    image: AssetImage('assets/fmc.jpeg'),
-                    fit: BoxFit.cover,
-                  ),
-                  elevation: 2.5,
-                ),
+                councilData == null
+                    ? Container(
+                        height: MediaQuery.of(context).size.height / 4,
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      )
+                    : Card(
+                        semanticContainer: true,
+                        clipBehavior: Clip.antiAliasWithSaveLayer,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        child: Image(
+                          image: councilData.large_image_url == null
+                              ? AssetImage('assets/AMC.png')
+                              : NetworkImage(councilData.large_image_url),
+                          // AssetImage('assets/fmc.jpeg'),
+                          fit: BoxFit.cover,
+                        ),
+                        elevation: 2.5,
+                      ),
                 space,
                 Container(
                   color: Colors.white,
@@ -88,28 +123,43 @@ class CouncilPage extends StatelessWidget {
                               style: headingStyle,
                             ),
                             divide,
-                            Text(council.description, style: generalTextStyle),
+                            councilData == null
+                                ? Center(
+                                    child: CircularProgressIndicator(),
+                                  )
+                                : Text(councilData.description,
+                                    style: generalTextStyle),
                             space,
                           ],
                         ),
                       ),
-                      Container(
-                        color: Colors.grey[300],
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            template(
-                              desg: designation[0],
-                              name: secyNames[0],
+                      councilData == null
+                          ? Container(
+                              height: MediaQuery.of(context).size.height / 4,
+                              child: Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                            )
+                          : Container(
+                              color: Colors.grey[300],
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: <Widget>[
+                                  template(
+                                    imageUrl: councilData.gensec.photo_url,
+                                    desg: 'gensec',
+                                    name: councilData.gensec.name,
+                                  ),
+                                  // template(
+                                  //   desg: designation[1],
+                                  //   name: secyNames[1],
+                                  // ),
+                                  // template(
+                                  //     desg: designation[2], name: secyNames[2]),
+                                ],
+                              ),
                             ),
-                            template(
-                              desg: designation[1],
-                              name: secyNames[1],
-                            ),
-                            template(desg: designation[2], name: secyNames[2]),
-                          ],
-                        ),
-                      ),
                       Container(
                         color: Colors.white,
                         padding: EdgeInsets.all(5.0),
@@ -128,52 +178,72 @@ class CouncilPage extends StatelessWidget {
                     ],
                   ),
                 ),
-                Container(
-                  color: Colors.white,
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: clubNames.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        onTap: () {
-                          Navigator.pushNamed(context, '/club');
-                        },
-                        leading: Container(
-                          height: 50.0,
-                          width: 50.0,
-                          decoration: BoxDecoration(
-                              //color: Colors.black,
-                              image: DecorationImage(
-                                image: AssetImage('assets/fmc.jpeg'),
-                                fit: BoxFit.cover,
-                              ),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(30.0)),
-                              border:
-                                  Border.all(color: Colors.blue, width: 2.0)),
+                councilData == null
+                    ? Container(
+                        height: MediaQuery.of(context).size.height / 4,
+                        child: Center(
+                          child: CircularProgressIndicator(),
                         ),
-                        title: Container(
-                          child: Card(
-                            shape: RoundedRectangleBorder(
-                              side: BorderSide(color: Colors.blue, width: 2.0),
-                              borderRadius: BorderRadius.circular(15.0),
-                            ),
-                            color: Colors.black,
-                            child: Container(
-                              height: 50.0,
-                              child: Center(
-                                child: Text('${clubNames[index]}',
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 25.0)),
+                      )
+                    : Container(
+                        color: Colors.white,
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: councilData.clubs.length,
+                          itemBuilder: (context, index) {
+                            return ListTile(
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => ClubPage(
+                                      clubId: councilData.clubs[index].id,
+                                    ),
+                                  ),
+                                );
+                              },
+                              leading: Container(
+                                height: 50.0,
+                                width: 50.0,
+                                decoration: BoxDecoration(
+                                    //color: Colors.black,
+                                    image: DecorationImage(
+                                      image: councilData.clubs[index]
+                                                  .small_image_url ==
+                                              null
+                                          ? AssetImage('assets/AMC.png')
+                                          : NetworkImage(councilData
+                                              .clubs[index].small_image_url),
+                                      fit: BoxFit.cover,
+                                    ),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(30.0)),
+                                    border: Border.all(
+                                        color: Colors.blue, width: 2.0)),
                               ),
-                            ),
-                          ),
+                              title: Container(
+                                child: Card(
+                                  shape: RoundedRectangleBorder(
+                                    side: BorderSide(
+                                        color: Colors.blue, width: 2.0),
+                                    borderRadius: BorderRadius.circular(15.0),
+                                  ),
+                                  color: Colors.black,
+                                  child: Container(
+                                    height: 50.0,
+                                    child: Center(
+                                      child: Text(councilData.clubs[index].name,
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 25.0)),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
                         ),
-                      );
-                    },
-                  ),
-                ),
+                      ),
               ],
             ),
           ),

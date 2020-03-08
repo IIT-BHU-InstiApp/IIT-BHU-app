@@ -277,11 +277,15 @@ class _HomeScreenState extends State<HomeScreen>
                 child: AppConstants.councils == null
                     ? Center(child: CircularProgressIndicator())
                     : ListView.builder(
-                      scrollDirection: Axis.horizontal,
+                        scrollDirection: Axis.horizontal,
                         itemBuilder: (context, index) {
                           return HomeWidgets.councilButton(context,
-                              name: AppConstants.councils[index].name.toString().substring(0,4),
-                              councilId: AppConstants.councils[index].id);
+                              name: AppConstants.councils[index].name
+                                  .toString()
+                                  .substring(0, 4),
+                              councilId: AppConstants.councils[index].id,
+                              imageUrl:
+                                  AppConstants.councils[index].small_image_url);
                         },
                         itemCount: AppConstants.councils.length,
                       ),
