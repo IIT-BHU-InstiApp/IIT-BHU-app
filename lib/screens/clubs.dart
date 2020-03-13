@@ -2,6 +2,7 @@ import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
+import 'package:iit_app/screens/home/home_widgets.dart';
 
 class ClubPage extends StatefulWidget {
   final int clubId;
@@ -123,22 +124,134 @@ class _ClubPageState extends State<ClubPage> {
 //TODO: use all the fields of clubMap in the UI..........
 
 // ?----------------------------------------------------------------------
+  final divide = Divider(height: 8.0, thickness: 2.0, color: Colors.blue);
+  final space = SizedBox(height: 8.0);
+  final headingStyle = TextStyle(
+      fontSize: 30.0,
+      color: Colors.black,
+      fontWeight: FontWeight.bold,
+      letterSpacing: 1.0);
+  Widget template({String imageUrl, String name, String desg}) {
+    return Expanded(
+      child: Container(
+        child: Wrap(
+          children: <Widget>[
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                space,
+                Center(
+                    child: CircleAvatar(
+                  backgroundImage: AssetImage('assets/fmc.jpeg'),
+                  radius: 50.0,
+                  backgroundColor: Colors.transparent,
+                )),
+                ListTile(
+                  title: Text(
+                    name,
+                    textAlign: TextAlign.center,
+                  ),
+                  subtitle: Text(
+                    desg,
+                    textAlign: TextAlign.center,
+                  ),
+                )
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[300],
       body: ListView(
-        children: <Widget>[
-          SizedBox(height: 50.0),
-          Text('COPS', textAlign: TextAlign.center, style: tempStyle),
-          SizedBox(height: 25.0),
-          Text('Description', textAlign: TextAlign.center, style: tempStyle),
-          SizedBox(height: 25.0),
-          Text(
-            'Workshops',
-            textAlign: TextAlign.center,
-          )
+        padding: EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 0.0),
+        scrollDirection: Axis.vertical,
+        children: [
+          Stack(children: [
+            Container(
+              width: MediaQuery.of(context).size.width,
+              child: Card(
+                semanticContainer: true,
+                clipBehavior: Clip.antiAliasWithSaveLayer,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+                child: Image(
+                  image: AssetImage('assets/fmc.jpeg'),
+                  fit: BoxFit.cover,
+                ),
+                elevation: 2.5,
+              ),
+            ),
+            Align(
+              alignment: Alignment.topRight,
+              child: Container(
+                padding: EdgeInsets.all(15.0),
+                child: FloatingActionButton(
+                  elevation: 3.0,
+                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                  onPressed: () {},
+                  child: Icon(Icons.description),
+                  /*child: Image(
+                    image: AssetImage('assets/iitbhu.jpeg'),
+                  ),*/
+                ),
+              ),
+            ),
+          ]),
+          space,
+          Container(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  clubMap['name'],
+                  style: headingStyle,
+                ),
+                IconButton(
+                    color: Colors.red,
+                    iconSize: 30.0,
+                    icon: Icon(Icons.subscriptions),
+                    onPressed: null)
+              ],
+            ),
+          ),
+          Container(
+            color: Colors.grey[300],
+            child: Center(
+              child: template(name: 'Ayush Kumar', desg: 'Secy'),
+            ),
+          ),
+          Container(
+            color: Colors.grey[300],
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                template(name: 'Ayush Kumar', desg: 'JointSecy'),
+                template(name: 'Ayush Kumar', desg: 'JointSecy')
+              ],
+            ),
+          ),
+          Center(
+            child: Text(
+              'Description',
+              style: headingStyle,
+            ),
+          ),
+          divide,
+          Text('${clubMap['description']}',
+              style: TextStyle(fontSize: 20, color: Colors.black)),
+          space,
+          Center(
+            child: Text(
+              'Active Workshops',
+              style: headingStyle,
+            ),
+          ),
         ],
       ),
     );
