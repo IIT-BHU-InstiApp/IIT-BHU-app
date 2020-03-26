@@ -11,18 +11,21 @@ class AppConstants {
   static bool firstTimeFetching = true;
   static bool refreshingHomePage = false;
 
+  static String djangoToken;
+
   static FirebaseUser currentUser;
   static PostApiService service;
 
   static List<Workshop> workshops;
   static var councils;
+  static int currentCouncilId;
 
   static Future<bool> isWorkshopDatabaseEmpty() async {
     DatabaseHelper helper = DatabaseHelper.instance;
     var database = await helper.workshopInfoDatabase;
 
     workshops = await helper.getAllWorkshopsInfo(db: database);
-    print(' workshops is empty: ${(workshops.isEmpty == true).toString()}');
+    // print(' workshops is empty: ${(workshops.isEmpty == true).toString()}');
 
     if (workshops.isEmpty == true) {
       return true;
@@ -44,7 +47,7 @@ class AppConstants {
     var database = await helper.workshopInfoDatabase;
 
     workshops = await helper.getAllWorkshopsInfo(db: database);
-    print(' workshops is empty: ${(workshops.isEmpty == true).toString()}');
+    // print(' workshops is empty: ${(workshops.isEmpty == true).toString()}');
 
     if (workshops.isEmpty == true) {
       // insert all workshop information for the first time
@@ -60,12 +63,12 @@ class AppConstants {
       for (var post in posts) {
         await helper.insertWorkshopInfoIntoDatabase(post: post);
       }
+
+      workshops = await helper.getAllWorkshopsInfo(db: database);
     }
 
-    workshops = await helper.getAllWorkshopsInfo(db: database);
-
     // helper.closeDatabase(db: database);
-    print('workshops after fetching : $workshops');
+    print('workshops fetched ');
   }
 
   static updateAndPopulateWorkshops() async {
@@ -74,7 +77,7 @@ class AppConstants {
 
     await helper.deleteWorkshopInfo(db: database);
 
-    print('fetching workshops infos from json');
+    print('fetching workshops infos from json for updation');
 
     Response<BuiltList<BuiltPost>> snapshots =
         await service.getUpcomingWorkshops();
@@ -85,8 +88,8 @@ class AppConstants {
       await helper.insertWorkshopInfoIntoDatabase(post: post);
     }
     workshops = await helper.getAllWorkshopsInfo(db: database);
-    print('------------------------------------');
-    print('workshops after updation: $workshops');
+    // print('------------------------------------');
+    // print('workshops after updation: $workshops');
     // helper.closeDatabase(db: database);
   }
 }

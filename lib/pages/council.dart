@@ -5,10 +5,6 @@ import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/screens/clubs.dart';
 
 class CouncilPage extends StatefulWidget {
-  final int councilId;
-
-  const CouncilPage({Key key, @required this.councilId}) : super(key: key);
-
   @override
   _CouncilPageState createState() => _CouncilPageState();
 }
@@ -23,7 +19,7 @@ class _CouncilPageState extends State<CouncilPage> {
 
   void fetchCouncilById() async {
     Response<BuiltCouncilPost> snapshots =
-        await AppConstants.service.getCouncil(widget.councilId);
+        await AppConstants.service.getCouncil(AppConstants.currentCouncilId);
     print(snapshots.body);
     councilData = snapshots.body;
     setState(() {});
@@ -44,7 +40,7 @@ class _CouncilPageState extends State<CouncilPage> {
                 backgroundImage: imageUrl == null
                     ? AssetImage('assets/AMC.png')
                     : NetworkImage(imageUrl),
-                radius: 50.0,
+                radius: 30.0,
                 backgroundColor: Colors.transparent,
               )),
               ListTile(
@@ -119,7 +115,7 @@ class _CouncilPageState extends State<CouncilPage> {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             Text(
-                              'council.description',
+                              'Description',
                               style: headingStyle,
                             ),
                             divide,
@@ -146,17 +142,25 @@ class _CouncilPageState extends State<CouncilPage> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: <Widget>[
+                                  // template(
+                                  //   imageUrl:
+                                  //       councilData.joint_gensec[0].photo_url,
+                                  //   desg: 'joint gensec',
+                                  //   name: councilData.joint_gensec[0].name,
+                                  // ),
+
                                   template(
                                     imageUrl: councilData.gensec.photo_url,
                                     desg: 'gensec',
                                     name: councilData.gensec.name,
                                   ),
+
                                   // template(
-                                  //   desg: designation[1],
-                                  //   name: secyNames[1],
+                                  //   imageUrl:
+                                  //       councilData.joint_gensec[1].photo_url,
+                                  //   desg: 'joint gensec',
+                                  //   name: councilData.joint_gensec[1].name,
                                   // ),
-                                  // template(
-                                  //     desg: designation[2], name: secyNames[2]),
                                 ],
                               ),
                             ),
@@ -214,7 +218,7 @@ class _CouncilPageState extends State<CouncilPage> {
                                           ? AssetImage('assets/AMC.png')
                                           : NetworkImage(councilData
                                               .clubs[index].small_image_url),
-                                      fit: BoxFit.cover,
+                                      fit: BoxFit.fill,
                                     ),
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(30.0)),

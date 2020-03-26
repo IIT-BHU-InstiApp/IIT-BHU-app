@@ -2,7 +2,6 @@ import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
-import 'package:iit_app/screens/home/home_widgets.dart';
 
 class ClubPage extends StatefulWidget {
   final int clubId;
@@ -22,8 +21,9 @@ class _ClubPageState extends State<ClubPage> {
   }
 
   void fetchClubDataById() async {
-    Response<BuiltClubPost> snapshots =
-        await AppConstants.service.getClub(widget.clubId);
+    // print('AppConstants.djangoToken : ${AppConstants.djangoToken}');
+    Response<BuiltClubPost> snapshots = await AppConstants.service
+        .getClub(widget.clubId, AppConstants.djangoToken);
     print(snapshots.body);
     clubData = snapshots.body;
     setState(() {});
@@ -132,34 +132,34 @@ class _ClubPageState extends State<ClubPage> {
       fontWeight: FontWeight.bold,
       letterSpacing: 1.0);
   Widget template({String imageUrl, String name, String desg}) {
-    return Expanded(
-      child: Container(
-        child: Wrap(
-          children: <Widget>[
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                space,
-                Center(
-                    child: CircleAvatar(
-                  backgroundImage: AssetImage('assets/fmc.jpeg'),
-                  radius: 50.0,
-                  backgroundColor: Colors.transparent,
-                )),
-                ListTile(
-                  title: Text(
-                    name,
-                    textAlign: TextAlign.center,
-                  ),
-                  subtitle: Text(
-                    desg,
-                    textAlign: TextAlign.center,
-                  ),
-                )
-              ],
-            ),
-          ],
-        ),
+    return Container(
+      child: Wrap(
+        children: <Widget>[
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              space,
+              Center(
+                  child: CircleAvatar(
+                backgroundImage: imageUrl == null
+                    ? AssetImage('assets/AMC.png')
+                    : NetworkImage(imageUrl),
+                radius: 30.0,
+                backgroundColor: Colors.transparent,
+              )),
+              ListTile(
+                title: Text(
+                  name,
+                  textAlign: TextAlign.center,
+                ),
+                subtitle: Text(
+                  desg,
+                  textAlign: TextAlign.center,
+                ),
+              )
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -226,16 +226,16 @@ class _ClubPageState extends State<ClubPage> {
               child: template(name: 'Ayush Kumar', desg: 'Secy'),
             ),
           ),
-          Container(
-            color: Colors.grey[300],
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                template(name: 'Ayush Kumar', desg: 'JointSecy'),
-                template(name: 'Ayush Kumar', desg: 'JointSecy')
-              ],
-            ),
-          ),
+          // Container(
+          //   color: Colors.grey[300],
+          //   child: Row(
+          //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          //     children: [
+          //       template(name: 'Ayush Kumar', desg: 'JointSecy'),
+          //       template(name: 'Ayush Kumar', desg: 'JointSecy')
+          //     ],
+          //   ),
+          // ),
           Center(
             child: Text(
               'Description',

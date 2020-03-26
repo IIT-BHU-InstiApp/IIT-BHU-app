@@ -1,6 +1,4 @@
-import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
-import 'package:iit_app/data/post_api_service.dart';
 import 'package:iit_app/data/workshop.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/pages/detail.dart';
@@ -202,11 +200,11 @@ class HomeWidgets {
             child: Text(name),
             shape: CircleBorder(),
             onPressed: () {
+              // setting councilId in AppConstnts
+              AppConstants.currentCouncilId = councilId;
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => CouncilPage(
-                    councilId: councilId,
-                  ),
+                  builder: (context) => CouncilPage(),
                 ),
               );
             },

@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:iit_app/data/post_api_service.dart';
 import 'package:iit_app/model/appConstants.dart';
 
 class CrudMethods {
