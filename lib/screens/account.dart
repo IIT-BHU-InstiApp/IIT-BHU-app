@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iit_app/model/appConstants.dart';
 
 class AccountScreen extends StatelessWidget {
   @override
@@ -9,7 +10,7 @@ class AccountScreen extends StatelessWidget {
       ),
       body: Container(
           child: Center(
-        child: Text("To display if the account is an admin account or not. Also display admin rights to clubs"),
+        child: Text("My Token: ${AppConstants.djangoToken}"),
       )),
     );
   }

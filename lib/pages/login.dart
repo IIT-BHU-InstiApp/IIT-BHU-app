@@ -68,21 +68,21 @@ Future<FirebaseUser> signInWithGoogle() async {
   return currentUser;
 }
 
-verifyToken(String token) {
+verifyToken(String token) async {
   var url = "https://workshops-app-backend.herokuapp.com/login/";
   var client = http.Client();
   var request = http.Request('POST', Uri.parse(url));
   var body = {'id_token': token};
   request.bodyFields = body;
-  client.send(request).then((response) {
-    response.stream.bytesToString().then((value) {
-      responseIdToken = json.decode(value)['token'];
-      AppConstants.djangoToken = responseIdToken;
-      // print('responseIdToken : $responseIdToken');
-    }).catchError((error) {
-      print(error.toString());
-    });
-  });
+  var response = await client.send(request);
+  try {
+    var value = await response.stream.bytesToString();
+    responseIdToken = json.decode(value)['token'];
+    AppConstants.djangoToken = responseIdToken;
+    print('DjangoToken: $responseIdToken');
+  } catch (e) {
+    print('django auth token error: ${e.toString()}');
+  }
 }
 
 Future<void> signOutGoogle() async {
@@ -94,6 +94,7 @@ Future<void> signOutGoogle() async {
       }
     });
   }
+  AppConstants.djangoToken = null;
   print("User Sign Out");
 }
 
@@ -170,10 +171,13 @@ class _LoginPageState extends State<LoginPage> {
 
                               AppConstants.logInButtonEnabled = true;
 
-                              if (AppConstants.currentUser == null) {
+                              if (AppConstants.currentUser == null ||
+                                  AppConstants.djangoToken == null) {
                                 setState(() {
                                   this._loading = false;
                                 });
+
+                                await signOutGoogle();
 
                                 return errorDialog(context);
                               } else {

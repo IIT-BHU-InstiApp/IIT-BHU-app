@@ -6,7 +6,7 @@ class CrudMethods {
   static Future<bool> isLoggedIn() async {
     AppConstants.currentUser = await FirebaseAuth.instance.currentUser();
     // print(AppConstants.currentUser);
-    if (AppConstants.currentUser != null) {
+    if (AppConstants.currentUser != null && AppConstants.djangoToken != null) {
       // AppConstants.service = PostApiService.create();
       return true;
     } else
