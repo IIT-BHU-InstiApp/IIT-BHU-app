@@ -6,6 +6,16 @@
   "commit": false,
   "contributors": [
     {
+      "login": "nishantkr18",
+      "name": "Nishant Kumar",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/44468894?v=4",
+      "profile": "https://github.com/nishantkr18",
+      "contributions": [
+        "code",
+        "maintenance"
+      ]
+    },
+    {
       "login": "mohit-mangal",
       "name": "MOHIT MANGAL",
       "avatar_url": "https://avatars1.githubusercontent.com/u/44101824?v=4",
