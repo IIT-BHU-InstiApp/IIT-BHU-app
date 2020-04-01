@@ -1,0 +1,25 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "nishantkr18",
+      "name": "Nishant Kumar",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/44468894?v=4",
+      "profile": "https://github.com/nishantkr18",
+      "contributions": [
+        "code",
+        "maintenance"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "IIT-BHU-app",
+  "projectOwner": "nishantkr18",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}
