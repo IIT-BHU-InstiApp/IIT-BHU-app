@@ -42,7 +42,7 @@ class _$PostApiService extends PostApiService {
 
   Future<Response<BuiltClubPost>> getClub(int id, String token) {
     final $url = '/clubs/${id}';
-    final $headers = {'token': token, 'Authorization': 'token {token}'};
+    final $headers = {'Authorization': token};
     final $request = Request('GET', $url, client.baseUrl, headers: $headers);
     return client.send<BuiltClubPost, BuiltClubPost>($request);
   }

@@ -21,9 +21,9 @@ abstract class PostApiService extends ChopperService {
   @Get(path: '/councils/{id}')
   Future<Response<BuiltCouncilPost>> getCouncil(@Path('id') int id);
 
-  @Get(path: '/clubs/{id}', headers: {"Authorize": "token {token}"})
+  @Get(path: '/clubs/{id}')
   Future<Response<BuiltClubPost>> getClub(
-      @Path('id') int id, @Header('token') String token);
+      @Path('id') int id, @Header('Authorization') String token);
 
   @Get(path: '/profile')
   Future<Response<BuiltClubPost>> getProfile();

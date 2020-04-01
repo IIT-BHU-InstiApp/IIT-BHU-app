@@ -23,7 +23,10 @@ class _ClubPageState extends State<ClubPage> {
   void fetchClubDataById() async {
     // print('AppConstants.djangoToken : ${AppConstants.djangoToken}');
     Response<BuiltClubPost> snapshots = await AppConstants.service
-        .getClub(widget.clubId, AppConstants.djangoToken);
+        .getClub(widget.clubId, "token ${AppConstants.djangoToken}")
+        .catchError((onError) {
+      print("Error in fetching clubs: ${onError.toString()}");
+    });
     print(snapshots.body);
     clubData = snapshots.body;
     setState(() {});
