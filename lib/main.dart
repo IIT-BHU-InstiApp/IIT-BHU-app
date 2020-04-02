@@ -5,6 +5,7 @@ import 'package:iit_app/screens/complaints.dart';
 import 'package:iit_app/screens/home/home.dart';
 import 'package:iit_app/screens/mess/mess.dart';
 import 'package:iit_app/pages/login.dart';
+import 'package:iit_app/pages/about.dart';
 import 'package:iit_app/screens/settings.dart';
 import 'package:iit_app/screens/create.dart';
 import 'package:iit_app/services/crud.dart';
@@ -39,6 +40,7 @@ void main() async {
           '/settings': (BuildContext context) => SettingsScreen(),
           '/login': (BuildContext context) => LoginPage(),
           '/create': (BuildContext context) => CreateScreen(),
+          '/about': (BuildContext context) => AboutPage(),
         },
       ),
     ),

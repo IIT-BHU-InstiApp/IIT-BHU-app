@@ -60,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen>
               Navigator.of(context).pushReplacementNamed('/login')
             },
           ),
-          AboutPageListTile.getAboutPageListTile(),
+          getNavItem(Icons.info, "About", '/about'),
         ],
       ),
     );
