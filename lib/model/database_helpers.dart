@@ -75,10 +75,10 @@ class DatabaseHelper {
 
   Future<Database> get workshopInfoDatabase async {
     if (_workshopInfoDatabase != null) {
-      print('workshopInfoDatabase has values');
+      // print('workshopInfoDatabase has values');
       return _workshopInfoDatabase;
     }
-    print('workshopInfoDatabase is empty');
+    // print('workshopInfoDatabase is empty');
     _workshopInfoDatabase = await _initWorkshopInfoDatabase();
     return _workshopInfoDatabase;
   }
@@ -88,7 +88,7 @@ class DatabaseHelper {
     // The path_provider plugin gets the right directory for Android or iOS.
     Directory documentDirectory = await getApplicationDocumentsDirectory();
     String path = documentDirectory.path + _workshopInfoDatabaseName;
-    print('path of Database Info: $path');
+    // print('path of Database Info: $path');
     // Open the database. Can also add an onUpdate callback parameter.
     return await openDatabase(path,
         version: _workshopInfoDatabaseVersion,

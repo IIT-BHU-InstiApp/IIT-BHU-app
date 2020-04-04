@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/screens/home/home_widgets.dart';
+import 'package:iit_app/data/workshop.dart';
 
 class ClubPage extends StatefulWidget {
   final int clubId;
@@ -22,8 +23,12 @@ class _ClubPageState extends State<ClubPage> {
   }
 
   void fetchClubDataById() async {
-    Response<BuiltClubPost> snapshots =
-        await AppConstants.service.getClub(widget.clubId);
+    // print('AppConstants.djangoToken : ${AppConstants.djangoToken}');
+    Response<BuiltClubPost> snapshots = await AppConstants.service
+        .getClub(widget.clubId, "token ${AppConstants.djangoToken}")
+        .catchError((onError) {
+      print("Error in fetching clubs: ${onError.toString()}");
+    });
     print(snapshots.body);
     clubData = snapshots.body;
     setState(() {});
@@ -132,36 +137,50 @@ class _ClubPageState extends State<ClubPage> {
       fontWeight: FontWeight.bold,
       letterSpacing: 1.0);
   Widget template({String imageUrl, String name, String desg}) {
-    return Expanded(
-      child: Container(
-        child: Wrap(
-          children: <Widget>[
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                space,
-                Center(
-                    child: CircleAvatar(
-                  backgroundImage: AssetImage('assets/fmc.jpeg'),
-                  radius: 50.0,
-                  backgroundColor: Colors.transparent,
-                )),
-                ListTile(
-                  title: Text(
-                    name,
-                    textAlign: TextAlign.center,
-                  ),
-                  subtitle: Text(
-                    desg,
-                    textAlign: TextAlign.center,
-                  ),
-                )
-              ],
-            ),
-          ],
-        ),
+    return Container(
+      child: Wrap(
+        children: <Widget>[
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              space,
+              Center(
+                  child: CircleAvatar(
+                backgroundImage: imageUrl == null
+                    ? AssetImage('assets/AMC.png')
+                    : NetworkImage(imageUrl),
+                radius: 30.0,
+                backgroundColor: Colors.transparent,
+              )),
+              ListTile(
+                title: Text(
+                  name,
+                  textAlign: TextAlign.center,
+                ),
+                subtitle: Text(
+                  desg,
+                  textAlign: TextAlign.center,
+                ),
+              )
+            ],
+          ),
+        ],
       ),
     );
+  }
+
+  Workshop createWorkshop(Map<String, dynamic> map) {
+    Workshop w = new Workshop();
+    w.title = map['title'];
+    w.date = map['date'];
+    w.time = map['time'];
+    w.id = map['id'];
+    w.club = map['club']['name'];
+    w.council = Workshop.councils[map['club']['id']];
+    w.description = 'ejnfe';
+    w.goingGlobal = 45;
+    w.showGoing = true;
+    return w;
   }
 
   @override
@@ -223,19 +242,19 @@ class _ClubPageState extends State<ClubPage> {
           Container(
             color: Colors.grey[300],
             child: Center(
-              child: template(name: 'Ayush Kumar', desg: 'Secy'),
+              child: template(name: clubMap['secy']['name'], desg: 'Secy',imageUrl:clubMap['secy']['photo_url']),
             ),
           ),
-          Container(
-            color: Colors.grey[300],
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                template(name: 'Ayush Kumar', desg: 'JointSecy'),
-                template(name: 'Ayush Kumar', desg: 'JointSecy')
+          /*Container(
+             color: Colors.grey[300],
+             child: Row(
+               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+               children: [
+                 template(name: clubMap['joint_secy'][0]['name'], desg: 'JointSecy',imageUrl:clubMap['joint_secy'][0]['photo_url']),
+                 template(name: clubMap['joint_secy'][0]['name'], desg: 'JointSecy',imageUrl:clubMap['joint_secy'][0]['photo_url'])
               ],
-            ),
-          ),
+             ),
+           ),*/
           Center(
             child: Text(
               'Description',
@@ -251,6 +270,42 @@ class _ClubPageState extends State<ClubPage> {
               'Active Workshops',
               style: headingStyle,
             ),
+          ),
+          ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            scrollDirection: Axis.vertical,
+            itemCount: clubMap['active_workshops'].length,
+            // posts.length,
+            padding: EdgeInsets.all(8),
+            itemBuilder: (context, index) {
+              return HomeWidgets.getWorkshopCard(
+                context,
+                // w: Workshop.createWorkshopFromMap(posts[index])
+                w: createWorkshop(clubMap['active_workshops'][index]),
+              );
+            },
+          ),
+          Center(
+            child: Text(
+              'Past Workshops',
+              style: headingStyle,
+            ),
+          ),
+          ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            scrollDirection: Axis.vertical,
+            itemCount: clubMap['past_workshops'].length,
+            // posts.length,
+            padding: EdgeInsets.all(8),
+            itemBuilder: (context, index) {
+              return HomeWidgets.getWorkshopCard(
+                context,
+                // w: Workshop.createWorkshopFromMap(posts[index])
+                w: createWorkshop(clubMap['past_workshops'][index]),
+              );
+            },
           ),
         ],
       ),

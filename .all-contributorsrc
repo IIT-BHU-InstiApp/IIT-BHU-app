@@ -1,0 +1,56 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "nishantkr18",
+      "name": "Nishant Kumar",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/44468894?v=4",
+      "profile": "https://github.com/nishantkr18",
+      "contributions": [
+        "code",
+        "maintenance"
+      ]
+    },
+    {
+      "login": "mohit-mangal",
+      "name": "MOHIT MANGAL",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/44101824?v=4",
+      "profile": "https://github.com/mohit-mangal",
+      "contributions": [
+        "code",
+        "maintenance",
+        "doc"
+      ]
+    },
+    {
+      "login": "aviralJain101",
+      "name": "aviralJain101",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/48090218?v=4",
+      "profile": "https://github.com/aviralJain101",
+      "contributions": [
+        "code",
+        "design"
+      ]
+    },
+    {
+      "login": "aksayushx",
+      "name": "Ayush Kumar Shaw",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/55887638?v=4",
+      "profile": "https://github.com/aksayushx",
+      "contributions": [
+        "code",
+        "design"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "IIT-BHU-app",
+  "projectOwner": "nishantkr18",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}

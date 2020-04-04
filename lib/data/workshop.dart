@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:iit_app/model/built_post.dart';
 
 class Workshop {
   static const councils = [

@@ -1,14 +1,10 @@
-import 'dart:io';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:iit_app/data/post_api_service.dart';
 import 'dart:convert';
 
 import 'package:iit_app/model/appConstants.dart';
-import 'package:path_provider/path_provider.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -58,16 +54,35 @@ Future<FirebaseUser> signInWithGoogle() async {
   }
 
   assert(!user.isAnonymous);
+
   String idToken = (await user.getIdToken()).token;
+
   assert(await user.getIdToken() != null);
 
   currentUser = await FirebaseAuth.instance.currentUser();
 
   assert(user.uid == currentUser.uid);
 
-  verifyToken(idToken);
+  await verifyToken(idToken);
 
   return currentUser;
+}
+
+verifyToken(String token) async {
+  var url = "https://workshops-app-backend.herokuapp.com/login/";
+  var client = http.Client();
+  var request = http.Request('POST', Uri.parse(url));
+  var body = {'id_token': token};
+  request.bodyFields = body;
+  var response = await client.send(request);
+  try {
+    var value = await response.stream.bytesToString();
+    responseIdToken = json.decode(value)['token'];
+    AppConstants.djangoToken = responseIdToken;
+    print('DjangoToken: $responseIdToken');
+  } catch (e) {
+    print('django auth token error: ${e.toString()}');
+  }
 }
 
 Future<void> signOutGoogle() async {
@@ -79,6 +94,7 @@ Future<void> signOutGoogle() async {
       }
     });
   }
+  AppConstants.djangoToken = null;
   print("User Sign Out");
 }
 
@@ -110,21 +126,6 @@ void errorDialog(BuildContext context) {
     ),
     barrierDismissible: true,
   );
-}
-
-void verifyToken(String token) {
-  var url = "https://workshops-app-backend.herokuapp.com/login/";
-  var client = http.Client();
-  var request = http.Request('POST', Uri.parse(url));
-  var body = {'id_token': token};
-  request.bodyFields = body;
-  client.send(request).then((response) {
-    response.stream.bytesToString().then((value) {
-      responseIdToken = json.decode(value)['token'];
-    }).catchError((error) {
-      print(error.toString());
-    });
-  });
 }
 
 class _LoginPageState extends State<LoginPage> {
@@ -170,10 +171,13 @@ class _LoginPageState extends State<LoginPage> {
 
                               AppConstants.logInButtonEnabled = true;
 
-                              if (AppConstants.currentUser == null) {
+                              if (AppConstants.currentUser == null ||
+                                  AppConstants.djangoToken == null) {
                                 setState(() {
                                   this._loading = false;
                                 });
+
+                                await signOutGoogle();
 
                                 return errorDialog(context);
                               } else {
