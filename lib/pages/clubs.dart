@@ -29,7 +29,7 @@ class _ClubPageState extends State<ClubPage> {
         .catchError((onError) {
       print("Error in fetching clubs: ${onError.toString()}");
     });
-    // print(snapshots.body);
+    print(snapshots.body);
     clubMap = snapshots.body;
     setState(() {});
   }
@@ -42,7 +42,7 @@ class _ClubPageState extends State<ClubPage> {
       fontWeight: FontWeight.bold,
       letterSpacing: 1.0);
   Widget template({String imageUrl, String name, String desg}) {
-    return Stack(
+    return Column(
       children: <Widget>[
         space,
         Center(
@@ -53,32 +53,10 @@ class _ClubPageState extends State<ClubPage> {
           radius: 30.0,
           backgroundColor: Colors.transparent,
         )),
-        // ListTile(
-        //   title: Text(
-        //     name,
-        //     textAlign: TextAlign.center,
-        //   ),
-        //   subtitle: Text(
-        //     desg,
-        //     textAlign: TextAlign.center,
-        //   ),
-        // )
+        Text(name, textAlign: TextAlign.center),
+        Text(desg, textAlign: TextAlign.center),
       ],
     );
-  }
-
-  Workshop createWorkshop(dynamic map) {
-    Workshop w = new Workshop();
-    w.title = map.title;
-    w.date = map.date;
-    w.time = map.time;
-    w.id = map.id;
-    w.club = map.club.name;
-    w.council = Workshop.councils[map.club.council];
-    w.description = 'ejnfe';
-    w.goingGlobal = 45;
-    w.showGoing = true;
-    return w;
   }
 
   @override
@@ -176,22 +154,14 @@ class _ClubPageState extends State<ClubPage> {
                           name: clubMap.secy.name,
                           desg: 'Secy',
                           imageUrl: clubMap.secy.photo_url),
-                      template(
-                          name: clubMap.secy.name,
-                          desg: 'Secy',
-                          imageUrl: clubMap.secy.photo_url),
-                      template(
-                          name: clubMap.secy.name,
-                          desg: 'Secy',
-                          imageUrl: clubMap.secy.photo_url),
                       // template(
                       //     name: clubMap.joint_secy[0].name,
                       //     desg: 'JointSecy',
                       //     imageUrl: clubMap.joint_secy[0].photo_url),
                       // template(
-                      //     name: clubMap.joint_secy[0].name,
+                      //     name: clubMap.joint_secy[1].name,
                       //     desg: 'JointSecy',
-                      //     imageUrl: clubMap.joint_secy[0].photo_url),
+                      //     imageUrl: clubMap.joint_secy[1].photo_url),
                     ],
                   ),
                 ),
@@ -229,7 +199,8 @@ class _ClubPageState extends State<ClubPage> {
                   itemBuilder: (context, index) {
                     return HomeWidgets.getWorkshopCard(
                       context,
-                      w: createWorkshop(clubMap.active_workshops[index]),
+                      w: Workshop.createWorkshopFromMap(
+                          clubMap.active_workshops[index]),
                     );
                   },
                 ),
@@ -253,11 +224,9 @@ class _ClubPageState extends State<ClubPage> {
                   // posts.length,
                   padding: EdgeInsets.all(8),
                   itemBuilder: (context, index) {
-                    return HomeWidgets.getWorkshopCard(
-                      context,
-                      // w: Workshop.createWorkshopFromMap(posts[index])
-                      w: createWorkshop(clubMap.past_workshops[index]),
-                    );
+                    return HomeWidgets.getWorkshopCard(context,
+                        w: Workshop.createWorkshopFromMap(
+                            clubMap.past_workshops[index]));
                   },
                 ),
         ],
