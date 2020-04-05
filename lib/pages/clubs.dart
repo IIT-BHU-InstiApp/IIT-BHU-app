@@ -42,35 +42,28 @@ class _ClubPageState extends State<ClubPage> {
       fontWeight: FontWeight.bold,
       letterSpacing: 1.0);
   Widget template({String imageUrl, String name, String desg}) {
-    return Container(
-      child: Wrap(
-        children: <Widget>[
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              space,
-              Center(
-                  child: CircleAvatar(
-                backgroundImage: imageUrl == null
-                    ? AssetImage('assets/iitbhu.jpeg')
-                    : NetworkImage(imageUrl),
-                radius: 30.0,
-                backgroundColor: Colors.transparent,
-              )),
-              ListTile(
-                title: Text(
-                  name,
-                  textAlign: TextAlign.center,
-                ),
-                subtitle: Text(
-                  desg,
-                  textAlign: TextAlign.center,
-                ),
-              )
-            ],
-          ),
-        ],
-      ),
+    return Stack(
+      children: <Widget>[
+        space,
+        Center(
+            child: CircleAvatar(
+          backgroundImage: imageUrl == null
+              ? AssetImage('assets/iitbhu.jpeg')
+              : NetworkImage(imageUrl),
+          radius: 30.0,
+          backgroundColor: Colors.transparent,
+        )),
+        // ListTile(
+        //   title: Text(
+        //     name,
+        //     textAlign: TextAlign.center,
+        //   ),
+        //   subtitle: Text(
+        //     desg,
+        //     textAlign: TextAlign.center,
+        //   ),
+        // )
+      ],
     );
   }
 
@@ -176,35 +169,29 @@ class _ClubPageState extends State<ClubPage> {
                   ),
                 )
               : Container(
-                  child: Column(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
-                      Container(
-                        color: Colors.grey[300],
-                        child: Center(
-                          child: template(
-                              name: clubMap.secy.name,
-                              desg: 'Secy',
-                              imageUrl: clubMap.secy.photo_url),
-                        ),
-                      ),
-
-                      // TODO: uncommenting these lines produced error
-                      // Container(
-                      //   color: Colors.grey[300],
-                      //   child: Row(
-                      //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      //     children: [
-                      //       template(
-                      //           name: clubMap.joint_secy[0].name,
-                      //           desg: 'JointSecy',
-                      //           imageUrl: clubMap.joint_secy[0].photo_url),
-                      //       template(
-                      //           name: clubMap.joint_secy[0].name,
-                      //           desg: 'JointSecy',
-                      //           imageUrl: clubMap.joint_secy[0].photo_url)
-                      //     ],
-                      //   ),
-                      // ),
+                      template(
+                          name: clubMap.secy.name,
+                          desg: 'Secy',
+                          imageUrl: clubMap.secy.photo_url),
+                      template(
+                          name: clubMap.secy.name,
+                          desg: 'Secy',
+                          imageUrl: clubMap.secy.photo_url),
+                      template(
+                          name: clubMap.secy.name,
+                          desg: 'Secy',
+                          imageUrl: clubMap.secy.photo_url),
+                      // template(
+                      //     name: clubMap.joint_secy[0].name,
+                      //     desg: 'JointSecy',
+                      //     imageUrl: clubMap.joint_secy[0].photo_url),
+                      // template(
+                      //     name: clubMap.joint_secy[0].name,
+                      //     desg: 'JointSecy',
+                      //     imageUrl: clubMap.joint_secy[0].photo_url),
                     ],
                   ),
                 ),

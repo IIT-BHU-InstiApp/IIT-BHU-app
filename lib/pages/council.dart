@@ -2,7 +2,7 @@ import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
-import 'package:iit_app/screens/clubs.dart';
+import 'package:iit_app/pages/clubs.dart';
 
 class CouncilPage extends StatefulWidget {
   @override
