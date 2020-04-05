@@ -5,18 +5,68 @@ import 'package:built_value/serializer.dart';
 part 'built_post.g.dart';
 
 // !--------------------------------------------------------------------------------------------------------------------
-abstract class BuiltPost implements Built<BuiltPost, BuiltPostBuilder> {
+abstract class BuiltAllWorkshopsPost
+    implements Built<BuiltAllWorkshopsPost, BuiltAllWorkshopsPostBuilder> {
   @nullable
   int get id;
+  @nullable
+  ClubListPost get club;
+  @nullable
   String get title;
+  @nullable
   String get date;
+  @nullable
   String get time;
 
-  BuiltPost._();
+  BuiltAllWorkshopsPost._();
 
-  factory BuiltPost([updates(BuiltPostBuilder b)]) = _$BuiltPost;
+  factory BuiltAllWorkshopsPost([updates(BuiltAllWorkshopsPostBuilder b)]) =
+      _$BuiltAllWorkshopsPost;
 
-  static Serializer<BuiltPost> get serializer => _$builtPostSerializer;
+  static Serializer<BuiltAllWorkshopsPost> get serializer =>
+      _$builtAllWorkshopsPostSerializer;
+}
+
+abstract class BuiltWorkshopDetailPost
+    implements Built<BuiltWorkshopDetailPost, BuiltWorkshopDetailPostBuilder> {
+  @nullable
+  int get id;
+  @nullable
+  String get title;
+  @nullable
+  String get description;
+  @nullable
+  ClubListPost get club;
+  @nullable
+  String get date;
+  @nullable
+  String get time;
+  @nullable
+  String get location;
+  @nullable
+  String get audience;
+  @nullable
+  String get resources;
+
+  // TODO: watch for type of contacts
+
+  @nullable
+  BuiltList<String> get contacts;
+
+  @nullable
+  String get image_url;
+  @nullable
+  bool get is_attendee;
+  @nullable
+  int get attendees;
+
+  BuiltWorkshopDetailPost._();
+
+  factory BuiltWorkshopDetailPost([updates(BuiltWorkshopDetailPostBuilder b)]) =
+      _$BuiltWorkshopDetailPost;
+
+  static Serializer<BuiltWorkshopDetailPost> get serializer =>
+      _$builtWorkshopDetailPostSerializer;
 }
 
 // !--------------------------------------------------------------------------------------------------------------------
@@ -161,47 +211,6 @@ abstract class WorkshopPost
 }
 
 // !--------------------------------------------------------------------------------------------------------------------
-abstract class BuiltWorkshopDetailPost
-    implements Built<BuiltWorkshopDetailPost, BuiltWorkshopDetailPostBuilder> {
-  @nullable
-  int get id;
-  @nullable
-  String get title;
-  @nullable
-  String get description;
-  @nullable
-  ClubListPost get club;
-  @nullable
-  String get date;
-  @nullable
-  String get time;
-  @nullable
-  String get location;
-  @nullable
-  String get audience;
-  @nullable
-  String get resources;
-
-  // TODO: watch for type of contacts
-
-  @nullable
-  BuiltList<String> get contacts;
-
-  @nullable
-  String get image_url;
-  @nullable
-  bool get is_attendee;
-  @nullable
-  int get attendees;
-
-  BuiltWorkshopDetailPost._();
-
-  factory BuiltWorkshopDetailPost([updates(BuiltWorkshopDetailPostBuilder b)]) =
-      _$BuiltWorkshopDetailPost;
-
-  static Serializer<BuiltWorkshopDetailPost> get serializer =>
-      _$builtWorkshopDetailPostSerializer;
-}
 
 abstract class BuiltProfilePost
     implements Built<BuiltProfilePost, BuiltProfilePostBuilder> {

@@ -14,10 +14,11 @@ class _$PostApiService extends PostApiService {
 
   final definitionType = PostApiService;
 
-  Future<Response<BuiltList<BuiltPost>>> getUpcomingWorkshops() {
+  Future<Response<BuiltList<BuiltAllWorkshopsPost>>> getUpcomingWorkshops() {
     final $url = '/workshops';
     final $request = Request('GET', $url, client.baseUrl);
-    return client.send<BuiltList<BuiltPost>, BuiltPost>($request);
+    return client.send<BuiltList<BuiltAllWorkshopsPost>, BuiltAllWorkshopsPost>(
+        $request);
   }
 
   Future<Response<BuiltWorkshopDetailPost>> getPost(int id) {
@@ -60,10 +61,10 @@ class _$PostApiService extends PostApiService {
         .send<BuiltList<BuiltTeamMemberPost>, BuiltTeamMemberPost>($request);
   }
 
-  Future<Response<BuiltPost>> postPost(BuiltPost body) {
+  Future<Response<BuiltAllWorkshopsPost>> postPost(BuiltAllWorkshopsPost body) {
     final $url = '';
     final $body = body;
     final $request = Request('POST', $url, client.baseUrl, body: $body);
-    return client.send<BuiltPost, BuiltPost>($request);
+    return client.send<BuiltAllWorkshopsPost, BuiltAllWorkshopsPost>($request);
   }
 }

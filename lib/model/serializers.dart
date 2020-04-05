@@ -7,7 +7,7 @@ import 'built_post.dart';
 part 'serializers.g.dart';
 
 @SerializersFor(const [
-  BuiltPost,
+  BuiltAllWorkshopsPost,
   BuiltCouncilPost,
   BuiltAllCouncilsPost,
   SecyPost,

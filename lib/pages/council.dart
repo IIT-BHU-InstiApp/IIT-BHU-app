@@ -38,7 +38,7 @@ class _CouncilPageState extends State<CouncilPage> {
               Center(
                   child: CircleAvatar(
                 backgroundImage: imageUrl == null
-                    ? AssetImage('assets/AMC.png')
+                    ? AssetImage('assets/iitbhu.jpeg')
                     : NetworkImage(imageUrl),
                 radius: 30.0,
                 backgroundColor: Colors.transparent,
@@ -94,7 +94,7 @@ class _CouncilPageState extends State<CouncilPage> {
                         ),
                         child: Image(
                           image: councilData.large_image_url == null
-                              ? AssetImage('assets/AMC.png')
+                              ? AssetImage('assets/iitbhu.jpeg')
                               : NetworkImage(councilData.large_image_url),
                           // AssetImage('assets/fmc.jpeg'),
                           fit: BoxFit.cover,

@@ -96,6 +96,7 @@ class _HomeScreenState extends State<HomeScreen>
   void fetchUpdatedDetails() async {
     await AppConstants.updateAndPopulateWorkshops();
     setState(() {});
+    print(AppConstants.workshops[0].club);
   }
 
   void refresh() async {

@@ -111,7 +111,8 @@ class DatabaseHelper {
 
   // Database helper methods:
 
-  Future insertWorkshopInfoIntoDatabase({@required BuiltPost post}) async {
+  Future insertWorkshopInfoIntoDatabase(
+      {@required BuiltAllWorkshopsPost post}) async {
     Database db = await workshopInfoDatabase;
 
     final workshop = Workshop.createWorkshopFromMap(post);
