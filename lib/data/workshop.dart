@@ -10,7 +10,15 @@ class Workshop {
   ];
   static Map<String, List<String>> clubs = {
     null: [],
-    councils[0]: ['COPS', 'Robotics Club', 'SAE', 'AMC', 'CSI', 'Biz', 'Astro'],
+    councils[0]: [
+      'Club of Programmers',
+      'Robotics Club',
+      'SAE',
+      'AMC',
+      'CSI',
+      'Biz',
+      'Astro'
+    ],
     councils[1]: [
       'Photography',
       'Animation',
@@ -94,15 +102,15 @@ class Workshop {
 
   static Workshop createWorkshopFromMap(dynamic map) {
     Workshop w = new Workshop();
-    w.club = 'COPS';
-    w.council = 'SnTC';
+    w.club = map.club.name;
+    w.council = Workshop.councils[map.club.council];
     w.title = map.title;
     w.date = map.date;
     w.time = map.time;
     w.description = 'ejnfe';
     w.goingGlobal = 45;
     w.showGoing = true;
-    w.id = 0;
+    w.id = map.id;
     return w;
   }
 }

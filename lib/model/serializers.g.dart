@@ -8,9 +8,9 @@ part of 'serializers.dart';
 
 Serializers _$serializers = (new Serializers().toBuilder()
       ..add(BuiltAllCouncilsPost.serializer)
+      ..add(BuiltAllWorkshopsPost.serializer)
       ..add(BuiltClubPost.serializer)
       ..add(BuiltCouncilPost.serializer)
-      ..add(BuiltPost.serializer)
       ..add(BuiltProfilePost.serializer)
       ..add(BuiltTeamMemberPost.serializer)
       ..add(BuiltWorkshopDetailPost.serializer)
