@@ -8,42 +8,42 @@ import 'package:sqflite/sqflite.dart';
 
 String workshopString = 'workshop';
 
+String idString = 'id';
+String clubIdString = 'clubId';
+String clubString = 'club';
+String councilIdString = 'councilId';
+String smallImageUrlString = 'smallImageUrl';
+String largeImageUrlString = 'largeImageUrl';
 String titleString = 'title';
 String dateString = 'date';
 String timeString = 'time';
-String councilString = 'council';
-String clubString = 'club';
-String descriptionString = 'description';
-String goingGlobalString = 'goingGlobal';
-String showGoingString = 'showGoing';
-String idString = 'id';
 
 Map<String, dynamic> workshopInfoToMap(dynamic workshop) {
   Map<String, dynamic> map = {
+    idString: workshop.id,
+    clubIdString: workshop.clubId,
+    clubString: workshop.club,
+    councilIdString: workshop.councilId,
+    smallImageUrlString: workshop.smallImageUrl,
+    largeImageUrlString: workshop.largeImageUrl,
     titleString: workshop.title,
     dateString: workshop.date,
     timeString: workshop.time,
-    councilString: workshop.council,
-    clubString: workshop.club,
-    descriptionString: workshop.description,
-    goingGlobalString: workshop.goingGlobal,
-    showGoingString: (workshop.showGoing == true) ? 1 : 0,
-    idString: workshop.id,
   };
   return map;
 }
 
 Workshop workshopInfoFromMap(dynamic map) {
   Workshop workshop = Workshop();
+  workshop.id = map.id;
+  workshop.clubId = map.clubId;
+  workshop.club = map.club;
+  workshop.councilId = map.councilId;
+  workshop.smallImageUrl = map.smallImageUrl;
+  workshop.largeImageUrl = map.largeImageUrl;
   workshop.title = map[titleString];
   workshop.date = map[dateString];
   workshop.time = map[timeString];
-  workshop.council = map[councilString];
-  workshop.club = map[clubString];
-  workshop.description = map[descriptionString];
-  workshop.goingGlobal = map[goingGlobalString];
-  workshop.showGoing = (map[showGoingString] == 1) ? true : false;
-  workshop.id = map[idString];
 
   return workshop;
 }
@@ -98,15 +98,15 @@ class DatabaseHelper {
 
   Future _onWorkshopInfoDatabaseCreate(Database db, int version) async {
     await db.execute('CREATE TABLE $workshopString ('
+        '$idString INTEGER NOT NULL, '
+        '$clubIdString INTEGER NOT NULL, '
+        '$clubString DEFAULT "", '
+        '$councilIdString INTEGER NOT NULL, '
+        '$smallImageUrlString DEFAULT "", '
+        '$largeImageUrlString DEFAULT "", '
         '$titleString DEFAULT "", '
         '$dateString DEFAULT "", '
-        '$timeString DEFAULT "", '
-        '$councilString DEFAULT "", '
-        '$clubString DEFAULT "", '
-        '$descriptionString DEFAULT "", '
-        '$goingGlobalString INTEGER NOT NULL, '
-        '$showGoingString INTEGER NOT NULL, '
-        '$idString INTEGER NOT NULL)');
+        '$timeString DEFAULT "")');
   }
 
   // Database helper methods:
@@ -124,15 +124,15 @@ class DatabaseHelper {
     List<Map> maps = await db.query(
       workshopString,
       columns: [
+        idString,
+        clubIdString,
+        clubString,
+        councilIdString,
+        smallImageUrlString,
+        largeImageUrlString,
         titleString,
         dateString,
         timeString,
-        councilString,
-        clubString,
-        descriptionString,
-        goingGlobalString,
-        showGoingString,
-        idString,
       ],
     );
 

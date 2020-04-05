@@ -8,13 +8,14 @@ part 'serializers.g.dart';
 
 @SerializersFor(const [
   BuiltAllWorkshopsPost,
-  BuiltCouncilPost,
+  BuiltWorkshopDetailPost,
+  ContactPost,
   BuiltAllCouncilsPost,
+  BuiltCouncilPost,
   SecyPost,
   ClubListPost,
   BuiltClubPost,
   WorkshopPost,
-  BuiltWorkshopDetailPost,
   BuiltProfilePost,
   BuiltTeamMemberPost,
 ])

@@ -29,7 +29,7 @@ class _ClubPageState extends State<ClubPage> {
         .catchError((onError) {
       print("Error in fetching clubs: ${onError.toString()}");
     });
-    print(snapshots.body);
+    // print(snapshots.body);
     clubMap = snapshots.body;
     setState(() {});
   }

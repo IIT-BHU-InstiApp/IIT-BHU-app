@@ -62,15 +62,16 @@ class _CreateScreenState extends State {
                         }).toList(),
                         onChanged: (value) {
                           setState(() {
-                            _workshop.council = value;
+                            _workshop.councilId =
+                                Workshop.councils.indexOf(value);
                             _workshop.club = null;
                           });
                         },
-                        value: _workshop.council,
+                        value: Workshop.councils[_workshop.councilId],
                         hint: Text('Select Council'),
                       ),
                       DropdownButton<String>(
-                        items: Workshop.clubs[_workshop.council]
+                        items: Workshop.clubs[_workshop.councilId]
                             .map((String dropDownStringItem) {
                           return DropdownMenuItem<String>(
                             value: dropDownStringItem,
@@ -96,24 +97,24 @@ class _CreateScreenState extends State {
                         },
                         onSaved: (val) => setState(() => _workshop.title = val),
                       ),
-                      TextFormField(
-                          decoration: InputDecoration(labelText: 'Description'),
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return 'Please describe the workshop in detail.';
-                            }
-                            return null;
-                          },
-                          onSaved: (val) =>
-                              setState(() => _workshop.description = val)),
-                      Container(
-                        padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
-                        child: SwitchListTile(
-                            title: const Text('\'number of people going\''),
-                            value: _workshop.showGoing,
-                            onChanged: (bool val) =>
-                                setState(() => _workshop.showGoing = val)),
-                      ),
+                      // TextFormField(
+                      //     decoration: InputDecoration(labelText: 'Description'),
+                      //     validator: (value) {
+                      //       if (value.isEmpty) {
+                      //         return 'Please describe the workshop in detail.';
+                      //       }
+                      //       return null;
+                      //     },
+                      //     onSaved: (val) =>
+                      //         setState(() => _workshop.description = val)),
+                      // Container(
+                      //   padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+                      //   child: SwitchListTile(
+                      //       title: const Text('\'number of people going\''),
+                      //       value: _workshop.showGoing,
+                      //       onChanged: (bool val) =>
+                      //           setState(() => _workshop.showGoing = val)),
+                      // ),
                       Row(
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
@@ -138,7 +139,7 @@ class _CreateScreenState extends State {
                               onPressed: () {
                                 final form = _formKey.currentState;
                                 if (form.validate()) {
-                                  if (_workshop.council == null)
+                                  if (_workshop.councilId == null)
                                     Scaffold.of(context).showSnackBar(SnackBar(
                                         content:
                                             Text('Please select council')));

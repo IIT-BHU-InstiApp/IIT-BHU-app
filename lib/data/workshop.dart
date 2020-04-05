@@ -71,15 +71,18 @@ class Workshop {
     clubs[councils[3]][3]: 'assets/iitbhu.jpeg',
     clubs[councils[4]][0]: 'assets/iitbhu.jpeg',
   };
+  int id;
+  int clubId;
+  String club;
+  int councilId;
+  String smallImageUrl;
+  String largeImageUrl;
   String title;
   String date;
   String time;
-  String council;
-  String club;
-  String description;
-  int goingGlobal = 0;
-  bool showGoing = true; //default value is true
-  int id;
+  // String description;
+  // int goingGlobal = 0;
+  // bool showGoing = true; //default value is true
 
   Workshop() {
     date = convertDate(DateTime.now());
@@ -88,29 +91,28 @@ class Workshop {
 
   Map<String, dynamic> createMap() {
     return {
+      'id': id,
+      'clubId': clubId,
+      'club': club,
+      'councilId': councilId,
       'title': title,
       'date': date,
       'time': time,
-      'council': council,
-      'club': club,
-      'description': description,
-      'goingGlobal': goingGlobal,
-      'showGoing': showGoing,
-      'id': id,
     };
   }
 
   static Workshop createWorkshopFromMap(dynamic map) {
     Workshop w = new Workshop();
+
+    w.id = map.id;
+    w.clubId = map.club.id;
     w.club = map.club.name;
-    w.council = Workshop.councils[map.club.council];
+    w.councilId = map.club.council;
+    w.smallImageUrl = map.small_image_url;
+    w.largeImageUrl = map.large_image_url;
     w.title = map.title;
     w.date = map.date;
     w.time = map.time;
-    w.description = 'ejnfe';
-    w.goingGlobal = 45;
-    w.showGoing = true;
-    w.id = map.id;
     return w;
   }
 }
@@ -121,4 +123,24 @@ String convertDate(DateTime date) {
 
 String converTime(TimeOfDay time) {
   return time.toString().substring(10, 15);
+}
+
+// ! These classes will be used for workshop creation
+class WorkshopDetails extends Workshop {
+  String description;
+  String location;
+  String audience;
+  String resources;
+  List<Contact> contacts;
+  String imageUrl;
+  String isAttendee;
+  String attendees;
+}
+
+class Contact {
+  int id;
+  String name;
+  String email;
+  String phoneNumber;
+  String photoUrl;
 }

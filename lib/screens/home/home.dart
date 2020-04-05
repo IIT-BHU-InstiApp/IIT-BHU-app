@@ -1,9 +1,12 @@
+import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/pages/login.dart';
-import 'package:iit_app/pages/about.dart';
 import 'package:iit_app/screens/home/home_widgets.dart';
 import 'package:iit_app/services/crud.dart';
+import 'package:built_collection/built_collection.dart';
+import 'package:iit_app/model/built_post.dart';
+import 'package:iit_app/data/workshop.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -129,52 +132,62 @@ class _HomeScreenState extends State<HomeScreen>
             ));
   }
 
-  // FutureBuilder<Response> _buildBody(BuildContext context) {
-  //   // FutureBuilder is perfect for easily building UI when awaiting a Future
-  //   // Response is the type currently returned by all the methods of PostApiService
-  //   return FutureBuilder<Response<BuiltList<BuiltPost>>>(
-  //     // In real apps, use some sort of state management (BLoC is cool)
-  //     // to prevent duplicate requests when the UI rebuilds
-  //     future: Provider.of<PostApiService>(context).getUpcomingWorkshops(),
-  //     builder: (context, snapshot) {
-  //       if (snapshot.connectionState == ConnectionState.done) {
-  //         if (snapshot.hasError) {
-  //           return Center(
-  //             child: Text(
-  //               snapshot.error.toString(),
-  //               textAlign: TextAlign.center,
-  //               textScaleFactor: 1.3,
-  //             ),
-  //           );
-  //         }
+  FutureBuilder<Response> _buildPastWorkshopsBody(BuildContext context) {
+    // FutureBuilder is perfect for easily building UI when awaiting a Future
+    // Response is the type currently returned by all the methods of PostApiService
+    return FutureBuilder<Response<BuiltList<BuiltAllWorkshopsPost>>>(
+      // In real apps, use some sort of state management (BLoC is cool)
+      // to prevent duplicate requests when the UI rebuilds
+      future: AppConstants.service.getPastWorkshops(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.hasError) {
+            return Center(
+              child: Text(
+                snapshot.error.toString(),
+                textAlign: TextAlign.center,
+                textScaleFactor: 1.3,
+              ),
+            );
+          }
 
-  //         final posts = snapshot.data.body;
-  //         print(posts);
-  //         print('-------------------------------------');
-  //         return _buildPosts(context, posts);
-  //       } else {
-  //         // Show a loading indicator while waiting for the posts
-  //         return Center(
-  //           child: CircularProgressIndicator(),
-  //         );
-  //       }
-  //     },
-  //   );
-  // }
+          final posts = snapshot.data.body;
+          print(posts);
+          print('-------------------------------------');
+          return _buildPastWorkshopPosts(context, posts);
+        } else {
+          // Show a loading indicator while waiting for the posts
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
+    );
+  }
 
-  ListView _buildPosts(
+  ListView _buildPastWorkshopPosts(
+      BuildContext context, BuiltList<BuiltAllWorkshopsPost> posts) {
+    return ListView.builder(
+      scrollDirection: Axis.vertical,
+      itemCount: posts.length,
+      padding: EdgeInsets.all(8),
+      itemBuilder: (context, index) {
+        return HomeWidgets.getWorkshopCard(context,
+            w: Workshop.createWorkshopFromMap(posts[index]));
+      },
+    );
+  }
+
+  ListView _buildCurrentWorkshopPosts(
     BuildContext context,
-    // BuiltList<BuiltPost> posts
   ) {
     return ListView.builder(
       scrollDirection: Axis.vertical,
       itemCount: AppConstants.workshops.length,
-      // posts.length,
       padding: EdgeInsets.all(8),
       itemBuilder: (context, index) {
         return HomeWidgets.getWorkshopCard(
           context,
-          // w: Workshop.createWorkshopFromMap(posts[index])
           w: AppConstants.workshops[index],
         );
       },
@@ -258,18 +271,19 @@ class _HomeScreenState extends State<HomeScreen>
           ),
           drawer: getNavDrawer(context),
           body: Stack(
-            //shrinkWrap: true,
             children: <Widget>[
               Container(
                 child: TabBarView(
                   controller: _tabController,
                   children: <Widget>[
                     Container(
-                        height: 400,
-                        child: AppConstants.firstTimeFetching
-                            ? Center(child: CircularProgressIndicator())
-                            : _buildPosts(context)),
-                    Container(height: 400, child: _buildPosts(context))
+                      height: 400,
+                      child: AppConstants.firstTimeFetching
+                          ? Center(child: CircularProgressIndicator())
+                          : _buildCurrentWorkshopPosts(context),
+                    ),
+                    Container(
+                        height: 400, child: _buildPastWorkshopsBody(context))
                   ],
                 ),
               ),
