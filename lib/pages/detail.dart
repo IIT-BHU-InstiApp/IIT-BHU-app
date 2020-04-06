@@ -26,7 +26,8 @@ class _DetailPage extends State<DetailPage> {
   //   Response<BuiltWorkshopDetailPost> snapshots = await AppConstants.service
   //       .getWorkshopDetailsPost(
   //           widget.workshopId, "token ${AppConstants.djangoToken}")
-  //       .catchError((onError) {
+  //       .catchError((git
+  //       onError) {
   //     print("Error in fetching clubs: ${onError.toString()}");
   //   });
   //   // print(snapshots.body);

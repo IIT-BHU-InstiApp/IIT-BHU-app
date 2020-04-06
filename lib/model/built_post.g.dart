@@ -24,6 +24,7 @@ Serializer<WorkshopPost> _$workshopPostSerializer =
     new _$WorkshopPostSerializer();
 Serializer<BuiltProfilePost> _$builtProfilePostSerializer =
     new _$BuiltProfilePostSerializer();
+Serializer<TeamMember> _$teamMemberSerializer = new _$TeamMemberSerializer();
 Serializer<BuiltTeamMemberPost> _$builtTeamMemberPostSerializer =
     new _$BuiltTeamMemberPostSerializer();
 
@@ -1075,19 +1076,14 @@ class _$BuiltProfilePostSerializer
   }
 }
 
-class _$BuiltTeamMemberPostSerializer
-    implements StructuredSerializer<BuiltTeamMemberPost> {
+class _$TeamMemberSerializer implements StructuredSerializer<TeamMember> {
   @override
-  final Iterable<Type> types = const [
-    BuiltTeamMemberPost,
-    _$BuiltTeamMemberPost
-  ];
+  final Iterable<Type> types = const [TeamMember, _$TeamMember];
   @override
-  final String wireName = 'BuiltTeamMemberPost';
+  final String wireName = 'TeamMember';
 
   @override
-  Iterable<Object> serialize(
-      Serializers serializers, BuiltTeamMemberPost object,
+  Iterable<Object> serialize(Serializers serializers, TeamMember object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[];
     if (object.name != null) {
@@ -1112,10 +1108,9 @@ class _$BuiltTeamMemberPostSerializer
   }
 
   @override
-  BuiltTeamMemberPost deserialize(
-      Serializers serializers, Iterable<Object> serialized,
+  TeamMember deserialize(Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = new BuiltTeamMemberPostBuilder();
+    final result = new TeamMemberBuilder();
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
@@ -1134,6 +1129,66 @@ class _$BuiltTeamMemberPostSerializer
         case 'github_image_url':
           result.github_image_url = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
+          break;
+      }
+    }
+
+    return result.build();
+  }
+}
+
+class _$BuiltTeamMemberPostSerializer
+    implements StructuredSerializer<BuiltTeamMemberPost> {
+  @override
+  final Iterable<Type> types = const [
+    BuiltTeamMemberPost,
+    _$BuiltTeamMemberPost
+  ];
+  @override
+  final String wireName = 'BuiltTeamMemberPost';
+
+  @override
+  Iterable<Object> serialize(
+      Serializers serializers, BuiltTeamMemberPost object,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = <Object>[];
+    if (object.role != null) {
+      result
+        ..add('role')
+        ..add(serializers.serialize(object.role,
+            specifiedType: const FullType(String)));
+    }
+    if (object.team_members != null) {
+      result
+        ..add('team_members')
+        ..add(serializers.serialize(object.team_members,
+            specifiedType:
+                const FullType(BuiltList, const [const FullType(TeamMember)])));
+    }
+    return result;
+  }
+
+  @override
+  BuiltTeamMemberPost deserialize(
+      Serializers serializers, Iterable<Object> serialized,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = new BuiltTeamMemberPostBuilder();
+
+    final iterator = serialized.iterator;
+    while (iterator.moveNext()) {
+      final key = iterator.current as String;
+      iterator.moveNext();
+      final dynamic value = iterator.current;
+      switch (key) {
+        case 'role':
+          result.role = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'team_members':
+          result.team_members.replace(serializers.deserialize(value,
+                  specifiedType: const FullType(
+                      BuiltList, const [const FullType(TeamMember)]))
+              as BuiltList<dynamic>);
           break;
       }
     }
@@ -2776,7 +2831,7 @@ class BuiltProfilePostBuilder
   }
 }
 
-class _$BuiltTeamMemberPost extends BuiltTeamMemberPost {
+class _$TeamMember extends TeamMember {
   @override
   final String name;
   @override
@@ -2784,27 +2839,23 @@ class _$BuiltTeamMemberPost extends BuiltTeamMemberPost {
   @override
   final String github_image_url;
 
-  factory _$BuiltTeamMemberPost(
-          [void Function(BuiltTeamMemberPostBuilder) updates]) =>
-      (new BuiltTeamMemberPostBuilder()..update(updates)).build();
+  factory _$TeamMember([void Function(TeamMemberBuilder) updates]) =>
+      (new TeamMemberBuilder()..update(updates)).build();
 
-  _$BuiltTeamMemberPost._(
-      {this.name, this.github_username, this.github_image_url})
+  _$TeamMember._({this.name, this.github_username, this.github_image_url})
       : super._();
 
   @override
-  BuiltTeamMemberPost rebuild(
-          void Function(BuiltTeamMemberPostBuilder) updates) =>
+  TeamMember rebuild(void Function(TeamMemberBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
-  BuiltTeamMemberPostBuilder toBuilder() =>
-      new BuiltTeamMemberPostBuilder()..replace(this);
+  TeamMemberBuilder toBuilder() => new TeamMemberBuilder()..replace(this);
 
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is BuiltTeamMemberPost &&
+    return other is TeamMember &&
         name == other.name &&
         github_username == other.github_username &&
         github_image_url == other.github_image_url;
@@ -2818,7 +2869,7 @@ class _$BuiltTeamMemberPost extends BuiltTeamMemberPost {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('BuiltTeamMemberPost')
+    return (newBuiltValueToStringHelper('TeamMember')
           ..add('name', name)
           ..add('github_username', github_username)
           ..add('github_image_url', github_image_url))
@@ -2826,9 +2877,8 @@ class _$BuiltTeamMemberPost extends BuiltTeamMemberPost {
   }
 }
 
-class BuiltTeamMemberPostBuilder
-    implements Builder<BuiltTeamMemberPost, BuiltTeamMemberPostBuilder> {
-  _$BuiltTeamMemberPost _$v;
+class TeamMemberBuilder implements Builder<TeamMember, TeamMemberBuilder> {
+  _$TeamMember _$v;
 
   String _name;
   String get name => _$this._name;
@@ -2844,13 +2894,106 @@ class BuiltTeamMemberPostBuilder
   set github_image_url(String github_image_url) =>
       _$this._github_image_url = github_image_url;
 
-  BuiltTeamMemberPostBuilder();
+  TeamMemberBuilder();
 
-  BuiltTeamMemberPostBuilder get _$this {
+  TeamMemberBuilder get _$this {
     if (_$v != null) {
       _name = _$v.name;
       _github_username = _$v.github_username;
       _github_image_url = _$v.github_image_url;
+      _$v = null;
+    }
+    return this;
+  }
+
+  @override
+  void replace(TeamMember other) {
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
+    _$v = other as _$TeamMember;
+  }
+
+  @override
+  void update(void Function(TeamMemberBuilder) updates) {
+    if (updates != null) updates(this);
+  }
+
+  @override
+  _$TeamMember build() {
+    final _$result = _$v ??
+        new _$TeamMember._(
+            name: name,
+            github_username: github_username,
+            github_image_url: github_image_url);
+    replace(_$result);
+    return _$result;
+  }
+}
+
+class _$BuiltTeamMemberPost extends BuiltTeamMemberPost {
+  @override
+  final String role;
+  @override
+  final BuiltList<TeamMember> team_members;
+
+  factory _$BuiltTeamMemberPost(
+          [void Function(BuiltTeamMemberPostBuilder) updates]) =>
+      (new BuiltTeamMemberPostBuilder()..update(updates)).build();
+
+  _$BuiltTeamMemberPost._({this.role, this.team_members}) : super._();
+
+  @override
+  BuiltTeamMemberPost rebuild(
+          void Function(BuiltTeamMemberPostBuilder) updates) =>
+      (toBuilder()..update(updates)).build();
+
+  @override
+  BuiltTeamMemberPostBuilder toBuilder() =>
+      new BuiltTeamMemberPostBuilder()..replace(this);
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(other, this)) return true;
+    return other is BuiltTeamMemberPost &&
+        role == other.role &&
+        team_members == other.team_members;
+  }
+
+  @override
+  int get hashCode {
+    return $jf($jc($jc(0, role.hashCode), team_members.hashCode));
+  }
+
+  @override
+  String toString() {
+    return (newBuiltValueToStringHelper('BuiltTeamMemberPost')
+          ..add('role', role)
+          ..add('team_members', team_members))
+        .toString();
+  }
+}
+
+class BuiltTeamMemberPostBuilder
+    implements Builder<BuiltTeamMemberPost, BuiltTeamMemberPostBuilder> {
+  _$BuiltTeamMemberPost _$v;
+
+  String _role;
+  String get role => _$this._role;
+  set role(String role) => _$this._role = role;
+
+  ListBuilder<TeamMember> _team_members;
+  ListBuilder<TeamMember> get team_members =>
+      _$this._team_members ??= new ListBuilder<TeamMember>();
+  set team_members(ListBuilder<TeamMember> team_members) =>
+      _$this._team_members = team_members;
+
+  BuiltTeamMemberPostBuilder();
+
+  BuiltTeamMemberPostBuilder get _$this {
+    if (_$v != null) {
+      _role = _$v.role;
+      _team_members = _$v.team_members?.toBuilder();
       _$v = null;
     }
     return this;
@@ -2871,11 +3014,22 @@ class BuiltTeamMemberPostBuilder
 
   @override
   _$BuiltTeamMemberPost build() {
-    final _$result = _$v ??
-        new _$BuiltTeamMemberPost._(
-            name: name,
-            github_username: github_username,
-            github_image_url: github_image_url);
+    _$BuiltTeamMemberPost _$result;
+    try {
+      _$result = _$v ??
+          new _$BuiltTeamMemberPost._(
+              role: role, team_members: _team_members?.build());
+    } catch (_) {
+      String _$failedField;
+      try {
+        _$failedField = 'team_members';
+        _team_members?.build();
+      } catch (e) {
+        throw new BuiltValueNestedFieldError(
+            'BuiltTeamMemberPost', _$failedField, e.toString());
+      }
+      rethrow;
+    }
     replace(_$result);
     return _$result;
   }

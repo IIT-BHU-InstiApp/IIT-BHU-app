@@ -259,14 +259,26 @@ abstract class BuiltProfilePost
 }
 
 // !--------------------------------------------------------------------------------------------------------------------
-abstract class BuiltTeamMemberPost
-    implements Built<BuiltTeamMemberPost, BuiltTeamMemberPostBuilder> {
+abstract class TeamMember implements Built<TeamMember, TeamMemberBuilder> {
   @nullable
   String get name;
   @nullable
   String get github_username;
   @nullable
   String get github_image_url;
+
+  TeamMember._();
+  factory TeamMember([updates(TeamMemberBuilder b)]) = _$TeamMember;
+  static Serializer<TeamMember> get serializer => _$teamMemberSerializer;
+}
+
+// !--------------------------------------------------------------------------------------------------------------------
+abstract class BuiltTeamMemberPost
+    implements Built<BuiltTeamMemberPost, BuiltTeamMemberPostBuilder> {
+  @nullable
+  String get role;
+  @nullable
+  BuiltList<TeamMember> get team_members;
 
   BuiltTeamMemberPost._();
   factory BuiltTeamMemberPost([updates(BuiltTeamMemberPostBuilder b)]) =
