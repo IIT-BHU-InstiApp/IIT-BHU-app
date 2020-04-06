@@ -88,8 +88,11 @@ class HomeWidgets {
       padding: EdgeInsets.symmetric(horizontal: 3, vertical: 10),
       child: InkWell(
         onTap: () {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => DetailPage(w)));
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => DetailPage(workshopId: w.id),
+            ),
+          );
         },
         child: Stack(
           children: <Widget>[

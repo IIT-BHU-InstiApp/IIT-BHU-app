@@ -21,9 +21,18 @@ class _$PostApiService extends PostApiService {
         $request);
   }
 
-  Future<Response<BuiltWorkshopDetailPost>> getPost(int id) {
-    final $url = '/workshops/${id}';
+  Future<Response<BuiltList<BuiltAllWorkshopsPost>>> getPastWorkshops() {
+    final $url = '/workshops/past';
     final $request = Request('GET', $url, client.baseUrl);
+    return client.send<BuiltList<BuiltAllWorkshopsPost>, BuiltAllWorkshopsPost>(
+        $request);
+  }
+
+  Future<Response<BuiltWorkshopDetailPost>> getWorkshopDetailsPost(
+      int id, String token) {
+    final $url = '/workshops/${id}';
+    final $headers = {'Authorization': token};
+    final $request = Request('GET', $url, client.baseUrl, headers: $headers);
     return client
         .send<BuiltWorkshopDetailPost, BuiltWorkshopDetailPost>($request);
   }

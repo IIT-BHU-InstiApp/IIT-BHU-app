@@ -15,6 +15,7 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..add(BuiltTeamMemberPost.serializer)
       ..add(BuiltWorkshopDetailPost.serializer)
       ..add(ClubListPost.serializer)
+      ..add(ContactPost.serializer)
       ..add(SecyPost.serializer)
       ..add(TeamMember.serializer)
       ..add(WorkshopPost.serializer)
@@ -25,6 +26,9 @@ Serializers _$serializers = (new Serializers().toBuilder()
           const FullType(BuiltList, const [const FullType(String)]),
           () => new ListBuilder<String>())
       ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(ContactPost)]),
+          () => new ListBuilder<ContactPost>())
+      ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(SecyPost)]),
           () => new ListBuilder<SecyPost>())
       ..addBuilderFactory(
@@ -38,6 +42,9 @@ Serializers _$serializers = (new Serializers().toBuilder()
           () => new ListBuilder<WorkshopPost>())
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(WorkshopPost)]),
+<<<<<<< HEAD
+          () => new ListBuilder<WorkshopPost>()))
+=======
           () => new ListBuilder<WorkshopPost>())
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(String)]),
@@ -45,6 +52,7 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(TeamMember)]),
           () => new ListBuilder<TeamMember>()))
+>>>>>>> master
     .build();
 
 // ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new

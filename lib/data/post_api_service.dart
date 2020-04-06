@@ -1,5 +1,4 @@
 import 'package:chopper/chopper.dart';
-import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:built_collection/built_collection.dart';
 
@@ -12,8 +11,12 @@ abstract class PostApiService extends ChopperService {
   @Get(path: '/workshops')
   Future<Response<BuiltList<BuiltAllWorkshopsPost>>> getUpcomingWorkshops();
 
+  @Get(path: '/workshops/past')
+  Future<Response<BuiltList<BuiltAllWorkshopsPost>>> getPastWorkshops();
+
   @Get(path: '/workshops/{id}')
-  Future<Response<BuiltWorkshopDetailPost>> getPost(@Path('id') int id);
+  Future<Response<BuiltWorkshopDetailPost>> getWorkshopDetailsPost(
+      @Path('id') int id, @Header('Authorization') String token);
 
   @Get(path: '/councils')
   Future<Response<BuiltList<BuiltAllCouncilsPost>>> getAllCouncils();

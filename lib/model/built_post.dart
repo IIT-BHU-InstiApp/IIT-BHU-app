@@ -51,7 +51,7 @@ abstract class BuiltWorkshopDetailPost
   // TODO: watch for type of contacts
 
   @nullable
-  BuiltList<String> get contacts;
+  BuiltList<ContactPost> get contacts;
 
   @nullable
   String get image_url;
@@ -67,6 +67,23 @@ abstract class BuiltWorkshopDetailPost
 
   static Serializer<BuiltWorkshopDetailPost> get serializer =>
       _$builtWorkshopDetailPostSerializer;
+}
+
+abstract class ContactPost implements Built<ContactPost, ContactPostBuilder> {
+  @nullable
+  int get id;
+  @nullable
+  String get name;
+  @nullable
+  String get email;
+  @nullable
+  String get phone_number;
+  @nullable
+  String get photo_url;
+
+  ContactPost._();
+  factory ContactPost([updates(ContactPostBuilder b)]) = _$ContactPost;
+  static Serializer<ContactPost> get serializer => _$contactPostSerializer;
 }
 
 // !--------------------------------------------------------------------------------------------------------------------

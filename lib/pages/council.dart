@@ -20,7 +20,7 @@ class _CouncilPageState extends State<CouncilPage> {
   void fetchCouncilById() async {
     Response<BuiltCouncilPost> snapshots =
         await AppConstants.service.getCouncil(AppConstants.currentCouncilId);
-    print(snapshots.body);
+    // print(snapshots.body);
     councilData = snapshots.body;
     setState(() {});
   }

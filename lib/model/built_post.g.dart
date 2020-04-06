@@ -10,6 +10,7 @@ Serializer<BuiltAllWorkshopsPost> _$builtAllWorkshopsPostSerializer =
     new _$BuiltAllWorkshopsPostSerializer();
 Serializer<BuiltWorkshopDetailPost> _$builtWorkshopDetailPostSerializer =
     new _$BuiltWorkshopDetailPostSerializer();
+Serializer<ContactPost> _$contactPostSerializer = new _$ContactPostSerializer();
 Serializer<BuiltAllCouncilsPost> _$builtAllCouncilsPostSerializer =
     new _$BuiltAllCouncilsPostSerializer();
 Serializer<BuiltCouncilPost> _$builtCouncilPostSerializer =
@@ -187,8 +188,8 @@ class _$BuiltWorkshopDetailPostSerializer
       result
         ..add('contacts')
         ..add(serializers.serialize(object.contacts,
-            specifiedType:
-                const FullType(BuiltList, const [const FullType(String)])));
+            specifiedType: const FullType(
+                BuiltList, const [const FullType(ContactPost)])));
     }
     if (object.image_url != null) {
       result
@@ -261,8 +262,8 @@ class _$BuiltWorkshopDetailPostSerializer
           break;
         case 'contacts':
           result.contacts.replace(serializers.deserialize(value,
-                  specifiedType:
-                      const FullType(BuiltList, const [const FullType(String)]))
+                  specifiedType: const FullType(
+                      BuiltList, const [const FullType(ContactPost)]))
               as BuiltList<dynamic>);
           break;
         case 'image_url':
@@ -276,6 +277,87 @@ class _$BuiltWorkshopDetailPostSerializer
         case 'attendees':
           result.attendees = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
+          break;
+      }
+    }
+
+    return result.build();
+  }
+}
+
+class _$ContactPostSerializer implements StructuredSerializer<ContactPost> {
+  @override
+  final Iterable<Type> types = const [ContactPost, _$ContactPost];
+  @override
+  final String wireName = 'ContactPost';
+
+  @override
+  Iterable<Object> serialize(Serializers serializers, ContactPost object,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = <Object>[];
+    if (object.id != null) {
+      result
+        ..add('id')
+        ..add(serializers.serialize(object.id,
+            specifiedType: const FullType(int)));
+    }
+    if (object.name != null) {
+      result
+        ..add('name')
+        ..add(serializers.serialize(object.name,
+            specifiedType: const FullType(String)));
+    }
+    if (object.email != null) {
+      result
+        ..add('email')
+        ..add(serializers.serialize(object.email,
+            specifiedType: const FullType(String)));
+    }
+    if (object.phone_number != null) {
+      result
+        ..add('phone_number')
+        ..add(serializers.serialize(object.phone_number,
+            specifiedType: const FullType(String)));
+    }
+    if (object.photo_url != null) {
+      result
+        ..add('photo_url')
+        ..add(serializers.serialize(object.photo_url,
+            specifiedType: const FullType(String)));
+    }
+    return result;
+  }
+
+  @override
+  ContactPost deserialize(Serializers serializers, Iterable<Object> serialized,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = new ContactPostBuilder();
+
+    final iterator = serialized.iterator;
+    while (iterator.moveNext()) {
+      final key = iterator.current as String;
+      iterator.moveNext();
+      final dynamic value = iterator.current;
+      switch (key) {
+        case 'id':
+          result.id = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+        case 'name':
+          result.name = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'email':
+          result.email = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'phone_number':
+          result.phone_number = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'photo_url':
+          result.photo_url = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
           break;
       }
     }
@@ -1273,7 +1355,7 @@ class _$BuiltWorkshopDetailPost extends BuiltWorkshopDetailPost {
   @override
   final String resources;
   @override
-  final BuiltList<String> contacts;
+  final BuiltList<ContactPost> contacts;
   @override
   final String image_url;
   @override
@@ -1418,10 +1500,11 @@ class BuiltWorkshopDetailPostBuilder
   String get resources => _$this._resources;
   set resources(String resources) => _$this._resources = resources;
 
-  ListBuilder<String> _contacts;
-  ListBuilder<String> get contacts =>
-      _$this._contacts ??= new ListBuilder<String>();
-  set contacts(ListBuilder<String> contacts) => _$this._contacts = contacts;
+  ListBuilder<ContactPost> _contacts;
+  ListBuilder<ContactPost> get contacts =>
+      _$this._contacts ??= new ListBuilder<ContactPost>();
+  set contacts(ListBuilder<ContactPost> contacts) =>
+      _$this._contacts = contacts;
 
   String _image_url;
   String get image_url => _$this._image_url;
@@ -1503,6 +1586,127 @@ class BuiltWorkshopDetailPostBuilder
       }
       rethrow;
     }
+    replace(_$result);
+    return _$result;
+  }
+}
+
+class _$ContactPost extends ContactPost {
+  @override
+  final int id;
+  @override
+  final String name;
+  @override
+  final String email;
+  @override
+  final String phone_number;
+  @override
+  final String photo_url;
+
+  factory _$ContactPost([void Function(ContactPostBuilder) updates]) =>
+      (new ContactPostBuilder()..update(updates)).build();
+
+  _$ContactPost._(
+      {this.id, this.name, this.email, this.phone_number, this.photo_url})
+      : super._();
+
+  @override
+  ContactPost rebuild(void Function(ContactPostBuilder) updates) =>
+      (toBuilder()..update(updates)).build();
+
+  @override
+  ContactPostBuilder toBuilder() => new ContactPostBuilder()..replace(this);
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(other, this)) return true;
+    return other is ContactPost &&
+        id == other.id &&
+        name == other.name &&
+        email == other.email &&
+        phone_number == other.phone_number &&
+        photo_url == other.photo_url;
+  }
+
+  @override
+  int get hashCode {
+    return $jf($jc(
+        $jc($jc($jc($jc(0, id.hashCode), name.hashCode), email.hashCode),
+            phone_number.hashCode),
+        photo_url.hashCode));
+  }
+
+  @override
+  String toString() {
+    return (newBuiltValueToStringHelper('ContactPost')
+          ..add('id', id)
+          ..add('name', name)
+          ..add('email', email)
+          ..add('phone_number', phone_number)
+          ..add('photo_url', photo_url))
+        .toString();
+  }
+}
+
+class ContactPostBuilder implements Builder<ContactPost, ContactPostBuilder> {
+  _$ContactPost _$v;
+
+  int _id;
+  int get id => _$this._id;
+  set id(int id) => _$this._id = id;
+
+  String _name;
+  String get name => _$this._name;
+  set name(String name) => _$this._name = name;
+
+  String _email;
+  String get email => _$this._email;
+  set email(String email) => _$this._email = email;
+
+  String _phone_number;
+  String get phone_number => _$this._phone_number;
+  set phone_number(String phone_number) => _$this._phone_number = phone_number;
+
+  String _photo_url;
+  String get photo_url => _$this._photo_url;
+  set photo_url(String photo_url) => _$this._photo_url = photo_url;
+
+  ContactPostBuilder();
+
+  ContactPostBuilder get _$this {
+    if (_$v != null) {
+      _id = _$v.id;
+      _name = _$v.name;
+      _email = _$v.email;
+      _phone_number = _$v.phone_number;
+      _photo_url = _$v.photo_url;
+      _$v = null;
+    }
+    return this;
+  }
+
+  @override
+  void replace(ContactPost other) {
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
+    _$v = other as _$ContactPost;
+  }
+
+  @override
+  void update(void Function(ContactPostBuilder) updates) {
+    if (updates != null) updates(this);
+  }
+
+  @override
+  _$ContactPost build() {
+    final _$result = _$v ??
+        new _$ContactPost._(
+            id: id,
+            name: name,
+            email: email,
+            phone_number: phone_number,
+            photo_url: photo_url);
     replace(_$result);
     return _$result;
   }
