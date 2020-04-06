@@ -11,7 +11,10 @@ class LoginPage extends StatefulWidget {
   _LoginPageState createState() => new _LoginPageState();
 }
 
-final GoogleSignIn googleSignIn = GoogleSignIn();
+final GoogleSignIn googleSignIn = GoogleSignIn(
+  scopes: ['profile', 'email', 'openid'],
+  hostedDomain: 'itbhu.ac.in',
+);
 String photoUrl;
 String displayName;
 String responseIdToken;
@@ -88,11 +91,6 @@ verifyToken(String token) async {
 Future<void> signOutGoogle() async {
   if (googleSignIn != null) {
     await googleSignIn.signOut();
-    FirebaseAuth.instance.currentUser().then((user) {
-      if (user != null) {
-        user.delete();
-      }
-    });
   }
   AppConstants.djangoToken = null;
   print("User Sign Out");
