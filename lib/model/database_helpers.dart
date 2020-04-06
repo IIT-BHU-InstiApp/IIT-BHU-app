@@ -35,12 +35,12 @@ Map<String, dynamic> workshopInfoToMap(dynamic workshop) {
 
 Workshop workshopInfoFromMap(dynamic map) {
   Workshop workshop = Workshop();
-  workshop.id = map.id;
-  workshop.clubId = map.clubId;
-  workshop.club = map.club;
-  workshop.councilId = map.councilId;
-  workshop.smallImageUrl = map.smallImageUrl;
-  workshop.largeImageUrl = map.largeImageUrl;
+  workshop.id = map[idString];
+  workshop.clubId = map[clubIdString];
+  workshop.club = map[clubString];
+  workshop.councilId = map[councilIdString];
+  workshop.smallImageUrl = map[smallImageUrlString];
+  workshop.largeImageUrl = map[largeImageUrlString];
   workshop.title = map[titleString];
   workshop.date = map[dateString];
   workshop.time = map[timeString];

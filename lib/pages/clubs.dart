@@ -150,10 +150,12 @@ class _ClubPageState extends State<ClubPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
-                      template(
-                          name: clubMap.secy.name,
-                          desg: 'Secy',
-                          imageUrl: clubMap.secy.photo_url),
+                      clubMap.secy == null
+                          ? Container()
+                          : template(
+                              name: clubMap.secy.name,
+                              desg: 'Secy',
+                              imageUrl: clubMap.secy.photo_url),
                       // template(
                       //     name: clubMap.joint_secy[0].name,
                       //     desg: 'JointSecy',

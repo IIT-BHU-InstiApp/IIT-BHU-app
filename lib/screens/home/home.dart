@@ -152,8 +152,8 @@ class _HomeScreenState extends State<HomeScreen>
           }
 
           final posts = snapshot.data.body;
-          print(posts);
-          print('-------------------------------------');
+          // print(posts);
+          // print('-------------------------------------');
           return _buildPastWorkshopPosts(context, posts);
         } else {
           // Show a loading indicator while waiting for the posts
@@ -283,7 +283,9 @@ class _HomeScreenState extends State<HomeScreen>
                           : _buildCurrentWorkshopPosts(context),
                     ),
                     Container(
-                        height: 400, child: _buildPastWorkshopsBody(context))
+                      height: 400,
+                      child: _buildPastWorkshopsBody(context),
+                    )
                   ],
                 ),
               ),

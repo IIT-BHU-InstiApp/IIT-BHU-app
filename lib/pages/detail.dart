@@ -95,9 +95,9 @@ class _DetailPage extends State<DetailPage> {
                   bottomLeft: Radius.circular(35.0),
                   bottomRight: Radius.circular(35.0)),
               image: DecorationImage(
-                  image: this._workshop.club.large_image_url == null
+                  image: this._workshop['club']['large_image_url'] == null
                       ? AssetImage('assets/iitbhu.jpeg')
-                      : NetworkImage(this._workshop.club.large_image_url),
+                      : NetworkImage(this._workshop['club']['large_image_url']),
                   fit: BoxFit.cover)),
         ),
         Positioned(
@@ -123,7 +123,7 @@ class _DetailPage extends State<DetailPage> {
                                 width: 5,
                               ),
                               Text(
-                                this._workshop.date,
+                                this._workshop['date'],
                                 style: TextStyle(
                                     fontFamily: 'Opensans',
                                     fontSize: 12.0,
@@ -142,7 +142,7 @@ class _DetailPage extends State<DetailPage> {
                                 width: 5,
                               ),
                               Text(
-                                this._workshop.time,
+                                this._workshop['time'],
                                 style: TextStyle(
                                     fontFamily: 'Opensans',
                                     fontSize: 12.0,
@@ -155,7 +155,7 @@ class _DetailPage extends State<DetailPage> {
                           ),
                           Container(
                             width: MediaQuery.of(context).size.width - 90.0,
-                            child: Text(this._workshop.title,
+                            child: Text(this._workshop['title'],
                                 style: TextStyle(
                                     fontFamily: 'Opensans',
                                     fontSize: 27.0,
@@ -271,7 +271,8 @@ class _DetailPage extends State<DetailPage> {
                           Icon(Icons.star, color: Colors.white, size: 12.0),
                           SizedBox(width: 5.0),
                           Text(
-                            Workshop.councils[this._workshop.club.council],
+                            Workshop
+                                .councils[this._workshop['club']['council']],
                             style: TextStyle(color: Colors.white),
                           )
                         ],

@@ -108,8 +108,8 @@ class Workshop {
     w.clubId = map.club.id;
     w.club = map.club.name;
     w.councilId = map.club.council;
-    w.smallImageUrl = map.small_image_url;
-    w.largeImageUrl = map.large_image_url;
+    w.smallImageUrl = map.club.small_image_url;
+    w.largeImageUrl = map.club.large_image_url;
     w.title = map.title;
     w.date = map.date;
     w.time = map.time;

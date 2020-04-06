@@ -88,6 +88,7 @@ class AppConstants {
       await helper.insertWorkshopInfoIntoDatabase(post: post);
     }
     workshops = await helper.getAllWorkshopsInfo(db: database);
+
     // print('------------------------------------');
     // print('workshops after updation: $workshops');
     // helper.closeDatabase(db: database);
