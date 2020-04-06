@@ -20,7 +20,7 @@ class _AboutPageState extends State<AboutPage> {
   void fetchTeamDetails() async {
     Response<BuiltList<BuiltTeamMemberPost>> snapshots =
         await AppConstants.service.getTeam();
-    print(snapshots.body);
+    // print(snapshots.body);
     teamData = snapshots.body;
     setState(() {});
   }
@@ -71,52 +71,55 @@ class _AboutPageState extends State<AboutPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[300],
-      body: ListView(
-        children: [
-          Container(
-            padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              //scrollDirection: Axis.vertical,
-              children: <Widget>[
-                Container(
-                  color: Colors.white,
-                  //margin: EdgeInsets.all(8.0),
+      body: teamData == null
+          ? Container(
+              height: MediaQuery.of(context).size.height / 4,
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            )
+          : ListView.builder(
+              shrinkWrap: true,
+              // physics: const NeverScrollableScrollPhysics(),
+              itemCount: teamData.length,
+              itemBuilder: (context, index) {
+                return Container(
+                  padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
+                    //scrollDirection: Axis.vertical,
+                    children: <Widget>[
                       Container(
                         color: Colors.white,
-                        padding: EdgeInsets.all(5.0),
+                        //margin: EdgeInsets.all(8.0),
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              'Contributors',
-                              style: headingStyle,
-                              textAlign: TextAlign.left,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Container(
+                              color: Colors.white,
+                              padding: EdgeInsets.all(5.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(
+                                    teamData[index].role,
+                                    style: headingStyle,
+                                    textAlign: TextAlign.left,
+                                  ),
+                                  divide,
+                                ],
+                              ),
                             ),
-                            divide,
                           ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
-                teamData == null
-                    ? Container(
-                        height: MediaQuery.of(context).size.height / 4,
-                        child: Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                      )
-                    : Container(
+                      Container(
                         color: Colors.white,
                         child: ListView.builder(
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
-                          itemCount: teamData.length,
-                          itemBuilder: (context, index) {
+                          itemCount: teamData[index].team_members.length,
+                          itemBuilder: (context, index2) {
                             return ListTile(
                               leading: Container(
                                 height: 50.0,
@@ -124,11 +127,14 @@ class _AboutPageState extends State<AboutPage> {
                                 decoration: BoxDecoration(
                                     //color: Colors.black,
                                     image: DecorationImage(
-                                      image: teamData[index].github_image_url ==
+                                      image: teamData[index]
+                                                  .team_members[index2]
+                                                  .github_image_url ==
                                               null
                                           ? AssetImage('assets/AMC.png')
-                                          : NetworkImage(
-                                              teamData[index].github_image_url),
+                                          : NetworkImage(teamData[index]
+                                              .team_members[index2]
+                                              .github_image_url),
                                       fit: BoxFit.fill,
                                     ),
                                     borderRadius:
@@ -147,7 +153,10 @@ class _AboutPageState extends State<AboutPage> {
                                   child: Container(
                                     height: 50.0,
                                     child: Center(
-                                      child: Text(teamData[index].github_username,
+                                      child: Text(
+                                          teamData[index]
+                                              .team_members[index2]
+                                              .github_username,
                                           style: TextStyle(
                                               color: Colors.white,
                                               fontSize: 25.0)),
@@ -159,11 +168,11 @@ class _AboutPageState extends State<AboutPage> {
                           },
                         ),
                       ),
-              ],
+                    ],
+                  ),
+                );
+              },
             ),
-          ),
-        ],
-      ),
     );
   }
 }
