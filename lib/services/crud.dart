@@ -1,13 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:iit_app/model/appConstants.dart';
+import 'package:iit_app/pages/login.dart';
 
 class CrudMethods {
   static Future<bool> isLoggedIn() async {
     AppConstants.currentUser = await FirebaseAuth.instance.currentUser();
     // print(AppConstants.currentUser);
+    String idToken = (await AppConstants.currentUser.getIdToken()).token;
+    await verifyToken(idToken);
+
     if (AppConstants.currentUser != null && AppConstants.djangoToken != null) {
-      // AppConstants.service = PostApiService.create();
       return true;
     } else
       return false;

@@ -11,7 +11,10 @@ class LoginPage extends StatefulWidget {
   _LoginPageState createState() => new _LoginPageState();
 }
 
-final GoogleSignIn googleSignIn = GoogleSignIn();
+final GoogleSignIn googleSignIn = GoogleSignIn(
+  scopes: ['profile', 'email', 'openid'],
+  hostedDomain: 'itbhu.ac.in',
+);
 String photoUrl;
 String displayName;
 String responseIdToken;

@@ -19,7 +19,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   AppConstants.service = PostApiService.create();
   bool logStatus = await CrudMethods.isLoggedIn();
-  // print('log status: $logStatus');
+  print('log status: $logStatus');
   runApp(
     Provider(
       builder: (_) => PostApiService.create(),
