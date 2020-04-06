@@ -88,11 +88,6 @@ verifyToken(String token) async {
 Future<void> signOutGoogle() async {
   if (googleSignIn != null) {
     await googleSignIn.signOut();
-    FirebaseAuth.instance.currentUser().then((user) {
-      if (user != null) {
-        user.delete();
-      }
-    });
   }
   AppConstants.djangoToken = null;
   print("User Sign Out");
