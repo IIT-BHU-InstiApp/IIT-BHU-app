@@ -163,13 +163,14 @@ class _CouncilPageState extends State<CouncilPage> {
                                           //   desg: 'joint gensec',
                                           //   name: councilData.joint_gensec[0].name,
                                           // ),
-
-                                          template(
-                                            imageUrl:
-                                                councilData.gensec.photo_url,
-                                            desg: 'gensec',
-                                            name: councilData.gensec.name,
-                                          ),
+                                          (councilData.gensec == null)
+                                              ? Text('GenSecy not provided!')
+                                              : template(
+                                                  imageUrl: councilData
+                                                      .gensec.photo_url,
+                                                  desg: 'gensec',
+                                                  name: councilData.gensec.name,
+                                                ),
 
                                           // template(
                                           //   imageUrl:
