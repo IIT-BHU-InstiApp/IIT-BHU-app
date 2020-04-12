@@ -15,8 +15,6 @@ final GoogleSignIn googleSignIn = GoogleSignIn(
   scopes: ['profile', 'email', 'openid'],
   hostedDomain: 'itbhu.ac.in',
 );
-String photoUrl;
-String displayName;
 String responseIdToken;
 FirebaseUser currentUser;
 
@@ -36,9 +34,6 @@ Future<FirebaseUser> signInWithGoogle() async {
 
   final GoogleSignInAuthentication googleSignInAuthentication =
       await googleSignInAccount.authentication;
-
-  photoUrl = googleSignInAccount.photoUrl;
-  displayName = googleSignInAccount.displayName;
 
   final AuthCredential credential = GoogleAuthProvider.getCredential(
     accessToken: googleSignInAuthentication.accessToken,

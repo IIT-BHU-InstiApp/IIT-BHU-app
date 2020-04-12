@@ -17,6 +17,10 @@ abstract class PostApiService extends ChopperService {
   @Get(path: '/workshops/{id}')
   Future<Response<BuiltWorkshopDetailPost>> getWorkshopDetailsPost(
       @Path('id') int id, @Header('Authorization') String token);
+  
+  @Get(path: '/workshops/{id}/toggle-interested')
+  Future<Response> toggleInterestedWorkshop(
+      @Path('id') int id, @Header('Authorization') String token);
 
   @Get(path: '/councils')
   Future<Response<BuiltList<BuiltAllCouncilsPost>>> getAllCouncils();

@@ -52,13 +52,12 @@ abstract class BuiltWorkshopDetailPost
 
   @nullable
   BuiltList<ContactPost> get contacts;
-
   @nullable
   String get image_url;
   @nullable
-  bool get is_attendee;
+  bool get is_interested;
   @nullable
-  int get attendees;
+  int get interested_users;
 
   BuiltWorkshopDetailPost._();
 

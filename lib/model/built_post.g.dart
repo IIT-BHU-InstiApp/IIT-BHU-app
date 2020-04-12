@@ -197,16 +197,16 @@ class _$BuiltWorkshopDetailPostSerializer
         ..add(serializers.serialize(object.image_url,
             specifiedType: const FullType(String)));
     }
-    if (object.is_attendee != null) {
+    if (object.is_interested != null) {
       result
-        ..add('is_attendee')
-        ..add(serializers.serialize(object.is_attendee,
+        ..add('is_interested')
+        ..add(serializers.serialize(object.is_interested,
             specifiedType: const FullType(bool)));
     }
-    if (object.attendees != null) {
+    if (object.interested_users != null) {
       result
-        ..add('attendees')
-        ..add(serializers.serialize(object.attendees,
+        ..add('interested_users')
+        ..add(serializers.serialize(object.interested_users,
             specifiedType: const FullType(int)));
     }
     return result;
@@ -270,12 +270,12 @@ class _$BuiltWorkshopDetailPostSerializer
           result.image_url = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
-        case 'is_attendee':
-          result.is_attendee = serializers.deserialize(value,
+        case 'is_interested':
+          result.is_interested = serializers.deserialize(value,
               specifiedType: const FullType(bool)) as bool;
           break;
-        case 'attendees':
-          result.attendees = serializers.deserialize(value,
+        case 'interested_users':
+          result.interested_users = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
           break;
       }
@@ -1359,9 +1359,9 @@ class _$BuiltWorkshopDetailPost extends BuiltWorkshopDetailPost {
   @override
   final String image_url;
   @override
-  final bool is_attendee;
+  final bool is_interested;
   @override
-  final int attendees;
+  final int interested_users;
 
   factory _$BuiltWorkshopDetailPost(
           [void Function(BuiltWorkshopDetailPostBuilder) updates]) =>
@@ -1379,8 +1379,8 @@ class _$BuiltWorkshopDetailPost extends BuiltWorkshopDetailPost {
       this.resources,
       this.contacts,
       this.image_url,
-      this.is_attendee,
-      this.attendees})
+      this.is_interested,
+      this.interested_users})
       : super._();
 
   @override
@@ -1407,8 +1407,8 @@ class _$BuiltWorkshopDetailPost extends BuiltWorkshopDetailPost {
         resources == other.resources &&
         contacts == other.contacts &&
         image_url == other.image_url &&
-        is_attendee == other.is_attendee &&
-        attendees == other.attendees;
+        is_interested == other.is_interested &&
+        interested_users == other.interested_users;
   }
 
   @override
@@ -1435,8 +1435,8 @@ class _$BuiltWorkshopDetailPost extends BuiltWorkshopDetailPost {
                         resources.hashCode),
                     contacts.hashCode),
                 image_url.hashCode),
-            is_attendee.hashCode),
-        attendees.hashCode));
+            is_interested.hashCode),
+        interested_users.hashCode));
   }
 
   @override
@@ -1453,8 +1453,8 @@ class _$BuiltWorkshopDetailPost extends BuiltWorkshopDetailPost {
           ..add('resources', resources)
           ..add('contacts', contacts)
           ..add('image_url', image_url)
-          ..add('is_attendee', is_attendee)
-          ..add('attendees', attendees))
+          ..add('is_interested', is_interested)
+          ..add('interested_users', interested_users))
         .toString();
   }
 }
@@ -1510,13 +1510,15 @@ class BuiltWorkshopDetailPostBuilder
   String get image_url => _$this._image_url;
   set image_url(String image_url) => _$this._image_url = image_url;
 
-  bool _is_attendee;
-  bool get is_attendee => _$this._is_attendee;
-  set is_attendee(bool is_attendee) => _$this._is_attendee = is_attendee;
+  bool _is_interested;
+  bool get is_interested => _$this._is_interested;
+  set is_interested(bool is_interested) =>
+      _$this._is_interested = is_interested;
 
-  int _attendees;
-  int get attendees => _$this._attendees;
-  set attendees(int attendees) => _$this._attendees = attendees;
+  int _interested_users;
+  int get interested_users => _$this._interested_users;
+  set interested_users(int interested_users) =>
+      _$this._interested_users = interested_users;
 
   BuiltWorkshopDetailPostBuilder();
 
@@ -1533,8 +1535,8 @@ class BuiltWorkshopDetailPostBuilder
       _resources = _$v.resources;
       _contacts = _$v.contacts?.toBuilder();
       _image_url = _$v.image_url;
-      _is_attendee = _$v.is_attendee;
-      _attendees = _$v.attendees;
+      _is_interested = _$v.is_interested;
+      _interested_users = _$v.interested_users;
       _$v = null;
     }
     return this;
@@ -1570,8 +1572,8 @@ class BuiltWorkshopDetailPostBuilder
               resources: resources,
               contacts: _contacts?.build(),
               image_url: image_url,
-              is_attendee: is_attendee,
-              attendees: attendees);
+              is_interested: is_interested,
+              interested_users: interested_users);
     } catch (_) {
       String _$failedField;
       try {
