@@ -1,7 +1,5 @@
 import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
-import 'package:iit_app/data/workshop.dart';
-import 'package:iit_app/pages/login.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/appConstants.dart';
 
