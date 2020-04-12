@@ -72,11 +72,6 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   void initState() {
     _tabController = new TabController(length: 2, vsync: this);
-    crudObj.getData().then((results) {
-      setState(() {
-        workshops = results;
-      });
-    });
 
     fetchWorkshops();
     fetchCouncils();
