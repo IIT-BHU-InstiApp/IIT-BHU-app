@@ -6,10 +6,11 @@ import 'package:iit_app/pages/login.dart';
 class CrudMethods {
   static Future<bool> isLoggedIn() async {
     AppConstants.currentUser = await FirebaseAuth.instance.currentUser();
-    // print(AppConstants.currentUser);
-    String idToken = (await AppConstants.currentUser.getIdToken()).token;
-    await verifyToken(idToken);
 
+    if(AppConstants.currentUser != null){
+      String idToken = (await AppConstants.currentUser.getIdToken()).token;
+      await verifyToken(idToken);
+    }
     if (AppConstants.currentUser != null && AppConstants.djangoToken != null) {
       return true;
     } else

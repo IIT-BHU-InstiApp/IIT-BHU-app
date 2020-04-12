@@ -72,9 +72,7 @@ class Workshop {
     clubs[councils[4]][0]: 'assets/iitbhu.jpeg',
   };
   int id;
-  int clubId;
   String club;
-  int councilId;
   String smallImageUrl;
   String largeImageUrl;
   String title;
@@ -92,9 +90,7 @@ class Workshop {
   Map<String, dynamic> createMap() {
     return {
       'id': id,
-      'clubId': clubId,
       'club': club,
-      'councilId': councilId,
       'title': title,
       'date': date,
       'time': time,
@@ -105,11 +101,7 @@ class Workshop {
     Workshop w = new Workshop();
 
     w.id = map.id;
-    w.clubId = map.club.id;
     w.club = map.club.name;
-    w.councilId = map.club.council;
-    w.smallImageUrl = map.club.small_image_url;
-    w.largeImageUrl = map.club.large_image_url;
     w.title = map.title;
     w.date = map.date;
     w.time = map.time;

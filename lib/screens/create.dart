@@ -52,40 +52,40 @@ class _CreateScreenState extends State {
                 builder: (context) => Form(
                     key: _formKey,
                     child: ListView(children: [
-                      DropdownButton<String>(
-                        items:
-                            Workshop.councils.map((String dropDownStringItem) {
-                          return DropdownMenuItem<String>(
-                            value: dropDownStringItem,
-                            child: Text(dropDownStringItem),
-                          );
-                        }).toList(),
-                        onChanged: (value) {
-                          setState(() {
-                            _workshop.councilId =
-                                Workshop.councils.indexOf(value);
-                            _workshop.club = null;
-                          });
-                        },
-                        value: Workshop.councils[_workshop.councilId],
-                        hint: Text('Select Council'),
-                      ),
-                      DropdownButton<String>(
-                        items: Workshop.clubs[_workshop.councilId]
-                            .map((String dropDownStringItem) {
-                          return DropdownMenuItem<String>(
-                            value: dropDownStringItem,
-                            child: Text(dropDownStringItem),
-                          );
-                        }).toList(),
-                        onChanged: (value) {
-                          setState(() {
-                            _workshop.club = value;
-                          });
-                        },
-                        value: _workshop.club,
-                        hint: Text('Select Club'),
-                      ),
+                      // DropdownButton<String>(
+                      //   items:
+                      //       Workshop.councils.map((String dropDownStringItem) {
+                      //     return DropdownMenuItem<String>(
+                      //       value: dropDownStringItem,
+                      //       child: Text(dropDownStringItem),
+                      //     );
+                      //   }).toList(),
+                      //   onChanged: (value) {
+                      //     setState(() {
+                      //       _workshop.councilId =
+                      //           Workshop.councils.indexOf(value);
+                      //       _workshop.club = null;
+                      //     });
+                      //   },
+                      //   value: Workshop.councils[_workshop.councilId],
+                      //   hint: Text('Select Council'),
+                      // ),
+                      // DropdownButton<String>(
+                      //   items: Workshop.clubs[_workshop.councilId]
+                      //       .map((String dropDownStringItem) {
+                      //     return DropdownMenuItem<String>(
+                      //       value: dropDownStringItem,
+                      //       child: Text(dropDownStringItem),
+                      //     );
+                      //   }).toList(),
+                      //   onChanged: (value) {
+                      //     setState(() {
+                      //       _workshop.club = value;
+                      //     });
+                      //   },
+                      //   value: _workshop.club,
+                      //   hint: Text('Select Club'),
+                      // ),
                       TextFormField(
                         decoration:
                             InputDecoration(labelText: 'Title of the Workshop'),
@@ -139,11 +139,11 @@ class _CreateScreenState extends State {
                               onPressed: () {
                                 final form = _formKey.currentState;
                                 if (form.validate()) {
-                                  if (_workshop.councilId == null)
-                                    Scaffold.of(context).showSnackBar(SnackBar(
-                                        content:
-                                            Text('Please select council')));
-                                  else if (_workshop.club == null)
+                                  // if (_workshop.councilId == null)
+                                  //   Scaffold.of(context).showSnackBar(SnackBar(
+                                  //       content:
+                                  //           Text('Please select council')));
+                                  if (_workshop.club == null)
                                     Scaffold.of(context).showSnackBar(SnackBar(
                                         content: Text('Please select club')));
                                   else {

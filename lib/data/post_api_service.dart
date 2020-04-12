@@ -8,7 +8,7 @@ part 'post_api_service.chopper.dart';
 
 @ChopperApi(baseUrl: '')
 abstract class PostApiService extends ChopperService {
-  @Get(path: '/workshops')
+  @Get(path: '/workshops/active')
   Future<Response<BuiltList<BuiltAllWorkshopsPost>>> getUpcomingWorkshops();
 
   @Get(path: '/workshops/past')

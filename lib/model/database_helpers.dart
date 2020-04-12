@@ -9,11 +9,7 @@ import 'package:sqflite/sqflite.dart';
 String workshopString = 'workshop';
 
 String idString = 'id';
-String clubIdString = 'clubId';
 String clubString = 'club';
-String councilIdString = 'councilId';
-String smallImageUrlString = 'smallImageUrl';
-String largeImageUrlString = 'largeImageUrl';
 String titleString = 'title';
 String dateString = 'date';
 String timeString = 'time';
@@ -21,11 +17,7 @@ String timeString = 'time';
 Map<String, dynamic> workshopInfoToMap(dynamic workshop) {
   Map<String, dynamic> map = {
     idString: workshop.id,
-    clubIdString: workshop.clubId,
     clubString: workshop.club,
-    councilIdString: workshop.councilId,
-    smallImageUrlString: workshop.smallImageUrl,
-    largeImageUrlString: workshop.largeImageUrl,
     titleString: workshop.title,
     dateString: workshop.date,
     timeString: workshop.time,
@@ -36,11 +28,7 @@ Map<String, dynamic> workshopInfoToMap(dynamic workshop) {
 Workshop workshopInfoFromMap(dynamic map) {
   Workshop workshop = Workshop();
   workshop.id = map[idString];
-  workshop.clubId = map[clubIdString];
   workshop.club = map[clubString];
-  workshop.councilId = map[councilIdString];
-  workshop.smallImageUrl = map[smallImageUrlString];
-  workshop.largeImageUrl = map[largeImageUrlString];
   workshop.title = map[titleString];
   workshop.date = map[dateString];
   workshop.time = map[timeString];
@@ -99,11 +87,7 @@ class DatabaseHelper {
   Future _onWorkshopInfoDatabaseCreate(Database db, int version) async {
     await db.execute('CREATE TABLE $workshopString ('
         '$idString INTEGER NOT NULL, '
-        '$clubIdString INTEGER NOT NULL, '
         '$clubString DEFAULT "", '
-        '$councilIdString INTEGER NOT NULL, '
-        '$smallImageUrlString DEFAULT "", '
-        '$largeImageUrlString DEFAULT "", '
         '$titleString DEFAULT "", '
         '$dateString DEFAULT "", '
         '$timeString DEFAULT "")');
@@ -125,11 +109,7 @@ class DatabaseHelper {
       workshopString,
       columns: [
         idString,
-        clubIdString,
         clubString,
-        councilIdString,
-        smallImageUrlString,
-        largeImageUrlString,
         titleString,
         dateString,
         timeString,
