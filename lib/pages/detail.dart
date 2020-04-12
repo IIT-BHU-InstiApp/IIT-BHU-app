@@ -260,8 +260,7 @@ class _DetailPage extends State<DetailPage> {
                 ),
                 SizedBox(width: 20.0),
                 Container(
-                    height: 40.0,
-                    width: 60.0,
+                    height: 35.0,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20.0),
                         color: Colors.black.withOpacity(0.2)),
@@ -269,13 +268,14 @@ class _DetailPage extends State<DetailPage> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
+                          SizedBox(width: 5.0),
                           Icon(Icons.star, color: Colors.white, size: 12.0),
                           SizedBox(width: 5.0),
                           Text(
-                            Workshop
-                                .councils[this._workshop['club']['council']],
+                            'Council Name',
                             style: TextStyle(color: Colors.white),
-                          )
+                          ),
+                          SizedBox(width: 5.0),
                         ],
                       ),
                     ))

@@ -101,7 +101,9 @@ class HomeWidgets {
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20.0),
                   image: DecorationImage(
-                      image: AssetImage(Workshop.imgPath[w.club]),
+                      image: w.smallImageUrl == null
+                          ? AssetImage('assets/AMC.png')
+                          : NetworkImage(w.smallImageUrl),
                       fit: BoxFit.cover)),
             ),
             // make the shade a bit deeper.
