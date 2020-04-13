@@ -260,11 +260,10 @@ abstract class BuiltProfilePost
   String get year_of_joining;
   @nullable
   BuiltList<ClubListPost> get subscriptions;
-
-  // TODO: watch for type of club_privileges
-
   @nullable
-  BuiltList<String> get club_privileges;
+  BuiltList<ClubListPost> get club_privileges;
+  @nullable
+  String get photo_url;
 
   BuiltProfilePost._();
 
