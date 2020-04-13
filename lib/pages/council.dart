@@ -27,36 +27,23 @@ class _CouncilPageState extends State<CouncilPage> {
 
   final space = SizedBox(height: 8.0);
   Widget template({String imageUrl, String name, String desg}) {
-    return Expanded(
-      child: Container(
-          child: Wrap(
-        children: <Widget>[
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              space,
-              Center(
-                  child: CircleAvatar(
-                backgroundImage: imageUrl == null
-                    ? AssetImage('assets/iitbhu.jpeg')
-                    : NetworkImage(imageUrl),
-                radius: 30.0,
-                backgroundColor: Colors.transparent,
-              )),
-              ListTile(
-                title: Text(
-                  name,
-                  textAlign: TextAlign.center,
-                ),
-                subtitle: Text(
-                  desg,
-                  textAlign: TextAlign.center,
-                ),
-              )
-            ],
-          ),
-        ],
-      )),
+    return Column(
+      children: <Widget>[
+        space,
+        Center(
+            child: CircleAvatar(
+          backgroundImage: imageUrl == null
+              ? AssetImage('assets/iitbhu.jpeg')
+              : NetworkImage(imageUrl),
+          radius: 30.0,
+          backgroundColor: Colors.transparent,
+        )),
+        Container(
+          child: Text(name, textAlign: TextAlign.center),
+          width: 100,
+        ),
+        Text(desg, textAlign: TextAlign.center),
+      ],
     );
   }
 
@@ -157,27 +144,34 @@ class _CouncilPageState extends State<CouncilPage> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceEvenly,
                                         children: <Widget>[
-                                          // template(
-                                          //   imageUrl:
-                                          //       councilData.joint_gensec[0].photo_url,
-                                          //   desg: 'joint gensec',
-                                          //   name: councilData.joint_gensec[0].name,
-                                          // ),
-                                          (councilData.gensec == null)
-                                              ? Text('GenSecy not provided!')
+                                          councilData.joint_gensec.length > 0
+                                              ? template(
+                                                  imageUrl: councilData
+                                                      .joint_gensec[0]
+                                                      .photo_url,
+                                                  desg: 'joint gensec',
+                                                  name: councilData
+                                                      .joint_gensec[0].name,
+                                                )
+                                              : SizedBox(width: 1),
+                                          councilData.gensec == null
+                                              ? SizedBox(width: 1)
                                               : template(
                                                   imageUrl: councilData
                                                       .gensec.photo_url,
                                                   desg: 'gensec',
                                                   name: councilData.gensec.name,
                                                 ),
-
-                                          // template(
-                                          //   imageUrl:
-                                          //       councilData.joint_gensec[1].photo_url,
-                                          //   desg: 'joint gensec',
-                                          //   name: councilData.joint_gensec[1].name,
-                                          // ),
+                                          councilData.joint_gensec.length > 1
+                                              ? template(
+                                                  imageUrl: councilData
+                                                      .joint_gensec[1]
+                                                      .photo_url,
+                                                  desg: 'joint gensec',
+                                                  name: councilData
+                                                      .joint_gensec[1].name,
+                                                )
+                                              : SizedBox(width: 1),
                                         ],
                                       ),
                                     ),

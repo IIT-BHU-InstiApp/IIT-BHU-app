@@ -68,7 +68,10 @@ class _ClubPageState extends State<ClubPage> {
           radius: 30.0,
           backgroundColor: Colors.transparent,
         )),
-        Text(name, textAlign: TextAlign.center),
+        Container(
+          child: Text(name, textAlign: TextAlign.center),
+          width: 100,
+        ),
         Text(desg, textAlign: TextAlign.center),
       ],
     );
