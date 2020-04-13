@@ -226,23 +226,36 @@ abstract class BuiltClubPost
 }
 
 // !--------------------------------------------------------------------------------------------------------------------
-// abstract class WorkshopPost
-//     implements Built<WorkshopPost, WorkshopPostBuilder> {
-//   @nullable
-//   int get id;
-//   @nullable
-//   ClubListPost get club;
-//   @nullable
-//   String get title;
-//   @nullable
-//   String get date;
-//   @nullable
-//   String get time;
+abstract class BuiltWorkshopCreatePost
+    implements Built<BuiltWorkshopCreatePost, BuiltWorkshopCreatePostBuilder> {
+  
+  String get title;
+  int get club;
+  String get date;
+  
+  // @nullable
+  // int get id;
+  // @nullable
+  // String get description;
+  // @nullable
+  // String get time;
+  // @nullable
+  // String get location;
+  // @nullable
+  // String get audience;
+  // @nullable
+  // String get resources;
+  // @nullable
+  // BuiltList<ContactPost> get contacts;
+  // @nullable
+  // String get image_url;
 
-//   WorkshopPost._();
-//   factory WorkshopPost([updates(WorkshopPostBuilder b)]) = _$WorkshopPost;
-//   static Serializer<WorkshopPost> get serializer => _$workshopPostSerializer;
-// }
+  BuiltWorkshopCreatePost._();
+  factory BuiltWorkshopCreatePost([updates(BuiltWorkshopCreatePostBuilder b)]) =
+      _$BuiltWorkshopCreatePost;
+  static Serializer<BuiltWorkshopCreatePost> get serializer =>
+      _$builtWorkshopCreatePostSerializer;
+}
 
 // !--------------------------------------------------------------------------------------------------------------------
 
