@@ -161,7 +161,7 @@ class HomeWidgets {
                                   color: Colors.white, size: 12.0),
                               SizedBox(width: 4.0),
                               Text(
-                                w.time,
+                                w.time == null ? "none" : w.time,
                                 style: TextStyle(color: Colors.white),
                               )
                             ],

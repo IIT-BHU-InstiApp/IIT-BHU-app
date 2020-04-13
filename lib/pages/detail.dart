@@ -117,7 +117,9 @@ class _DetailPage extends State<DetailPage> {
                                       width: 5,
                                     ),
                                     Text(
-                                      _workshop.time,
+                                      _workshop.time != null
+                                          ? _workshop.time
+                                          : "none",
                                       style: TextStyle(
                                           fontFamily: 'Opensans',
                                           fontSize: 12.0,
