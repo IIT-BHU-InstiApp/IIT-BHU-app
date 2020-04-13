@@ -34,6 +34,19 @@ class _ClubPageState extends State<ClubPage> {
     setState(() {});
   }
 
+  void toggleSubscription() async {
+    await AppConstants.service
+        .toggleClubSubscription(
+            widget.clubId, "token ${AppConstants.djangoToken}")
+        .then((snapshot) {
+      print("status of club subscription: ${snapshot.statusCode}");
+    }).catchError((onError) {
+      print("Error in toggleing: ${onError.toString()}");
+    });
+    fetchClubDataById();
+    setState(() {});
+  }
+
   final divide = Divider(height: 8.0, thickness: 2.0, color: Colors.blue);
   final space = SizedBox(height: 8.0);
   final headingStyle = TextStyle(
@@ -124,7 +137,7 @@ class _ClubPageState extends State<ClubPage> {
                       InkWell(
                         splashColor:
                             clubMap.is_subscribed ? Colors.black87 : Colors.red,
-                        onTap: () {},
+                        onTap: () => toggleSubscription(),
                         child: IconButton(
                             color: Colors.red,
                             iconSize: 30.0,

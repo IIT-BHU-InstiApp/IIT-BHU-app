@@ -70,6 +70,13 @@ class _$PostApiService extends PostApiService {
     return client.send<BuiltClubPost, BuiltClubPost>($request);
   }
 
+  Future<Response> toggleClubSubscription(int id, String token) {
+    final $url = '/clubs/${id}/toggle-subscribed';
+    final $headers = {'Authorization': token};
+    final $request = Request('GET', $url, client.baseUrl, headers: $headers);
+    return client.send<dynamic, dynamic>($request);
+  }
+
   Future<Response<BuiltClubPost>> getProfile() {
     final $url = '/profile';
     final $request = Request('GET', $url, client.baseUrl);
