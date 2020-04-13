@@ -127,13 +127,14 @@ class _HomeScreenState extends State<HomeScreen>
             ));
   }
 
-  FutureBuilder<Response> _buildPastWorkshopsBody(BuildContext context) {
+  FutureBuilder<Response> _buildInterestedWorkshopsBody(BuildContext context) {
     // FutureBuilder is perfect for easily building UI when awaiting a Future
     // Response is the type currently returned by all the methods of PostApiService
     return FutureBuilder<Response<BuiltList<BuiltWorkshopSummaryPost>>>(
       // In real apps, use some sort of state management (BLoC is cool)
       // to prevent duplicate requests when the UI rebuilds
-      future: AppConstants.service.getPastWorkshops(),
+      future: AppConstants.service
+          .getInterestedWorkshops("token ${AppConstants.djangoToken}"),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasError) {
@@ -149,7 +150,7 @@ class _HomeScreenState extends State<HomeScreen>
           final posts = snapshot.data.body;
           // print(posts);
           // print('-------------------------------------');
-          return _buildPastWorkshopPosts(context, posts);
+          return _buildInterestedWorkshopPosts(context, posts);
         } else {
           // Show a loading indicator while waiting for the posts
           return Center(
@@ -160,7 +161,7 @@ class _HomeScreenState extends State<HomeScreen>
     );
   }
 
-  ListView _buildPastWorkshopPosts(
+  ListView _buildInterestedWorkshopPosts(
       BuildContext context, BuiltList<BuiltWorkshopSummaryPost> posts) {
     return ListView.builder(
       scrollDirection: Axis.vertical,
@@ -279,7 +280,7 @@ class _HomeScreenState extends State<HomeScreen>
                     ),
                     Container(
                       height: 400,
-                      child: _buildPastWorkshopsBody(context),
+                      child: _buildInterestedWorkshopsBody(context),
                     )
                   ],
                 ),

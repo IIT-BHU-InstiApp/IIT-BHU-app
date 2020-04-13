@@ -34,6 +34,15 @@ class _$PostApiService extends PostApiService {
         BuiltWorkshopSummaryPost>($request);
   }
 
+  Future<Response<BuiltList<BuiltWorkshopSummaryPost>>> getInterestedWorkshops(
+      String token) {
+    final $url = '/workshops/interested';
+    final $headers = {'Authorization': token};
+    final $request = Request('GET', $url, client.baseUrl, headers: $headers);
+    return client.send<BuiltList<BuiltWorkshopSummaryPost>,
+        BuiltWorkshopSummaryPost>($request);
+  }
+
   Future<Response<BuiltWorkshopDetailPost>> getWorkshopDetailsPost(
       int id, String token) {
     final $url = '/workshops/${id}';
