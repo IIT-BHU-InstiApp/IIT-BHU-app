@@ -55,8 +55,8 @@ class AppConstants {
 
       print('fetching workshops infos from json');
 
-      Response<BuiltList<BuiltAllWorkshopsPost>> snapshots =
-          await service.getUpcomingWorkshops();
+      Response<BuiltList<BuiltWorkshopSummaryPost>> snapshots =
+          await service.getActiveWorkshops();
 
       final posts = snapshots.body;
 
@@ -79,8 +79,8 @@ class AppConstants {
 
     print('fetching workshops infos from json for updation');
 
-    Response<BuiltList<BuiltAllWorkshopsPost>> snapshots =
-        await service.getUpcomingWorkshops();
+    Response<BuiltList<BuiltWorkshopSummaryPost>> snapshots =
+        await service.getActiveWorkshops();
 
     final posts = snapshots.body;
 

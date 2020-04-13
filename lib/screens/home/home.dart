@@ -130,7 +130,7 @@ class _HomeScreenState extends State<HomeScreen>
   FutureBuilder<Response> _buildPastWorkshopsBody(BuildContext context) {
     // FutureBuilder is perfect for easily building UI when awaiting a Future
     // Response is the type currently returned by all the methods of PostApiService
-    return FutureBuilder<Response<BuiltList<BuiltAllWorkshopsPost>>>(
+    return FutureBuilder<Response<BuiltList<BuiltWorkshopSummaryPost>>>(
       // In real apps, use some sort of state management (BLoC is cool)
       // to prevent duplicate requests when the UI rebuilds
       future: AppConstants.service.getPastWorkshops(),
@@ -161,7 +161,7 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   ListView _buildPastWorkshopPosts(
-      BuildContext context, BuiltList<BuiltAllWorkshopsPost> posts) {
+      BuildContext context, BuiltList<BuiltWorkshopSummaryPost> posts) {
     return ListView.builder(
       scrollDirection: Axis.vertical,
       itemCount: posts.length,

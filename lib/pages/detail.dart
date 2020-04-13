@@ -41,6 +41,7 @@ class _DetailPage extends State<DetailPage> {
     }).catchError((onError) {
       print("Error in toggleing: ${onError.toString()}");
     });
+    fetchWorkshopDetails();
     setState(() {});
   }
 

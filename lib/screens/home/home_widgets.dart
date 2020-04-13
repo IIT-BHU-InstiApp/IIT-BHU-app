@@ -102,7 +102,7 @@ class HomeWidgets {
                   borderRadius: BorderRadius.circular(20.0),
                   image: DecorationImage(
                       image: w.smallImageUrl == null
-                          ? AssetImage('assets/AMC.png')
+                          ? AssetImage('assets/iitbhu.jpeg')
                           : NetworkImage(w.smallImageUrl),
                       fit: BoxFit.cover)),
             ),

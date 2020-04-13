@@ -8,6 +8,8 @@ part of 'built_post.dart';
 
 Serializer<BuiltAllWorkshopsPost> _$builtAllWorkshopsPostSerializer =
     new _$BuiltAllWorkshopsPostSerializer();
+Serializer<BuiltWorkshopSummaryPost> _$builtWorkshopSummaryPostSerializer =
+    new _$BuiltWorkshopSummaryPostSerializer();
 Serializer<BuiltWorkshopDetailPost> _$builtWorkshopDetailPostSerializer =
     new _$BuiltWorkshopDetailPostSerializer();
 Serializer<ContactPost> _$contactPostSerializer = new _$ContactPostSerializer();
@@ -20,8 +22,6 @@ Serializer<ClubListPost> _$clubListPostSerializer =
     new _$ClubListPostSerializer();
 Serializer<BuiltClubPost> _$builtClubPostSerializer =
     new _$BuiltClubPostSerializer();
-Serializer<WorkshopPost> _$workshopPostSerializer =
-    new _$WorkshopPostSerializer();
 Serializer<BuiltProfilePost> _$builtProfilePostSerializer =
     new _$BuiltProfilePostSerializer();
 Serializer<TeamMember> _$teamMemberSerializer = new _$TeamMemberSerializer();
@@ -41,6 +41,69 @@ class _$BuiltAllWorkshopsPostSerializer
   @override
   Iterable<Object> serialize(
       Serializers serializers, BuiltAllWorkshopsPost object,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = <Object>[];
+    if (object.active_workshops != null) {
+      result
+        ..add('active_workshops')
+        ..add(serializers.serialize(object.active_workshops,
+            specifiedType: const FullType(
+                BuiltList, const [const FullType(BuiltWorkshopSummaryPost)])));
+    }
+    if (object.past_workshops != null) {
+      result
+        ..add('past_workshops')
+        ..add(serializers.serialize(object.past_workshops,
+            specifiedType: const FullType(
+                BuiltList, const [const FullType(BuiltWorkshopSummaryPost)])));
+    }
+    return result;
+  }
+
+  @override
+  BuiltAllWorkshopsPost deserialize(
+      Serializers serializers, Iterable<Object> serialized,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = new BuiltAllWorkshopsPostBuilder();
+
+    final iterator = serialized.iterator;
+    while (iterator.moveNext()) {
+      final key = iterator.current as String;
+      iterator.moveNext();
+      final dynamic value = iterator.current;
+      switch (key) {
+        case 'active_workshops':
+          result.active_workshops.replace(serializers.deserialize(value,
+              specifiedType: const FullType(BuiltList, const [
+                const FullType(BuiltWorkshopSummaryPost)
+              ])) as BuiltList<dynamic>);
+          break;
+        case 'past_workshops':
+          result.past_workshops.replace(serializers.deserialize(value,
+              specifiedType: const FullType(BuiltList, const [
+                const FullType(BuiltWorkshopSummaryPost)
+              ])) as BuiltList<dynamic>);
+          break;
+      }
+    }
+
+    return result.build();
+  }
+}
+
+class _$BuiltWorkshopSummaryPostSerializer
+    implements StructuredSerializer<BuiltWorkshopSummaryPost> {
+  @override
+  final Iterable<Type> types = const [
+    BuiltWorkshopSummaryPost,
+    _$BuiltWorkshopSummaryPost
+  ];
+  @override
+  final String wireName = 'BuiltWorkshopSummaryPost';
+
+  @override
+  Iterable<Object> serialize(
+      Serializers serializers, BuiltWorkshopSummaryPost object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[];
     if (object.id != null) {
@@ -77,10 +140,10 @@ class _$BuiltAllWorkshopsPostSerializer
   }
 
   @override
-  BuiltAllWorkshopsPost deserialize(
+  BuiltWorkshopSummaryPost deserialize(
       Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = new BuiltAllWorkshopsPostBuilder();
+    final result = new BuiltWorkshopSummaryPostBuilder();
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
@@ -776,14 +839,14 @@ class _$BuiltClubPostSerializer implements StructuredSerializer<BuiltClubPost> {
         ..add('active_workshops')
         ..add(serializers.serialize(object.active_workshops,
             specifiedType: const FullType(
-                BuiltList, const [const FullType(WorkshopPost)])));
+                BuiltList, const [const FullType(BuiltWorkshopSummaryPost)])));
     }
     if (object.past_workshops != null) {
       result
         ..add('past_workshops')
         ..add(serializers.serialize(object.past_workshops,
             specifiedType: const FullType(
-                BuiltList, const [const FullType(WorkshopPost)])));
+                BuiltList, const [const FullType(BuiltWorkshopSummaryPost)])));
     }
     if (object.small_image_url != null) {
       result
@@ -853,15 +916,15 @@ class _$BuiltClubPostSerializer implements StructuredSerializer<BuiltClubPost> {
           break;
         case 'active_workshops':
           result.active_workshops.replace(serializers.deserialize(value,
-                  specifiedType: const FullType(
-                      BuiltList, const [const FullType(WorkshopPost)]))
-              as BuiltList<dynamic>);
+              specifiedType: const FullType(BuiltList, const [
+                const FullType(BuiltWorkshopSummaryPost)
+              ])) as BuiltList<dynamic>);
           break;
         case 'past_workshops':
           result.past_workshops.replace(serializers.deserialize(value,
-                  specifiedType: const FullType(
-                      BuiltList, const [const FullType(WorkshopPost)]))
-              as BuiltList<dynamic>);
+              specifiedType: const FullType(BuiltList, const [
+                const FullType(BuiltWorkshopSummaryPost)
+              ])) as BuiltList<dynamic>);
           break;
         case 'small_image_url':
           result.small_image_url = serializers.deserialize(value,
@@ -878,87 +941,6 @@ class _$BuiltClubPostSerializer implements StructuredSerializer<BuiltClubPost> {
         case 'subscribed_users':
           result.subscribed_users = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
-          break;
-      }
-    }
-
-    return result.build();
-  }
-}
-
-class _$WorkshopPostSerializer implements StructuredSerializer<WorkshopPost> {
-  @override
-  final Iterable<Type> types = const [WorkshopPost, _$WorkshopPost];
-  @override
-  final String wireName = 'WorkshopPost';
-
-  @override
-  Iterable<Object> serialize(Serializers serializers, WorkshopPost object,
-      {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[];
-    if (object.id != null) {
-      result
-        ..add('id')
-        ..add(serializers.serialize(object.id,
-            specifiedType: const FullType(int)));
-    }
-    if (object.club != null) {
-      result
-        ..add('club')
-        ..add(serializers.serialize(object.club,
-            specifiedType: const FullType(ClubListPost)));
-    }
-    if (object.title != null) {
-      result
-        ..add('title')
-        ..add(serializers.serialize(object.title,
-            specifiedType: const FullType(String)));
-    }
-    if (object.date != null) {
-      result
-        ..add('date')
-        ..add(serializers.serialize(object.date,
-            specifiedType: const FullType(String)));
-    }
-    if (object.time != null) {
-      result
-        ..add('time')
-        ..add(serializers.serialize(object.time,
-            specifiedType: const FullType(String)));
-    }
-    return result;
-  }
-
-  @override
-  WorkshopPost deserialize(Serializers serializers, Iterable<Object> serialized,
-      {FullType specifiedType = FullType.unspecified}) {
-    final result = new WorkshopPostBuilder();
-
-    final iterator = serialized.iterator;
-    while (iterator.moveNext()) {
-      final key = iterator.current as String;
-      iterator.moveNext();
-      final dynamic value = iterator.current;
-      switch (key) {
-        case 'id':
-          result.id = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
-          break;
-        case 'club':
-          result.club.replace(serializers.deserialize(value,
-              specifiedType: const FullType(ClubListPost)) as ClubListPost);
-          break;
-        case 'title':
-          result.title = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
-          break;
-        case 'date':
-          result.date = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
-          break;
-        case 'time':
-          result.time = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
           break;
       }
     }
@@ -1199,22 +1181,15 @@ class _$BuiltTeamMemberPostSerializer
 
 class _$BuiltAllWorkshopsPost extends BuiltAllWorkshopsPost {
   @override
-  final int id;
+  final BuiltList<BuiltWorkshopSummaryPost> active_workshops;
   @override
-  final ClubListPost club;
-  @override
-  final String title;
-  @override
-  final String date;
-  @override
-  final String time;
+  final BuiltList<BuiltWorkshopSummaryPost> past_workshops;
 
   factory _$BuiltAllWorkshopsPost(
           [void Function(BuiltAllWorkshopsPostBuilder) updates]) =>
       (new BuiltAllWorkshopsPostBuilder()..update(updates)).build();
 
-  _$BuiltAllWorkshopsPost._(
-      {this.id, this.club, this.title, this.date, this.time})
+  _$BuiltAllWorkshopsPost._({this.active_workshops, this.past_workshops})
       : super._();
 
   @override
@@ -1230,29 +1205,20 @@ class _$BuiltAllWorkshopsPost extends BuiltAllWorkshopsPost {
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
     return other is BuiltAllWorkshopsPost &&
-        id == other.id &&
-        club == other.club &&
-        title == other.title &&
-        date == other.date &&
-        time == other.time;
+        active_workshops == other.active_workshops &&
+        past_workshops == other.past_workshops;
   }
 
   @override
   int get hashCode {
-    return $jf($jc(
-        $jc($jc($jc($jc(0, id.hashCode), club.hashCode), title.hashCode),
-            date.hashCode),
-        time.hashCode));
+    return $jf($jc($jc(0, active_workshops.hashCode), past_workshops.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper('BuiltAllWorkshopsPost')
-          ..add('id', id)
-          ..add('club', club)
-          ..add('title', title)
-          ..add('date', date)
-          ..add('time', time))
+          ..add('active_workshops', active_workshops)
+          ..add('past_workshops', past_workshops))
         .toString();
   }
 }
@@ -1261,35 +1227,25 @@ class BuiltAllWorkshopsPostBuilder
     implements Builder<BuiltAllWorkshopsPost, BuiltAllWorkshopsPostBuilder> {
   _$BuiltAllWorkshopsPost _$v;
 
-  int _id;
-  int get id => _$this._id;
-  set id(int id) => _$this._id = id;
+  ListBuilder<BuiltWorkshopSummaryPost> _active_workshops;
+  ListBuilder<BuiltWorkshopSummaryPost> get active_workshops =>
+      _$this._active_workshops ??= new ListBuilder<BuiltWorkshopSummaryPost>();
+  set active_workshops(
+          ListBuilder<BuiltWorkshopSummaryPost> active_workshops) =>
+      _$this._active_workshops = active_workshops;
 
-  ClubListPostBuilder _club;
-  ClubListPostBuilder get club => _$this._club ??= new ClubListPostBuilder();
-  set club(ClubListPostBuilder club) => _$this._club = club;
-
-  String _title;
-  String get title => _$this._title;
-  set title(String title) => _$this._title = title;
-
-  String _date;
-  String get date => _$this._date;
-  set date(String date) => _$this._date = date;
-
-  String _time;
-  String get time => _$this._time;
-  set time(String time) => _$this._time = time;
+  ListBuilder<BuiltWorkshopSummaryPost> _past_workshops;
+  ListBuilder<BuiltWorkshopSummaryPost> get past_workshops =>
+      _$this._past_workshops ??= new ListBuilder<BuiltWorkshopSummaryPost>();
+  set past_workshops(ListBuilder<BuiltWorkshopSummaryPost> past_workshops) =>
+      _$this._past_workshops = past_workshops;
 
   BuiltAllWorkshopsPostBuilder();
 
   BuiltAllWorkshopsPostBuilder get _$this {
     if (_$v != null) {
-      _id = _$v.id;
-      _club = _$v.club?.toBuilder();
-      _title = _$v.title;
-      _date = _$v.date;
-      _time = _$v.time;
+      _active_workshops = _$v.active_workshops?.toBuilder();
+      _past_workshops = _$v.past_workshops?.toBuilder();
       _$v = null;
     }
     return this;
@@ -1314,6 +1270,144 @@ class BuiltAllWorkshopsPostBuilder
     try {
       _$result = _$v ??
           new _$BuiltAllWorkshopsPost._(
+              active_workshops: _active_workshops?.build(),
+              past_workshops: _past_workshops?.build());
+    } catch (_) {
+      String _$failedField;
+      try {
+        _$failedField = 'active_workshops';
+        _active_workshops?.build();
+        _$failedField = 'past_workshops';
+        _past_workshops?.build();
+      } catch (e) {
+        throw new BuiltValueNestedFieldError(
+            'BuiltAllWorkshopsPost', _$failedField, e.toString());
+      }
+      rethrow;
+    }
+    replace(_$result);
+    return _$result;
+  }
+}
+
+class _$BuiltWorkshopSummaryPost extends BuiltWorkshopSummaryPost {
+  @override
+  final int id;
+  @override
+  final ClubListPost club;
+  @override
+  final String title;
+  @override
+  final String date;
+  @override
+  final String time;
+
+  factory _$BuiltWorkshopSummaryPost(
+          [void Function(BuiltWorkshopSummaryPostBuilder) updates]) =>
+      (new BuiltWorkshopSummaryPostBuilder()..update(updates)).build();
+
+  _$BuiltWorkshopSummaryPost._(
+      {this.id, this.club, this.title, this.date, this.time})
+      : super._();
+
+  @override
+  BuiltWorkshopSummaryPost rebuild(
+          void Function(BuiltWorkshopSummaryPostBuilder) updates) =>
+      (toBuilder()..update(updates)).build();
+
+  @override
+  BuiltWorkshopSummaryPostBuilder toBuilder() =>
+      new BuiltWorkshopSummaryPostBuilder()..replace(this);
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(other, this)) return true;
+    return other is BuiltWorkshopSummaryPost &&
+        id == other.id &&
+        club == other.club &&
+        title == other.title &&
+        date == other.date &&
+        time == other.time;
+  }
+
+  @override
+  int get hashCode {
+    return $jf($jc(
+        $jc($jc($jc($jc(0, id.hashCode), club.hashCode), title.hashCode),
+            date.hashCode),
+        time.hashCode));
+  }
+
+  @override
+  String toString() {
+    return (newBuiltValueToStringHelper('BuiltWorkshopSummaryPost')
+          ..add('id', id)
+          ..add('club', club)
+          ..add('title', title)
+          ..add('date', date)
+          ..add('time', time))
+        .toString();
+  }
+}
+
+class BuiltWorkshopSummaryPostBuilder
+    implements
+        Builder<BuiltWorkshopSummaryPost, BuiltWorkshopSummaryPostBuilder> {
+  _$BuiltWorkshopSummaryPost _$v;
+
+  int _id;
+  int get id => _$this._id;
+  set id(int id) => _$this._id = id;
+
+  ClubListPostBuilder _club;
+  ClubListPostBuilder get club => _$this._club ??= new ClubListPostBuilder();
+  set club(ClubListPostBuilder club) => _$this._club = club;
+
+  String _title;
+  String get title => _$this._title;
+  set title(String title) => _$this._title = title;
+
+  String _date;
+  String get date => _$this._date;
+  set date(String date) => _$this._date = date;
+
+  String _time;
+  String get time => _$this._time;
+  set time(String time) => _$this._time = time;
+
+  BuiltWorkshopSummaryPostBuilder();
+
+  BuiltWorkshopSummaryPostBuilder get _$this {
+    if (_$v != null) {
+      _id = _$v.id;
+      _club = _$v.club?.toBuilder();
+      _title = _$v.title;
+      _date = _$v.date;
+      _time = _$v.time;
+      _$v = null;
+    }
+    return this;
+  }
+
+  @override
+  void replace(BuiltWorkshopSummaryPost other) {
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
+    _$v = other as _$BuiltWorkshopSummaryPost;
+  }
+
+  @override
+  void update(void Function(BuiltWorkshopSummaryPostBuilder) updates) {
+    if (updates != null) updates(this);
+  }
+
+  @override
+  _$BuiltWorkshopSummaryPost build() {
+    _$BuiltWorkshopSummaryPost _$result;
+    try {
+      _$result = _$v ??
+          new _$BuiltWorkshopSummaryPost._(
               id: id,
               club: _club?.build(),
               title: title,
@@ -1326,7 +1420,7 @@ class BuiltAllWorkshopsPostBuilder
         _club?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'BuiltAllWorkshopsPost', _$failedField, e.toString());
+            'BuiltWorkshopSummaryPost', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -2284,9 +2378,9 @@ class _$BuiltClubPost extends BuiltClubPost {
   @override
   final BuiltList<SecyPost> joint_secy;
   @override
-  final BuiltList<WorkshopPost> active_workshops;
+  final BuiltList<BuiltWorkshopSummaryPost> active_workshops;
   @override
-  final BuiltList<WorkshopPost> past_workshops;
+  final BuiltList<BuiltWorkshopSummaryPost> past_workshops;
   @override
   final String small_image_url;
   @override
@@ -2415,16 +2509,17 @@ class BuiltClubPostBuilder
   set joint_secy(ListBuilder<SecyPost> joint_secy) =>
       _$this._joint_secy = joint_secy;
 
-  ListBuilder<WorkshopPost> _active_workshops;
-  ListBuilder<WorkshopPost> get active_workshops =>
-      _$this._active_workshops ??= new ListBuilder<WorkshopPost>();
-  set active_workshops(ListBuilder<WorkshopPost> active_workshops) =>
+  ListBuilder<BuiltWorkshopSummaryPost> _active_workshops;
+  ListBuilder<BuiltWorkshopSummaryPost> get active_workshops =>
+      _$this._active_workshops ??= new ListBuilder<BuiltWorkshopSummaryPost>();
+  set active_workshops(
+          ListBuilder<BuiltWorkshopSummaryPost> active_workshops) =>
       _$this._active_workshops = active_workshops;
 
-  ListBuilder<WorkshopPost> _past_workshops;
-  ListBuilder<WorkshopPost> get past_workshops =>
-      _$this._past_workshops ??= new ListBuilder<WorkshopPost>();
-  set past_workshops(ListBuilder<WorkshopPost> past_workshops) =>
+  ListBuilder<BuiltWorkshopSummaryPost> _past_workshops;
+  ListBuilder<BuiltWorkshopSummaryPost> get past_workshops =>
+      _$this._past_workshops ??= new ListBuilder<BuiltWorkshopSummaryPost>();
+  set past_workshops(ListBuilder<BuiltWorkshopSummaryPost> past_workshops) =>
       _$this._past_workshops = past_workshops;
 
   String _small_image_url;
@@ -2515,140 +2610,6 @@ class BuiltClubPostBuilder
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             'BuiltClubPost', _$failedField, e.toString());
-      }
-      rethrow;
-    }
-    replace(_$result);
-    return _$result;
-  }
-}
-
-class _$WorkshopPost extends WorkshopPost {
-  @override
-  final int id;
-  @override
-  final ClubListPost club;
-  @override
-  final String title;
-  @override
-  final String date;
-  @override
-  final String time;
-
-  factory _$WorkshopPost([void Function(WorkshopPostBuilder) updates]) =>
-      (new WorkshopPostBuilder()..update(updates)).build();
-
-  _$WorkshopPost._({this.id, this.club, this.title, this.date, this.time})
-      : super._();
-
-  @override
-  WorkshopPost rebuild(void Function(WorkshopPostBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
-
-  @override
-  WorkshopPostBuilder toBuilder() => new WorkshopPostBuilder()..replace(this);
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(other, this)) return true;
-    return other is WorkshopPost &&
-        id == other.id &&
-        club == other.club &&
-        title == other.title &&
-        date == other.date &&
-        time == other.time;
-  }
-
-  @override
-  int get hashCode {
-    return $jf($jc(
-        $jc($jc($jc($jc(0, id.hashCode), club.hashCode), title.hashCode),
-            date.hashCode),
-        time.hashCode));
-  }
-
-  @override
-  String toString() {
-    return (newBuiltValueToStringHelper('WorkshopPost')
-          ..add('id', id)
-          ..add('club', club)
-          ..add('title', title)
-          ..add('date', date)
-          ..add('time', time))
-        .toString();
-  }
-}
-
-class WorkshopPostBuilder
-    implements Builder<WorkshopPost, WorkshopPostBuilder> {
-  _$WorkshopPost _$v;
-
-  int _id;
-  int get id => _$this._id;
-  set id(int id) => _$this._id = id;
-
-  ClubListPostBuilder _club;
-  ClubListPostBuilder get club => _$this._club ??= new ClubListPostBuilder();
-  set club(ClubListPostBuilder club) => _$this._club = club;
-
-  String _title;
-  String get title => _$this._title;
-  set title(String title) => _$this._title = title;
-
-  String _date;
-  String get date => _$this._date;
-  set date(String date) => _$this._date = date;
-
-  String _time;
-  String get time => _$this._time;
-  set time(String time) => _$this._time = time;
-
-  WorkshopPostBuilder();
-
-  WorkshopPostBuilder get _$this {
-    if (_$v != null) {
-      _id = _$v.id;
-      _club = _$v.club?.toBuilder();
-      _title = _$v.title;
-      _date = _$v.date;
-      _time = _$v.time;
-      _$v = null;
-    }
-    return this;
-  }
-
-  @override
-  void replace(WorkshopPost other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
-    _$v = other as _$WorkshopPost;
-  }
-
-  @override
-  void update(void Function(WorkshopPostBuilder) updates) {
-    if (updates != null) updates(this);
-  }
-
-  @override
-  _$WorkshopPost build() {
-    _$WorkshopPost _$result;
-    try {
-      _$result = _$v ??
-          new _$WorkshopPost._(
-              id: id,
-              club: _club?.build(),
-              title: title,
-              date: date,
-              time: time);
-    } catch (_) {
-      String _$failedField;
-      try {
-        _$failedField = 'club';
-        _club?.build();
-      } catch (e) {
-        throw new BuiltValueNestedFieldError(
-            'WorkshopPost', _$failedField, e.toString());
       }
       rethrow;
     }

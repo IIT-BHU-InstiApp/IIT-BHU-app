@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 class Workshop {
   int id;
+  int clubId;
   String club;
+  int councilId;
   String smallImageUrl;
   String largeImageUrl;
   String title;
@@ -17,7 +19,9 @@ class Workshop {
   static Workshop createWorkshopFromMap(dynamic map) {
     Workshop w = new Workshop();
     w.id = map.id;
+    w.clubId = map.club.id;
     w.club = map.club.name;
+    w.councilId = map.club.council;
     w.smallImageUrl = map.club.small_image_url;
     w.largeImageUrl = map.club.large_image_url;
     w.title = map.title;

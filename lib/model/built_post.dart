@@ -8,6 +8,23 @@ part 'built_post.g.dart';
 abstract class BuiltAllWorkshopsPost
     implements Built<BuiltAllWorkshopsPost, BuiltAllWorkshopsPostBuilder> {
   @nullable
+  BuiltList<BuiltWorkshopSummaryPost> get active_workshops;
+  @nullable
+  BuiltList<BuiltWorkshopSummaryPost> get past_workshops;
+
+  BuiltAllWorkshopsPost._();
+
+  factory BuiltAllWorkshopsPost([updates(BuiltAllWorkshopsPostBuilder b)]) =
+      _$BuiltAllWorkshopsPost;
+
+  static Serializer<BuiltAllWorkshopsPost> get serializer =>
+      _$builtAllWorkshopsPostSerializer;
+}
+
+abstract class BuiltWorkshopSummaryPost
+    implements
+        Built<BuiltWorkshopSummaryPost, BuiltWorkshopSummaryPostBuilder> {
+  @nullable
   int get id;
   @nullable
   ClubListPost get club;
@@ -18,13 +35,14 @@ abstract class BuiltAllWorkshopsPost
   @nullable
   String get time;
 
-  BuiltAllWorkshopsPost._();
+  BuiltWorkshopSummaryPost._();
 
-  factory BuiltAllWorkshopsPost([updates(BuiltAllWorkshopsPostBuilder b)]) =
-      _$BuiltAllWorkshopsPost;
+  factory BuiltWorkshopSummaryPost(
+          [updates(BuiltWorkshopSummaryPostBuilder b)]) =
+      _$BuiltWorkshopSummaryPost;
 
-  static Serializer<BuiltAllWorkshopsPost> get serializer =>
-      _$builtAllWorkshopsPostSerializer;
+  static Serializer<BuiltWorkshopSummaryPost> get serializer =>
+      _$builtWorkshopSummaryPostSerializer;
 }
 
 abstract class BuiltWorkshopDetailPost
@@ -188,9 +206,9 @@ abstract class BuiltClubPost
   @nullable
   BuiltList<SecyPost> get joint_secy;
   @nullable
-  BuiltList<WorkshopPost> get active_workshops;
+  BuiltList<BuiltWorkshopSummaryPost> get active_workshops;
   @nullable
-  BuiltList<WorkshopPost> get past_workshops;
+  BuiltList<BuiltWorkshopSummaryPost> get past_workshops;
   @nullable
   String get small_image_url;
   @nullable
@@ -208,23 +226,23 @@ abstract class BuiltClubPost
 }
 
 // !--------------------------------------------------------------------------------------------------------------------
-abstract class WorkshopPost
-    implements Built<WorkshopPost, WorkshopPostBuilder> {
-  @nullable
-  int get id;
-  @nullable
-  ClubListPost get club;
-  @nullable
-  String get title;
-  @nullable
-  String get date;
-  @nullable
-  String get time;
+// abstract class WorkshopPost
+//     implements Built<WorkshopPost, WorkshopPostBuilder> {
+//   @nullable
+//   int get id;
+//   @nullable
+//   ClubListPost get club;
+//   @nullable
+//   String get title;
+//   @nullable
+//   String get date;
+//   @nullable
+//   String get time;
 
-  WorkshopPost._();
-  factory WorkshopPost([updates(WorkshopPostBuilder b)]) = _$WorkshopPost;
-  static Serializer<WorkshopPost> get serializer => _$workshopPostSerializer;
-}
+//   WorkshopPost._();
+//   factory WorkshopPost([updates(WorkshopPostBuilder b)]) = _$WorkshopPost;
+//   static Serializer<WorkshopPost> get serializer => _$workshopPostSerializer;
+// }
 
 // !--------------------------------------------------------------------------------------------------------------------
 
