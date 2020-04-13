@@ -43,7 +43,8 @@ abstract class PostApiService extends ChopperService {
       @Path('id') int id, @Header('Authorization') String token);
 
   @Get(path: '/profile')
-  Future<Response<BuiltClubPost>> getProfile();
+  Future<Response<BuiltProfilePost>> getProfile(
+      @Header('Authorization') String token);
 
   @Get(path: '/team')
   Future<Response<BuiltList<BuiltTeamMemberPost>>> getTeam();

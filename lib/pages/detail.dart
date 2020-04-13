@@ -5,7 +5,9 @@ import 'package:iit_app/model/appConstants.dart';
 
 class DetailPage extends StatefulWidget {
   final int workshopId;
-  const DetailPage({Key key, this.workshopId}) : super(key: key);
+  final bool editMode;
+  const DetailPage({Key key, this.workshopId, this.editMode = false})
+      : super(key: key);
   @override
   _DetailPage createState() => _DetailPage();
 }
@@ -28,6 +30,11 @@ class _DetailPage extends State<DetailPage> {
     });
     _workshop = snapshots.body;
     is_interested = _workshop.is_interested;
+    setState(() {});
+  }
+
+  void deleteWorkshop() async {
+    print('METHOD TO DELETE GOES HERE');
     setState(() {});
   }
 
@@ -131,6 +138,13 @@ class _DetailPage extends State<DetailPage> {
                                 SizedBox(
                                   height: 7.0,
                                 ),
+                                widget.editMode
+                                    ? IconButton(
+                                        iconSize: 50,
+                                        icon: Icon(Icons.delete_forever,
+                                            color: Colors.red),
+                                        onPressed: () => deleteWorkshop())
+                                    : SizedBox(width: 0.1),
                                 Container(
                                   width:
                                       MediaQuery.of(context).size.width - 90.0,

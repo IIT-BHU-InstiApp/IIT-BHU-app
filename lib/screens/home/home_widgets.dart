@@ -84,116 +84,123 @@ class HomeWidgets {
                 )));
       });
 
-  static Widget getWorkshopCard(BuildContext context, {Workshop w}) => Padding(
-      padding: EdgeInsets.symmetric(horizontal: 3, vertical: 10),
-      child: InkWell(
-        onTap: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => DetailPage(workshopId: w.id),
-            ),
-          );
-        },
-        child: Stack(
-          children: <Widget>[
-            Container(
-              height: 175.0,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20.0),
-                  image: DecorationImage(
-                      image: w.smallImageUrl == null
-                          ? AssetImage('assets/iitbhu.jpeg')
-                          : NetworkImage(w.smallImageUrl),
-                      fit: BoxFit.cover)),
-            ),
-            // make the shade a bit deeper.
-            Container(
-              height: 175.0,
-              width: 500.0,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20.0),
-                  color: Colors.black.withOpacity(0.5)),
-            ),
-            Positioned(
-                top: 20.0,
-                left: 10.0,
-                child: Column(
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        Container(
-                          height: 25,
-                          // width: 60.0,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20.0),
-                            // color: Colors.black.withOpacity(0.5)
-                          ),
-                          child: Center(
-                              child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Icon(Icons.date_range,
-                                  color: Colors.white, size: 12.0),
-                              SizedBox(width: 4.0),
-                              Text(
-                                w.date,
-                                style: TextStyle(color: Colors.white),
-                              )
-                            ],
-                          )),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Container(
-                          height: 25,
-                          // width: 60.0,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20.0),
-                            // color: Colors.black.withOpacity(0.5)
-                          ),
-                          child: Center(
-                              child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Icon(Icons.timer,
-                                  color: Colors.white, size: 12.0),
-                              SizedBox(width: 4.0),
-                              Text(
-                                w.time == null ? "none" : w.time,
-                                style: TextStyle(color: Colors.white),
-                              )
-                            ],
-                          )),
-                        ),
-                      ],
-                    ),
-                  ],
-                )),
-            Positioned(
-              top: 120.0,
-              left: 1.0,
-              right: 1.0,
-              child: Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black),
-                  color: Colors.white,
+  static Widget getWorkshopCard(BuildContext context,
+          {Workshop w, bool editMode = false}) =>
+      Padding(
+          padding: EdgeInsets.symmetric(horizontal: 3, vertical: 10),
+          child: InkWell(
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) =>
+                      DetailPage(workshopId: w.id, editMode: editMode),
                 ),
-                width: 500.0,
-                height: 35.0,
-                child: Text(w.title,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontFamily: 'Opensans',
-                        fontSize: 25.0,
-                        color: Colors.grey[800],
-                        fontWeight: FontWeight.w600)),
-              ),
+              );
+            },
+            child: Stack(
+              children: <Widget>[
+                Container(
+                  height: 175.0,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20.0),
+                      image: DecorationImage(
+                          image: w.smallImageUrl == null
+                              ? AssetImage('assets/iitbhu.jpeg')
+                              : NetworkImage(w.smallImageUrl),
+                          fit: BoxFit.cover)),
+                ),
+                // make the shade a bit deeper.
+                Container(
+                  height: 175.0,
+                  width: 500.0,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20.0),
+                      color: Colors.black.withOpacity(0.5)),
+                ),
+                Positioned(
+                    top: 20.0,
+                    left: 10.0,
+                    child: Column(
+                      children: <Widget>[
+                        Row(
+                          children: <Widget>[
+                            Container(
+                              height: 25,
+                              // width: 60.0,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20.0),
+                                // color: Colors.black.withOpacity(0.5)
+                              ),
+                              child: Center(
+                                  child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Icon(Icons.date_range,
+                                      color: Colors.white, size: 12.0),
+                                  SizedBox(width: 4.0),
+                                  Text(
+                                    w.date,
+                                    style: TextStyle(color: Colors.white),
+                                  )
+                                ],
+                              )),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: <Widget>[
+                            Container(
+                              height: 25,
+                              // width: 60.0,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20.0),
+                                // color: Colors.black.withOpacity(0.5)
+                              ),
+                              child: Center(
+                                  child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Icon(Icons.timer,
+                                      color: Colors.white, size: 12.0),
+                                  SizedBox(width: 4.0),
+                                  Text(
+                                    w.time == null ? "none" : w.time,
+                                    style: TextStyle(color: Colors.white),
+                                  )
+                                ],
+                              )),
+                            ),
+                          ],
+                        ),
+                        editMode
+                            ? Text("CLICK TO EDIT",
+                                style: TextStyle(color: Colors.green))
+                            : SizedBox(height: 1),
+                      ],
+                    )),
+                Positioned(
+                  top: 120.0,
+                  left: 1.0,
+                  right: 1.0,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.black),
+                      color: Colors.white,
+                    ),
+                    width: 500.0,
+                    height: 35.0,
+                    child: Text(w.title,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontFamily: 'Opensans',
+                            fontSize: 25.0,
+                            color: Colors.grey[800],
+                            fontWeight: FontWeight.w600)),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ));
+          ));
 
   static Widget councilButton(BuildContext context,
           {String name, int councilId, String imageUrl}) =>
