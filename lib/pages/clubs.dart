@@ -75,176 +75,197 @@ class _ClubPageState extends State<ClubPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView(
-        padding: EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 0.0),
-        scrollDirection: Axis.vertical,
-        children: [
-          Stack(children: [
-            clubMap == null
-                ? Container(
-                    height: MediaQuery.of(context).size.height / 4,
-                    child: Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  )
-                : Container(
-                    width: MediaQuery.of(context).size.width,
-                    child: Card(
-                      semanticContainer: true,
-                      clipBehavior: Clip.antiAliasWithSaveLayer,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.0),
-                      ),
-                      child: Image(
-                        image: clubMap.large_image_url == null
-                            ? AssetImage('assets/iitbhu.jpeg')
-                            : NetworkImage(clubMap.large_image_url),
-                        fit: BoxFit.cover,
-                      ),
-                      elevation: 2.5,
-                    ),
-                  ),
-            clubMap == null
-                ? Container()
-                : Align(
-                    alignment: Alignment.topRight,
-                    child: Container(
-                      padding: EdgeInsets.all(15.0),
-                      child: FloatingActionButton(
-                        elevation: 3.0,
-                        clipBehavior: Clip.antiAliasWithSaveLayer,
-                        onPressed: () {},
-                        child: Image(
-                          image: clubMap.council.small_image_url == null
-                              ? AssetImage('assets/iitbhu.jpeg')
-                              : NetworkImage(clubMap.council.small_image_url),
-                        ),
-                      ),
-                    ),
-                  ),
-          ]),
-          space,
-          clubMap == null
-              ? Container()
-              : Container(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        clubMap.name,
-                        style: headingStyle,
-                      ),
-                      InkWell(
-                        splashColor:
-                            clubMap.is_subscribed ? Colors.black87 : Colors.red,
-                        onTap: () => toggleSubscription(),
-                        child: IconButton(
-                            color: Colors.red,
-                            iconSize: 30.0,
-                            icon: Icon(
-                              Icons.subscriptions,
-                              color: clubMap.is_subscribed
-                                  ? Colors.red
-                                  : Colors.black38,
+      body: SafeArea(
+        child: CustomScrollView(
+          scrollDirection: Axis.vertical,
+          slivers: [
+            SliverAppBar(
+              backgroundColor: Colors.grey[300],
+              floating: true,
+              expandedHeight: MediaQuery.of(context).size.height / 4,
+              flexibleSpace: FlexibleSpaceBar(
+                background: Stack(
+                  children: [
+                    clubMap == null
+                        ? Container(
+                            height: MediaQuery.of(context).size.height / 4,
+                            child: Center(
+                              child: CircularProgressIndicator(),
                             ),
-                            onPressed: null),
-                      )
-                    ],
-                  ),
+                          )
+                        : Container(
+                            height: MediaQuery.of(context).size.height / 4,
+                            width: MediaQuery.of(context).size.width,
+                            child: Card(
+                              semanticContainer: true,
+                              clipBehavior: Clip.antiAliasWithSaveLayer,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20.0),
+                              ),
+                              child: Image(
+                                image: clubMap.large_image_url == null
+                                    ? AssetImage('assets/iitbhu.jpeg')
+                                    : NetworkImage(clubMap.large_image_url),
+                                fit: BoxFit.fill,
+                              ),
+                              elevation: 2.5,
+                            ),
+                          ),
+                    clubMap == null
+                        ? Container()
+                        : Align(
+                            alignment: Alignment.topRight,
+                            child: Container(
+                              padding: EdgeInsets.all(15.0),
+                              child: FloatingActionButton(
+                                elevation: 3.0,
+                                clipBehavior: Clip.antiAliasWithSaveLayer,
+                                onPressed: () {},
+                                child: Image(
+                                  image: clubMap.council.small_image_url == null
+                                      ? AssetImage('assets/iitbhu.jpeg')
+                                      : NetworkImage(
+                                          clubMap.council.small_image_url,
+                                        ),
+                                ),
+                              ),
+                            ),
+                          ),
+                  ],
                 ),
-          clubMap == null
-              ? Container(
-                  height: MediaQuery.of(context).size.height / 4,
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                )
-              : Container(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      clubMap.secy == null
-                          ? Container()
-                          : template(
-                              name: clubMap.secy.name,
-                              desg: 'Secy',
-                              imageUrl: clubMap.secy.photo_url),
-                      // template(
-                      //     name: clubMap.joint_secy[0].name,
-                      //     desg: 'JointSecy',
-                      //     imageUrl: clubMap.joint_secy[0].photo_url),
-                      // template(
-                      //     name: clubMap.joint_secy[1].name,
-                      //     desg: 'JointSecy',
-                      //     imageUrl: clubMap.joint_secy[1].photo_url),
-                    ],
-                  ),
-                ),
-          Center(
-            child: Text(
-              'Description',
-              style: headingStyle,
+              ),
             ),
-          ),
-          divide,
-          clubMap == null
-              ? Container()
-              : Text('${clubMap.description}',
-                  style: TextStyle(fontSize: 20, color: Colors.black)),
-          space,
-          Center(
-            child: Text(
-              'Active Workshops',
-              style: headingStyle,
-            ),
-          ),
-          clubMap == null
-              ? Container(
-                  height: MediaQuery.of(context).size.height / 4,
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ))
-              : ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  scrollDirection: Axis.vertical,
-                  itemCount: clubMap.active_workshops.length,
-                  // posts.length,
-                  padding: EdgeInsets.all(8),
-                  itemBuilder: (context, index) {
-                    return HomeWidgets.getWorkshopCard(
-                      context,
-                      w: Workshop.createWorkshopFromMap(
-                          clubMap.active_workshops[index]),
-                    );
-                  },
-                ),
-          Center(
-            child: Text(
-              'Past Workshops',
-              style: headingStyle,
-            ),
-          ),
-          clubMap == null
-              ? Container(
-                  child: Center(
-                    child: CircularProgressIndicator(),
+            SliverList(
+              delegate: SliverChildListDelegate(
+                [
+                  space,
+                  clubMap == null
+                      ? Container()
+                      : Container(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                clubMap.name,
+                                style: headingStyle,
+                              ),
+                              InkWell(
+                                splashColor: clubMap.is_subscribed
+                                    ? Colors.black87
+                                    : Colors.red,
+                                onTap: () => toggleSubscription(),
+                                child: IconButton(
+                                    color: Colors.red,
+                                    iconSize: 30.0,
+                                    icon: Icon(
+                                      Icons.subscriptions,
+                                      color: clubMap.is_subscribed
+                                          ? Colors.red
+                                          : Colors.black38,
+                                    ),
+                                    onPressed: null),
+                              ),
+                            ],
+                          ),
+                        ),
+                  clubMap == null
+                      ? Container(
+                          height: MediaQuery.of(context).size.height / 4,
+                          child: Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        )
+                      : Container(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: <Widget>[
+                              clubMap.secy == null
+                                  ? Container()
+                                  : template(
+                                      name: clubMap.secy.name,
+                                      desg: 'Secy',
+                                      imageUrl: clubMap.secy.photo_url),
+                              // template(
+                              //     name: clubMap.joint_secy[0].name,
+                              //     desg: 'JointSecy',
+                              //     imageUrl: clubMap.joint_secy[0].photo_url),
+                              // template(
+                              //     name: clubMap.joint_secy[1].name,
+                              //     desg: 'JointSecy',
+                              //     imageUrl: clubMap.joint_secy[1].photo_url),
+                            ],
+                          ),
+                        ),
+                  Center(
+                    child: Text(
+                      'Description',
+                      style: headingStyle,
+                    ),
                   ),
-                )
-              : ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  scrollDirection: Axis.vertical,
-                  itemCount: clubMap.past_workshops.length,
-                  // posts.length,
-                  padding: EdgeInsets.all(8),
-                  itemBuilder: (context, index) {
-                    return HomeWidgets.getWorkshopCard(context,
-                        w: Workshop.createWorkshopFromMap(
-                            clubMap.past_workshops[index]));
-                  },
-                ),
-        ],
+                  divide,
+                  clubMap == null
+                      ? Container()
+                      : Text('${clubMap.description}',
+                          style: TextStyle(fontSize: 20, color: Colors.black)),
+                  space,
+                  Center(
+                    child: Text(
+                      'Active Workshops',
+                      style: headingStyle,
+                    ),
+                  ),
+                  clubMap == null
+                      ? Container(
+                          height: MediaQuery.of(context).size.height / 4,
+                          child: Center(
+                            child: CircularProgressIndicator(),
+                          ))
+                      : ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          scrollDirection: Axis.vertical,
+                          itemCount: clubMap.active_workshops.length,
+                          padding: EdgeInsets.all(8),
+                          itemBuilder: (context, index) {
+                            return HomeWidgets.getWorkshopCard(
+                              context,
+                              w: Workshop.createWorkshopFromMap(
+                                  clubMap.active_workshops[index]),
+                            );
+                          },
+                        ),
+                  Center(
+                    child: Text(
+                      'Past Workshops',
+                      style: headingStyle,
+                    ),
+                  ),
+                  clubMap == null
+                      ? Container(
+                          child: Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        )
+                      : ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          scrollDirection: Axis.vertical,
+                          itemCount: clubMap.past_workshops.length,
+                          padding: EdgeInsets.all(8),
+                          itemBuilder: (context, index) {
+                            return HomeWidgets.getWorkshopCard(
+                              context,
+                              w: Workshop.createWorkshopFromMap(
+                                clubMap.past_workshops[index],
+                              ),
+                            );
+                          },
+                        ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

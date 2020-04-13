@@ -18,6 +18,7 @@ class _$PostApiService extends PostApiService {
     final $url = '/workshops';
     final $request = Request('GET', $url, client.baseUrl);
     return client.send<BuiltAllWorkshopsPost, BuiltAllWorkshopsPost>($request);
+
   }
 
   Future<Response<BuiltList<BuiltWorkshopSummaryPost>>> getActiveWorkshops() {
@@ -31,8 +32,7 @@ class _$PostApiService extends PostApiService {
     final $url = '/workshops/past';
     final $request = Request('GET', $url, client.baseUrl);
     return client.send<BuiltList<BuiltWorkshopSummaryPost>,
-        BuiltWorkshopSummaryPost>($request);
-  }
+        BuiltWorkshopSummaryPost>($request);  }
 
   Future<Response<BuiltList<BuiltWorkshopSummaryPost>>> getInterestedWorkshops(
       String token) {
