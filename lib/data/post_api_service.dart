@@ -45,10 +45,10 @@ abstract class PostApiService extends ChopperService {
   @Get(path: '/team')
   Future<Response<BuiltList<BuiltTeamMemberPost>>> getTeam();
 
-  @Post()
-  Future<Response<BuiltWorkshopSummaryPost>> postPost(
-    @Body() BuiltWorkshopSummaryPost body,
-  );
+  @Post(path: '/workshops/create')
+  Future<Response> postNewWorkshop(
+      @Header('Authorization') String token,
+      @Body() BuiltWorkshopCreatePost body);
 
   static PostApiService create() {
     final client = ChopperClient(

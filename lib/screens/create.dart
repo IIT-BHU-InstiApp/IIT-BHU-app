@@ -1,7 +1,10 @@
+import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
 import 'package:iit_app/data/workshop.dart';
+import 'package:iit_app/model/appConstants.dart';
 import 'dart:async';
-import 'package:iit_app/services/crud.dart';
+
+import 'package:iit_app/model/built_post.dart';
 
 class CreateScreen extends StatefulWidget {
   @override
@@ -11,8 +14,6 @@ class CreateScreen extends StatefulWidget {
 class _CreateScreenState extends State {
   final _formKey = GlobalKey<FormState>();
   final _workshop = Workshop();
-
-  CrudMethods crudObj = new CrudMethods();
 
   Future<Null> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
@@ -40,6 +41,14 @@ class _CreateScreenState extends State {
       });
     }
   }
+
+  // void submitForm() async {
+  //   Response<BuiltCouncilPost> snapshots =
+
+  //   // print(snapshots.body);
+  //   councilData = snapshots.body;
+  //   setState(() {});
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -136,27 +145,46 @@ class _CreateScreenState extends State {
                           padding: const EdgeInsets.symmetric(
                               vertical: 16.0, horizontal: 16.0),
                           child: RaisedButton(
-                              onPressed: () {
+                              onPressed: () async {
                                 final form = _formKey.currentState;
-                                if (form.validate()) {
+                                if (true) {
                                   // if (_workshop.councilId == null)
                                   //   Scaffold.of(context).showSnackBar(SnackBar(
                                   //       content:
                                   //           Text('Please select council')));
-                                  if (_workshop.club == null)
-                                    Scaffold.of(context).showSnackBar(SnackBar(
-                                        content: Text('Please select club')));
-                                  else {
+                                  // if (_workshop.club == null)
+                                  //   Scaffold.of(context).showSnackBar(SnackBar(
+                                  //       content: Text('Please select club')));
+                                  {
                                     form.save();
                                     Scaffold.of(context).showSnackBar(SnackBar(
                                         content: Text('Submitting form')));
-                                    // crudObj
-                                    //     .addData(_workshop.createMap())
-                                    //     .then((result) {
-                                    //   Navigator.pop(context);
-                                    // }).catchError((e) {
-                                    //   print(e);
-                                    // });
+                                    // BuiltWorkshopCreatePost snapshot =
+                                    //     new BuiltWorkshopCreatePost();
+                                    // print(snapshot.club);
+                                    // snapshot.body.id = 6;
+                                    final newWorkshop = BuiltWorkshopCreatePost(
+                                        (b) => b
+                                          // id is null - it gets assigned in the backend
+                                          ..title = 'New Title'
+                                          ..club = 2
+                                          ..date = '2020-04-13'
+                                        // ..k,
+                                        );
+                                        print(newWorkshop);
+                                    await AppConstants.service
+                                        .postNewWorkshop(
+                                            "token ${AppConstants.djangoToken}",
+                                            newWorkshop)
+                                        .catchError((onError) {
+                                      print(
+                                          'Error creating workshop: ${onError.toString()}');
+                                    }).then((value) {
+                                      print(value.body);
+                                    }).catchError((onError) {
+                                      print(
+                                          'Error printing CREATED workshop: ${onError.toString()}');
+                                    });
                                   }
                                 }
                               },

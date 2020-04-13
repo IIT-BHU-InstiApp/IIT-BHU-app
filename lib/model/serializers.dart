@@ -16,6 +16,7 @@ part 'serializers.g.dart';
   SecyPost,
   ClubListPost,
   BuiltClubPost,
+  BuiltWorkshopCreatePost,
   // WorkshopPost,
   BuiltProfilePost,
   BuiltTeamMemberPost,
