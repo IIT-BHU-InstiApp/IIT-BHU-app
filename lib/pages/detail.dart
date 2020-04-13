@@ -26,7 +26,7 @@ class _DetailPage extends State<DetailPage> {
         .getWorkshopDetailsPost(
             widget.workshopId, "token ${AppConstants.djangoToken}")
         .catchError((onError) {
-      print("Error in fetching clubs: ${onError.toString()}");
+      print("Error in fetching workshop: ${onError.toString()}");
     });
     _workshop = snapshots.body;
     is_interested = _workshop.is_interested;
@@ -34,7 +34,16 @@ class _DetailPage extends State<DetailPage> {
   }
 
   void deleteWorkshop() async {
-    print('METHOD TO DELETE GOES HERE');
+    await AppConstants.service
+        .removeWorkshop(widget.workshopId, "token ${AppConstants.djangoToken}")
+        .then((snapshot) {
+      print("status of deleting workshop: ${snapshot.statusCode}");
+      Scaffold.of(context)
+          .showSnackBar(SnackBar(content: Text('Deleted Workshop!')));
+      Navigator.pop(context);
+    }).catchError((onError) {
+      print("Error in deleting: ${onError.toString()}");
+    });
     setState(() {});
   }
 

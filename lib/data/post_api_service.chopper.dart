@@ -43,6 +43,13 @@ class _$PostApiService extends PostApiService {
         BuiltWorkshopSummaryPost>($request);
   }
 
+  Future<Response> removeWorkshop(int id, String token) {
+    final $url = '/workshops/${id}';
+    final $headers = {'Authorization': token};
+    final $request = Request('DELETE', $url, client.baseUrl, headers: $headers);
+    return client.send<dynamic, dynamic>($request);
+  }
+
   Future<Response<BuiltWorkshopDetailPost>> getWorkshopDetailsPost(
       int id, String token) {
     final $url = '/workshops/${id}';
