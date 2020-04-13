@@ -173,6 +173,21 @@ class _AboutPageState extends State<AboutPage> {
                 );
               },
             ),
+      bottomNavigationBar: BottomAppBar(
+        elevation: 0.0,
+        child: Container(
+          color: Colors.grey[300],
+          height: 50.0,
+          child: Center(
+            child: Text(
+              'Made with ❤️ by COPS',
+              style: TextStyle(
+                fontSize: 16.0,
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
