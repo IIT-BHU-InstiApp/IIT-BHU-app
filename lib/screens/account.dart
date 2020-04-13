@@ -139,12 +139,12 @@ class _AccountScreenState extends State<AccountScreen> {
                     profileDetails.subscriptions.length == 0
                         ? SizedBox(height: 5)
                         : Text(
-                      "Subscriptions",
-                      style: TextStyle(
-                          color: Color(0xff242424),
-                          fontSize: 28,
-                          fontWeight: FontWeight.w600),
-                    ),
+                            "Subscriptions",
+                            style: TextStyle(
+                                color: Color(0xff242424),
+                                fontSize: 28,
+                                fontWeight: FontWeight.w600),
+                          ),
                     profileDetails == null
                         ? Container(
                             height: MediaQuery.of(context).size.height / 4,
@@ -241,9 +241,9 @@ class _AccountScreenState extends State<AccountScreen> {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (context) => ClubPage(
-                                    clubId:
-                                        profileDetails.club_privileges[index].id,
-                                  ),
+                                      clubId: profileDetails
+                                          .club_privileges[index].id,
+                                      editMode: true),
                                 ),
                               );
                             },

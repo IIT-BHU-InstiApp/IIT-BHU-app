@@ -7,7 +7,9 @@ import 'package:iit_app/data/workshop.dart';
 
 class ClubPage extends StatefulWidget {
   final int clubId;
-  const ClubPage({Key key, @required this.clubId}) : super(key: key);
+  final bool editMode;
+  const ClubPage({Key key, @required this.clubId, this.editMode = false})
+      : super(key: key);
   @override
   _ClubPageState createState() => _ClubPageState();
 }
@@ -15,9 +17,9 @@ class ClubPage extends StatefulWidget {
 class _ClubPageState extends State<ClubPage> {
   TextStyle tempStyle = TextStyle(fontSize: 50.0, fontWeight: FontWeight.bold);
   var clubMap;
-
   @override
   void initState() {
+    print("Club opened in edit mode:${widget.editMode}");
     fetchClubDataById();
     super.initState();
   }
@@ -192,6 +194,14 @@ class _ClubPageState extends State<ClubPage> {
               : Text('${clubMap.description}',
                   style: TextStyle(fontSize: 20, color: Colors.black)),
           space,
+          widget.editMode
+              ? Center(
+                  child: Text(
+                    'Edit Workshops HERE!',
+                    style: headingStyle,
+                  ),
+                )
+              : SizedBox(height: 1),
           Center(
             child: Text(
               'Active Workshops',
@@ -216,6 +226,7 @@ class _ClubPageState extends State<ClubPage> {
                       context,
                       w: Workshop.createWorkshopFromMap(
                           clubMap.active_workshops[index]),
+                      editMode: widget.editMode,
                     );
                   },
                 ),
@@ -239,9 +250,12 @@ class _ClubPageState extends State<ClubPage> {
                   // posts.length,
                   padding: EdgeInsets.all(8),
                   itemBuilder: (context, index) {
-                    return HomeWidgets.getWorkshopCard(context,
-                        w: Workshop.createWorkshopFromMap(
-                            clubMap.past_workshops[index]));
+                    return HomeWidgets.getWorkshopCard(
+                      context,
+                      w: Workshop.createWorkshopFromMap(
+                          clubMap.past_workshops[index]),
+                      editMode: widget.editMode,
+                    );
                   },
                 ),
         ],
