@@ -111,7 +111,7 @@ class _DetailPage extends State<DetailPage> {
             showSuccessfulDialog();
           }).catchError((onError) {
             print("Error in deleting: ${onError.toString()}");
-            showSuccessfulDialog();
+            showUnSuccessfulDialog();
           })
         : null;
     setState(() {});
