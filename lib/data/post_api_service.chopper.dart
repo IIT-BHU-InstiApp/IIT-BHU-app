@@ -15,20 +15,20 @@ class _$PostApiService extends PostApiService {
   final definitionType = PostApiService;
 
   Future<Response<BuiltAllWorkshopsPost>> getAllWorkshops() {
-    final $url = '/workshops';
+    final $url = '/workshops/';
     final $request = Request('GET', $url, client.baseUrl);
     return client.send<BuiltAllWorkshopsPost, BuiltAllWorkshopsPost>($request);
   }
 
   Future<Response<BuiltList<BuiltWorkshopSummaryPost>>> getActiveWorkshops() {
-    final $url = '/workshops/active';
+    final $url = '/workshops/active/';
     final $request = Request('GET', $url, client.baseUrl);
     return client.send<BuiltList<BuiltWorkshopSummaryPost>,
         BuiltWorkshopSummaryPost>($request);
   }
 
   Future<Response<BuiltList<BuiltWorkshopSummaryPost>>> getPastWorkshops() {
-    final $url = '/workshops/past';
+    final $url = '/workshops/past/';
     final $request = Request('GET', $url, client.baseUrl);
     return client.send<BuiltList<BuiltWorkshopSummaryPost>,
         BuiltWorkshopSummaryPost>($request);
@@ -36,7 +36,7 @@ class _$PostApiService extends PostApiService {
 
   Future<Response<BuiltList<BuiltWorkshopSummaryPost>>> getInterestedWorkshops(
       String token) {
-    final $url = '/workshops/interested';
+    final $url = '/workshops/interested/';
     final $headers = {'Authorization': token};
     final $request = Request('GET', $url, client.baseUrl, headers: $headers);
     return client.send<BuiltList<BuiltWorkshopSummaryPost>,
@@ -44,7 +44,7 @@ class _$PostApiService extends PostApiService {
   }
 
   Future<Response> removeWorkshop(int id, String token) {
-    final $url = '/workshops/${id}';
+    final $url = '/workshops/${id}/';
     final $headers = {'Authorization': token};
     final $request = Request('DELETE', $url, client.baseUrl, headers: $headers);
     return client.send<dynamic, dynamic>($request);
@@ -52,7 +52,7 @@ class _$PostApiService extends PostApiService {
 
   Future<Response<BuiltWorkshopDetailPost>> getWorkshopDetailsPost(
       int id, String token) {
-    final $url = '/workshops/${id}';
+    final $url = '/workshops/${id}/';
     final $headers = {'Authorization': token};
     final $request = Request('GET', $url, client.baseUrl, headers: $headers);
     return client
@@ -60,55 +60,55 @@ class _$PostApiService extends PostApiService {
   }
 
   Future<Response> toggleInterestedWorkshop(int id, String token) {
-    final $url = '/workshops/${id}/toggle-interested';
+    final $url = '/workshops/${id}/toggle-interested/';
     final $headers = {'Authorization': token};
     final $request = Request('GET', $url, client.baseUrl, headers: $headers);
     return client.send<dynamic, dynamic>($request);
   }
 
   Future<Response<BuiltList<BuiltAllCouncilsPost>>> getAllCouncils() {
-    final $url = '/councils';
+    final $url = '/councils/';
     final $request = Request('GET', $url, client.baseUrl);
     return client
         .send<BuiltList<BuiltAllCouncilsPost>, BuiltAllCouncilsPost>($request);
   }
 
   Future<Response<BuiltCouncilPost>> getCouncil(int id) {
-    final $url = '/councils/${id}';
+    final $url = '/councils/${id}/';
     final $request = Request('GET', $url, client.baseUrl);
     return client.send<BuiltCouncilPost, BuiltCouncilPost>($request);
   }
 
   Future<Response<BuiltClubPost>> getClub(int id, String token) {
-    final $url = '/clubs/${id}';
+    final $url = '/clubs/${id}/';
     final $headers = {'Authorization': token};
     final $request = Request('GET', $url, client.baseUrl, headers: $headers);
     return client.send<BuiltClubPost, BuiltClubPost>($request);
   }
 
   Future<Response> toggleClubSubscription(int id, String token) {
-    final $url = '/clubs/${id}/toggle-subscribed';
+    final $url = '/clubs/${id}/toggle-subscribed/';
     final $headers = {'Authorization': token};
     final $request = Request('GET', $url, client.baseUrl, headers: $headers);
     return client.send<dynamic, dynamic>($request);
   }
 
   Future<Response<BuiltProfilePost>> getProfile(String token) {
-    final $url = '/profile';
+    final $url = '/profile/';
     final $headers = {'Authorization': token};
     final $request = Request('GET', $url, client.baseUrl, headers: $headers);
     return client.send<BuiltProfilePost, BuiltProfilePost>($request);
   }
 
   Future<Response<BuiltList<BuiltTeamMemberPost>>> getTeam() {
-    final $url = '/team';
+    final $url = '/team/';
     final $request = Request('GET', $url, client.baseUrl);
     return client
         .send<BuiltList<BuiltTeamMemberPost>, BuiltTeamMemberPost>($request);
   }
 
   Future<Response> postNewWorkshop(String token, BuiltWorkshopCreatePost body) {
-    final $url = '/workshops/create';
+    final $url = '/workshops/create/';
     final $headers = {'Authorization': token};
     final $body = body;
     final $request =

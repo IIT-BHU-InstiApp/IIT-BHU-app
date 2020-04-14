@@ -8,53 +8,53 @@ part 'post_api_service.chopper.dart';
 
 @ChopperApi(baseUrl: '')
 abstract class PostApiService extends ChopperService {
-  @Get(path: '/workshops')
+  @Get(path: '/workshops/')
   Future<Response<BuiltAllWorkshopsPost>> getAllWorkshops();
 
-  @Get(path: '/workshops/active')
+  @Get(path: '/workshops/active/')
   Future<Response<BuiltList<BuiltWorkshopSummaryPost>>> getActiveWorkshops();
 
-  @Get(path: '/workshops/past')
+  @Get(path: '/workshops/past/')
   Future<Response<BuiltList<BuiltWorkshopSummaryPost>>> getPastWorkshops();
 
-  @Get(path: '/workshops/interested')
+  @Get(path: '/workshops/interested/')
   Future<Response<BuiltList<BuiltWorkshopSummaryPost>>> getInterestedWorkshops(
       @Header('Authorization') String token);
 
-  @Delete(path: '/workshops/{id}')
+  @Delete(path: '/workshops/{id}/')
   Future<Response> removeWorkshop(
       @Path('id') int id, @Header('Authorization') String token);
 
-  @Get(path: '/workshops/{id}')
+  @Get(path: '/workshops/{id}/')
   Future<Response<BuiltWorkshopDetailPost>> getWorkshopDetailsPost(
       @Path('id') int id, @Header('Authorization') String token);
 
-  @Get(path: '/workshops/{id}/toggle-interested')
+  @Get(path: '/workshops/{id}/toggle-interested/')
   Future<Response> toggleInterestedWorkshop(
       @Path('id') int id, @Header('Authorization') String token);
 
-  @Get(path: '/councils')
+  @Get(path: '/councils/')
   Future<Response<BuiltList<BuiltAllCouncilsPost>>> getAllCouncils();
 
-  @Get(path: '/councils/{id}')
+  @Get(path: '/councils/{id}/')
   Future<Response<BuiltCouncilPost>> getCouncil(@Path('id') int id);
 
-  @Get(path: '/clubs/{id}')
+  @Get(path: '/clubs/{id}/')
   Future<Response<BuiltClubPost>> getClub(
       @Path('id') int id, @Header('Authorization') String token);
 
-  @Get(path: '/clubs/{id}/toggle-subscribed')
+  @Get(path: '/clubs/{id}/toggle-subscribed/')
   Future<Response> toggleClubSubscription(
       @Path('id') int id, @Header('Authorization') String token);
 
-  @Get(path: '/profile')
+  @Get(path: '/profile/')
   Future<Response<BuiltProfilePost>> getProfile(
       @Header('Authorization') String token);
 
-  @Get(path: '/team')
+  @Get(path: '/team/')
   Future<Response<BuiltList<BuiltTeamMemberPost>>> getTeam();
 
-  @Post(path: '/workshops/create')
+  @Post(path: '/workshops/create/')
   Future<Response> postNewWorkshop(
       @Header('Authorization') String token,
       @Body() BuiltWorkshopCreatePost body);
