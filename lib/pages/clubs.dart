@@ -2,6 +2,7 @@ import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
+import 'package:iit_app/pages/create.dart';
 import 'package:iit_app/screens/home/home_widgets.dart';
 import 'package:iit_app/data/workshop.dart';
 
@@ -214,10 +215,20 @@ class _ClubPageState extends State<ClubPage> {
                       : Text('${clubMap.description}',
                           style: TextStyle(fontSize: 20, color: Colors.black)),
                   space,
+                  RaisedButton(
+                      child: Text('Create workshop'),
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => CreateScreen(
+                                clubId: clubMap.id, clubName: clubMap.name),
+                          ),
+                        );
+                      }),
                   widget.editMode
                       ? Center(
                           child: Text(
-                            'Edit Workshops HERE!',
+                            'Edit Workshops Here:',
                             style: headingStyle,
                           ),
                         )

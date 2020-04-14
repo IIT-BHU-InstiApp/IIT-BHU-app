@@ -54,7 +54,6 @@ class _HomeScreenState extends State<HomeScreen>
           getNavItem(Icons.account_box, "Account", '/account'),
           getNavItem(Icons.comment, "Complaints & Suggestions", '/complaints'),
           getNavItem(Icons.settings, "Settings", '/settings'),
-          getNavItem(Icons.add, "Create Workshop", '/create'),
           ListTile(
             leading: Icon(Icons.exit_to_app),
             title: Text('LogOut'),

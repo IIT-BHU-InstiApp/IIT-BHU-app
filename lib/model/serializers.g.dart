@@ -38,6 +38,9 @@ Serializers _$serializers = (new Serializers().toBuilder()
           const FullType(BuiltList, const [const FullType(ContactPost)]),
           () => new ListBuilder<ContactPost>())
       ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(ContactPost)]),
+          () => new ListBuilder<ContactPost>())
+      ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(SecyPost)]),
           () => new ListBuilder<SecyPost>())
       ..addBuilderFactory(

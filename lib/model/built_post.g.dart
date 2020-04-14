@@ -974,7 +974,55 @@ class _$BuiltWorkshopCreatePostSerializer
       'date',
       serializers.serialize(object.date, specifiedType: const FullType(String)),
     ];
-
+    if (object.id != null) {
+      result
+        ..add('id')
+        ..add(serializers.serialize(object.id,
+            specifiedType: const FullType(int)));
+    }
+    if (object.description != null) {
+      result
+        ..add('description')
+        ..add(serializers.serialize(object.description,
+            specifiedType: const FullType(String)));
+    }
+    if (object.time != null) {
+      result
+        ..add('time')
+        ..add(serializers.serialize(object.time,
+            specifiedType: const FullType(String)));
+    }
+    if (object.location != null) {
+      result
+        ..add('location')
+        ..add(serializers.serialize(object.location,
+            specifiedType: const FullType(String)));
+    }
+    if (object.audience != null) {
+      result
+        ..add('audience')
+        ..add(serializers.serialize(object.audience,
+            specifiedType: const FullType(String)));
+    }
+    if (object.resources != null) {
+      result
+        ..add('resources')
+        ..add(serializers.serialize(object.resources,
+            specifiedType: const FullType(String)));
+    }
+    if (object.contacts != null) {
+      result
+        ..add('contacts')
+        ..add(serializers.serialize(object.contacts,
+            specifiedType: const FullType(
+                BuiltList, const [const FullType(ContactPost)])));
+    }
+    if (object.image_url != null) {
+      result
+        ..add('image_url')
+        ..add(serializers.serialize(object.image_url,
+            specifiedType: const FullType(String)));
+    }
     return result;
   }
 
@@ -1000,6 +1048,40 @@ class _$BuiltWorkshopCreatePostSerializer
           break;
         case 'date':
           result.date = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'id':
+          result.id = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+        case 'description':
+          result.description = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'time':
+          result.time = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'location':
+          result.location = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'audience':
+          result.audience = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'resources':
+          result.resources = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'contacts':
+          result.contacts.replace(serializers.deserialize(value,
+                  specifiedType: const FullType(
+                      BuiltList, const [const FullType(ContactPost)]))
+              as BuiltList<dynamic>);
+          break;
+        case 'image_url':
+          result.image_url = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
       }
@@ -2695,12 +2777,40 @@ class _$BuiltWorkshopCreatePost extends BuiltWorkshopCreatePost {
   final int club;
   @override
   final String date;
+  @override
+  final int id;
+  @override
+  final String description;
+  @override
+  final String time;
+  @override
+  final String location;
+  @override
+  final String audience;
+  @override
+  final String resources;
+  @override
+  final BuiltList<ContactPost> contacts;
+  @override
+  final String image_url;
 
   factory _$BuiltWorkshopCreatePost(
           [void Function(BuiltWorkshopCreatePostBuilder) updates]) =>
       (new BuiltWorkshopCreatePostBuilder()..update(updates)).build();
 
-  _$BuiltWorkshopCreatePost._({this.title, this.club, this.date}) : super._() {
+  _$BuiltWorkshopCreatePost._(
+      {this.title,
+      this.club,
+      this.date,
+      this.id,
+      this.description,
+      this.time,
+      this.location,
+      this.audience,
+      this.resources,
+      this.contacts,
+      this.image_url})
+      : super._() {
     if (title == null) {
       throw new BuiltValueNullFieldError('BuiltWorkshopCreatePost', 'title');
     }
@@ -2727,12 +2837,39 @@ class _$BuiltWorkshopCreatePost extends BuiltWorkshopCreatePost {
     return other is BuiltWorkshopCreatePost &&
         title == other.title &&
         club == other.club &&
-        date == other.date;
+        date == other.date &&
+        id == other.id &&
+        description == other.description &&
+        time == other.time &&
+        location == other.location &&
+        audience == other.audience &&
+        resources == other.resources &&
+        contacts == other.contacts &&
+        image_url == other.image_url;
   }
 
   @override
   int get hashCode {
-    return $jf($jc($jc($jc(0, title.hashCode), club.hashCode), date.hashCode));
+    return $jf($jc(
+        $jc(
+            $jc(
+                $jc(
+                    $jc(
+                        $jc(
+                            $jc(
+                                $jc(
+                                    $jc(
+                                        $jc($jc(0, title.hashCode),
+                                            club.hashCode),
+                                        date.hashCode),
+                                    id.hashCode),
+                                description.hashCode),
+                            time.hashCode),
+                        location.hashCode),
+                    audience.hashCode),
+                resources.hashCode),
+            contacts.hashCode),
+        image_url.hashCode));
   }
 
   @override
@@ -2740,7 +2877,15 @@ class _$BuiltWorkshopCreatePost extends BuiltWorkshopCreatePost {
     return (newBuiltValueToStringHelper('BuiltWorkshopCreatePost')
           ..add('title', title)
           ..add('club', club)
-          ..add('date', date))
+          ..add('date', date)
+          ..add('id', id)
+          ..add('description', description)
+          ..add('time', time)
+          ..add('location', location)
+          ..add('audience', audience)
+          ..add('resources', resources)
+          ..add('contacts', contacts)
+          ..add('image_url', image_url))
         .toString();
   }
 }
@@ -2762,6 +2907,40 @@ class BuiltWorkshopCreatePostBuilder
   String get date => _$this._date;
   set date(String date) => _$this._date = date;
 
+  int _id;
+  int get id => _$this._id;
+  set id(int id) => _$this._id = id;
+
+  String _description;
+  String get description => _$this._description;
+  set description(String description) => _$this._description = description;
+
+  String _time;
+  String get time => _$this._time;
+  set time(String time) => _$this._time = time;
+
+  String _location;
+  String get location => _$this._location;
+  set location(String location) => _$this._location = location;
+
+  String _audience;
+  String get audience => _$this._audience;
+  set audience(String audience) => _$this._audience = audience;
+
+  String _resources;
+  String get resources => _$this._resources;
+  set resources(String resources) => _$this._resources = resources;
+
+  ListBuilder<ContactPost> _contacts;
+  ListBuilder<ContactPost> get contacts =>
+      _$this._contacts ??= new ListBuilder<ContactPost>();
+  set contacts(ListBuilder<ContactPost> contacts) =>
+      _$this._contacts = contacts;
+
+  String _image_url;
+  String get image_url => _$this._image_url;
+  set image_url(String image_url) => _$this._image_url = image_url;
+
   BuiltWorkshopCreatePostBuilder();
 
   BuiltWorkshopCreatePostBuilder get _$this {
@@ -2769,6 +2948,14 @@ class BuiltWorkshopCreatePostBuilder
       _title = _$v.title;
       _club = _$v.club;
       _date = _$v.date;
+      _id = _$v.id;
+      _description = _$v.description;
+      _time = _$v.time;
+      _location = _$v.location;
+      _audience = _$v.audience;
+      _resources = _$v.resources;
+      _contacts = _$v.contacts?.toBuilder();
+      _image_url = _$v.image_url;
       _$v = null;
     }
     return this;
@@ -2789,8 +2976,32 @@ class BuiltWorkshopCreatePostBuilder
 
   @override
   _$BuiltWorkshopCreatePost build() {
-    final _$result = _$v ??
-        new _$BuiltWorkshopCreatePost._(title: title, club: club, date: date);
+    _$BuiltWorkshopCreatePost _$result;
+    try {
+      _$result = _$v ??
+          new _$BuiltWorkshopCreatePost._(
+              title: title,
+              club: club,
+              date: date,
+              id: id,
+              description: description,
+              time: time,
+              location: location,
+              audience: audience,
+              resources: resources,
+              contacts: _contacts?.build(),
+              image_url: image_url);
+    } catch (_) {
+      String _$failedField;
+      try {
+        _$failedField = 'contacts';
+        _contacts?.build();
+      } catch (e) {
+        throw new BuiltValueNestedFieldError(
+            'BuiltWorkshopCreatePost', _$failedField, e.toString());
+      }
+      rethrow;
+    }
     replace(_$result);
     return _$result;
   }

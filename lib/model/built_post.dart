@@ -233,22 +233,22 @@ abstract class BuiltWorkshopCreatePost
   int get club;
   String get date;
   
-  // @nullable
-  // int get id;
-  // @nullable
-  // String get description;
-  // @nullable
-  // String get time;
-  // @nullable
-  // String get location;
-  // @nullable
-  // String get audience;
-  // @nullable
-  // String get resources;
-  // @nullable
-  // BuiltList<ContactPost> get contacts;
-  // @nullable
-  // String get image_url;
+  @nullable
+  int get id;
+  @nullable
+  String get description;
+  @nullable
+  String get time;
+  @nullable
+  String get location;
+  @nullable
+  String get audience;
+  @nullable
+  String get resources;
+  @nullable
+  BuiltList<ContactPost> get contacts;
+  @nullable
+  String get image_url;
 
   BuiltWorkshopCreatePost._();
   factory BuiltWorkshopCreatePost([updates(BuiltWorkshopCreatePostBuilder b)]) =

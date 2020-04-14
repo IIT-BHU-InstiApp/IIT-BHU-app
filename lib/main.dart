@@ -7,7 +7,6 @@ import 'package:iit_app/screens/mess/mess.dart';
 import 'package:iit_app/pages/login.dart';
 import 'package:iit_app/pages/about.dart';
 import 'package:iit_app/screens/settings.dart';
-import 'package:iit_app/screens/create.dart';
 import 'package:iit_app/services/crud.dart';
 
 import 'package:provider/provider.dart';
@@ -39,7 +38,6 @@ void main() async {
           '/complaints': (BuildContext context) => ComplaintsScreen(),
           '/settings': (BuildContext context) => SettingsScreen(),
           '/login': (BuildContext context) => LoginPage(),
-          '/create': (BuildContext context) => CreateScreen(),
           '/about': (BuildContext context) => AboutPage(),
         },
       ),

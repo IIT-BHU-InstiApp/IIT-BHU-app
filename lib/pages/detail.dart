@@ -32,6 +32,7 @@ class _DetailPage extends State<DetailPage> {
             FlatButton(
               child: new Text("yay"),
               onPressed: () {
+                // TODO: Refresh clubs page after deleting workshop!
                 Navigator.pop(context);
                 Navigator.pop(context);
               },
