@@ -21,6 +21,74 @@ class _DetailPage extends State<DetailPage> {
     super.initState();
   }
 
+  showSuccessfulDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: new Text("Successful!"),
+          content: new Text("Workshop succesfully deleted!"),
+          actions: <Widget>[
+            FlatButton(
+              child: new Text("yay"),
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future showUnSuccessfulDialog() async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: new Text("UnSuccessful :("),
+          content: new Text("Please try again"),
+          actions: <Widget>[
+            FlatButton(
+              child: new Text("Ok"),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<bool> confirmCreateDialog() async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: new Text("Create workshop"),
+          content: new Text("Are you sure to create this new workshop?"),
+          actions: <Widget>[
+            FlatButton(
+              child: new Text("Yup!"),
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+            ),
+            FlatButton(
+              child: new Text("nope, let me rethink.."),
+              onPressed: () {
+                Navigator.of(context).pop(false);
+                return false;
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void fetchWorkshopDetails() async {
     Response<BuiltWorkshopDetailPost> snapshots = await AppConstants.service
         .getWorkshopDetailsPost(
@@ -34,16 +102,18 @@ class _DetailPage extends State<DetailPage> {
   }
 
   void deleteWorkshop() async {
-    await AppConstants.service
-        .removeWorkshop(widget.workshopId, "token ${AppConstants.djangoToken}")
-        .then((snapshot) {
-      print("status of deleting workshop: ${snapshot.statusCode}");
-      Scaffold.of(context)
-          .showSnackBar(SnackBar(content: Text('Deleted Workshop!')));
-      Navigator.pop(context);
-    }).catchError((onError) {
-      print("Error in deleting: ${onError.toString()}");
-    });
+    await confirmCreateDialog()
+        ? await AppConstants.service
+            .removeWorkshop(
+                widget.workshopId, "token ${AppConstants.djangoToken}")
+            .then((snapshot) {
+            print("status of deleting workshop: ${snapshot.statusCode}");
+            showSuccessfulDialog();
+          }).catchError((onError) {
+            print("Error in deleting: ${onError.toString()}");
+            showSuccessfulDialog();
+          })
+        : null;
     setState(() {});
   }
 
