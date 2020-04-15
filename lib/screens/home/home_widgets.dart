@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:iit_app/data/workshop.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/pages/detail.dart';

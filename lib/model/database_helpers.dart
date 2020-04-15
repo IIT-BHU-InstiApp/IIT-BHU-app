@@ -1,7 +1,5 @@
 import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
-import 'package:iit_app/data/workshop.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
@@ -21,11 +19,11 @@ String timeString = 'time';
 Map<String, dynamic> workshopInfoToMap(dynamic workshop) {
   Map<String, dynamic> map = {
     idString: workshop.id,
-    clubIdString: workshop.clubId,
-    clubString: workshop.club,
-    councilIdString: workshop.councilId,
-    smallImageUrlString: workshop.smallImageUrl,
-    largeImageUrlString: workshop.largeImageUrl,
+    clubIdString: workshop.club.id,
+    clubString: workshop.club.name,
+    councilIdString: workshop.club.council,
+    smallImageUrlString: workshop.club.small_image_url,
+    largeImageUrlString: workshop.club.large_image_url,
     titleString: workshop.title,
     dateString: workshop.date,
     timeString: workshop.time,
@@ -33,18 +31,17 @@ Map<String, dynamic> workshopInfoToMap(dynamic workshop) {
   return map;
 }
 
-Workshop workshopInfoFromMap(dynamic map) {
-  Workshop workshop = Workshop();
-  workshop.id = map[idString];
-  workshop.clubId = map[clubIdString];
-  workshop.club = map[clubString];
-  workshop.councilId = map[councilIdString];
-  workshop.smallImageUrl = map[smallImageUrlString];
-  workshop.largeImageUrl = map[largeImageUrlString];
-  workshop.title = map[titleString];
-  workshop.date = map[dateString];
-  workshop.time = map[timeString];
-
+BuiltWorkshopSummaryPost workshopInfoFromMap(dynamic map) {
+  final workshop = BuiltWorkshopSummaryPost((b) => b
+    ..id = map[idString]
+    ..club.id = map[clubIdString]
+    ..club.name = map[clubString]
+    ..club.council = map[councilIdString]
+    ..club.small_image_url = map[smallImageUrlString]
+    ..club.large_image_url = map[largeImageUrlString]
+    ..title = map[titleString]
+    ..date = map[dateString]
+    ..time = map[timeString]);
   return workshop;
 }
 
@@ -114,13 +111,11 @@ class DatabaseHelper {
   Future insertWorkshopInfoIntoDatabase(
       {@required BuiltWorkshopSummaryPost post}) async {
     Database db = await workshopInfoDatabase;
-
-    final workshop = Workshop.createWorkshopFromMap(post);
-
-    await db.insert(workshopString, workshopInfoToMap(workshop));
+    await db.insert(workshopString, workshopInfoToMap(post));
   }
 
-  Future<List<Workshop>> getAllWorkshopsInfo({@required Database db}) async {
+  Future<List<BuiltWorkshopSummaryPost>> getAllWorkshopsInfo(
+      {@required Database db}) async {
     List<Map> maps = await db.query(
       workshopString,
       columns: [
@@ -136,9 +131,9 @@ class DatabaseHelper {
       ],
     );
 
-    List<Workshop> workshops = [];
+    List<BuiltWorkshopSummaryPost> workshops = [];
     for (var map in maps) {
-      Workshop workshop = workshopInfoFromMap(map);
+      BuiltWorkshopSummaryPost workshop = workshopInfoFromMap(map);
       workshops.add(workshop);
     }
     return workshops;

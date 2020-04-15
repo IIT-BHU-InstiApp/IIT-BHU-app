@@ -6,7 +6,6 @@ import 'package:iit_app/screens/home/home_widgets.dart';
 import 'package:iit_app/services/crud.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:iit_app/model/built_post.dart';
-import 'package:iit_app/data/workshop.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -93,7 +92,6 @@ class _HomeScreenState extends State<HomeScreen>
   void fetchUpdatedDetails() async {
     await AppConstants.updateAndPopulateWorkshops();
     setState(() {});
-    print(AppConstants.workshops[0].club);
   }
 
   void refresh() async {
@@ -167,8 +165,7 @@ class _HomeScreenState extends State<HomeScreen>
       itemCount: posts.length,
       padding: EdgeInsets.all(8),
       itemBuilder: (context, index) {
-        return HomeWidgets.getWorkshopCard(context,
-            w: posts[index]);
+        return HomeWidgets.getWorkshopCard(context, w: posts[index]);
       },
     );
   }
@@ -178,12 +175,12 @@ class _HomeScreenState extends State<HomeScreen>
   ) {
     return ListView.builder(
       scrollDirection: Axis.vertical,
-      itemCount: AppConstants.workshops.length,
+      itemCount: AppConstants.workshopFromDatabase.length,
       padding: EdgeInsets.all(8),
       itemBuilder: (context, index) {
         return HomeWidgets.getWorkshopCard(
           context,
-          w: AppConstants.workshops[index],
+          w: AppConstants.workshopFromDatabase[index],
         );
       },
     );
