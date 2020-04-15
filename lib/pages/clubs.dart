@@ -4,7 +4,6 @@ import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/pages/create.dart';
 import 'package:iit_app/screens/home/home_widgets.dart';
-import 'package:iit_app/data/workshop.dart';
 
 class ClubPage extends StatefulWidget {
   final int clubId;

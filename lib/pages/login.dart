@@ -174,14 +174,8 @@ class _LoginPageState extends State<LoginPage> {
 
                                 return errorDialog(context);
                               } else {
-                                // AppConstants.service = PostApiService.create();
-                                AppConstants.firstTimeFetching =
-                                    await AppConstants
-                                        .isWorkshopDatabaseEmpty();
-
                                 Navigator.of(context).pushNamedAndRemoveUntil(
                                     '/home', (r) => false);
-                                // pushReplacementNamed('/home');
                               }
                             }
 
