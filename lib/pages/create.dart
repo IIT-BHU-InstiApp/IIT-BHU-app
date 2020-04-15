@@ -310,6 +310,7 @@ class _CreateScreenState extends State<CreateScreen> {
 
                                 await AppConstants.service
                                     .updateWorkshopByPatch(
+                                        widget.workshopData.id,
                                         "token ${AppConstants.djangoToken}",
                                         editedWorkshop)
                                     .catchError((onError) {

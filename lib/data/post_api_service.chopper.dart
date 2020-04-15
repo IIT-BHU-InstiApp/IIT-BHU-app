@@ -117,8 +117,8 @@ class _$PostApiService extends PostApiService {
   }
 
   Future<Response> updateWorkshopByPatch(
-      String token, BuiltWorkshopDetailPost body) {
-    final $url = '/workshops/{id}/';
+      int id, String token, BuiltWorkshopDetailPost body) {
+    final $url = '/workshops/${id}/';
     final $headers = {'Authorization': token};
     final $body = body;
     final $request =
