@@ -4,25 +4,6 @@ import 'package:chopper/chopper.dart';
 import 'package:iit_app/pages/clubs.dart';
 import 'package:iit_app/model/built_post.dart';
 
-// class AccountScreen extends StatelessWidget {
-
-//   // Scaffold.of(context).showSnackBar(SnackBar(
-//   //                                       content: Text("My Token: ${AppConstants.djangoToken}")));
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text("Account"),
-//       ),
-//       body: Container(
-//           child: Center(
-//         child: Text("My Token: ${AppConstants.djangoToken}"),
-//       )),
-//     );
-//   }
-// }
-
 class AccountScreen extends StatefulWidget {
   @override
   _AccountScreenState createState() => _AccountScreenState();
@@ -36,14 +17,92 @@ class _AccountScreenState extends State<AccountScreen> {
     super.initState();
   }
 
+  Future<String> _asyncInputDialog(
+    BuildContext context, {
+    String queryName,
+  }) async {
+    String returnData = '';
+    return showDialog<String>(
+      context: context,
+      barrierDismissible:
+          false, // dialog is dismissible with a tap on the barrier
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Enter $queryName'),
+          content: new Row(
+            children: <Widget>[
+              Expanded(
+                  child: TextField(
+                autofocus: true,
+                decoration: InputDecoration(
+                    labelText: queryName,
+                    hintText: queryName == 'Phone No.'
+                        ? '+91987654321'
+                        : 'Sheldon Cooper'),
+                onChanged: (value) {
+                  returnData = value;
+                },
+              ))
+            ],
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Ok'),
+              onPressed: () {
+                Navigator.of(context).pop(returnData);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future showUnSuccessfulDialog() async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: new Text("UnSuccessful :("),
+          content: new Text("Please try again"),
+          actions: <Widget>[
+            FlatButton(
+              child: new Text("Ok"),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void fetchProfileDetails() async {
-    Response<BuiltProfilePost> snapshots = await AppConstants.service
+    await AppConstants.service
         .getProfile("token ${AppConstants.djangoToken}")
         .catchError((onError) {
-      print("Error in fetching clubs: ${onError.toString()}");
+      print("Error in fetching profile: ${onError.toString()}");
+    }).then((value) {
+      profileDetails = value.body;
+      setState(() {});
     });
-    profileDetails = snapshots.body;
-    setState(() {});
+  }
+
+  void updateProfileDetails({String name, String phoneNumber}) async {
+    final updatedProfile = BuiltProfilePost((b) => b
+      ..name = name
+      ..phone_number = phoneNumber);
+    await AppConstants.service
+        .updateProfileByPatch(
+            "token ${AppConstants.djangoToken}", updatedProfile)
+        .then((value) {
+      profileDetails = value.body;
+      setState(() {});
+    }).catchError((onError) {
+      print("Error in updating profile: ${onError.toString()}");
+      showUnSuccessfulDialog();
+    });
   }
 
   Future<bool> onPop() {
@@ -93,9 +152,29 @@ class _AccountScreenState extends State<AccountScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Text(
-                                  profileDetails.name,
-                                  style: TextStyle(fontSize: 25),
+                                Row(
+                                  children: <Widget>[
+                                    Container(
+                                      width: MediaQuery.of(context).size.width - 200,
+                                      child: Text(
+                                        profileDetails.name,
+                                        style: TextStyle(fontSize: 25),
+                                      ),
+                                    ),
+                                    IconButton(
+                                      icon: Icon(Icons.edit),
+                                      onPressed: () async {
+                                        final name = await _asyncInputDialog(
+                                            context,
+                                            queryName: 'Name');
+                                        print(name);
+                                        updateProfileDetails(
+                                            name: name,
+                                            phoneNumber:
+                                                profileDetails.phone_number);
+                                      },
+                                    )
+                                  ],
                                 ),
                                 Text(
                                   profileDetails.department,
@@ -137,6 +216,18 @@ class _AccountScreenState extends State<AccountScreen> {
                                 : profileDetails.phone_number,
                             style: TextStyle(fontSize: 15),
                           ),
+                          IconButton(
+                            icon: Icon(Icons.edit),
+                            onPressed: () async {
+                              final phoneNumber = await _asyncInputDialog(
+                                  context,
+                                  queryName: 'Phone No.');
+                              print(phoneNumber);
+                              updateProfileDetails(
+                                  name: profileDetails.name,
+                                  phoneNumber: phoneNumber);
+                            },
+                          )
                         ],
                       ),
                       SizedBox(

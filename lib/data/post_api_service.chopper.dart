@@ -100,6 +100,16 @@ class _$PostApiService extends PostApiService {
     return client.send<BuiltProfilePost, BuiltProfilePost>($request);
   }
 
+  Future<Response<BuiltProfilePost>> updateProfileByPatch(
+      String token, BuiltProfilePost body) {
+    final $url = '/profile/';
+    final $headers = {'Authorization': token};
+    final $body = body;
+    final $request =
+        Request('PATCH', $url, client.baseUrl, body: $body, headers: $headers);
+    return client.send<BuiltProfilePost, BuiltProfilePost>($request);
+  }
+
   Future<Response<BuiltList<BuiltTeamMemberPost>>> getTeam() {
     final $url = '/team/';
     final $request = Request('GET', $url, client.baseUrl);
