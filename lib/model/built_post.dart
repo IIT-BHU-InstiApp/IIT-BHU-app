@@ -65,9 +65,6 @@ abstract class BuiltWorkshopDetailPost
   String get audience;
   @nullable
   String get resources;
-
-  // TODO: watch for type of contacts
-
   @nullable
   BuiltList<ContactPost> get contacts;
   @nullable
@@ -228,11 +225,10 @@ abstract class BuiltClubPost
 // !--------------------------------------------------------------------------------------------------------------------
 abstract class BuiltWorkshopCreatePost
     implements Built<BuiltWorkshopCreatePost, BuiltWorkshopCreatePostBuilder> {
-  
   String get title;
   int get club;
   String get date;
-  
+
   @nullable
   int get id;
   @nullable

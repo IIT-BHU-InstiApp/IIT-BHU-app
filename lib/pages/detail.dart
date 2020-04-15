@@ -2,6 +2,8 @@ import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/appConstants.dart';
+import 'package:iit_app/pages/clubs.dart';
+import 'package:iit_app/pages/create.dart';
 
 class DetailPage extends StatefulWidget {
   final int workshopId;
@@ -35,6 +37,12 @@ class _DetailPage extends State<DetailPage> {
                 // TODO: Refresh clubs page after deleting workshop!
                 Navigator.pop(context);
                 Navigator.pop(context);
+                Navigator.pop(context);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ClubPage(
+                            clubId: _workshop.club.id, editMode: true)));
               },
             ),
           ],
@@ -142,205 +150,207 @@ class _DetailPage extends State<DetailPage> {
                 child: CircularProgressIndicator(),
               ),
             )
-          : Stack(children: [
-              Container(
-                height: MediaQuery.of(context).size.height - 75.0,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(35.0),
-                        bottomRight: Radius.circular(35.0)),
-                    color: Colors.white),
-              ),
-              Container(
-                height: MediaQuery.of(context).size.height - 310.0,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(35.0),
-                        bottomRight: Radius.circular(35.0)),
-                    image: DecorationImage(
-                        image: _workshop.club.large_image_url == null
-                            ? AssetImage('assets/iitbhu.jpeg')
-                            : NetworkImage(_workshop.club.large_image_url),
-                        fit: BoxFit.cover)),
-              ),
-              Positioned(
-                top: MediaQuery.of(context).size.height - 300.0,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(left: 15.0),
-                      child: Container(
-                        width: MediaQuery.of(context).size.width - 35.0,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Row(
-                                  children: <Widget>[
-                                    Icon(Icons.date_range,
-                                        size: 12.0, color: Colors.grey),
-                                    SizedBox(
-                                      width: 5,
-                                    ),
-                                    Text(
-                                      _workshop.date,
-                                      style: TextStyle(
-                                          fontFamily: 'Opensans',
-                                          fontSize: 12.0,
-                                          color: Colors.grey),
-                                    )
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 2.5,
-                                ),
-                                Row(
-                                  children: <Widget>[
-                                    Icon(Icons.timelapse,
-                                        size: 12.0, color: Colors.grey),
-                                    SizedBox(
-                                      width: 5,
-                                    ),
-                                    Text(
-                                      _workshop.time != null
-                                          ? _workshop.time
-                                          : "none",
-                                      style: TextStyle(
-                                          fontFamily: 'Opensans',
-                                          fontSize: 12.0,
-                                          color: Colors.grey),
-                                    )
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 7.0,
-                                ),
-                                widget.editMode
-                                    ? IconButton(
-                                        iconSize: 50,
-                                        icon: Icon(Icons.delete_forever,
-                                            color: Colors.red),
-                                        onPressed: () => deleteWorkshop())
-                                    : SizedBox(width: 0.1),
-                                Container(
-                                  width:
-                                      MediaQuery.of(context).size.width - 90.0,
-                                  child: Text(_workshop.title,
-                                      style: TextStyle(
-                                          fontFamily: 'Opensans',
-                                          fontSize: 27.0,
-                                          fontWeight: FontWeight.w600)),
-                                )
-                              ],
-                            ),
-                            Container(
-                              height: 80.0,
-                              width: 50.0,
-                              decoration: BoxDecoration(
-                                  color: Colors.grey.withOpacity(0.2),
-                                  borderRadius: BorderRadius.circular(25.0)),
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+          : Stack(
+              children: [
+                Container(
+                  height: MediaQuery.of(context).size.height - 75.0,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(35.0),
+                          bottomRight: Radius.circular(35.0)),
+                      color: Colors.white),
+                ),
+                Container(
+                  height: MediaQuery.of(context).size.height - 310.0,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(35.0),
+                          bottomRight: Radius.circular(35.0)),
+                      image: DecorationImage(
+                          image: _workshop.club.large_image_url == null
+                              ? AssetImage('assets/iitbhu.jpeg')
+                              : NetworkImage(_workshop.club.large_image_url),
+                          fit: BoxFit.cover)),
+                ),
+                Positioned(
+                  top: MediaQuery.of(context).size.height - 300.0,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(left: 15.0),
+                        child: Container(
+                          width: MediaQuery.of(context).size.width - 35.0,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  SizedBox(height: 7.0),
-                                  Text(_workshop.interested_users.toString()),
-                                  InkWell(
-                                    child: Icon(Icons.people,
-                                        color: is_interested
-                                            ? Colors.blue
-                                            : Colors.black,
-                                        size: 25.0),
-                                    onTap: () => updateButton(),
+                                  Row(
+                                    children: <Widget>[
+                                      Icon(Icons.date_range,
+                                          size: 12.0, color: Colors.grey),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      Text(
+                                        _workshop.date,
+                                        style: TextStyle(
+                                            fontFamily: 'Opensans',
+                                            fontSize: 12.0,
+                                            color: Colors.grey),
+                                      )
+                                    ],
                                   ),
-                                  SizedBox(height: 7.0)
+                                  SizedBox(
+                                    height: 2.5,
+                                  ),
+                                  Row(
+                                    children: <Widget>[
+                                      Icon(Icons.timelapse,
+                                          size: 12.0, color: Colors.grey),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      Text(
+                                        _workshop.time != null
+                                            ? _workshop.time
+                                            : "none",
+                                        style: TextStyle(
+                                            fontFamily: 'Opensans',
+                                            fontSize: 12.0,
+                                            color: Colors.grey),
+                                      )
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 7.0,
+                                  ),
+                                  // widget.editMode
+                                  //     ? IconButton(
+                                  //         iconSize: 50,
+                                  //         icon: Icon(Icons.delete_forever,
+                                  //             color: Colors.red),
+                                  //         onPressed: () => deleteWorkshop())
+                                  //     : SizedBox(width: 0.1),
+                                  Container(
+                                    width: MediaQuery.of(context).size.width -
+                                        90.0,
+                                    child: Text(_workshop.title,
+                                        style: TextStyle(
+                                            fontFamily: 'Opensans',
+                                            fontSize: 27.0,
+                                            fontWeight: FontWeight.w600)),
+                                  )
                                 ],
                               ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 15.0, top: 15.0),
-                      child: Row(
-                        children: <Widget>[
-                          Text('People Going:',
-                              style: TextStyle(
-                                  fontFamily: 'Opensans',
-                                  fontSize: 15.0,
-                                  color: Color(0xFF6A6A6A),
-                                  fontWeight: FontWeight.w600)),
-                          SizedBox(width: 25.0),
-                          Stack(
-                            children: <Widget>[
-                              Container(height: 40.0, width: 100.0),
                               Container(
-                                height: 40.0,
-                                width: 40.0,
+                                height: 80.0,
+                                width: 50.0,
                                 decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20.0),
-                                    image: DecorationImage(
-                                        image:
-                                            AppConstants.currentUser.photoUrl ==
-                                                    null
-                                                ? AssetImage(
-                                                    'assets/profile_test.jpg')
-                                                : NetworkImage(AppConstants
-                                                    .currentUser.photoUrl),
-                                        fit: BoxFit.cover)),
-                              ),
-                              Positioned(
-                                left: 30.0,
-                                child: Container(
-                                  height: 40.0,
-                                  width: 40.0,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20.0),
-                                      color: Color(0xFFFE7050)),
-                                  child: Center(
-                                    child: Text(
-                                        '+${_workshop.interested_users}',
-                                        style: TextStyle(
-                                            fontSize: 14.0,
-                                            color: Colors.white)),
-                                  ),
+                                    color: Colors.grey.withOpacity(0.2),
+                                    borderRadius: BorderRadius.circular(25.0)),
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    SizedBox(height: 7.0),
+                                    Text(_workshop.interested_users.toString()),
+                                    InkWell(
+                                      child: Icon(Icons.people,
+                                          color: is_interested
+                                              ? Colors.blue
+                                              : Colors.black,
+                                          size: 25.0),
+                                      onTap: () => updateButton(),
+                                    ),
+                                    SizedBox(height: 7.0)
+                                  ],
                                 ),
                               )
                             ],
                           ),
-                        ],
+                        ),
                       ),
-                    ),
-                    Padding(
-                        padding: EdgeInsets.only(top: 15.0, left: 15.0),
-                        child: Container(
-                          width: 250.0,
-                          child: Text(_workshop.description,
-                              style: TextStyle(
-                                  color: Color(0xFF6A6A6A),
-                                  fontFamily: 'Opensans',
-                                  fontWeight: FontWeight.w300)),
-                        ))
-                  ],
+                      Padding(
+                        padding: const EdgeInsets.only(left: 15.0, top: 15.0),
+                        child: Row(
+                          children: <Widget>[
+                            Text('People Going:',
+                                style: TextStyle(
+                                    fontFamily: 'Opensans',
+                                    fontSize: 15.0,
+                                    color: Color(0xFF6A6A6A),
+                                    fontWeight: FontWeight.w600)),
+                            SizedBox(width: 25.0),
+                            Stack(
+                              children: <Widget>[
+                                Container(height: 40.0, width: 100.0),
+                                Container(
+                                  height: 40.0,
+                                  width: 40.0,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20.0),
+                                      image: DecorationImage(
+                                          image: AppConstants
+                                                      .currentUser.photoUrl ==
+                                                  null
+                                              ? AssetImage(
+                                                  'assets/profile_test.jpg')
+                                              : NetworkImage(AppConstants
+                                                  .currentUser.photoUrl),
+                                          fit: BoxFit.cover)),
+                                ),
+                                Positioned(
+                                  left: 30.0,
+                                  child: Container(
+                                    height: 40.0,
+                                    width: 40.0,
+                                    decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(20.0),
+                                        color: Color(0xFFFE7050)),
+                                    child: Center(
+                                      child: Text(
+                                          '+${_workshop.interested_users}',
+                                          style: TextStyle(
+                                              fontSize: 14.0,
+                                              color: Colors.white)),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                          padding: EdgeInsets.only(top: 15.0, left: 15.0),
+                          child: Container(
+                            width: 250.0,
+                            child: Text(_workshop.description,
+                                style: TextStyle(
+                                    color: Color(0xFF6A6A6A),
+                                    fontFamily: 'Opensans',
+                                    fontWeight: FontWeight.w300)),
+                          ))
+                    ],
+                  ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 40.0, left: 15.0, right: 15.0),
-                child: Container(
-                  width: MediaQuery.of(context).size.width - 15.0,
-                  child: Row(
-                    children: <Widget>[
-                      IconButton(
-                        icon: Icon(Icons.arrow_back_ios,
-                            color: Colors.lightGreen, size: 15.0),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                      SizedBox(width: 20.0),
-                      Container(
+                Padding(
+                  padding: EdgeInsets.only(top: 40.0, left: 15.0, right: 15.0),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width - 15.0,
+                    child: Row(
+                      children: <Widget>[
+                        IconButton(
+                          icon: Icon(Icons.arrow_back_ios,
+                              color: Colors.lightGreen, size: 15.0),
+                          onPressed: () => Navigator.pop(context),
+                        ),
+                        SizedBox(width: 20.0),
+                        Container(
                           height: 35.0,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20.0),
@@ -360,12 +370,69 @@ class _DetailPage extends State<DetailPage> {
                                 SizedBox(width: 5.0),
                               ],
                             ),
-                          ))
-                    ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              )
-            ]),
+                widget.editMode == false
+                    ? Container()
+                    : Positioned(
+                        right: 20,
+                        top: 30,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Column(
+                              children: <Widget>[
+                                Text(
+                                  'Edit',
+                                  style: TextStyle(
+                                      color: Colors.yellow,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                IconButton(
+                                  icon: Icon(
+                                    Icons.edit,
+                                    color: Colors.yellow,
+                                  ),
+                                  iconSize: 50,
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => CreateScreen(
+                                          clubId: _workshop.club.id,
+                                          clubName: _workshop.club.name,
+                                          workshopData: _workshop,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
+                            Column(
+                              children: <Widget>[
+                                Text(
+                                  'Delete',
+                                  style: TextStyle(
+                                      color: Colors.red,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                IconButton(
+                                    iconSize: 50,
+                                    icon: Icon(Icons.delete_forever,
+                                        color: Colors.red),
+                                    onPressed: () => deleteWorkshop()),
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+              ],
+            ),
     );
   }
 }

@@ -115,4 +115,14 @@ class _$PostApiService extends PostApiService {
         Request('POST', $url, client.baseUrl, body: $body, headers: $headers);
     return client.send<dynamic, dynamic>($request);
   }
+
+  Future<Response> updateWorkshopByPatch(
+      String token, BuiltWorkshopDetailPost body) {
+    final $url = '/workshops/{id}/';
+    final $headers = {'Authorization': token};
+    final $body = body;
+    final $request =
+        Request('PATCH', $url, client.baseUrl, body: $body, headers: $headers);
+    return client.send<dynamic, dynamic>($request);
+  }
 }
