@@ -72,6 +72,9 @@ class _CreateScreenState extends State<CreateScreen> {
                 Navigator.pop(context);
                 Navigator.pop(context);
                 Navigator.pop(context);
+                if (widget.workshopData != null) {
+                  Navigator.pop(context);
+                }
                 Navigator.push(
                     context,
                     MaterialPageRoute(
