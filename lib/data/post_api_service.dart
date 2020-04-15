@@ -59,7 +59,9 @@ abstract class PostApiService extends ChopperService {
       @Body() BuiltWorkshopCreatePost body);
 
   @Patch(path: '/workshops/{id}/')
-  Future<Response> updateWorkshopByPatch(@Header('Authorization') String token,
+  Future<Response> updateWorkshopByPatch(
+      @Path('id') int id,
+      @Header('Authorization') String token,
       @Body() BuiltWorkshopDetailPost body);
 
   static PostApiService create() {
