@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iit_app/data/workshop.dart';
 import 'package:iit_app/model/appConstants.dart';
+import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/pages/detail.dart';
 import 'package:iit_app/pages/council.dart';
 import 'package:iit_app/pages/login.dart';
@@ -85,7 +86,7 @@ class HomeWidgets {
       });
 
   static Widget getWorkshopCard(BuildContext context,
-          {Workshop w, bool editMode = false}) =>
+          {BuiltWorkshopSummaryPost w, bool editMode = false}) =>
       Padding(
           padding: EdgeInsets.symmetric(horizontal: 3, vertical: 10),
           child: InkWell(
@@ -104,9 +105,9 @@ class HomeWidgets {
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20.0),
                       image: DecorationImage(
-                          image: w.smallImageUrl == null
+                          image: w.club.small_image_url == null
                               ? AssetImage('assets/iitbhu.jpeg')
-                              : NetworkImage(w.smallImageUrl),
+                              : NetworkImage(w.club.small_image_url),
                           fit: BoxFit.cover)),
                 ),
                 // make the shade a bit deeper.

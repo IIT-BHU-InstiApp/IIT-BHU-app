@@ -168,7 +168,7 @@ class _HomeScreenState extends State<HomeScreen>
       padding: EdgeInsets.all(8),
       itemBuilder: (context, index) {
         return HomeWidgets.getWorkshopCard(context,
-            w: Workshop.createWorkshopFromMap(posts[index]));
+            w: posts[index]);
       },
     );
   }

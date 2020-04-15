@@ -10,7 +10,7 @@ class Workshop {
   String time;
 
 
-  static Workshop createWorkshopFromMap(dynamic map) {
+  static Workshop createWorshopFromMap(dynamic map) {
     Workshop w = new Workshop();
     w.id = map.id;
     w.clubId = map.club.id;

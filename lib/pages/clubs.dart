@@ -255,8 +255,7 @@ class _ClubPageState extends State<ClubPage> {
                           itemBuilder: (context, index) {
                             return HomeWidgets.getWorkshopCard(
                               context,
-                              w: Workshop.createWorkshopFromMap(
-                                  clubMap.active_workshops[index]),
+                              w: clubMap.active_workshops[index],
                               editMode: widget.editMode,
                             );
                           },
@@ -283,8 +282,7 @@ class _ClubPageState extends State<ClubPage> {
                           itemBuilder: (context, index) {
                             return HomeWidgets.getWorkshopCard(
                               context,
-                              w: Workshop.createWorkshopFromMap(
-                                  clubMap.past_workshops[index]),
+                              w: clubMap.past_workshops[index],
                               editMode: widget.editMode,
                             );
                           },

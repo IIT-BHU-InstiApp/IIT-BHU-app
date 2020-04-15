@@ -98,8 +98,7 @@ class AllWorkshopsScreen extends StatelessWidget {
             padding: EdgeInsets.all(8),
             itemBuilder: (context, index) {
               return HomeWidgets.getWorkshopCard(context,
-                  w: Workshop.createWorkshopFromMap(
-                      posts.active_workshops[index]));
+                  w: posts.active_workshops[index]);
             },
           ),
         ),
@@ -121,8 +120,7 @@ class AllWorkshopsScreen extends StatelessWidget {
             padding: EdgeInsets.all(8),
             itemBuilder: (context, index) {
               return HomeWidgets.getWorkshopCard(context,
-                  w: Workshop.createWorkshopFromMap(
-                      posts.past_workshops[index]));
+                  w: posts.past_workshops[index]);
             },
           ),
         ),
