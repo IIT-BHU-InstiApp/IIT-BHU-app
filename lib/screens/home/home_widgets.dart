@@ -9,6 +9,21 @@ class HomeWidgets {
   static final Color textPaleColor = Color(0xFFAFAFAF);
   static final Color textColor = Color(0xFF004681);
 
+  static Widget get connectionError {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        Text("Could not find active internet connection"),
+        Text(
+          'Try again',
+          style: TextStyle(
+              color: Colors.green, fontWeight: FontWeight.bold, fontSize: 20),
+        ),
+      ],
+    );
+  }
+
   static Future<bool> getLogOutDialog(context, details) => showDialog(
       context: context,
       barrierDismissible: true,

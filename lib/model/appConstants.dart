@@ -4,8 +4,18 @@ import 'package:iit_app/data/post_api_service.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/database_helpers.dart';
 import 'package:built_collection/built_collection.dart';
+import 'package:iit_app/services/connectivityCheck.dart';
 
 class AppConstants {
+  // ------------------------------------------ connectivity variables
+
+  static ConnectionStatusSingleton connectionStatus;
+  static bool isLoggedIn = false;
+  // static bool isOnline = false;
+  // static Stream connectivityStream;
+
+  // ------------------------------------------ connectivity variables
+
   static bool logInButtonEnabled = true;
   static bool firstTimeFetching = true;
   static bool refreshingHomePage = false;
@@ -18,20 +28,6 @@ class AppConstants {
   static List<BuiltWorkshopSummaryPost> workshopFromDatabase;
   static var councils;
   static int currentCouncilId;
-
-  // static Future<bool> isWorkshopDatabaseEmpty() async {
-  //   DatabaseHelper helper = DatabaseHelper.instance;
-  //   var database = await helper.workshopInfoDatabase;
-
-  //   workshopFromDatabase = await helper.getAllWorkshopsInfo(db: database);
-  //   // print(' workshops is empty: ${(workshops.isEmpty == true).toString()}');
-
-  //   if (workshopFromDatabase.isEmpty == true) {
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // }
 
   static Future<void> populateCouncils() async {
     Response<BuiltList<BuiltAllCouncilsPost>> snapshots =
