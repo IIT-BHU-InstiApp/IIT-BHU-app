@@ -64,6 +64,14 @@ abstract class PostApiService extends ChopperService {
       @Header('Authorization') String token,
       @Body() BuiltWorkshopDetailPost body);
 
+  @Post(path: '/workshops/search/')
+  Future<Response<BuiltAllWorkshopsPost>> searchWorkshopByString(
+      @Body() BuiltWorkshopSearchByStringPost body);
+
+  @Post(path: '/workshops/search/date/')
+  Future<Response<BuiltList<BuiltWorkshopSummaryPost>>> searchWorkshopByDate(
+      @Body() BuiltWorkshopSearchByDatePost body);
+
   static PostApiService create() {
     final client = ChopperClient(
       baseUrl: 'https://workshops-app-backend.herokuapp.com',

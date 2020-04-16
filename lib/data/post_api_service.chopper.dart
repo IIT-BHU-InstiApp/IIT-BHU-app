@@ -125,4 +125,21 @@ class _$PostApiService extends PostApiService {
         Request('PATCH', $url, client.baseUrl, body: $body, headers: $headers);
     return client.send<dynamic, dynamic>($request);
   }
+
+  Future<Response<BuiltAllWorkshopsPost>> searchWorkshopByString(
+      BuiltWorkshopSearchByStringPost body) {
+    final $url = '/workshops/search/';
+    final $body = body;
+    final $request = Request('POST', $url, client.baseUrl, body: $body);
+    return client.send<BuiltAllWorkshopsPost, BuiltAllWorkshopsPost>($request);
+  }
+
+  Future<Response<BuiltList<BuiltWorkshopSummaryPost>>> searchWorkshopByDate(
+      BuiltWorkshopSearchByDatePost body) {
+    final $url = '/workshops/search/date/';
+    final $body = body;
+    final $request = Request('POST', $url, client.baseUrl, body: $body);
+    return client.send<BuiltList<BuiltWorkshopSummaryPost>,
+        BuiltWorkshopSummaryPost>($request);
+  }
 }

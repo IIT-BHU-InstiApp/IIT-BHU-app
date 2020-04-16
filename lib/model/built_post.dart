@@ -100,6 +100,44 @@ abstract class ContactPost implements Built<ContactPost, ContactPostBuilder> {
   static Serializer<ContactPost> get serializer => _$contactPostSerializer;
 }
 
+abstract class BuiltWorkshopSearchByStringPost
+    implements
+        Built<BuiltWorkshopSearchByStringPost,
+            BuiltWorkshopSearchByStringPostBuilder> {
+  @nullable
+  String get search_by;
+  @nullable
+  String get search_string;
+
+  BuiltWorkshopSearchByStringPost._();
+
+  factory BuiltWorkshopSearchByStringPost(
+          [updates(BuiltWorkshopSearchByStringPostBuilder b)]) =
+      _$BuiltWorkshopSearchByStringPost;
+
+  static Serializer<BuiltWorkshopSearchByStringPost> get serializer =>
+      _$builtWorkshopSearchByStringPostSerializer;
+}
+
+abstract class BuiltWorkshopSearchByDatePost
+    implements
+        Built<BuiltWorkshopSearchByDatePost,
+            BuiltWorkshopSearchByDatePostBuilder> {
+  @nullable
+  String get start_date;
+  @nullable
+  String get end_date;
+
+  BuiltWorkshopSearchByDatePost._();
+
+  factory BuiltWorkshopSearchByDatePost(
+          [updates(BuiltWorkshopSearchByDatePostBuilder b)]) =
+      _$BuiltWorkshopSearchByDatePost;
+
+  static Serializer<BuiltWorkshopSearchByDatePost> get serializer =>
+      _$builtWorkshopSearchByDatePostSerializer;
+}
+
 // !--------------------------------------------------------------------------------------------------------------------
 abstract class BuiltAllCouncilsPost
     implements Built<BuiltAllCouncilsPost, BuiltAllCouncilsPostBuilder> {

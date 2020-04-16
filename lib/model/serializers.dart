@@ -11,6 +11,8 @@ part 'serializers.g.dart';
   BuiltWorkshopSummaryPost,
   BuiltWorkshopDetailPost,
   ContactPost,
+  BuiltWorkshopSearchByStringPost,
+  BuiltWorkshopSearchByDatePost,
   BuiltAllCouncilsPost,
   BuiltCouncilPost,
   SecyPost,
