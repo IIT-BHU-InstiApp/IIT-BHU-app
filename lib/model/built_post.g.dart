@@ -13,6 +13,12 @@ Serializer<BuiltWorkshopSummaryPost> _$builtWorkshopSummaryPostSerializer =
 Serializer<BuiltWorkshopDetailPost> _$builtWorkshopDetailPostSerializer =
     new _$BuiltWorkshopDetailPostSerializer();
 Serializer<ContactPost> _$contactPostSerializer = new _$ContactPostSerializer();
+Serializer<BuiltWorkshopSearchByStringPost>
+    _$builtWorkshopSearchByStringPostSerializer =
+    new _$BuiltWorkshopSearchByStringPostSerializer();
+Serializer<BuiltWorkshopSearchByDatePost>
+    _$builtWorkshopSearchByDatePostSerializer =
+    new _$BuiltWorkshopSearchByDatePostSerializer();
 Serializer<BuiltAllCouncilsPost> _$builtAllCouncilsPostSerializer =
     new _$BuiltAllCouncilsPostSerializer();
 Serializer<BuiltCouncilPost> _$builtCouncilPostSerializer =
@@ -422,6 +428,120 @@ class _$ContactPostSerializer implements StructuredSerializer<ContactPost> {
           break;
         case 'photo_url':
           result.photo_url = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+      }
+    }
+
+    return result.build();
+  }
+}
+
+class _$BuiltWorkshopSearchByStringPostSerializer
+    implements StructuredSerializer<BuiltWorkshopSearchByStringPost> {
+  @override
+  final Iterable<Type> types = const [
+    BuiltWorkshopSearchByStringPost,
+    _$BuiltWorkshopSearchByStringPost
+  ];
+  @override
+  final String wireName = 'BuiltWorkshopSearchByStringPost';
+
+  @override
+  Iterable<Object> serialize(
+      Serializers serializers, BuiltWorkshopSearchByStringPost object,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = <Object>[];
+    if (object.search_by != null) {
+      result
+        ..add('search_by')
+        ..add(serializers.serialize(object.search_by,
+            specifiedType: const FullType(String)));
+    }
+    if (object.search_string != null) {
+      result
+        ..add('search_string')
+        ..add(serializers.serialize(object.search_string,
+            specifiedType: const FullType(String)));
+    }
+    return result;
+  }
+
+  @override
+  BuiltWorkshopSearchByStringPost deserialize(
+      Serializers serializers, Iterable<Object> serialized,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = new BuiltWorkshopSearchByStringPostBuilder();
+
+    final iterator = serialized.iterator;
+    while (iterator.moveNext()) {
+      final key = iterator.current as String;
+      iterator.moveNext();
+      final dynamic value = iterator.current;
+      switch (key) {
+        case 'search_by':
+          result.search_by = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'search_string':
+          result.search_string = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+      }
+    }
+
+    return result.build();
+  }
+}
+
+class _$BuiltWorkshopSearchByDatePostSerializer
+    implements StructuredSerializer<BuiltWorkshopSearchByDatePost> {
+  @override
+  final Iterable<Type> types = const [
+    BuiltWorkshopSearchByDatePost,
+    _$BuiltWorkshopSearchByDatePost
+  ];
+  @override
+  final String wireName = 'BuiltWorkshopSearchByDatePost';
+
+  @override
+  Iterable<Object> serialize(
+      Serializers serializers, BuiltWorkshopSearchByDatePost object,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = <Object>[];
+    if (object.start_date != null) {
+      result
+        ..add('start_date')
+        ..add(serializers.serialize(object.start_date,
+            specifiedType: const FullType(String)));
+    }
+    if (object.end_date != null) {
+      result
+        ..add('end_date')
+        ..add(serializers.serialize(object.end_date,
+            specifiedType: const FullType(String)));
+    }
+    return result;
+  }
+
+  @override
+  BuiltWorkshopSearchByDatePost deserialize(
+      Serializers serializers, Iterable<Object> serialized,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = new BuiltWorkshopSearchByDatePostBuilder();
+
+    final iterator = serialized.iterator;
+    while (iterator.moveNext()) {
+      final key = iterator.current as String;
+      iterator.moveNext();
+      final dynamic value = iterator.current;
+      switch (key) {
+        case 'start_date':
+          result.start_date = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'end_date':
+          result.end_date = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
       }
@@ -1955,6 +2075,192 @@ class ContactPostBuilder implements Builder<ContactPost, ContactPostBuilder> {
             email: email,
             phone_number: phone_number,
             photo_url: photo_url);
+    replace(_$result);
+    return _$result;
+  }
+}
+
+class _$BuiltWorkshopSearchByStringPost
+    extends BuiltWorkshopSearchByStringPost {
+  @override
+  final String search_by;
+  @override
+  final String search_string;
+
+  factory _$BuiltWorkshopSearchByStringPost(
+          [void Function(BuiltWorkshopSearchByStringPostBuilder) updates]) =>
+      (new BuiltWorkshopSearchByStringPostBuilder()..update(updates)).build();
+
+  _$BuiltWorkshopSearchByStringPost._({this.search_by, this.search_string})
+      : super._();
+
+  @override
+  BuiltWorkshopSearchByStringPost rebuild(
+          void Function(BuiltWorkshopSearchByStringPostBuilder) updates) =>
+      (toBuilder()..update(updates)).build();
+
+  @override
+  BuiltWorkshopSearchByStringPostBuilder toBuilder() =>
+      new BuiltWorkshopSearchByStringPostBuilder()..replace(this);
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(other, this)) return true;
+    return other is BuiltWorkshopSearchByStringPost &&
+        search_by == other.search_by &&
+        search_string == other.search_string;
+  }
+
+  @override
+  int get hashCode {
+    return $jf($jc($jc(0, search_by.hashCode), search_string.hashCode));
+  }
+
+  @override
+  String toString() {
+    return (newBuiltValueToStringHelper('BuiltWorkshopSearchByStringPost')
+          ..add('search_by', search_by)
+          ..add('search_string', search_string))
+        .toString();
+  }
+}
+
+class BuiltWorkshopSearchByStringPostBuilder
+    implements
+        Builder<BuiltWorkshopSearchByStringPost,
+            BuiltWorkshopSearchByStringPostBuilder> {
+  _$BuiltWorkshopSearchByStringPost _$v;
+
+  String _search_by;
+  String get search_by => _$this._search_by;
+  set search_by(String search_by) => _$this._search_by = search_by;
+
+  String _search_string;
+  String get search_string => _$this._search_string;
+  set search_string(String search_string) =>
+      _$this._search_string = search_string;
+
+  BuiltWorkshopSearchByStringPostBuilder();
+
+  BuiltWorkshopSearchByStringPostBuilder get _$this {
+    if (_$v != null) {
+      _search_by = _$v.search_by;
+      _search_string = _$v.search_string;
+      _$v = null;
+    }
+    return this;
+  }
+
+  @override
+  void replace(BuiltWorkshopSearchByStringPost other) {
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
+    _$v = other as _$BuiltWorkshopSearchByStringPost;
+  }
+
+  @override
+  void update(void Function(BuiltWorkshopSearchByStringPostBuilder) updates) {
+    if (updates != null) updates(this);
+  }
+
+  @override
+  _$BuiltWorkshopSearchByStringPost build() {
+    final _$result = _$v ??
+        new _$BuiltWorkshopSearchByStringPost._(
+            search_by: search_by, search_string: search_string);
+    replace(_$result);
+    return _$result;
+  }
+}
+
+class _$BuiltWorkshopSearchByDatePost extends BuiltWorkshopSearchByDatePost {
+  @override
+  final String start_date;
+  @override
+  final String end_date;
+
+  factory _$BuiltWorkshopSearchByDatePost(
+          [void Function(BuiltWorkshopSearchByDatePostBuilder) updates]) =>
+      (new BuiltWorkshopSearchByDatePostBuilder()..update(updates)).build();
+
+  _$BuiltWorkshopSearchByDatePost._({this.start_date, this.end_date})
+      : super._();
+
+  @override
+  BuiltWorkshopSearchByDatePost rebuild(
+          void Function(BuiltWorkshopSearchByDatePostBuilder) updates) =>
+      (toBuilder()..update(updates)).build();
+
+  @override
+  BuiltWorkshopSearchByDatePostBuilder toBuilder() =>
+      new BuiltWorkshopSearchByDatePostBuilder()..replace(this);
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(other, this)) return true;
+    return other is BuiltWorkshopSearchByDatePost &&
+        start_date == other.start_date &&
+        end_date == other.end_date;
+  }
+
+  @override
+  int get hashCode {
+    return $jf($jc($jc(0, start_date.hashCode), end_date.hashCode));
+  }
+
+  @override
+  String toString() {
+    return (newBuiltValueToStringHelper('BuiltWorkshopSearchByDatePost')
+          ..add('start_date', start_date)
+          ..add('end_date', end_date))
+        .toString();
+  }
+}
+
+class BuiltWorkshopSearchByDatePostBuilder
+    implements
+        Builder<BuiltWorkshopSearchByDatePost,
+            BuiltWorkshopSearchByDatePostBuilder> {
+  _$BuiltWorkshopSearchByDatePost _$v;
+
+  String _start_date;
+  String get start_date => _$this._start_date;
+  set start_date(String start_date) => _$this._start_date = start_date;
+
+  String _end_date;
+  String get end_date => _$this._end_date;
+  set end_date(String end_date) => _$this._end_date = end_date;
+
+  BuiltWorkshopSearchByDatePostBuilder();
+
+  BuiltWorkshopSearchByDatePostBuilder get _$this {
+    if (_$v != null) {
+      _start_date = _$v.start_date;
+      _end_date = _$v.end_date;
+      _$v = null;
+    }
+    return this;
+  }
+
+  @override
+  void replace(BuiltWorkshopSearchByDatePost other) {
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
+    _$v = other as _$BuiltWorkshopSearchByDatePost;
+  }
+
+  @override
+  void update(void Function(BuiltWorkshopSearchByDatePostBuilder) updates) {
+    if (updates != null) updates(this);
+  }
+
+  @override
+  _$BuiltWorkshopSearchByDatePost build() {
+    final _$result = _$v ??
+        new _$BuiltWorkshopSearchByDatePost._(
+            start_date: start_date, end_date: end_date);
     replace(_$result);
     return _$result;
   }
