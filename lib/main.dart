@@ -1,46 +1,111 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:iit_app/screens/account.dart';
 import 'package:iit_app/screens/allWorkshops.dart';
 import 'package:iit_app/screens/complaints.dart';
 import 'package:iit_app/screens/home/home.dart';
+import 'package:iit_app/screens/home/home_widgets.dart';
 import 'package:iit_app/screens/mess/mess.dart';
 import 'package:iit_app/pages/login.dart';
 import 'package:iit_app/pages/about.dart';
 import 'package:iit_app/screens/settings.dart';
+import 'package:iit_app/services/connectivityCheck.dart';
 import 'package:iit_app/services/crud.dart';
-
-import 'package:provider/provider.dart';
-
 import 'data/post_api_service.dart';
 import 'model/appConstants.dart';
 
-void main() async {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
   AppConstants.service = PostApiService.create();
-  bool logStatus = await CrudMethods.isLoggedIn();
-  print('log status: $logStatus');
+  AppConstants.connectionStatus = ConnectionStatusSingleton.getInstance();
+  AppConstants.connectionStatus.initialize();
+
+  // bool logStatus = await CrudMethods.isLoggedIn();
+  // print('log status: $logStatus');
+
   runApp(
-    Provider(
-      builder: (_) => PostApiService.create(),
-      dispose: (_, PostApiService service) => service.client.dispose(),
-      create: (BuildContext context) {},
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: logStatus
-            ? HomeScreen()
-            : LoginPage(), // route for home is '/' implicitly
-        routes: <String, WidgetBuilder>{
-          // define the routes
-          '/home': (BuildContext context) => HomeScreen(),
-          '/mess': (BuildContext context) => MessScreen(),
-          '/allWorkshops': (BuildContext context) => AllWorkshopsScreen(),
-          '/account': (BuildContext context) => AccountScreen(),
-          '/complaints': (BuildContext context) => ComplaintsScreen(),
-          '/settings': (BuildContext context) => SettingsScreen(),
-          '/login': (BuildContext context) => LoginPage(),
-          '/about': (BuildContext context) => AboutPage(),
-        },
-      ),
-    ),
-  );
+      // Provider(
+      //   builder: (_) => PostApiService.create(),
+      //   dispose: (_, PostApiService service) => service.client.dispose(),
+      //   create: (BuildContext context) {},
+      // child:
+
+      MaterialApp(
+    debugShowCheckedModeBanner: false,
+    // home: AppConstants.isLoggedIn ? HomeScreen() : LoginPage(),
+    home: ConnectedMain(),
+    routes: <String, WidgetBuilder>{
+      // define the routes
+      '/home': (BuildContext context) => HomeScreen(),
+      '/mess': (BuildContext context) => MessScreen(),
+      '/allWorkshops': (BuildContext context) => AllWorkshopsScreen(),
+      '/account': (BuildContext context) => AccountScreen(),
+      '/complaints': (BuildContext context) => ComplaintsScreen(),
+      '/settings': (BuildContext context) => SettingsScreen(),
+      '/login': (BuildContext context) => LoginPage(),
+      '/about': (BuildContext context) => AboutPage(),
+    },
+  )
+
+      // ),
+      );
+}
+
+class ConnectedMain extends StatefulWidget {
+  @override
+  _ConnectedMainState createState() => _ConnectedMainState();
+}
+
+class _ConnectedMainState extends State<ConnectedMain> {
+  bool _isOnline;
+  bool _tappable = true;
+
+  @override
+  void initState() {
+    checkConnection();
+    super.initState();
+  }
+
+  void checkConnection() async {
+    setState(() {
+      this._tappable = false;
+    });
+
+    this._isOnline = await AppConstants.connectionStatus.checkConnection();
+
+    print('tapped: online = ${this._isOnline.toString()}');
+
+    if (this._isOnline == true && AppConstants.isLoggedIn == false) {
+      AppConstants.isLoggedIn = await CrudMethods.isLoggedIn();
+    }
+    setState(() {
+      this._tappable = true;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return this._isOnline == null
+        ? Scaffold(
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
+          )
+        : (this._isOnline == false
+            ? Scaffold(
+                body: Center(
+                  child: GestureDetector(
+                    onTap: this._tappable == false
+                        ? null
+                        : () {
+                            checkConnection();
+                          },
+                    child: HomeWidgets.connectionError,
+                  ),
+                ),
+              )
+            : (AppConstants.isLoggedIn ? HomeScreen() : LoginPage()));
+  }
 }
