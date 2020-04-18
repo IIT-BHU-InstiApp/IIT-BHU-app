@@ -1,9 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:connectivity/connectivity.dart';
-import 'package:iit_app/data/post_api_service.dart';
-import 'package:iit_app/model/appConstants.dart';
-import 'package:iit_app/services/crud.dart';
 
 class ConnectionStatusSingleton {
   //This creates the single instance by calling the `_internal` constructor specified below

@@ -1,4 +1,3 @@
-import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
@@ -10,7 +9,7 @@ class CouncilPage extends StatefulWidget {
 }
 
 class _CouncilPageState extends State<CouncilPage> {
-  var councilData;
+  BuiltCouncilPost councilData;
   @override
   void initState() {
     fetchCouncilById();
@@ -18,11 +17,29 @@ class _CouncilPageState extends State<CouncilPage> {
   }
 
   void fetchCouncilById() async {
-    Response<BuiltCouncilPost> snapshots =
-        await AppConstants.service.getCouncil(AppConstants.currentCouncilId);
-    // print(snapshots.body);
-    councilData = snapshots.body;
+    print('fetching council data ');
+    councilData = await AppConstants.getCouncilDetailsFromDatabase(
+        councilId: AppConstants.currentCouncilId);
+
+    if (!this.mounted) {
+      return;
+    }
     setState(() {});
+
+    print('updating council data ');
+
+    councilData = await AppConstants.getAndUpdateCouncilDetailsInDatabase(
+        councilId: AppConstants.currentCouncilId);
+
+    if (!this.mounted) {
+      return;
+    }
+    setState(() {});
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   final space = SizedBox(height: 8.0);
@@ -81,7 +98,8 @@ class _CouncilPageState extends State<CouncilPage> {
                           borderRadius: BorderRadius.circular(20.0),
                         ),
                         child: Image(
-                          image: councilData.large_image_url == null
+                          image: councilData.large_image_url == '' ||
+                                  councilData.large_image_url == null
                               ? AssetImage('assets/iitbhu.jpeg')
                               : NetworkImage(councilData.large_image_url),
                           // AssetImage('assets/fmc.jpeg'),

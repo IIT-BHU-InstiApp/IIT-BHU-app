@@ -1,5 +1,6 @@
 import 'package:chopper/chopper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:iit_app/data/post_api_service.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/database_helpers.dart';
@@ -25,67 +26,120 @@ class AppConstants {
   static FirebaseUser currentUser;
   static PostApiService service;
 
-  static List<BuiltWorkshopSummaryPost> workshopFromDatabase;
-  static var councils;
+  static BuiltList<BuiltWorkshopSummaryPost> workshopFromDatabase;
+
+  // !-------------------------
+  static BuiltList<BuiltAllCouncilsPost> councilsSummaryfromDatabase;
+  // !-------------------------
+
   static int currentCouncilId;
 
-  static Future<void> populateCouncils() async {
-    Response<BuiltList<BuiltAllCouncilsPost>> snapshots =
-        await service.getAllCouncils();
-    councils = snapshots.body;
-  }
-
-  static Future<void> populateWorkshops() async {
-    workshopFromDatabase = [];
-
+  static Future populateWorkshopsAndCouncilButtons() async {
     DatabaseHelper helper = DatabaseHelper.instance;
-    var database = await helper.workshopInfoDatabase;
+    var database = await helper.database;
 
-    workshopFromDatabase = await helper.getAllWorkshopsInfo(db: database);
+    workshopFromDatabase = await helper.getAllWorkshopsSummary(db: database);
+    councilsSummaryfromDatabase =
+        await helper.getAllCouncilsSummary(db: database);
+
     // print(' workshops is empty: ${(workshops.isEmpty == true).toString()}');
 
-    if (workshopFromDatabase.isEmpty == true) {
+    if (workshopFromDatabase == null) {
       // insert all workshop information for the first time
-      await helper.deleteWorkshopInfo(db: database);
+      await helper.deleteWorkshopsSummary(db: database);
+      await helper.deleteAllCouncilsSummary(db: database);
 
-      print('fetching workshops infos from json');
+      print('fetching workshops and all councils summary from json');
 
-      Response<BuiltList<BuiltWorkshopSummaryPost>> snapshots =
+// API calls to fetch the data
+      Response<BuiltList<BuiltWorkshopSummaryPost>> workshopSnapshots =
           await service.getActiveWorkshops();
+      final workshopPosts = workshopSnapshots.body;
 
-      final posts = snapshots.body;
+      Response<BuiltList<BuiltAllCouncilsPost>> councilSummarySnapshots =
+          await service.getAllCouncils();
+      final councilSummaryPosts = councilSummarySnapshots.body;
 
-      for (var post in posts) {
-        await helper.insertWorkshopInfoIntoDatabase(post: post);
+// storing the data fetched from json objects into local database
+      for (var post in workshopPosts) {
+        await helper.insertWorkshopSummaryIntoDatabase(post: post);
       }
 
-      workshopFromDatabase = await helper.getAllWorkshopsInfo(db: database);
+      for (var post in councilSummaryPosts) {
+        await helper.insertCouncilSummaryIntoDatabase(councilSummary: post);
+      }
+
+// fetching the data from local database and storing it into variables
+// whose scope is throughout the app
+
+      workshopFromDatabase = workshopPosts;
+      // await helper.getAllWorkshopsSummary(db: database);
+      councilsSummaryfromDatabase = councilSummaryPosts;
+      // await helper.getAllCouncilsSummary(db: database);
     }
 
     // helper.closeDatabase(db: database);
-    print('workshops fetched ');
+    print('workshops and all councils summary fetched ');
   }
 
-  static updateAndPopulateWorkshops() async {
+  static Future updateAndPopulateWorkshops() async {
     DatabaseHelper helper = DatabaseHelper.instance;
-    var database = await helper.workshopInfoDatabase;
+    var database = await helper.database;
 
-    await helper.deleteWorkshopInfo(db: database);
+    await helper.deleteWorkshopsSummary(db: database);
 
     print('fetching workshops infos from json for updation');
 
-    Response<BuiltList<BuiltWorkshopSummaryPost>> snapshots =
+    Response<BuiltList<BuiltWorkshopSummaryPost>> workshopSnapshots =
         await service.getActiveWorkshops();
 
-    final posts = snapshots.body;
+    final workshopPosts = workshopSnapshots.body;
 
-    for (var post in posts) {
-      await helper.insertWorkshopInfoIntoDatabase(post: post);
+    for (var post in workshopPosts) {
+      await helper.insertWorkshopSummaryIntoDatabase(post: post);
     }
-    workshopFromDatabase = await helper.getAllWorkshopsInfo(db: database);
+    workshopFromDatabase = workshopPosts;
 
-    // print('------------------------------------');
-    // print('workshops after updation: $workshops');
+    print('workshops fetched and updated ');
+
     // helper.closeDatabase(db: database);
+  }
+
+  static Future getCouncilDetailsFromDatabase({@required int councilId}) async {
+    DatabaseHelper helper = DatabaseHelper.instance;
+    var database = await helper.database;
+
+    BuiltCouncilPost councilPost =
+        await helper.getCouncilDetail(db: database, councilId: councilId);
+
+    if (councilPost == null) {
+      Response<BuiltCouncilPost> councilSnapshots =
+          await AppConstants.service.getCouncil(AppConstants.currentCouncilId);
+
+      councilPost = councilSnapshots.body;
+
+      await helper.insertCouncilDetailsIntoDatabase(councilPost: councilPost);
+    }
+
+    return councilPost;
+  }
+
+  static Future getAndUpdateCouncilDetailsInDatabase(
+      {@required int councilId}) async {
+    DatabaseHelper helper = DatabaseHelper.instance;
+    var database = await helper.database;
+
+    print('deleting council entries ---------------------------');
+    await helper.deleteEntryOfCouncilDetail(db: database, councilId: councilId);
+    print('deleted ---------------------------');
+
+    Response<BuiltCouncilPost> councilSnapshots =
+        await AppConstants.service.getCouncil(AppConstants.currentCouncilId);
+
+    var councilPost = councilSnapshots.body;
+
+    await helper.insertCouncilDetailsIntoDatabase(councilPost: councilPost);
+
+    return councilPost;
   }
 }
