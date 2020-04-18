@@ -108,21 +108,20 @@ class _HomeScreenState extends State<HomeScreen>
   void initState() {
     _tabController = new TabController(length: 2, vsync: this);
 
-    fetchWorkshops();
-    fetchCouncils();
+    fetchWorkshopsAndCouncilButtons();
     super.initState();
   }
 
-  void fetchWorkshops() async {
-    await AppConstants.populateWorkshops();
+  void fetchWorkshopsAndCouncilButtons() async {
+    await AppConstants.populateWorkshopsAndCouncilButtons();
     setState(() {
       AppConstants.firstTimeFetching = false;
     });
     fetchUpdatedDetails();
   }
 
-  void fetchCouncils() async {
-    await AppConstants.populateCouncils();
+  void fetchUpdatedDetails() async {
+    await AppConstants.updateAndPopulateWorkshops();
     setState(() {});
   }
 
@@ -249,11 +248,6 @@ class _HomeScreenState extends State<HomeScreen>
         return HomeWidgets.getWorkshopCard(context, w: posts[index]);
       },
     );
-  }
-
-  void fetchUpdatedDetails() async {
-    await AppConstants.updateAndPopulateWorkshops();
-    setState(() {});
   }
 
   void refresh() async {
@@ -548,20 +542,24 @@ class _HomeScreenState extends State<HomeScreen>
               ),
               Container(
                 padding: EdgeInsets.fromLTRB(5, 400, 5, 20),
-                child: AppConstants.councils == null
+                child: AppConstants.councilsSummaryfromDatabase == null
                     ? Center(child: CircularProgressIndicator())
                     : ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (context, index) {
                           return HomeWidgets.councilButton(context,
-                              name: AppConstants.councils[index].name
+                              name: AppConstants
+                                  .councilsSummaryfromDatabase[index].name
                                   .toString()
                                   .substring(0, 4),
-                              councilId: AppConstants.councils[index].id,
-                              imageUrl:
-                                  AppConstants.councils[index].small_image_url);
+                              councilId: AppConstants
+                                  .councilsSummaryfromDatabase[index].id,
+                              imageUrl: AppConstants
+                                  .councilsSummaryfromDatabase[index]
+                                  .small_image_url);
                         },
-                        itemCount: AppConstants.councils.length,
+                        itemCount:
+                            AppConstants.councilsSummaryfromDatabase.length,
                       ),
               ),
             ],
