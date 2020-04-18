@@ -51,6 +51,11 @@ abstract class PostApiService extends ChopperService {
   Future<Response<BuiltProfilePost>> getProfile(
       @Header('Authorization') String token);
 
+  @Patch(path: '/profile/')
+  Future<Response<BuiltProfilePost>> updateProfileByPatch(
+      @Header('Authorization') String token,
+      @Body() BuiltProfilePost body);
+
   @Get(path: '/team/')
   Future<Response<BuiltList<BuiltTeamMemberPost>>> getTeam();
 
