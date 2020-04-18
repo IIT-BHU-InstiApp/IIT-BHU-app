@@ -38,6 +38,17 @@ String photoUrlString = 'photoUrl';
 
 String clubSummaryString = 'clubSummary'; //*table name
 
+String clubDetailsString = 'clubDetails'; //*table name
+
+String secyIdString = 'secyId';
+String councilNameString = 'councilName';
+String councilSmallImageUrlString = 'councilSmallImageUrl';
+String councilLargeImageUrlString = 'councilLargeImageUrl';
+String jointSecyId1String = 'jointSecyId1';
+String jointSecyId2String = 'jointSecyId2';
+String isSubscribedString = 'isSubscribed';
+String subscribedUsersString = 'subscribedUsers';
+
 Map<String, dynamic> workshopInfoToMap(BuiltWorkshopSummaryPost workshop) {
   Map<String, dynamic> map = {
     idString: workshop.id,
@@ -93,10 +104,12 @@ Map<String, dynamic> councilDetailToMap(BuiltCouncilPost councilPost) {
   return map;
 }
 
-Map<String, dynamic> porInfoToMap(SecyPost por, int councilId) {
+Map<String, dynamic> porInfoToMap(
+    {SecyPost por, int councilId = -1, int clubId = -1}) {
   Map<String, dynamic> map = {
     idString: por.id,
     councilIdString: councilId,
+    clubIdString: clubId,
     nameString: por.name == null ? '' : por.name,
     emailString: por.email == null ? '' : por.email,
     phoneNumberString: por.phone_number == null ? '' : por.phone_number,
@@ -114,6 +127,30 @@ Map<String, dynamic> clubSummaryInfoToMap(ClubListPost clubSummary) {
         clubSummary.small_image_url == null ? '' : clubSummary.small_image_url,
     largeImageUrlString:
         clubSummary.large_image_url == null ? '' : clubSummary.large_image_url,
+  };
+  return map;
+}
+
+Map<String, dynamic> clubDetailToMap(BuiltClubPost clubPost) {
+  Map<String, dynamic> map = {
+    idString: clubPost.id,
+    nameString: clubPost.name == null ? '' : clubPost.name,
+    descriptionString: clubPost.description == null ? '' : clubPost.description,
+    councilIdString: clubPost.council.id,
+    councilNameString: clubPost.council.name,
+    councilSmallImageUrlString: clubPost.council.small_image_url,
+    councilLargeImageUrlString: clubPost.large_image_url,
+    secyIdString: clubPost.secy == null ? -1 : clubPost.secy.id,
+    jointSecyId1String:
+        (clubPost.joint_secy.isEmpty) ? -1 : clubPost.joint_secy[0].id,
+    jointSecyId2String:
+        (clubPost.joint_secy.length < 2) ? -1 : clubPost.joint_secy[1].id,
+    smallImageUrlString:
+        clubPost.small_image_url == null ? '' : clubPost.small_image_url,
+    largeImageUrlString:
+        clubPost.large_image_url == null ? '' : clubPost.large_image_url,
+    isSubscribedString: clubPost.is_subscribed == true ? 1 : 0,
+    subscribedUsersString: clubPost.subscribed_users,
   };
   return map;
 }
@@ -247,12 +284,14 @@ class DatabaseHelper {
         '        $smallImageUrlString DEFAULT "",'
         '        $largeImageUrlString DEFAULT "")');
 
-// TODO: fetch clubs for a particular council by using its id named as councilId in clubs.
-
     await db.execute('      CREATE TABLE $porHoldersString ('
         '        $idString INTEGER NOT NULL,'
-        // councilId is only to ease the deletion
+
+        // councilId is only to ease the deletion while deleting coucil information
         '        $councilIdString INTEGER NOT NULL,'
+
+        // clubId is only to ease the deletion while deleting club information
+        '        $clubIdString INTEGER NOT NULL,'
         '        $nameString DEFAULT "",'
         '        $emailString DEFAULT "",'
         '        $phoneNumberString DEFAULT "",'
@@ -264,9 +303,29 @@ class DatabaseHelper {
         '        $councilIdString INTEGER,'
         '        $smallImageUrlString DEFAULT "",'
         '        $largeImageUrlString DEFAULT "")');
+
+// for club page
+
+    await db.execute('      CREATE TABLE $clubDetailsString ('
+        '        $idString INTEGER NOT NULL,'
+        '        $nameString DEFAULT "",'
+        '        $descriptionString DEFAULT "",'
+        '        $councilIdString INTEGER,'
+        '        $councilNameString DEFAULT "",'
+        '        $councilSmallImageUrlString DEFAULT "",'
+        '        $councilLargeImageUrlString DEFAULT "",'
+        '        $secyIdString INTEGER,'
+        '        $jointSecyId1String INTEGER,'
+        '        $jointSecyId2String INTEGER,'
+        '        $smallImageUrlString DEFAULT "",'
+        '        $largeImageUrlString DEFAULT "",'
+        '        $isSubscribedString INTEGER,'
+        '        $subscribedUsersString INTEGER)');
   }
 
   // Database helper methods:
+
+  // Inserting the data-----------------------------------------------------------------------
 
   Future insertWorkshopSummaryIntoDatabase(
       {@required BuiltWorkshopSummaryPost post}) async {
@@ -298,18 +357,24 @@ class DatabaseHelper {
 
   Future insertPORHoldersIntoDatabase(
       {@required Database db,
-      @required int councilId,
+      int councilId = -1,
+      int clubId = -1,
       @required SecyPost mainPOR,
       @required BuiltList<SecyPost> jointPOR}) async {
     if (mainPOR != null) {
-      await db.insert(porHoldersString, porInfoToMap(mainPOR, councilId));
+      await db.insert(porHoldersString,
+          porInfoToMap(por: mainPOR, councilId: councilId, clubId: clubId));
     }
 
     if (jointPOR.isEmpty != true) {
-      await db.insert(porHoldersString, porInfoToMap(jointPOR[0], councilId));
+      await db.insert(porHoldersString,
+          porInfoToMap(por: jointPOR[0], councilId: councilId, clubId: clubId));
 
       if (jointPOR.length > 1) {
-        await db.insert(porHoldersString, porInfoToMap(jointPOR[1], councilId));
+        await db.insert(
+            porHoldersString,
+            porInfoToMap(
+                por: jointPOR[1], councilId: councilId, clubId: clubId));
       }
     }
   }
@@ -320,6 +385,20 @@ class DatabaseHelper {
       await db.insert(clubSummaryString, clubSummaryInfoToMap(club));
     }
   }
+
+  Future insertClubDetailsIntoDatabase(
+      {@required BuiltClubPost clubPost}) async {
+    Database db = await database;
+    await db.insert(clubDetailsString, clubDetailToMap(clubPost));
+
+    await insertPORHoldersIntoDatabase(
+        db: db,
+        clubId: clubPost.id,
+        mainPOR: clubPost.secy,
+        jointPOR: clubPost.joint_secy);
+  }
+
+  // Fetching the data-----------------------------------------------------------------------
 
   Future<BuiltList<BuiltWorkshopSummaryPost>> getAllWorkshopsSummary(
       {@required Database db}) async {
@@ -397,10 +476,6 @@ class DatabaseHelper {
       where: '$idString  = $councilId',
     );
 
-    print(
-        'council id = $councilId -----------------------------------------------------');
-    print(maps.length);
-
     if (maps.isEmpty) {
       return null;
     }
@@ -432,7 +507,7 @@ class DatabaseHelper {
     BuiltList<ClubListPost> clubs =
         await getClubsSummary(db: db, councilId: councilId);
 
-    final BuiltCouncilPost councilDetail = BuiltCouncilPost((b) => b
+    final BuiltCouncilPost councilDetails = BuiltCouncilPost((b) => b
       ..id = map[idString]
       ..name = map[nameString]
       ..description = map[descriptionString]
@@ -441,7 +516,7 @@ class DatabaseHelper {
       ..clubs = clubs.toBuilder()
       ..small_image_url = map[smallImageUrlString]
       ..large_image_url = map[largeImageUrlString]);
-    return councilDetail;
+    return councilDetails;
   }
 
   Future<SecyPost> getPORHolderInfo(
@@ -492,6 +567,83 @@ class DatabaseHelper {
     return clubsSummary;
   }
 
+// TODO; fetch club only when its required , do not store all clubs beforehand.
+
+  Future<BuiltClubPost> getClubDetails(
+      {@required Database db, @required int clubId}) async {
+    // it will return only 1 map as every POR Holder has unique id
+
+    List<Map> maps = await db.query(
+      clubDetailsString,
+      columns: [
+        idString,
+        nameString,
+        descriptionString,
+        councilIdString,
+        councilNameString,
+        councilSmallImageUrlString,
+        councilLargeImageUrlString,
+        secyIdString,
+        jointSecyId1String,
+        jointSecyId2String,
+        smallImageUrlString,
+        largeImageUrlString,
+        isSubscribedString,
+        subscribedUsersString
+      ],
+      where: '$idString  = $clubId',
+    );
+    print(
+        'club id = $clubId -----------------------------------------------------');
+    print(maps.length);
+
+    if (maps.isEmpty) {
+      return null;
+    }
+    var map = maps[0];
+
+    BuiltAllCouncilsPost council = BuiltAllCouncilsPost((b) => b
+      ..id = map[councilIdString]
+      ..name = map[councilNameString]
+      ..small_image_url = map[councilSmallImageUrlString]
+      ..large_image_url = map[councilLargeImageUrlString]);
+
+    SecyPost secy;
+    if (map[secyIdString] != -1) {
+      secy = await getPORHolderInfo(db: db, porId: map[secyIdString]);
+    }
+
+    BuiltList<SecyPost> porList = BuiltList<SecyPost>([]);
+    var porBuilder = porList.toBuilder();
+
+    if (map[jointSecyId1String] != -1) {
+      var js1 = await getPORHolderInfo(db: db, porId: map[jointSecyId1String]);
+      porBuilder.add(js1);
+    }
+
+    if (map[jointSecyId2String] != -1) {
+      var js2 = await getPORHolderInfo(db: db, porId: map[jointSecyId2String]);
+      porBuilder.add(js2);
+    }
+    BuiltList<SecyPost> jointSecy = porBuilder.build();
+
+    final BuiltClubPost clubDetails = BuiltClubPost((b) => b
+      ..id = map[idString]
+      ..name = map[nameString]
+      ..description = map[descriptionString]
+      ..council = council.toBuilder()
+      ..secy = secy.toBuilder()
+      ..joint_secy = jointSecy.toBuilder()
+      ..small_image_url = map[smallImageUrlString]
+      ..large_image_url = map[largeImageUrlString]
+      ..is_subscribed = map[isSubscribedString] == 1 ? true : false
+      ..subscribed_users = map[subscribedUsersString]);
+
+    return clubDetails;
+  }
+
+  // Deleting the data-----------------------------------------------------------------------
+
   Future deleteWorkshopsSummary({@required Database db}) async {
     await db.delete(workshopSummaryString);
   }
@@ -503,8 +655,17 @@ class DatabaseHelper {
   Future deleteEntryOfCouncilDetail(
       {@required Database db, @required int councilId}) async {
     await db.delete(councilDetailString, where: '$idString = $councilId');
+
     await db.delete(porHoldersString, where: '$councilIdString = $councilId');
+
     await db.delete(clubSummaryString, where: '$councilIdString = $councilId');
+  }
+
+  Future deleteEntryOfClubDetail(
+      {@required Database db, @required int clubId}) async {
+    await db.delete(clubDetailsString, where: '$idString = $clubId');
+
+    await db.delete(porHoldersString, where: '$clubIdString = $clubId');
   }
 
   Future closeDatabase({@required Database db}) async => db.close();

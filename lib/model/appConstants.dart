@@ -8,7 +8,7 @@ import 'package:built_collection/built_collection.dart';
 import 'package:iit_app/services/connectivityCheck.dart';
 
 class AppConstants {
-  // ------------------------------------------ connectivity variables
+  //  connectivity variables ------------------------------------------
 
   static ConnectionStatusSingleton connectionStatus;
   static bool isLoggedIn = false;
@@ -134,12 +134,47 @@ class AppConstants {
     print('deleted ---------------------------');
 
     Response<BuiltCouncilPost> councilSnapshots =
-        await AppConstants.service.getCouncil(AppConstants.currentCouncilId);
+        await AppConstants.service.getCouncil(councilId);
 
     var councilPost = councilSnapshots.body;
 
     await helper.insertCouncilDetailsIntoDatabase(councilPost: councilPost);
 
     return councilPost;
+  }
+
+  static Future getClubDetailsFromDatabase({@required int clubId}) async {
+    DatabaseHelper helper = DatabaseHelper.instance;
+    var database = await helper.database;
+
+    BuiltClubPost clubPost =
+        await helper.getClubDetails(db: database, clubId: clubId);
+
+    if (clubPost == null) {
+      Response<BuiltClubPost> clubSnapshots = await AppConstants.service
+          .getClub(clubId, "token ${AppConstants.djangoToken}")
+          .catchError((onError) {
+        print("Error in fetching clubs: ${onError.toString()}");
+      });
+      clubPost = clubSnapshots.body;
+
+      await helper.insertClubDetailsIntoDatabase(clubPost: clubPost);
+    }
+
+    return clubPost;
+  }
+
+  static Future updateClubDetailsInDatabase(
+      {@required BuiltClubPost clubPost}) async {
+    DatabaseHelper helper = DatabaseHelper.instance;
+    var database = await helper.database;
+
+// here, we are not doing exactly like we did for council. because everytime we have to fetch workshops
+// so  API request will be sent anyway. Therefore to ensure minimum requests, we will fetch all data altogether.
+// Keep in mind: Use of local database is done to achieve quick fetching of club data except workshops
+
+    await helper.deleteEntryOfClubDetail(db: database, clubId: clubPost.id);
+
+    await helper.insertClubDetailsIntoDatabase(clubPost: clubPost);
   }
 }

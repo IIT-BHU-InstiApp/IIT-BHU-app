@@ -17,6 +17,7 @@ class ClubPage extends StatefulWidget {
 class _ClubPageState extends State<ClubPage> {
   TextStyle tempStyle = TextStyle(fontSize: 50.0, fontWeight: FontWeight.bold);
   var clubMap;
+  bool _loadingWorkshops = true;
   @override
   void initState() {
     print("Club opened in edit mode:${widget.editMode}");
@@ -25,15 +26,32 @@ class _ClubPageState extends State<ClubPage> {
   }
 
   void fetchClubDataById() async {
-    // print('AppConstants.djangoToken : ${AppConstants.djangoToken}');
+    clubMap =
+        await AppConstants.getClubDetailsFromDatabase(clubId: widget.clubId);
+
+    if (!this.mounted) {
+      return;
+    }
+    setState(() {});
+
     Response<BuiltClubPost> snapshots = await AppConstants.service
         .getClub(widget.clubId, "token ${AppConstants.djangoToken}")
         .catchError((onError) {
       print("Error in fetching clubs: ${onError.toString()}");
     });
-    // print(snapshots.body);
     clubMap = snapshots.body;
-    setState(() {});
+    if (!this.mounted) {
+      return;
+    }
+    AppConstants.updateClubDetailsInDatabase(clubPost: clubMap);
+    setState(() {
+      this._loadingWorkshops = false;
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   void toggleSubscription() async {
@@ -238,7 +256,7 @@ class _ClubPageState extends State<ClubPage> {
                       style: headingStyle,
                     ),
                   ),
-                  clubMap == null
+                  clubMap == null || this._loadingWorkshops
                       ? Container(
                           height: MediaQuery.of(context).size.height / 4,
                           child: Center(
@@ -265,7 +283,7 @@ class _ClubPageState extends State<ClubPage> {
                       style: headingStyle,
                     ),
                   ),
-                  clubMap == null
+                  clubMap == null || this._loadingWorkshops
                       ? Container(
                           child: Center(
                             child: CircularProgressIndicator(),
