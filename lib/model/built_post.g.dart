@@ -34,6 +34,8 @@ Serializer<BuiltProfileSearchPost> _$builtProfileSearchPostSerializer =
 Serializer<TeamMember> _$teamMemberSerializer = new _$TeamMemberSerializer();
 Serializer<BuiltTeamMemberPost> _$builtTeamMemberPostSerializer =
     new _$BuiltTeamMemberPostSerializer();
+Serializer<BuiltContacts> _$builtContactsSerializer =
+    new _$BuiltContactsSerializer();
 
 class _$BuiltAllWorkshopsPostSerializer
     implements StructuredSerializer<BuiltAllWorkshopsPost> {
@@ -1452,6 +1454,48 @@ class _$BuiltTeamMemberPostSerializer
                   specifiedType: const FullType(
                       BuiltList, const [const FullType(TeamMember)]))
               as BuiltList<dynamic>);
+          break;
+      }
+    }
+
+    return result.build();
+  }
+}
+
+class _$BuiltContactsSerializer implements StructuredSerializer<BuiltContacts> {
+  @override
+  final Iterable<Type> types = const [BuiltContacts, _$BuiltContacts];
+  @override
+  final String wireName = 'BuiltContacts';
+
+  @override
+  Iterable<Object> serialize(Serializers serializers, BuiltContacts object,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = <Object>[];
+    if (object.id != null) {
+      result
+        ..add('id')
+        ..add(serializers.serialize(object.id,
+            specifiedType: const FullType(int)));
+    }
+    return result;
+  }
+
+  @override
+  BuiltContacts deserialize(
+      Serializers serializers, Iterable<Object> serialized,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = new BuiltContactsBuilder();
+
+    final iterator = serialized.iterator;
+    while (iterator.moveNext()) {
+      final key = iterator.current as String;
+      iterator.moveNext();
+      final dynamic value = iterator.current;
+      switch (key) {
+        case 'id':
+          result.id = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
           break;
       }
     }
@@ -3721,6 +3765,79 @@ class BuiltTeamMemberPostBuilder
       }
       rethrow;
     }
+    replace(_$result);
+    return _$result;
+  }
+}
+
+class _$BuiltContacts extends BuiltContacts {
+  @override
+  final int id;
+
+  factory _$BuiltContacts([void Function(BuiltContactsBuilder) updates]) =>
+      (new BuiltContactsBuilder()..update(updates)).build();
+
+  _$BuiltContacts._({this.id}) : super._();
+
+  @override
+  BuiltContacts rebuild(void Function(BuiltContactsBuilder) updates) =>
+      (toBuilder()..update(updates)).build();
+
+  @override
+  BuiltContactsBuilder toBuilder() => new BuiltContactsBuilder()..replace(this);
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(other, this)) return true;
+    return other is BuiltContacts && id == other.id;
+  }
+
+  @override
+  int get hashCode {
+    return $jf($jc(0, id.hashCode));
+  }
+
+  @override
+  String toString() {
+    return (newBuiltValueToStringHelper('BuiltContacts')..add('id', id))
+        .toString();
+  }
+}
+
+class BuiltContactsBuilder
+    implements Builder<BuiltContacts, BuiltContactsBuilder> {
+  _$BuiltContacts _$v;
+
+  int _id;
+  int get id => _$this._id;
+  set id(int id) => _$this._id = id;
+
+  BuiltContactsBuilder();
+
+  BuiltContactsBuilder get _$this {
+    if (_$v != null) {
+      _id = _$v.id;
+      _$v = null;
+    }
+    return this;
+  }
+
+  @override
+  void replace(BuiltContacts other) {
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
+    _$v = other as _$BuiltContacts;
+  }
+
+  @override
+  void update(void Function(BuiltContactsBuilder) updates) {
+    if (updates != null) updates(this);
+  }
+
+  @override
+  _$BuiltContacts build() {
+    final _$result = _$v ?? new _$BuiltContacts._(id: id);
     replace(_$result);
     return _$result;
   }
