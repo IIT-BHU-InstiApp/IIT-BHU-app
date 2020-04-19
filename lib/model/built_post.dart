@@ -296,6 +296,8 @@ abstract class BuiltWorkshopCreatePost
 abstract class BuiltProfilePost
     implements Built<BuiltProfilePost, BuiltProfilePostBuilder> {
   @nullable
+  int get id;
+  @nullable
   String get name;
   @nullable
   String get email;

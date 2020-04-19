@@ -1222,6 +1222,12 @@ class _$BuiltProfilePostSerializer
   Iterable<Object> serialize(Serializers serializers, BuiltProfilePost object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[];
+    if (object.id != null) {
+      result
+        ..add('id')
+        ..add(serializers.serialize(object.id,
+            specifiedType: const FullType(int)));
+    }
     if (object.name != null) {
       result
         ..add('name')
@@ -1287,6 +1293,10 @@ class _$BuiltProfilePostSerializer
       iterator.moveNext();
       final dynamic value = iterator.current;
       switch (key) {
+        case 'id':
+          result.id = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
         case 'name':
           result.name = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
@@ -3315,6 +3325,8 @@ class BuiltWorkshopCreatePostBuilder
 
 class _$BuiltProfilePost extends BuiltProfilePost {
   @override
+  final int id;
+  @override
   final String name;
   @override
   final String email;
@@ -3336,7 +3348,8 @@ class _$BuiltProfilePost extends BuiltProfilePost {
       (new BuiltProfilePostBuilder()..update(updates)).build();
 
   _$BuiltProfilePost._(
-      {this.name,
+      {this.id,
+      this.name,
       this.email,
       this.phone_number,
       this.department,
@@ -3358,6 +3371,7 @@ class _$BuiltProfilePost extends BuiltProfilePost {
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
     return other is BuiltProfilePost &&
+        id == other.id &&
         name == other.name &&
         email == other.email &&
         phone_number == other.phone_number &&
@@ -3375,7 +3389,9 @@ class _$BuiltProfilePost extends BuiltProfilePost {
             $jc(
                 $jc(
                     $jc(
-                        $jc($jc($jc(0, name.hashCode), email.hashCode),
+                        $jc(
+                            $jc($jc($jc(0, id.hashCode), name.hashCode),
+                                email.hashCode),
                             phone_number.hashCode),
                         department.hashCode),
                     year_of_joining.hashCode),
@@ -3387,6 +3403,7 @@ class _$BuiltProfilePost extends BuiltProfilePost {
   @override
   String toString() {
     return (newBuiltValueToStringHelper('BuiltProfilePost')
+          ..add('id', id)
           ..add('name', name)
           ..add('email', email)
           ..add('phone_number', phone_number)
@@ -3402,6 +3419,10 @@ class _$BuiltProfilePost extends BuiltProfilePost {
 class BuiltProfilePostBuilder
     implements Builder<BuiltProfilePost, BuiltProfilePostBuilder> {
   _$BuiltProfilePost _$v;
+
+  int _id;
+  int get id => _$this._id;
+  set id(int id) => _$this._id = id;
 
   String _name;
   String get name => _$this._name;
@@ -3444,6 +3465,7 @@ class BuiltProfilePostBuilder
 
   BuiltProfilePostBuilder get _$this {
     if (_$v != null) {
+      _id = _$v.id;
       _name = _$v.name;
       _email = _$v.email;
       _phone_number = _$v.phone_number;
@@ -3476,6 +3498,7 @@ class BuiltProfilePostBuilder
     try {
       _$result = _$v ??
           new _$BuiltProfilePost._(
+              id: id,
               name: name,
               email: email,
               phone_number: phone_number,
