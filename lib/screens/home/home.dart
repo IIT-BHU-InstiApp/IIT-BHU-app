@@ -101,6 +101,17 @@ class _HomeScreenState extends State<HomeScreen>
       future: AppConstants.service.searchWorkshop(this._searchPost),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.data == null ||
+              (snapshot.data.body.active_workshops.isEmpty &&
+                  snapshot.data.body.past_workshops.isEmpty)) {
+            return Center(
+              child: Text(
+                'No Workshops found........',
+                textAlign: TextAlign.center,
+                textScaleFactor: 3,
+              ),
+            );
+          }
           if (snapshot.hasError) {
             return Center(
               child: Text(
@@ -112,9 +123,7 @@ class _HomeScreenState extends State<HomeScreen>
           }
 
           final posts = snapshot.data.body;
-
           print(posts);
-          print('-------------------------------------');
 
           return _buildWorkshopsFromSearchPosts(context, posts);
         } else {
@@ -131,15 +140,17 @@ class _HomeScreenState extends State<HomeScreen>
       BuildContext context, BuiltAllWorkshopsPost posts) {
     return ListView(
       children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: Center(
-            child: Text(
-              'Active Workshops',
-              style: TextStyle(fontSize: 25),
-            ),
-          ),
-        ),
+        posts.active_workshops.isEmpty
+            ? Container()
+            : Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Center(
+                  child: Text(
+                    'Active Workshops',
+                    style: TextStyle(fontSize: 25),
+                  ),
+                ),
+              ),
         Container(
           child: ListView.builder(
             physics: ScrollPhysics(),
@@ -153,15 +164,17 @@ class _HomeScreenState extends State<HomeScreen>
             },
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: Center(
-            child: Text(
-              'Past Workshops',
-              style: TextStyle(fontSize: 25),
-            ),
-          ),
-        ),
+        posts.past_workshops.isEmpty
+            ? Container()
+            : Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Center(
+                  child: Text(
+                    'Past Workshops',
+                    style: TextStyle(fontSize: 25),
+                  ),
+                ),
+              ),
         Container(
           child: ListView.builder(
             shrinkWrap: true,
