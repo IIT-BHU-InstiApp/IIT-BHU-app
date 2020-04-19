@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
-import 'package:chopper/chopper.dart';
 import 'package:iit_app/pages/clubs.dart';
 import 'package:iit_app/model/built_post.dart';
 
@@ -155,7 +154,8 @@ class _AccountScreenState extends State<AccountScreen> {
                                 Row(
                                   children: <Widget>[
                                     Container(
-                                      width: MediaQuery.of(context).size.width - 200,
+                                      width: MediaQuery.of(context).size.width -
+                                          200,
                                       child: Text(
                                         profileDetails.name,
                                         style: TextStyle(fontSize: 25),

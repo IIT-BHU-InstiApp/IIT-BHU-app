@@ -119,24 +119,24 @@ abstract class BuiltWorkshopSearchByStringPost
       _$builtWorkshopSearchByStringPostSerializer;
 }
 
-abstract class BuiltWorkshopSearchByDatePost
-    implements
-        Built<BuiltWorkshopSearchByDatePost,
-            BuiltWorkshopSearchByDatePostBuilder> {
-  @nullable
-  String get start_date;
-  @nullable
-  String get end_date;
+// abstract class BuiltWorkshopSearchByDatePost
+//     implements
+//         Built<BuiltWorkshopSearchByDatePost,
+//             BuiltWorkshopSearchByDatePostBuilder> {
+//   @nullable
+//   String get start_date;
+//   @nullable
+//   String get end_date;
 
-  BuiltWorkshopSearchByDatePost._();
+//   BuiltWorkshopSearchByDatePost._();
 
-  factory BuiltWorkshopSearchByDatePost(
-          [updates(BuiltWorkshopSearchByDatePostBuilder b)]) =
-      _$BuiltWorkshopSearchByDatePost;
+//   factory BuiltWorkshopSearchByDatePost(
+//           [updates(BuiltWorkshopSearchByDatePostBuilder b)]) =
+//       _$BuiltWorkshopSearchByDatePost;
 
-  static Serializer<BuiltWorkshopSearchByDatePost> get serializer =>
-      _$builtWorkshopSearchByDatePostSerializer;
-}
+//   static Serializer<BuiltWorkshopSearchByDatePost> get serializer =>
+//       _$builtWorkshopSearchByDatePostSerializer;
+// }
 
 // !--------------------------------------------------------------------------------------------------------------------
 abstract class BuiltAllCouncilsPost
@@ -321,6 +321,22 @@ abstract class BuiltProfilePost
 
   static Serializer<BuiltProfilePost> get serializer =>
       _$builtProfilePostSerializer;
+}
+
+abstract class BuiltProfileSearchPost
+    implements Built<BuiltProfileSearchPost, BuiltProfileSearchPostBuilder> {
+  @nullable
+  String get search_by;
+  @nullable
+  String get search_string;
+
+  BuiltProfileSearchPost._();
+
+  factory BuiltProfileSearchPost([updates(BuiltProfileSearchPostBuilder b)]) =
+      _$BuiltProfileSearchPost;
+
+  static Serializer<BuiltProfileSearchPost> get serializer =>
+      _$builtProfileSearchPostSerializer;
 }
 
 // !--------------------------------------------------------------------------------------------------------------------

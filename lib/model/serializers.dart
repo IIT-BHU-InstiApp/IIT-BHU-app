@@ -12,7 +12,7 @@ part 'serializers.g.dart';
   BuiltWorkshopDetailPost,
   ContactPost,
   BuiltWorkshopSearchByStringPost,
-  BuiltWorkshopSearchByDatePost,
+  // BuiltWorkshopSearchByDatePost,
   BuiltAllCouncilsPost,
   BuiltCouncilPost,
   SecyPost,
@@ -21,6 +21,7 @@ part 'serializers.g.dart';
   BuiltWorkshopCreatePost,
   // WorkshopPost,
   BuiltProfilePost,
+  BuiltProfileSearchPost,
   BuiltTeamMemberPost,
 ])
 final Serializers serializers =

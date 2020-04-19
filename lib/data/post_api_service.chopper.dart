@@ -110,6 +110,16 @@ class _$PostApiService extends PostApiService {
     return client.send<BuiltProfilePost, BuiltProfilePost>($request);
   }
 
+  Future<Response<BuiltList<BuiltProfilePost>>> searchProfile(
+      String token, BuiltProfileSearchPost body) {
+    final $url = '/profile/search/';
+    final $headers = {'Authorization': token};
+    final $body = body;
+    final $request =
+        Request('POST', $url, client.baseUrl, body: $body, headers: $headers);
+    return client.send<BuiltList<BuiltProfilePost>, BuiltProfilePost>($request);
+  }
+
   Future<Response<BuiltList<BuiltTeamMemberPost>>> getTeam() {
     final $url = '/team/';
     final $request = Request('GET', $url, client.baseUrl);
