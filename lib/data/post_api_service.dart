@@ -1,10 +1,10 @@
 import 'package:chopper/chopper.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:built_collection/built_collection.dart';
-
 import 'built_value_converter.dart';
-
 part 'post_api_service.chopper.dart';
+
+// command for initiating chopper inspector/generator - flutter packages pub run build_runner watch --delete-conflicting-outputs
 
 @ChopperApi(baseUrl: '')
 abstract class PostApiService extends ChopperService {
@@ -53,8 +53,7 @@ abstract class PostApiService extends ChopperService {
 
   @Patch(path: '/profile/')
   Future<Response<BuiltProfilePost>> updateProfileByPatch(
-      @Header('Authorization') String token,
-      @Body() BuiltProfilePost body);
+      @Header('Authorization') String token, @Body() BuiltProfilePost body);
 
   @Get(path: '/team/')
   Future<Response<BuiltList<BuiltTeamMemberPost>>> getTeam();
@@ -70,12 +69,8 @@ abstract class PostApiService extends ChopperService {
       @Body() BuiltWorkshopDetailPost body);
 
   @Post(path: '/workshops/search/')
-  Future<Response<BuiltAllWorkshopsPost>> searchWorkshopByString(
+  Future<Response<BuiltAllWorkshopsPost>> searchWorkshop(
       @Body() BuiltWorkshopSearchByStringPost body);
-
-  @Post(path: '/workshops/search/date/')
-  Future<Response<BuiltList<BuiltWorkshopSummaryPost>>> searchWorkshopByDate(
-      @Body() BuiltWorkshopSearchByDatePost body);
 
   static PostApiService create() {
     final client = ChopperClient(

@@ -18,42 +18,10 @@ class _HomeScreenState extends State<HomeScreen>
   Stream workshops;
   TabController _tabController;
 
-  String _searchByValue = 'title';
-  String _searchString = '';
-  String _searchStartDate = DateTime.now().toString().substring(0, 10);
-  String _searchEndDate = DateTime.now().toString().substring(0, 10);
+  TextEditingController _searchController = TextEditingController();
 
   bool _isSearching = false;
   var _searchPost;
-  // bool _isLoading = false;
-  final dropDownButtonTextStyle = TextStyle(fontSize: 12);
-  DropdownButton _searchCategoryDropDown() => DropdownButton<String>(
-        items: [
-          DropdownMenuItem(
-            value: "title",
-            child: Text('Title', style: dropDownButtonTextStyle),
-          ),
-          DropdownMenuItem(
-            value: "audience",
-            child: Text('Audience', style: dropDownButtonTextStyle),
-          ),
-          DropdownMenuItem(
-            value: "location",
-            child: Text('Location', style: dropDownButtonTextStyle),
-          ),
-          DropdownMenuItem(
-            value: "date",
-            child: Text('Date', style: dropDownButtonTextStyle),
-          ),
-        ],
-        onChanged: (value) {
-          setState(() {
-            this._searchByValue = value;
-          });
-        },
-        value: this._searchByValue,
-        hint: Text('category'),
-      );
 
   Drawer getNavDrawer(BuildContext context) {
     ListTile getNavItem(var icon, String s, String routeName,
@@ -125,10 +93,9 @@ class _HomeScreenState extends State<HomeScreen>
     setState(() {});
   }
 
-  FutureBuilder<Response> _buildWorkshopsFromSearchByString(
-      BuildContext context) {
+  FutureBuilder<Response> _buildWorkshopsFromSearch(BuildContext context) {
     return FutureBuilder<Response<BuiltAllWorkshopsPost>>(
-      future: AppConstants.service.searchWorkshopByString(this._searchPost),
+      future: AppConstants.service.searchWorkshop(this._searchPost),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasError) {
@@ -146,7 +113,7 @@ class _HomeScreenState extends State<HomeScreen>
           print(posts);
           print('-------------------------------------');
 
-          return _buildWorkshopsFromSearchByStringPosts(context, posts);
+          return _buildWorkshopsFromSearchPosts(context, posts);
         } else {
           // Show a loading indicator while waiting for the posts
           return Center(
@@ -157,7 +124,7 @@ class _HomeScreenState extends State<HomeScreen>
     );
   }
 
-  Widget _buildWorkshopsFromSearchByStringPosts(
+  Widget _buildWorkshopsFromSearchPosts(
       BuildContext context, BuiltAllWorkshopsPost posts) {
     return ListView(
       children: <Widget>[
@@ -206,47 +173,6 @@ class _HomeScreenState extends State<HomeScreen>
           ),
         ),
       ],
-    );
-  }
-
-  FutureBuilder<Response> _buildWorkshopsFromSearchByDate(
-      BuildContext context) {
-    return FutureBuilder<Response<BuiltList<BuiltWorkshopSummaryPost>>>(
-      future: AppConstants.service.searchWorkshopByDate(this._searchPost),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.hasError) {
-            return Center(
-              child: Text(
-                snapshot.error.toString(),
-                textAlign: TextAlign.center,
-                textScaleFactor: 1.3,
-              ),
-            );
-          }
-
-          final posts = snapshot.data.body;
-          // print(posts);
-          // print('-------------------------------------');
-          return _buildWorkshopsFromSearchByDatePosts(context, posts);
-        } else {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-      },
-    );
-  }
-
-  ListView _buildWorkshopsFromSearchByDatePosts(
-      BuildContext context, BuiltList<BuiltWorkshopSummaryPost> posts) {
-    return ListView.builder(
-      scrollDirection: Axis.vertical,
-      itemCount: posts.length,
-      padding: EdgeInsets.all(8),
-      itemBuilder: (context, index) {
-        return HomeWidgets.getWorkshopCard(context, w: posts[index]);
-      },
     );
   }
 
@@ -377,110 +303,44 @@ class _HomeScreenState extends State<HomeScreen>
               Padding(
                 padding: EdgeInsets.only(left: 8.0),
               ),
-              _searchCategoryDropDown(),
               Expanded(
-                child: this._searchByValue == 'date'
-                    ? Row(
-                        children: <Widget>[
-                          OutlineButton(
-                            onPressed: () async {
-                              DateTime picked = await showDatePicker(
-                                context: context,
-                                initialDate: DateTime.now(),
-                                firstDate: DateTime(2018),
-                                lastDate: DateTime(2022),
-                              );
-                              if (picked != null && picked != DateTime.now()) {
-                                setState(() {
-                                  this._searchStartDate =
-                                      picked.toString().substring(0, 10);
-                                });
-                              }
-                            },
-                            child: Column(
-                              children: <Widget>[
-                                Text('From'),
-                                Text(this._searchStartDate,
-                                    style: TextStyle(fontSize: 12)),
-                              ],
-                            ),
-                          ),
-                          OutlineButton(
-                            onPressed: () async {
-                              DateTime picked = await showDatePicker(
-                                context: context,
-                                initialDate: DateTime.now(),
-                                firstDate: DateTime(2018),
-                                lastDate: DateTime(2022),
-                              );
-                              if (picked != null && picked != DateTime.now()) {
-                                setState(() {
-                                  this._searchEndDate =
-                                      picked.toString().substring(0, 10);
-                                });
-                              }
-                            },
-                            child: Column(
-                              children: <Widget>[
-                                Text('To'),
-                                Text(this._searchEndDate,
-                                    style: TextStyle(fontSize: 12)),
-                              ],
-                            ),
-                          ),
-                          IconButton(
-                              icon: Icon(
-                                this._isSearching ? Icons.cancel : Icons.search,
-                                color: Colors.red,
-                              ),
-                              onPressed: () {
-                                this._isSearching = !this._isSearching;
+                child: TextFormField(
+                  decoration: InputDecoration(
+                    //labelText: 'Search',
+                    hintText: 'Search by title ...',
+                    suffixIcon: IconButton(
+                      icon: Icon(Icons.search),
+                      onPressed: () {
+                        if (this._searchController.text.isEmpty) {
+                          return;
+                        }
 
-                                if (this._isSearching) {
-                                  this._searchPost =
-                                      BuiltWorkshopSearchByDatePost((b) => b
-                                        ..start_date = this._searchStartDate
-                                        ..end_date = this._searchEndDate);
-                                }
-                                setState(() {});
-                              })
-                        ],
-                      )
-                    : TextField(
-                        decoration: InputDecoration(
-                          //labelText: 'Search',
-                          hintText: 'Enter ${this._searchByValue}',
-                          suffixIcon: IconButton(
-                            icon: Icon(this._isSearching
-                                ? Icons.cancel
-                                : Icons.search),
-                            onPressed: () {
-                              if (this._isSearching) {
-                                this._searchString = '';
-                              }
+                        this._isSearching = true;
+                        this._searchPost =
+                            BuiltWorkshopSearchByStringPost((b) => b
+                              ..search_by = 'title'
+                              ..search_string = this._searchController.text);
 
-                              if (this._searchString != '') {
-                                this._isSearching = true;
-                                this._searchPost =
-                                    BuiltWorkshopSearchByStringPost((b) => b
-                                      ..search_by = this._searchByValue
-                                      ..search_string = this._searchString);
-                              } else {
-                                this._isSearching = false;
-                              }
-                              setState(() {});
-                            },
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(25.0),
-                            ),
-                          ),
-                        ),
-                        onChanged: (value) {
-                          this._searchString = value;
-                        },
+                        setState(() {});
+                      },
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(25.0),
                       ),
+                    ),
+                  ),
+                  onFieldSubmitted: (value) {
+                    if (value.isEmpty) return;
+                    this._isSearching = true;
+                    this._searchPost = BuiltWorkshopSearchByStringPost((b) => b
+                      ..search_by = 'title'
+                      ..search_string = this._searchController.text);
+
+                    setState(() {});
+                  },
+                  controller: this._searchController,
+                ),
               ),
               Padding(
                 padding: EdgeInsets.only(right: 5.0),
@@ -503,7 +363,40 @@ class _HomeScreenState extends State<HomeScreen>
               )
             ],
             bottom: this._isSearching
-                ? null
+                ? PreferredSize(
+                    child: Center(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          RaisedButton(
+                            color: Colors.lightBlueAccent.withOpacity(0.5),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(50.0)),
+                            elevation: 3,
+                            splashColor: Colors.black12,
+                            onPressed: () {
+                              setState(() {
+                                this._searchController.clear();
+                                this._isSearching = false;
+                              });
+                            },
+                            child: Row(
+                              children: <Widget>[
+                                Text(
+                                  'Clear Search ',
+                                ),
+                                Icon(
+                                  Icons.clear,
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    preferredSize: Size.fromHeight(50))
                 : TabBar(
                     unselectedLabelColor: Colors.grey,
                     labelColor: Colors.black,
@@ -521,9 +414,7 @@ class _HomeScreenState extends State<HomeScreen>
             children: <Widget>[
               Container(
                 child: this._isSearching
-                    ? (this._searchByValue == 'date'
-                        ? _buildWorkshopsFromSearchByDate(context)
-                        : _buildWorkshopsFromSearchByString(context))
+                    ? _buildWorkshopsFromSearch(context)
                     : TabBarView(
                         controller: _tabController,
                         children: <Widget>[
