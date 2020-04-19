@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:iit_app/model/appConstants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -77,7 +78,7 @@ verifyToken(String token) async {
     var value = await response.stream.bytesToString();
     responseIdToken = json.decode(value)['token'];
     AppConstants.djangoToken = responseIdToken;
-    print('DjangoToken: $responseIdToken');
+    print('DjangoToken from backend: $responseIdToken');
   } catch (e) {
     print('django auth token error: ${e.toString()}');
   }
@@ -174,6 +175,13 @@ class _LoginPageState extends State<LoginPage> {
 
                                 return errorDialog(context);
                               } else {
+                                // logged in successfully :)
+
+                                SharedPreferences prefs =
+                                    await SharedPreferences.getInstance();
+                                await prefs.setString(
+                                    'djangoToken', AppConstants.djangoToken);
+
                                 Navigator.of(context).pushNamedAndRemoveUntil(
                                     '/home', (r) => false);
                               }

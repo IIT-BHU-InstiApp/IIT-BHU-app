@@ -6,6 +6,7 @@ import 'package:iit_app/screens/home/home_widgets.dart';
 import 'package:iit_app/services/crud.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:iit_app/model/built_post.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -61,9 +62,11 @@ class _HomeScreenState extends State<HomeScreen>
           ListTile(
             leading: Icon(Icons.exit_to_app),
             title: Text('LogOut'),
-            onTap: () async => {
-              await signOutGoogle(),
-              Navigator.of(context).pushReplacementNamed('/login')
+            onTap: () async {
+              await signOutGoogle();
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              prefs.clear();
+              Navigator.of(context).pushReplacementNamed('/login');
             },
           ),
           getNavItem(Icons.info, "About", '/about'),
