@@ -18,6 +18,8 @@ class _ClubPageState extends State<ClubPage> {
   TextStyle tempStyle = TextStyle(fontSize: 50.0, fontWeight: FontWeight.bold);
   var clubMap;
   bool _loadingWorkshops = true;
+  bool _toggling = false;
+
   @override
   void initState() {
     print("Club opened in edit mode:${widget.editMode}");
@@ -25,10 +27,11 @@ class _ClubPageState extends State<ClubPage> {
     super.initState();
   }
 
-  void fetchClubDataById() async {
-    clubMap =
-        await AppConstants.getClubDetailsFromDatabase(clubId: widget.clubId);
-
+  fetchClubDataById() async {
+    if (clubMap == null) {
+      clubMap =
+          await AppConstants.getClubDetailsFromDatabase(clubId: widget.clubId);
+    }
     if (!this.mounted) {
       return;
     }
@@ -55,6 +58,13 @@ class _ClubPageState extends State<ClubPage> {
   }
 
   void toggleSubscription() async {
+    if (!this.mounted) {
+      return;
+    }
+    setState(() {
+      this._toggling = true;
+    });
+
     await AppConstants.service
         .toggleClubSubscription(
             widget.clubId, "token ${AppConstants.djangoToken}")
@@ -63,8 +73,13 @@ class _ClubPageState extends State<ClubPage> {
     }).catchError((onError) {
       print("Error in toggleing: ${onError.toString()}");
     });
-    fetchClubDataById();
-    setState(() {});
+    await fetchClubDataById();
+    if (!this.mounted) {
+      return;
+    }
+    setState(() {
+      this._toggling = false;
+    });
   }
 
   final divide = Divider(height: 8.0, thickness: 2.0, color: Colors.blue);
@@ -97,9 +112,23 @@ class _ClubPageState extends State<ClubPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: CustomScrollView(
+    return SafeArea(
+      child: Scaffold(
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.white,
+          onPressed: () {
+            if (this._toggling == false) {
+              toggleSubscription();
+            }
+          },
+          child: this._toggling || clubMap == null
+              ? CircularProgressIndicator()
+              : Icon(
+                  Icons.subscriptions,
+                  color: clubMap.is_subscribed ? Colors.red : Colors.black26,
+                ),
+        ),
+        body: CustomScrollView(
           scrollDirection: Axis.vertical,
           slivers: [
             SliverAppBar(
@@ -172,22 +201,6 @@ class _ClubPageState extends State<ClubPage> {
                                 clubMap.name,
                                 style: headingStyle,
                               ),
-                              InkWell(
-                                splashColor: clubMap.is_subscribed
-                                    ? Colors.black87
-                                    : Colors.red,
-                                onTap: () => toggleSubscription(),
-                                child: IconButton(
-                                    color: Colors.red,
-                                    iconSize: 30.0,
-                                    icon: Icon(
-                                      Icons.subscriptions,
-                                      color: clubMap.is_subscribed
-                                          ? Colors.red
-                                          : Colors.black38,
-                                    ),
-                                    onPressed: null),
-                              )
                             ],
                           ),
                         ),
