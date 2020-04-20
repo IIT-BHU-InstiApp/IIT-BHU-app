@@ -16,7 +16,7 @@ class ClubPage extends StatefulWidget {
 
 class _ClubPageState extends State<ClubPage> {
   TextStyle tempStyle = TextStyle(fontSize: 50.0, fontWeight: FontWeight.bold);
-  var clubMap;
+  BuiltClubPost clubMap;
   bool _loadingWorkshops = true;
   bool _toggling = false;
 
@@ -68,12 +68,28 @@ class _ClubPageState extends State<ClubPage> {
     await AppConstants.service
         .toggleClubSubscription(
             widget.clubId, "token ${AppConstants.djangoToken}")
-        .then((snapshot) {
+        .then((snapshot) async {
       print("status of club subscription: ${snapshot.statusCode}");
+      if (snapshot.statusCode == 200) {
+        await AppConstants.updateClubSubscriptionInDatabase(
+            clubId: widget.clubId,
+            isSubscribed: !clubMap.is_subscribed,
+            currentSubscribedUsers: clubMap.subscribed_users);
+
+        var activeWorkshops = clubMap.active_workshops;
+        var pastWorkshops = clubMap.past_workshops;
+
+        clubMap = await AppConstants.getClubDetailsFromDatabase(
+            clubId: widget.clubId);
+
+        clubMap = clubMap.rebuild((b) => b
+          ..active_workshops = activeWorkshops.toBuilder()
+          ..past_workshops = pastWorkshops.toBuilder());
+      }
     }).catchError((onError) {
       print("Error in toggleing: ${onError.toString()}");
     });
-    await fetchClubDataById();
+
     if (!this.mounted) {
       return;
     }

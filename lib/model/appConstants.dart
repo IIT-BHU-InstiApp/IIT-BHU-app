@@ -177,4 +177,20 @@ class AppConstants {
 
     await helper.insertClubDetailsIntoDatabase(clubPost: clubPost);
   }
+
+  static Future updateClubSubscriptionInDatabase(
+      {@required int clubId,
+      @required bool isSubscribed,
+      @required int currentSubscribedUsers}) async {
+    DatabaseHelper helper = DatabaseHelper.instance;
+    var database = await helper.database;
+
+    final subscribedUsers = currentSubscribedUsers + (isSubscribed ? 1 : -1);
+
+    await helper.updateClubSubcription(
+        db: database,
+        clubId: clubId,
+        isSubscribed: isSubscribed,
+        subscribedUsers: subscribedUsers);
+  }
 }

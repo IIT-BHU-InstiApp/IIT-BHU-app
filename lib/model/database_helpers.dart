@@ -641,6 +641,22 @@ class DatabaseHelper {
 
     return clubDetails;
   }
+// Updating the data-------------------------------------------------------------------------------
+
+  Future updateClubSubcription(
+      {@required Database db,
+      @required int clubId,
+      @required bool isSubscribed,
+      @required int subscribedUsers}) async {
+    await db.update(
+      clubDetailsString,
+      {
+        isSubscribedString: isSubscribed ? 1 : 0,
+        subscribedUsersString: subscribedUsers
+      },
+      where: '$idString  = $clubId',
+    );
+  }
 
   // Deleting the data-----------------------------------------------------------------------
 
