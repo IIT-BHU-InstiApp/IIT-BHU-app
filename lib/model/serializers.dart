@@ -23,6 +23,7 @@ part 'serializers.g.dart';
   BuiltProfilePost,
   BuiltProfileSearchPost,
   BuiltTeamMemberPost,
+  BuiltContacts,
 ])
 final Serializers serializers =
     (_$serializers.toBuilder()..addPlugin(StandardJsonPlugin())).build();
