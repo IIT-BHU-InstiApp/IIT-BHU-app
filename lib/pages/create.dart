@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'dart:async';
-
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/pages/clubs.dart';
 
@@ -28,6 +28,7 @@ class _CreateScreenState extends State<CreateScreen> {
   TextEditingController _locationController;
   TextEditingController _audienceController;
   TextEditingController _resourcesController;
+  TextEditingController _contactsController;
   String _editingDate;
   String _editingTime;
 
@@ -38,6 +39,7 @@ class _CreateScreenState extends State<CreateScreen> {
     this._locationController = TextEditingController();
     this._audienceController = TextEditingController();
     this._resourcesController = TextEditingController();
+    this._contactsController = TextEditingController();
 
     if (widget.workshopData != null) {
       this._titleController.text = widget.workshopData.title;
@@ -251,6 +253,18 @@ class _CreateScreenState extends State<CreateScreen> {
                           },
                           onSaved: (val) =>
                               setState(() => _workshop.resources = val)),
+                      TextFormField(
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            WhitelistingTextInputFormatter.digitsOnly,
+                          ],
+                          decoration: InputDecoration(labelText: 'Contacts'),
+                          controller: this._contactsController,
+                          validator: (value) {
+                            return null;
+                          },
+                          onSaved: (val) => setState(
+                              () => _workshop.contactIds.add(int.parse(val)))),
                       Container(
                         padding: const EdgeInsets.symmetric(
                             vertical: 16.0, horizontal: 16.0),
@@ -272,8 +286,8 @@ class _CreateScreenState extends State<CreateScreen> {
                               if (isconfirmed == false) return;
 
                               if (widget.workshopData == null) {
-                                final newWorkshop =
-                                    BuiltWorkshopCreatePost((b) => b
+                                final newWorkshop = BuiltWorkshopCreatePost(
+                                    (b) => b
                                       ..title = _workshop.title
                                       ..description = _workshop.description
                                       ..club = widget.clubId
@@ -281,7 +295,9 @@ class _CreateScreenState extends State<CreateScreen> {
                                       ..time = _workshop.time
                                       ..location = _workshop.location
                                       ..audience = _workshop.audience
-                                      ..resources = _workshop.resources);
+                                      ..resources = _workshop.resources
+                                      ..contacts =
+                                          _workshop.contacts.toBuilder());
 
                                 await AppConstants.service
                                     .postNewWorkshop(
@@ -309,7 +325,9 @@ class _CreateScreenState extends State<CreateScreen> {
                                       ..time = _workshop.time
                                       ..location = _workshop.location
                                       ..audience = _workshop.audience
-                                      ..resources = _workshop.resources);
+                                      ..resources = _workshop.resources
+                                      ..contacts = _workshop.contacts.toBuilder()
+                                      );
 
                                 await AppConstants.service
                                     .updateWorkshopByPatch(
@@ -350,6 +368,7 @@ class WorkshopCreater {
   String location;
   String audience;
   String resources;
+  List<int> contactIds = [];
   // TODO: add contacts and image_url
 
   WorkshopCreater({String editingDate, String editingTime}) {

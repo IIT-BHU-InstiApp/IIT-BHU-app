@@ -372,7 +372,7 @@ abstract class BuiltTeamMemberPost
 abstract class BuiltContacts
     implements Built<BuiltContacts, BuiltContactsBuilder> {
   @nullable
-  int get id;
+  BuiltList<int> get contacts;
 
   BuiltContacts._();
   factory BuiltContacts([updates(BuiltContactsBuilder b)]) =

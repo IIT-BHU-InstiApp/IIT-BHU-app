@@ -1472,11 +1472,12 @@ class _$BuiltContactsSerializer implements StructuredSerializer<BuiltContacts> {
   Iterable<Object> serialize(Serializers serializers, BuiltContacts object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[];
-    if (object.id != null) {
+    if (object.contacts != null) {
       result
-        ..add('id')
-        ..add(serializers.serialize(object.id,
-            specifiedType: const FullType(int)));
+        ..add('contacts')
+        ..add(serializers.serialize(object.contacts,
+            specifiedType:
+                const FullType(BuiltList, const [const FullType(int)])));
     }
     return result;
   }
@@ -1493,9 +1494,11 @@ class _$BuiltContactsSerializer implements StructuredSerializer<BuiltContacts> {
       iterator.moveNext();
       final dynamic value = iterator.current;
       switch (key) {
-        case 'id':
-          result.id = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+        case 'contacts':
+          result.contacts.replace(serializers.deserialize(value,
+                  specifiedType:
+                      const FullType(BuiltList, const [const FullType(int)]))
+              as BuiltList<dynamic>);
           break;
       }
     }
@@ -3772,12 +3775,12 @@ class BuiltTeamMemberPostBuilder
 
 class _$BuiltContacts extends BuiltContacts {
   @override
-  final int id;
+  final BuiltList<int> contacts;
 
   factory _$BuiltContacts([void Function(BuiltContactsBuilder) updates]) =>
       (new BuiltContactsBuilder()..update(updates)).build();
 
-  _$BuiltContacts._({this.id}) : super._();
+  _$BuiltContacts._({this.contacts}) : super._();
 
   @override
   BuiltContacts rebuild(void Function(BuiltContactsBuilder) updates) =>
@@ -3789,17 +3792,18 @@ class _$BuiltContacts extends BuiltContacts {
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is BuiltContacts && id == other.id;
+    return other is BuiltContacts && contacts == other.contacts;
   }
 
   @override
   int get hashCode {
-    return $jf($jc(0, id.hashCode));
+    return $jf($jc(0, contacts.hashCode));
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('BuiltContacts')..add('id', id))
+    return (newBuiltValueToStringHelper('BuiltContacts')
+          ..add('contacts', contacts))
         .toString();
   }
 }
@@ -3808,15 +3812,15 @@ class BuiltContactsBuilder
     implements Builder<BuiltContacts, BuiltContactsBuilder> {
   _$BuiltContacts _$v;
 
-  int _id;
-  int get id => _$this._id;
-  set id(int id) => _$this._id = id;
+  ListBuilder<int> _contacts;
+  ListBuilder<int> get contacts => _$this._contacts ??= new ListBuilder<int>();
+  set contacts(ListBuilder<int> contacts) => _$this._contacts = contacts;
 
   BuiltContactsBuilder();
 
   BuiltContactsBuilder get _$this {
     if (_$v != null) {
-      _id = _$v.id;
+      _contacts = _$v.contacts?.toBuilder();
       _$v = null;
     }
     return this;
@@ -3837,7 +3841,20 @@ class BuiltContactsBuilder
 
   @override
   _$BuiltContacts build() {
-    final _$result = _$v ?? new _$BuiltContacts._(id: id);
+    _$BuiltContacts _$result;
+    try {
+      _$result = _$v ?? new _$BuiltContacts._(contacts: _contacts?.build());
+    } catch (_) {
+      String _$failedField;
+      try {
+        _$failedField = 'contacts';
+        _contacts?.build();
+      } catch (e) {
+        throw new BuiltValueNestedFieldError(
+            'BuiltContacts', _$failedField, e.toString());
+      }
+      rethrow;
+    }
     replace(_$result);
     return _$result;
   }
