@@ -1078,8 +1078,8 @@ class _$BuiltWorkshopCreatePostSerializer
       result
         ..add('contacts')
         ..add(serializers.serialize(object.contacts,
-            specifiedType: const FullType(
-                BuiltList, const [const FullType(ContactPost)])));
+            specifiedType:
+                const FullType(BuiltList, const [const FullType(int)])));
     }
     if (object.image_url != null) {
       result
@@ -1140,8 +1140,8 @@ class _$BuiltWorkshopCreatePostSerializer
           break;
         case 'contacts':
           result.contacts.replace(serializers.deserialize(value,
-                  specifiedType: const FullType(
-                      BuiltList, const [const FullType(ContactPost)]))
+                  specifiedType:
+                      const FullType(BuiltList, const [const FullType(int)]))
               as BuiltList<dynamic>);
           break;
         case 'image_url':
@@ -3060,7 +3060,7 @@ class _$BuiltWorkshopCreatePost extends BuiltWorkshopCreatePost {
   @override
   final String resources;
   @override
-  final BuiltList<ContactPost> contacts;
+  final BuiltList<int> contacts;
   @override
   final String image_url;
 
@@ -3201,11 +3201,9 @@ class BuiltWorkshopCreatePostBuilder
   String get resources => _$this._resources;
   set resources(String resources) => _$this._resources = resources;
 
-  ListBuilder<ContactPost> _contacts;
-  ListBuilder<ContactPost> get contacts =>
-      _$this._contacts ??= new ListBuilder<ContactPost>();
-  set contacts(ListBuilder<ContactPost> contacts) =>
-      _$this._contacts = contacts;
+  ListBuilder<int> _contacts;
+  ListBuilder<int> get contacts => _$this._contacts ??= new ListBuilder<int>();
+  set contacts(ListBuilder<int> contacts) => _$this._contacts = contacts;
 
   String _image_url;
   String get image_url => _$this._image_url;

@@ -280,7 +280,7 @@ abstract class BuiltWorkshopCreatePost
   @nullable
   String get resources;
   @nullable
-  BuiltList<ContactPost> get contacts;
+  BuiltList<int> get contacts;
   @nullable
   String get image_url;
 
@@ -375,8 +375,6 @@ abstract class BuiltContacts
   BuiltList<int> get contacts;
 
   BuiltContacts._();
-  factory BuiltContacts([updates(BuiltContactsBuilder b)]) =
-      _$BuiltContacts;
-  static Serializer<BuiltContacts> get serializer =>
-      _$builtContactsSerializer;
+  factory BuiltContacts([updates(BuiltContactsBuilder b)]) = _$BuiltContacts;
+  static Serializer<BuiltContacts> get serializer => _$builtContactsSerializer;
 }

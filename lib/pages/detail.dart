@@ -15,7 +15,7 @@ class DetailPage extends StatefulWidget {
 }
 
 class _DetailPage extends State<DetailPage> {
-  var _workshop;
+  BuiltWorkshopDetailPost _workshop;
   bool is_interested;
   @override
   void initState() {

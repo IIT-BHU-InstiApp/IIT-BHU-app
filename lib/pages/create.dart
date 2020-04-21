@@ -1,6 +1,4 @@
-import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'dart:async';
 import 'package:iit_app/model/built_post.dart';
@@ -10,7 +8,7 @@ import 'package:built_collection/built_collection.dart';
 class CreateScreen extends StatefulWidget {
   final int clubId;
   final String clubName;
-  final dynamic workshopData;
+  final BuiltWorkshopDetailPost workshopData;
   const CreateScreen(
       {Key key,
       @required this.clubId,
@@ -23,23 +21,25 @@ class CreateScreen extends StatefulWidget {
 
 class _CreateScreenState extends State<CreateScreen> {
   final _formKey = GlobalKey<FormState>();
-  var _workshop;
+  WorkshopCreater _workshop;
 
   TextEditingController _titleController;
   TextEditingController _descriptionController;
   TextEditingController _locationController;
   TextEditingController _audienceController;
   TextEditingController _resourcesController;
-  TextEditingController _contactsController;
   String _editingDate;
   String _editingTime;
 
   TextEditingController _searchContactsController;
   BuiltProfileSearchPost _searchPost;
   bool _isSearchingContacts = false;
-  BuiltList<BuiltContacts> _searchedContactresult;
+
+  final _searchContactFormKey = GlobalKey<FormState>();
+
+  BuiltList<BuiltProfilePost> _searchedProfileresult;
   String _searchByValue = 'name';
-  String _searchString = '';
+  bool _searchedDataFetched = false;
 
   final dropDownButtonTextStyle = TextStyle(fontSize: 12);
   DropdownButton _searchCategoryDropDown() => DropdownButton<String>(
@@ -59,6 +59,7 @@ class _CreateScreenState extends State<CreateScreen> {
             if (value != this._searchByValue) {
               this._searchContactsController.text = '';
               this._isSearchingContacts = false;
+              this._searchContactFormKey.currentState.reset();
             }
             this._searchByValue = value;
           });
@@ -67,106 +68,129 @@ class _CreateScreenState extends State<CreateScreen> {
         hint: Text('category'),
       );
 
-  FutureBuilder<Response> _buildContactsFromSearch(BuildContext context) {
-    return FutureBuilder<Response<BuiltList<BuiltProfilePost>>>(
-      future: AppConstants.service
-          .searchProfile("token ${AppConstants.djangoToken}", this._searchPost),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.data == null || snapshot.data.body.isEmpty) {
-            return Center(
-              child: Text(
-                'No such contact found........',
-                textAlign: TextAlign.center,
-                textScaleFactor: 1.5,
-              ),
-            );
-          }
-          if (snapshot.hasError) {
-            return Center(
-              child: Text(
-                snapshot.error.toString(),
-                textAlign: TextAlign.center,
-                textScaleFactor: 1.3,
-              ),
-            );
-          }
+  Widget _buildContactsFromSearchPosts(
+    BuildContext context,
+    // BuiltList<BuiltProfilePost> posts
+  ) {
+    return this._searchedDataFetched
+        ? ListView(
+            shrinkWrap: true,
+            children: <Widget>[
+              Container(
+                child: (this._searchedProfileresult == null ||
+                        this._searchedProfileresult.isEmpty)
+                    ? Center(
+                        child: Text(
+                          'No such contact found........',
+                          textAlign: TextAlign.center,
+                          textScaleFactor: 1.5,
+                        ),
+                      )
+                    : ListView.builder(
+                        physics: ScrollPhysics(),
+                        shrinkWrap: true,
+                        scrollDirection: Axis.vertical,
+                        itemCount: _searchedProfileresult.length,
+                        padding: EdgeInsets.all(8),
+                        itemBuilder: (context, index) {
+                          bool _isAdded = this
+                              ._workshop
+                              .contactIds
+                              .contains(_searchedProfileresult[index].id);
+                          print(
+                              '-----------------------------------------------------');
+                          print(this._workshop.contactIds);
+                          print(
+                              '-----------------------------------------------------');
 
-          final posts = snapshot.data.body;
-          // print(posts);
-
-          return _buildContactsFromSearchPosts(context, posts);
-        } else {
-          // Show a loading indicator while waiting for the posts
-          return Center(
+                          return Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 3, vertical: 10),
+                            child: Container(
+                              // color: Colors.lightBlue.withOpacity(0.3),
+                              height: MediaQuery.of(context).size.height / 11,
+                              child: Row(
+                                children: <Widget>[
+                                  Expanded(
+                                    flex: 2,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                        image: (_searchedProfileresult[index]
+                                                        .photo_url ==
+                                                    null ||
+                                                _searchedProfileresult[index]
+                                                    .photo_url
+                                                    .isEmpty)
+                                            ? Image.asset(
+                                                'assets/profile_test.jpg')
+                                            : NetworkImage(
+                                                _searchedProfileresult[index]
+                                                    .photo_url),
+                                      )),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 8,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 8.0, right: 10.0),
+                                      child: Column(
+                                        children: <Widget>[
+                                          Text(_searchedProfileresult[index]
+                                              .name),
+                                          Text(_searchedProfileresult[index]
+                                              .email),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 2,
+                                    child: OutlineButton(
+                                      onPressed: () {
+                                        int _id =
+                                            _searchedProfileresult[index].id;
+                                        String _name =
+                                            _searchedProfileresult[index]
+                                                    .name
+                                                    .split(' ')[0] +
+                                                ' ' +
+                                                _searchedProfileresult[index]
+                                                    .name
+                                                    .split(' ')[1];
+                                        if (_isAdded) {
+                                          _isAdded = false;
+                                          this._workshop.contactIds.remove(_id);
+                                          this
+                                              ._workshop
+                                              .contactNameofId
+                                              .remove(_id);
+                                        } else {
+                                          _isAdded = true;
+                                          this._workshop.contactIds.add(_id);
+                                          this._workshop.contactNameofId[_id] =
+                                              _name;
+                                        }
+                                        if (!this.mounted) return;
+                                        setState(() {});
+                                      },
+                                      child: Icon(
+                                          _isAdded ? Icons.remove : Icons.add),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+              ),
+            ],
+          )
+        : Center(
             child: CircularProgressIndicator(),
           );
-        }
-      },
-    );
-  }
-
-  Widget _buildContactsFromSearchPosts(
-      BuildContext context, BuiltList<BuiltProfilePost> posts) {
-    return ListView(
-      shrinkWrap: true,
-      children: <Widget>[
-        Container(
-          child: ListView.builder(
-            physics: ScrollPhysics(),
-            shrinkWrap: true,
-            scrollDirection: Axis.vertical,
-            itemCount: posts.length,
-            padding: EdgeInsets.all(8),
-            itemBuilder: (context, index) {
-              return Padding(
-                padding: EdgeInsets.symmetric(horizontal: 3, vertical: 10),
-                child: Container(
-                  // color: Colors.lightBlue.withOpacity(0.3),
-                  height: MediaQuery.of(context).size.height / 11,
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                        flex: 2,
-                        child: Container(
-                          decoration: BoxDecoration(
-                              image: DecorationImage(
-                            image: (posts[index].photo_url == null ||
-                                    posts[index].photo_url.isEmpty)
-                                ? Image.asset('assets/profile_test.jpg')
-                                : NetworkImage(posts[index].photo_url),
-                          )),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 8,
-                        child: Padding(
-                          padding:
-                              const EdgeInsets.only(left: 8.0, right: 10.0),
-                          child: Column(
-                            children: <Widget>[
-                              Text(posts[index].name),
-                              Text(posts[index].email),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: OutlineButton(
-                          onPressed: null,
-                          child: Icon(Icons.add),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
-      ],
-    );
   }
 
   @override
@@ -176,7 +200,6 @@ class _CreateScreenState extends State<CreateScreen> {
     this._locationController = TextEditingController();
     this._audienceController = TextEditingController();
     this._resourcesController = TextEditingController();
-    this._contactsController = TextEditingController();
 
     this._searchContactsController = TextEditingController();
 
@@ -190,6 +213,11 @@ class _CreateScreenState extends State<CreateScreen> {
       this._resourcesController.text = widget.workshopData.resources;
       _workshop = WorkshopCreater(
           editingDate: this._editingDate, editingTime: this._editingTime);
+      widget.workshopData.contacts.forEach((contact) {
+        this._workshop.contactIds.add(contact.id);
+        this._workshop.contactNameofId[contact.id] =
+            contact.name.split(' ')[0] + ' ' + contact.name.split(' ')[1];
+      });
     } else {
       _workshop = WorkshopCreater();
     }
@@ -391,61 +419,75 @@ class _CreateScreenState extends State<CreateScreen> {
                   },
                   onSaved: (val) => setState(() => _workshop.resources = val),
                 ),
-                // TextFormField(
-                //   keyboardType: TextInputType.number,
-                //   inputFormatters: [
-                //     WhitelistingTextInputFormatter.digitsOnly,
-                //   ],
-                //   decoration: InputDecoration(labelText: 'Contacts'),
-                //   controller: this._contactsController,
-                //   validator: (value) {
-                //     return null;
-                //   },
-                //   onSaved: (val) =>
-                //       setState(() => _workshop.contactIds.add(int.parse(val))),
-                // ),
-                Row(
-                  children: <Widget>[
-                    _searchCategoryDropDown(),
-                    Expanded(
-                      child: TextFormField(
-                        decoration: InputDecoration(
-                            labelText:
-                                'Search contacts by ${this._searchByValue}'),
-                        onFieldSubmitted: (value) async {
-                          if (value.isEmpty) return;
+                Form(
+                  key: this._searchContactFormKey,
+                  child: Row(
+                    children: <Widget>[
+                      _searchCategoryDropDown(),
+                      Expanded(
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                              labelText:
+                                  'Search contacts by ${this._searchByValue}'),
+                          onFieldSubmitted: (value) async {
+                            if (value.isEmpty) return;
 
-                          this._searchPost = BuiltProfileSearchPost((b) => b
-                            ..search_by = this._searchByValue
-                            ..search_string =
-                                this._searchContactsController.text);
+                            if (!this
+                                ._searchContactFormKey
+                                .currentState
+                                .validate()) return;
 
-                          if (!this.mounted) return;
-                          setState(() {
-                            this._isSearchingContacts = true;
-                          });
-                        },
-                        controller: this._searchContactsController,
-                        validator: (value) {
-                          if (value.isNotEmpty && value.length < 3)
-                            return '${this._searchByValue} must contain atleast 3 characters';
-                        },
+                            this._searchPost = BuiltProfileSearchPost((b) => b
+                              ..search_by = this._searchByValue
+                              ..search_string =
+                                  this._searchContactsController.text);
+
+                            if (!this.mounted) return;
+                            setState(() {
+                              this._isSearchingContacts = true;
+                              this._searchedDataFetched = false;
+
+                              this._searchedProfileresult = null;
+                            });
+                            await AppConstants.service
+                                .searchProfile(
+                                    "token ${AppConstants.djangoToken}",
+                                    this._searchPost)
+                                .catchError((onError) {
+                              print(
+                                  'Error whlie fetching search results: $onError');
+                            }).then((result) {
+                              if (result != null)
+                                this._searchedProfileresult = result.body;
+                            });
+
+                            if (!this.mounted) return;
+                            setState(() {
+                              this._searchedDataFetched = true;
+                            });
+                          },
+                          controller: this._searchContactsController,
+                          validator: (value) {
+                            if (value.isNotEmpty && value.length < 3)
+                              return '${this._searchByValue} must contain atleast 3 characters';
+                          },
+                        ),
                       ),
-                    ),
-                    this._isSearchingContacts
-                        ? RaisedButton(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(50)),
-                            onPressed: () {
-                              this._searchContactsController.text = '';
-                              this._isSearchingContacts = false;
-                              if (!this.mounted) return;
-                              setState(() {});
-                            },
-                            child: Text('X Clear'),
-                          )
-                        : Container()
-                  ],
+                      this._isSearchingContacts
+                          ? RaisedButton(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(50)),
+                              onPressed: () {
+                                this._searchContactsController.text = '';
+                                this._isSearchingContacts = false;
+                                if (!this.mounted) return;
+                                setState(() {});
+                              },
+                              child: Text('X Clear'),
+                            )
+                          : Container()
+                    ],
+                  ),
                 ),
                 this._isSearchingContacts
                     ? Column(
@@ -456,13 +498,48 @@ class _CreateScreenState extends State<CreateScreen> {
                           ),
                           Container(
                             height: MediaQuery.of(context).size.height / 6,
-                            child: _buildContactsFromSearch(context),
+                            child: _buildContactsFromSearchPosts(context),
                           ),
                           Divider(
                             height: 2,
                             thickness: 2,
                           ),
                         ],
+                      )
+                    : Container(),
+                this._workshop.contactIds.length > 0
+                    ? Container(
+                        height: 50,
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          itemCount: this._workshop.contactIds.length,
+                          itemBuilder: (context, index) {
+                            int _id = this._workshop.contactIds[index];
+                            return Container(
+                              padding: EdgeInsets.all(2),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  Text(this._workshop.contactNameofId[_id]),
+                                  InkWell(
+                                    splashColor: Colors.red,
+                                    onTap: () {
+                                      setState(() {
+                                        this._workshop.contactIds.remove(_id);
+                                        this
+                                            ._workshop
+                                            .contactNameofId
+                                            .remove(_id);
+                                      });
+                                    },
+                                    child: Icon(Icons.cancel),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
                       )
                     : Container(),
                 Container(
@@ -495,7 +572,8 @@ class _CreateScreenState extends State<CreateScreen> {
                             ..location = _workshop.location
                             ..audience = _workshop.audience
                             ..resources = _workshop.resources
-                            ..contacts = _workshop.contacts.toBuilder());
+                            ..contacts =
+                                _workshop.contactIds.build().toBuilder());
 
                           await AppConstants.service
                               .postNewWorkshop(
@@ -523,8 +601,7 @@ class _CreateScreenState extends State<CreateScreen> {
                                 ..time = _workshop.time
                                 ..location = _workshop.location
                                 ..audience = _workshop.audience
-                                ..resources = _workshop.resources
-                                ..contacts = _workshop.contacts.toBuilder());
+                                ..resources = _workshop.resources);
 
                           await AppConstants.service
                               .updateWorkshopByPatch(
@@ -543,6 +620,22 @@ class _CreateScreenState extends State<CreateScreen> {
                           }).catchError((onError) {
                             print(
                                 'Error printing EDITED workshop: ${onError.toString()}');
+                          });
+
+                          await AppConstants.service
+                              .updateContacts(
+                            widget.workshopData.id,
+                            "token ${AppConstants.djangoToken}",
+                            BuiltContacts(
+                              (b) => b
+                                ..contacts =
+                                    _workshop.contactIds.build().toBuilder(),
+                            ),
+                          )
+                              .catchError((onError) {
+                            print(
+                                'Error editing contacts in edited workshop: ${onError.toString()}');
+                            // showUnSuccessfulDialog();
                           });
                         }
                       }
@@ -571,7 +664,8 @@ class WorkshopCreater {
   String audience;
   String resources;
   List<int> contactIds = [];
-  // TODO: add contacts and image_url
+  Map<int, String> contactNameofId = {};
+  // TODO: add image_url
 
   WorkshopCreater({String editingDate, String editingTime}) {
     if (editingDate == null) {
