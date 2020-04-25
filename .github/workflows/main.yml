@@ -16,9 +16,9 @@ jobs:
       
 #     Tests would be added later
 #     - run: flutter test
-    - run: flutter build apk --debug --split-per-abi
+    - run: flutter build apk --debug
     - name: Create a Release APK
       uses: ncipollo/release-action@v1
       with:
         artifacts: "build/app/outputs/apk/debug/*.apk"
-        token: ${{ secrets.GITHUB_ACCESS_TOKEN }}
+        token: ${{ secrets.GITHUB_TOKEN }}
