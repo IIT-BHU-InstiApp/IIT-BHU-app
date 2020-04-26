@@ -16,7 +16,7 @@ class DetailPage extends StatefulWidget {
 
 class _DetailPage extends State<DetailPage> {
   BuiltWorkshopDetailPost _workshop;
-  bool is_interested;
+  int is_interested;
   @override
   void initState() {
     fetchWorkshopDetails();
@@ -106,7 +106,7 @@ class _DetailPage extends State<DetailPage> {
       print("Error in fetching workshop: ${onError.toString()}");
     });
     _workshop = snapshots.body;
-    is_interested = _workshop.is_interested;
+    is_interested = _workshop.is_interested ? 1 : -1;
     setState(() {});
   }
 
@@ -127,12 +127,16 @@ class _DetailPage extends State<DetailPage> {
   }
 
   void updateButton() async {
+    is_interested = 0;
+    setState(() {});
     await AppConstants.service
         .toggleInterestedWorkshop(
             widget.workshopId, "token ${AppConstants.djangoToken}")
         .then((snapshot) {
       print("status of toggle workshop: ${snapshot.statusCode}");
-      if (snapshot.isSuccessful) is_interested = !is_interested;
+      if (snapshot.isSuccessful) {
+        is_interested = (_workshop.is_interested ? 1 : -1) * -1;
+      }
     }).catchError((onError) {
       print("Error in toggleing: ${onError.toString()}");
     });
@@ -257,14 +261,19 @@ class _DetailPage extends State<DetailPage> {
                                   children: <Widget>[
                                     SizedBox(height: 7.0),
                                     Text(_workshop.interested_users.toString()),
-                                    InkWell(
-                                      child: Icon(Icons.people,
-                                          color: is_interested
-                                              ? Colors.blue
-                                              : Colors.black,
-                                          size: 25.0),
-                                      onTap: () => updateButton(),
-                                    ),
+                                    is_interested == 0
+                                        ? Container(
+                                            child: CircularProgressIndicator(),
+                                            height: 20,
+                                            width: 20)
+                                        : InkWell(
+                                            child: Icon(Icons.people,
+                                                color: is_interested == 1
+                                                    ? Colors.blue
+                                                    : Colors.black,
+                                                size: 25.0),
+                                            onTap: () => updateButton(),
+                                          ),
                                     SizedBox(height: 7.0)
                                   ],
                                 ),
