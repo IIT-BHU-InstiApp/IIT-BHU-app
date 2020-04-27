@@ -110,10 +110,16 @@ class HomeWidgets {
           horizontal ? FractionalOffset.centerLeft : FractionalOffset.center,
       child: new Hero(
         tag: "w-hero-${w.id}",
-        child: new Image(
-          image: w.club.small_image_url == null
-              ? AssetImage('assets/iitbhu.jpeg')
-              : NetworkImage(w.club.small_image_url),
+        child: Container(
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: Image(
+              fit: BoxFit.contain,
+              image: w.club.small_image_url == null
+                  ? AssetImage('assets/iitbhu.jpeg')
+                  : NetworkImage(w.club.small_image_url),
+            ),
+          ),
           height: 92.0,
           width: 92.0,
         ),

@@ -297,7 +297,7 @@ class _HomeScreenState extends State<HomeScreen>
     return WillPopScope(
         onWillPop: _onPopHome,
         child: Scaffold(
-          backgroundColor: Colors.white70,
+          backgroundColor: Color(0xFF736AB7),
           appBar: AppBar(
             backgroundColor: Colors.white,
             automaticallyImplyLeading: false,
