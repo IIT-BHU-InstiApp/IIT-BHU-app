@@ -102,8 +102,9 @@ class HomeWidgets {
       });
 
   static Widget getWorkshopCard(BuildContext context,
-      {BuiltWorkshopSummaryPost w, bool editMode = false}) {
-    final bool horizontal = true;
+      {BuiltWorkshopSummaryPost w,
+      bool editMode = false,
+      bool horizontal = true}) {
     final workshopThumbnail = new Container(
       margin: new EdgeInsets.symmetric(vertical: 16.0),
       alignment:
@@ -197,7 +198,7 @@ class HomeWidgets {
             ? () => Navigator.of(context).push(
                   new PageRouteBuilder(
                     pageBuilder: (_, __, ___) =>
-                        new DetailPage(workshopId: w.id, editMode: editMode),
+                        new DetailPage(workshop: w, editMode: editMode),
                     transitionsBuilder: (context, animation, secondaryAnimation,
                             child) =>
                         new FadeTransition(opacity: animation, child: child),

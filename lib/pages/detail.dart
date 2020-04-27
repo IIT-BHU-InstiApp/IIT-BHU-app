@@ -4,11 +4,14 @@ import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/pages/clubs.dart';
 import 'package:iit_app/pages/create.dart';
+import 'package:iit_app/screens/home/home_widgets.dart';
+import 'package:iit_app/screens/home/separator.dart';
+import 'package:iit_app/screens/home/text_style.dart';
 
 class DetailPage extends StatefulWidget {
-  final int workshopId;
+  final BuiltWorkshopSummaryPost workshop;
   final bool editMode;
-  const DetailPage({Key key, this.workshopId, this.editMode = false})
+  const DetailPage({Key key, this.workshop, this.editMode = false})
       : super(key: key);
   @override
   _DetailPage createState() => _DetailPage();
@@ -101,7 +104,7 @@ class _DetailPage extends State<DetailPage> {
   void fetchWorkshopDetails() async {
     Response<BuiltWorkshopDetailPost> snapshots = await AppConstants.service
         .getWorkshopDetailsPost(
-            widget.workshopId, "token ${AppConstants.djangoToken}")
+            widget.workshop.id, "token ${AppConstants.djangoToken}")
         .catchError((onError) {
       print("Error in fetching workshop: ${onError.toString()}");
     });
@@ -114,7 +117,7 @@ class _DetailPage extends State<DetailPage> {
     await confirmCreateDialog()
         ? await AppConstants.service
             .removeWorkshop(
-                widget.workshopId, "token ${AppConstants.djangoToken}")
+                widget.workshop.id, "token ${AppConstants.djangoToken}")
             .then((snapshot) {
             print("status of deleting workshop: ${snapshot.statusCode}");
             showSuccessfulDialog();
@@ -131,7 +134,7 @@ class _DetailPage extends State<DetailPage> {
     setState(() {});
     await AppConstants.service
         .toggleInterestedWorkshop(
-            widget.workshopId, "token ${AppConstants.djangoToken}")
+            widget.workshop.id, "token ${AppConstants.djangoToken}")
         .then((snapshot) {
       print("status of toggle workshop: ${snapshot.statusCode}");
       if (snapshot.isSuccessful) {
@@ -144,14 +147,81 @@ class _DetailPage extends State<DetailPage> {
     setState(() {});
   }
 
+  Container _getToolbar(BuildContext context) {
+    return new Container(
+      margin: new EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+      child: new BackButton(color: Colors.white),
+    );
+  }
+
+  Container _getBackground() {
+    return new Container(
+      child: Image.network(
+        widget.workshop.club.small_image_url,
+        fit: BoxFit.cover,
+        height: 300.0,
+      ),
+      constraints: new BoxConstraints.expand(height: 295.0),
+    );
+  }
+
+  Container _getContent() {
+    final _overviewTitle = "Overview".toUpperCase();
+    return new Container(
+      child: new ListView(
+        padding: new EdgeInsets.fromLTRB(0.0, 72.0, 0.0, 32.0),
+        children: <Widget>[
+          HomeWidgets.getWorkshopCard(context,
+              w: widget.workshop, editMode: false, horizontal: false),
+          Container(
+            padding: new EdgeInsets.symmetric(horizontal: 32.0),
+            child: new Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                new Text(
+                  _overviewTitle,
+                  style: Style.headerTextStyle,
+                ),
+                new Separator(),
+                new Text('Description comes here',
+                    style: Style.commonTextStyle),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Container _getGradient() {
+    return new Container(
+      margin: new EdgeInsets.only(top: 190.0),
+      height: 110.0,
+      decoration: new BoxDecoration(
+        gradient: new LinearGradient(
+          colors: <Color>[new Color(0x00736AB7), new Color(0xFF736AB7)],
+          stops: [0.0, 0.9],
+          begin: const FractionalOffset(0.0, 0.0),
+          end: const FractionalOffset(0.0, 1.0),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: _workshop == null
-          ? Container(
-              height: MediaQuery.of(context).size.height / 4,
-              child: Center(
-                child: CircularProgressIndicator(),
+          ? new Container(
+              constraints: new BoxConstraints.expand(),
+              color: new Color(0xFF736AB7),
+              child: new Stack(
+                children: <Widget>[
+                  _getBackground(),
+                  _getGradient(),
+                  _getContent(),
+                  _getToolbar(context),
+                ],
               ),
             )
           : Stack(
