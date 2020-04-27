@@ -1,6 +1,8 @@
 import 'package:chopper/chopper.dart';
+import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
+import 'package:iit_app/pages/council.dart';
 import 'package:iit_app/pages/login.dart';
 import 'package:iit_app/screens/home/home_widgets.dart';
 import 'package:iit_app/services/crud.dart';
@@ -18,6 +20,8 @@ class _HomeScreenState extends State<HomeScreen>
   CrudMethods crudObj = new CrudMethods();
   Stream workshops;
   TabController _tabController;
+
+  final GlobalKey<FabCircularMenuState> fabKey = GlobalKey();
 
   TextEditingController _searchController = TextEditingController();
 
@@ -426,6 +430,42 @@ class _HomeScreenState extends State<HomeScreen>
                   ),
           ),
           drawer: getNavDrawer(context),
+          floatingActionButton: AppConstants.councilsSummaryfromDatabase == null
+              ? Center(child: CircularProgressIndicator())
+              : FabCircularMenu(
+                  key: fabKey,
+                  ringColor: Colors.blue.withOpacity(0.8),
+                  ringDiameter: 600,
+                  ringWidth: 120,
+                  fabSize: 65,
+                  // animationDuration: Duration(milliseconds: 500),
+                  fabOpenColor: Colors.red,
+                  children: AppConstants.councilsSummaryfromDatabase
+                      .map(
+                        (council) => InkWell(
+                          onTap: () {
+                            // setting councilId in AppConstnts
+                            AppConstants.currentCouncilId = council.id;
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => CouncilPage(),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                image: NetworkImage(council.small_image_url),
+                                fit: BoxFit.fill,
+                              ),
+                            ),
+                            height: 60,
+                            width: 60,
+                          ),
+                        ),
+                      )
+                      .toList()),
           body: Stack(
             children: <Widget>[
               Container(
@@ -447,28 +487,28 @@ class _HomeScreenState extends State<HomeScreen>
                         ],
                       ),
               ),
-              Container(
-                padding: EdgeInsets.fromLTRB(5, 400, 5, 20),
-                child: AppConstants.councilsSummaryfromDatabase == null
-                    ? Center(child: CircularProgressIndicator())
-                    : ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (context, index) {
-                          return HomeWidgets.councilButton(context,
-                              name: AppConstants
-                                  .councilsSummaryfromDatabase[index].name
-                                  .toString()
-                                  .substring(0, 4),
-                              councilId: AppConstants
-                                  .councilsSummaryfromDatabase[index].id,
-                              imageUrl: AppConstants
-                                  .councilsSummaryfromDatabase[index]
-                                  .small_image_url);
-                        },
-                        itemCount:
-                            AppConstants.councilsSummaryfromDatabase.length,
-                      ),
-              ),
+              // Container(
+              //   padding: EdgeInsets.fromLTRB(5, 400, 5, 20),
+              //   child: AppConstants.councilsSummaryfromDatabase == null
+              //       ? Center(child: CircularProgressIndicator())
+              //       : ListView.builder(
+              //           scrollDirection: Axis.horizontal,
+              //           itemBuilder: (context, index) {
+              //             return HomeWidgets.councilButton(context,
+              //                 name: AppConstants
+              //                     .councilsSummaryfromDatabase[index].name
+              //                     .toString()
+              //                     .substring(0, 4),
+              //                 councilId: AppConstants
+              //                     .councilsSummaryfromDatabase[index].id,
+              //                 imageUrl: AppConstants
+              //                     .councilsSummaryfromDatabase[index]
+              //                     .small_image_url);
+              //           },
+              //           itemCount:
+              //               AppConstants.councilsSummaryfromDatabase.length,
+              //         ),
+              // ),
             ],
           ),
         ));
