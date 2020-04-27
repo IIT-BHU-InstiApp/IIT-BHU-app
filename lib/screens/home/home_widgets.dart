@@ -5,12 +5,6 @@ import 'package:iit_app/pages/detail.dart';
 import 'package:iit_app/pages/council.dart';
 import 'package:iit_app/pages/login.dart';
 import 'separator.dart';
-import 'package:flutter/material.dart';
-import 'package:iit_app/model/appConstants.dart';
-import 'package:iit_app/model/built_post.dart';
-import 'package:iit_app/pages/detail.dart';
-import 'package:iit_app/pages/council.dart';
-import 'package:iit_app/pages/login.dart';
 import 'text_style.dart';
 
 class HomeWidgets {
