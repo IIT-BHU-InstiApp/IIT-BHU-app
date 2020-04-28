@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
-import 'package:iit_app/pages/clubs.dart';
 import 'package:iit_app/model/built_post.dart';
+import 'package:iit_app/pages/common_ui_widgets.dart';
 
 class AccountScreen extends StatefulWidget {
   @override
@@ -9,8 +9,9 @@ class AccountScreen extends StatefulWidget {
 }
 
 class _AccountScreenState extends State<AccountScreen> {
+  BuiltProfilePost profileDetails;
+
   @override
-  var profileDetails;
   void initState() {
     fetchProfileDetails();
     super.initState();
@@ -233,15 +234,13 @@ class _AccountScreenState extends State<AccountScreen> {
                       SizedBox(
                         height: 20,
                       ),
-                      profileDetails.subscriptions.length == 0
-                          ? SizedBox(height: 5)
-                          : Text(
-                              "Subscriptions",
-                              style: TextStyle(
-                                  color: Color(0xff242424),
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.w600),
-                            ),
+                      Text(
+                        "Subscriptions",
+                        style: TextStyle(
+                            color: Color(0xff242424),
+                            fontSize: 28,
+                            fontWeight: FontWeight.w600),
+                      ),
                       profileDetails == null
                           ? Container(
                               height: MediaQuery.of(context).size.height / 4,
@@ -249,68 +248,20 @@ class _AccountScreenState extends State<AccountScreen> {
                                 child: CircularProgressIndicator(),
                               ),
                             )
-                          : Container(
-                              color: Colors.white,
+                          : profileDetails.subscriptions.length == 0
+                          ? Text('You haven\'t subscribed to any channels yet!')
+                          :Container(
+                              color: Color(0xFF736AB7),
                               child: ListView.builder(
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),
                                 itemCount: profileDetails.subscriptions.length,
                                 itemBuilder: (context, index) {
-                                  return ListTile(
-                                    onTap: () {
-                                      Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                          builder: (context) => ClubPage(
-                                            clubId: profileDetails
-                                                .subscriptions[index].id,
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                    leading: Container(
-                                      height: 50.0,
-                                      width: 50.0,
-                                      decoration: BoxDecoration(
-                                          //color: Colors.black,
-                                          image: DecorationImage(
-                                            image: profileDetails
-                                                        .subscriptions[index]
-                                                        .small_image_url ==
-                                                    null
-                                                ? AssetImage('assets/AMC.png')
-                                                : NetworkImage(profileDetails
-                                                    .subscriptions[index]
-                                                    .small_image_url),
-                                            fit: BoxFit.fill,
-                                          ),
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(30.0)),
-                                          border: Border.all(
-                                              color: Colors.blue, width: 2.0)),
-                                    ),
-                                    title: Container(
-                                      child: Card(
-                                        shape: RoundedRectangleBorder(
-                                          side: BorderSide(
-                                              color: Colors.blue, width: 2.0),
-                                          borderRadius:
-                                              BorderRadius.circular(15.0),
-                                        ),
-                                        color: Colors.black,
-                                        child: Container(
-                                          height: 50.0,
-                                          child: Center(
-                                            child: Text(
-                                                profileDetails
-                                                    .subscriptions[index].name,
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 25.0)),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  );
+                                  return CommonWidgets.getOnlyClubnameCard(
+                                      context,
+                                      club: profileDetails.subscriptions[index],
+                                      editMode: false,
+                                      type: 'subscription');
                                 },
                               ),
                             ),
@@ -327,66 +278,16 @@ class _AccountScreenState extends State<AccountScreen> {
                                   fontWeight: FontWeight.w600),
                             ),
                       Container(
-                        color: Colors.white,
+                        color: Color(0xFF736AB7),
                         child: ListView.builder(
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
                           itemCount: profileDetails.club_privileges.length,
                           itemBuilder: (context, index) {
-                            return ListTile(
-                              onTap: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => ClubPage(
-                                        clubId: profileDetails
-                                            .club_privileges[index].id,
-                                        editMode: true),
-                                  ),
-                                );
-                              },
-                              leading: Container(
-                                height: 50.0,
-                                width: 50.0,
-                                decoration: BoxDecoration(
-                                    //color: Colors.black,
-                                    image: DecorationImage(
-                                      image: profileDetails
-                                                  .club_privileges[index]
-                                                  .small_image_url ==
-                                              null
-                                          ? AssetImage('assets/AMC.png')
-                                          : NetworkImage(profileDetails
-                                              .club_privileges[index]
-                                              .small_image_url),
-                                      fit: BoxFit.fill,
-                                    ),
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(30.0)),
-                                    border: Border.all(
-                                        color: Colors.blue, width: 2.0)),
-                              ),
-                              title: Container(
-                                child: Card(
-                                  shape: RoundedRectangleBorder(
-                                    side: BorderSide(
-                                        color: Colors.blue, width: 2.0),
-                                    borderRadius: BorderRadius.circular(15.0),
-                                  ),
-                                  color: Colors.black,
-                                  child: Container(
-                                    height: 50.0,
-                                    child: Center(
-                                      child: Text(
-                                          profileDetails
-                                              .club_privileges[index].name,
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 25.0)),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            );
+                            return CommonWidgets.getOnlyClubnameCard(context,
+                                club: profileDetails.club_privileges[index],
+                                editMode: false,
+                                type: 'club_priviledges');
                           },
                         ),
                       ),

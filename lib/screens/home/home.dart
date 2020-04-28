@@ -5,6 +5,7 @@ import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/pages/council.dart';
 import 'package:iit_app/pages/login.dart';
 import 'package:iit_app/screens/home/home_widgets.dart';
+import 'package:iit_app/screens/home/search_workshop.dart';
 import 'package:iit_app/services/crud.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:iit_app/model/built_post.dart';
@@ -128,8 +129,8 @@ class _HomeScreenState extends State<HomeScreen>
 
           final posts = snapshot.data.body;
           print(posts);
-
-          return _buildWorkshopsFromSearchPosts(context, posts);
+          return SearchWorkshopWidgets.buildWorkshopsFromSearchPosts(
+              context, posts);
         } else {
           // Show a loading indicator while waiting for the posts
           return Center(
@@ -137,62 +138,6 @@ class _HomeScreenState extends State<HomeScreen>
           );
         }
       },
-    );
-  }
-
-  Widget _buildWorkshopsFromSearchPosts(
-      BuildContext context, BuiltAllWorkshopsPost posts) {
-    return ListView(
-      children: <Widget>[
-        posts.active_workshops.isEmpty
-            ? Container()
-            : Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Center(
-                  child: Text(
-                    'Active Workshops',
-                    style: TextStyle(fontSize: 25),
-                  ),
-                ),
-              ),
-        Container(
-          child: ListView.builder(
-            physics: ScrollPhysics(),
-            shrinkWrap: true,
-            scrollDirection: Axis.vertical,
-            itemCount: posts.active_workshops.length,
-            padding: EdgeInsets.all(8),
-            itemBuilder: (context, index) {
-              return HomeWidgets.getWorkshopCard(context,
-                  w: posts.active_workshops[index]);
-            },
-          ),
-        ),
-        posts.past_workshops.isEmpty
-            ? Container()
-            : Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Center(
-                  child: Text(
-                    'Past Workshops',
-                    style: TextStyle(fontSize: 25),
-                  ),
-                ),
-              ),
-        Container(
-          child: ListView.builder(
-            shrinkWrap: true,
-            physics: ScrollPhysics(),
-            scrollDirection: Axis.vertical,
-            itemCount: posts.past_workshops.length,
-            padding: EdgeInsets.all(8),
-            itemBuilder: (context, index) {
-              return HomeWidgets.getWorkshopCard(context,
-                  w: posts.past_workshops[index]);
-            },
-          ),
-        ),
-      ],
     );
   }
 
@@ -227,11 +172,7 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   FutureBuilder<Response> _buildInterestedWorkshopsBody(BuildContext context) {
-    // FutureBuilder is perfect for easily building UI when awaiting a Future
-    // Response is the type currently returned by all the methods of PostApiService
     return FutureBuilder<Response<BuiltList<BuiltWorkshopSummaryPost>>>(
-      // In real apps, use some sort of state management (BLoC is cool)
-      // to prevent duplicate requests when the UI rebuilds
       future: AppConstants.service
           .getInterestedWorkshops("token ${AppConstants.djangoToken}"),
       builder: (context, snapshot) {
@@ -247,11 +188,8 @@ class _HomeScreenState extends State<HomeScreen>
           }
 
           final posts = snapshot.data.body;
-          // print(posts);
-          // print('-------------------------------------');
           return _buildInterestedWorkshopPosts(context, posts);
         } else {
-          // Show a loading indicator while waiting for the posts
           return Center(
             child: CircularProgressIndicator(),
           );
@@ -263,6 +201,7 @@ class _HomeScreenState extends State<HomeScreen>
   ListView _buildInterestedWorkshopPosts(
       BuildContext context, BuiltList<BuiltWorkshopSummaryPost> posts) {
     return ListView.builder(
+      physics: BouncingScrollPhysics(),
       scrollDirection: Axis.vertical,
       itemCount: posts.length,
       padding: EdgeInsets.all(8),
@@ -276,6 +215,7 @@ class _HomeScreenState extends State<HomeScreen>
     BuildContext context,
   ) {
     return ListView.builder(
+      physics: BouncingScrollPhysics(),
       scrollDirection: Axis.vertical,
       itemCount: AppConstants.workshopFromDatabase.length,
       padding: EdgeInsets.all(8),
@@ -297,9 +237,46 @@ class _HomeScreenState extends State<HomeScreen>
     return WillPopScope(
         onWillPop: _onPopHome,
         child: Scaffold(
-          backgroundColor: Color(0xFF736AB7),
+          backgroundColor: Colors.blue[200],
+          drawer: getNavDrawer(context),
+          floatingActionButton: AppConstants.councilsSummaryfromDatabase == null
+              ? Center(child: CircularProgressIndicator())
+              : FabCircularMenu(
+                  key: fabKey,
+                  ringColor: Colors.blue.withOpacity(0.8),
+                  ringDiameter: 600,
+                  ringWidth: 120,
+                  fabSize: 65,
+                  // animationDuration: Duration(milliseconds: 500),
+                  fabOpenColor: Colors.red,
+                  children: AppConstants.councilsSummaryfromDatabase
+                      .map(
+                        (council) => InkWell(
+                          onTap: () {
+                            // setting councilId in AppConstnts
+                            AppConstants.currentCouncilId = council.id;
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => CouncilPage(),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                image: NetworkImage(council.small_image_url),
+                                fit: BoxFit.fill,
+                              ),
+                            ),
+                            height: 60,
+                            width: 60,
+                          ),
+                        ),
+                      )
+                      .toList()),
           appBar: AppBar(
-            backgroundColor: Colors.white,
+            backgroundColor: Color(0xff00c6ff),
             automaticallyImplyLeading: false,
             actions: <Widget>[
               Padding(
@@ -320,9 +297,7 @@ class _HomeScreenState extends State<HomeScreen>
                       borderRadius: BorderRadius.circular(10.0)),
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.only(left: 8.0),
-              ),
+              //TODO: add the search UI to search_workshop.dart
               Expanded(
                 child: TextFormField(
                   decoration: InputDecoration(
@@ -363,21 +338,12 @@ class _HomeScreenState extends State<HomeScreen>
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(right: 5.0),
-              ),
-              Padding(
                 padding: const EdgeInsets.only(right: 5.0),
                 child: Container(
                   child: InkWell(
                     child:
                         Icon(Icons.notifications_active, color: Colors.black),
-                    onTap: () {
-                      print(AppConstants.currentUser.photoUrl);
-                      print(AppConstants.currentUser);
-                      // FirebaseAuth.instance.currentUser().then((value) {
-                      //   print(value);
-                      // });
-                    },
+                    onTap: () {},
                   ),
                 ),
               )
@@ -417,99 +383,51 @@ class _HomeScreenState extends State<HomeScreen>
                       ),
                     ),
                     preferredSize: Size.fromHeight(50))
-                : TabBar(
-                    unselectedLabelColor: Colors.grey,
-                    labelColor: Colors.black,
-                    tabs: [
-                      new Tab(
-                        text: 'Latest',
-                      ),
-                      new Tab(text: 'Interested'),
-                    ],
-                    controller: _tabController,
-                  ),
+                : null,
           ),
-          drawer: getNavDrawer(context),
-          floatingActionButton: AppConstants.councilsSummaryfromDatabase == null
-              ? Center(child: CircularProgressIndicator())
-              : FabCircularMenu(
-                  key: fabKey,
-                  ringColor: Colors.blue.withOpacity(0.8),
-                  ringDiameter: 600,
-                  ringWidth: 120,
-                  fabSize: 65,
-                  // animationDuration: Duration(milliseconds: 500),
-                  fabOpenColor: Colors.red,
-                  children: AppConstants.councilsSummaryfromDatabase
-                      .map(
-                        (council) => InkWell(
-                          onTap: () {
-                            // setting councilId in AppConstnts
-                            AppConstants.currentCouncilId = council.id;
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => CouncilPage(),
-                              ),
-                            );
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              image: DecorationImage(
-                                image: NetworkImage(council.small_image_url),
-                                fit: BoxFit.fill,
-                              ),
-                            ),
-                            height: 60,
-                            width: 60,
-                          ),
-                        ),
-                      )
-                      .toList()),
-          body: Stack(
-            children: <Widget>[
-              Container(
-                child: this._isSearching
-                    ? _buildWorkshopsFromSearch(context)
-                    : TabBarView(
-                        controller: _tabController,
-                        children: <Widget>[
-                          Container(
-                            height: 400,
-                            child: AppConstants.firstTimeFetching
-                                ? Center(child: CircularProgressIndicator())
-                                : _buildCurrentWorkshopPosts(context),
-                          ),
-                          Container(
-                            height: 400,
-                            child: _buildInterestedWorkshopsBody(context),
-                          )
+          body: Container(
+            margin: EdgeInsets.fromLTRB(12, 10, 12, 0),
+            decoration: new BoxDecoration(
+                border: Border.all(width: 2),
+                color: Color(0xFF736AB7), //new Color.fromRGBO(255, 0, 0, 0.0),
+                borderRadius: new BorderRadius.only(
+                    topLeft: const Radius.circular(40.0),
+                    topRight: const Radius.circular(40.0))),
+
+            // color: ,
+            child: this._isSearching
+                ? _buildWorkshopsFromSearch(context)
+                : Column(
+                    children: [
+                      TabBar(
+                        indicatorSize: TabBarIndicatorSize.tab,
+                        indicatorColor: Color(0xFF333366),
+                        indicatorWeight: 2.5,
+                        unselectedLabelColor: Colors.white70,
+                        labelColor: Colors.black,
+                        tabs: [
+                          new Tab(text: 'Latest'),
+                          new Tab(text: 'Interested'),
                         ],
+                        controller: _tabController,
                       ),
-              ),
-              // Container(
-              //   padding: EdgeInsets.fromLTRB(5, 400, 5, 20),
-              //   child: AppConstants.councilsSummaryfromDatabase == null
-              //       ? Center(child: CircularProgressIndicator())
-              //       : ListView.builder(
-              //           scrollDirection: Axis.horizontal,
-              //           itemBuilder: (context, index) {
-              //             return HomeWidgets.councilButton(context,
-              //                 name: AppConstants
-              //                     .councilsSummaryfromDatabase[index].name
-              //                     .toString()
-              //                     .substring(0, 4),
-              //                 councilId: AppConstants
-              //                     .councilsSummaryfromDatabase[index].id,
-              //                 imageUrl: AppConstants
-              //                     .councilsSummaryfromDatabase[index]
-              //                     .small_image_url);
-              //           },
-              //           itemCount:
-              //               AppConstants.councilsSummaryfromDatabase.length,
-              //         ),
-              // ),
-            ],
+                      Expanded(
+                        child: TabBarView(
+                          controller: _tabController,
+                          children: <Widget>[
+                            Container(
+                              child: AppConstants.firstTimeFetching
+                                  ? Center(child: CircularProgressIndicator())
+                                  : _buildCurrentWorkshopPosts(context),
+                            ),
+                            Container(
+                              child: _buildInterestedWorkshopsBody(context),
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
           ),
         ));
   }
