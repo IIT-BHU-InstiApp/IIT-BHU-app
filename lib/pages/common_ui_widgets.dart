@@ -13,7 +13,7 @@ class CommonWidgets {
       // margin: new EdgeInsets.symmetric(vertical: 16.0),
       alignment:
           horizontal ? FractionalOffset.centerLeft : FractionalOffset.center,
-      child: Hero(
+      child: new Hero(
         tag: "club-hero-${club.id}-$type",
         child: Container(
           child: ClipRRect(
@@ -93,7 +93,7 @@ class CommonWidgets {
   static Widget getClubSummaryCard(BuildContext context,
       {ClubListPost club,
       String councilName,
-      bool editMode,
+      bool editMode = false,
       bool horizontal = true}) {
     final workshopThumbnail = new Container(
       margin: new EdgeInsets.symmetric(vertical: 16.0),

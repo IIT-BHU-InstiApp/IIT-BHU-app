@@ -137,7 +137,7 @@ class HomeWidgets {
 
     final workshopCardContent = new Container(
       margin: new EdgeInsets.fromLTRB(
-          horizontal ? 76.0 : 16.0, horizontal ? 16.0 : 42.0, 16.0, 16.0),
+          horizontal ? 60.0 : 16.0, horizontal ? 16.0 : 42.0, 16.0, 16.0),
       constraints: new BoxConstraints.expand(),
       child: new Column(
         crossAxisAlignment:
@@ -205,8 +205,8 @@ class HomeWidgets {
             : null,
         child: new Container(
           margin: const EdgeInsets.symmetric(
-            vertical: 16.0,
-            horizontal: 24.0,
+            vertical: 10.0,
+            horizontal: 10.0,
           ),
           child: new Stack(
             children: <Widget>[

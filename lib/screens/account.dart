@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
-import 'package:iit_app/pages/clubs.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/pages/common_ui_widgets.dart';
 
@@ -235,15 +234,13 @@ class _AccountScreenState extends State<AccountScreen> {
                       SizedBox(
                         height: 20,
                       ),
-                      profileDetails.subscriptions.length == 0
-                          ? SizedBox(height: 5)
-                          : Text(
-                              "Subscriptions",
-                              style: TextStyle(
-                                  color: Color(0xff242424),
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.w600),
-                            ),
+                      Text(
+                        "Subscriptions",
+                        style: TextStyle(
+                            color: Color(0xff242424),
+                            fontSize: 28,
+                            fontWeight: FontWeight.w600),
+                      ),
                       profileDetails == null
                           ? Container(
                               height: MediaQuery.of(context).size.height / 4,
@@ -251,9 +248,10 @@ class _AccountScreenState extends State<AccountScreen> {
                                 child: CircularProgressIndicator(),
                               ),
                             )
-                          : Container(
+                          : profileDetails.subscriptions.length == 0
+                          ? Text('You haven\'t subscribed to any channels yet!')
+                          :Container(
                               color: Color(0xFF736AB7),
-                              margin: EdgeInsets.symmetric(vertical : 20),
                               child: ListView.builder(
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),
