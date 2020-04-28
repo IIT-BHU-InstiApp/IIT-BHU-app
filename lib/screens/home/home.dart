@@ -237,6 +237,7 @@ class _HomeScreenState extends State<HomeScreen>
     return WillPopScope(
         onWillPop: _onPopHome,
         child: Scaffold(
+          backgroundColor: Colors.blue[200],
           drawer: getNavDrawer(context),
           floatingActionButton: AppConstants.councilsSummaryfromDatabase == null
               ? Center(child: CircularProgressIndicator())
