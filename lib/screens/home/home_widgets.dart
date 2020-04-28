@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/pages/detail.dart';
-import 'package:iit_app/pages/council.dart';
 import 'package:iit_app/pages/login.dart';
 import 'separator.dart';
 import 'text_style.dart';
@@ -139,7 +137,7 @@ class HomeWidgets {
 
     final workshopCardContent = new Container(
       margin: new EdgeInsets.fromLTRB(
-          horizontal ? 76.0 : 16.0, horizontal ? 16.0 : 42.0, 16.0, 16.0),
+          horizontal ? 60.0 : 16.0, horizontal ? 16.0 : 42.0, 16.0, 16.0),
       constraints: new BoxConstraints.expand(),
       child: new Column(
         crossAxisAlignment:
@@ -207,8 +205,8 @@ class HomeWidgets {
             : null,
         child: new Container(
           margin: const EdgeInsets.symmetric(
-            vertical: 16.0,
-            horizontal: 24.0,
+            vertical: 10.0,
+            horizontal: 10.0,
           ),
           child: new Stack(
             children: <Widget>[
@@ -218,26 +216,4 @@ class HomeWidgets {
           ),
         ));
   }
-
-  static Widget councilButton(BuildContext context,
-          {String name, int councilId, String imageUrl}) =>
-      Padding(
-        padding: const EdgeInsets.all(5.0),
-        child: Hero(
-          tag: 'councilId: $councilId',
-          child: RaisedButton(
-            child: Text(name),
-            shape: CircleBorder(),
-            onPressed: () {
-              // setting councilId in AppConstnts
-              AppConstants.currentCouncilId = councilId;
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => CouncilPage(),
-                ),
-              );
-            },
-          ),
-        ),
-      );
 }

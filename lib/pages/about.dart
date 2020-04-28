@@ -70,7 +70,7 @@ class _AboutPageState extends State<AboutPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[300],
+      backgroundColor: Color(0xFF736AB7),
       body: teamData == null
           ? Container(
               height: MediaQuery.of(context).size.height / 4,
