@@ -324,21 +324,40 @@ class _DetailPage extends State<DetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          Container(
-            height: MediaQuery.of(context).size.height - 75.0,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(35.0),
-                    bottomRight: Radius.circular(35.0)),
-                color: Color(0xFF736AB7)),
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            leading: Container(),
+            backgroundColor: Colors.white,
+            expandedHeight: MediaQuery.of(context).size.height*0.75,
+            floating: false,
+            flexibleSpace: FlexibleSpaceBar(
+              background: Stack(
+                children: [
+                  Container(
+                    height: MediaQuery.of(context).size.height*0.75,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(35.0),
+                            bottomRight: Radius.circular(35.0)),
+                        color: Color(0xFF736AB7)),
+                  ),
+                  _getBackground(),
+                  _getGradient(),
+                  _getContent(), //_workshop == null
+                  _getToolbar(context),
+                  widget.editMode == false ? Container() : editWorkshopOptions()
+                ],
+              ),
+            ),
           ),
-          _getBackground(),
-          _getGradient(),
-          _getContent(), //_workshop == null
-          _getToolbar(context),
-          widget.editMode == false ? Container() : editWorkshopOptions()
+          SliverList(
+            delegate: SliverChildListDelegate(
+              [
+                Container(),
+              ],
+            ),
+          ),
         ],
       ),
     );
