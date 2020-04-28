@@ -8,13 +8,13 @@ class CommonWidgets {
   static final Color textColor = Color(0xFF004681);
 
   static Widget getOnlyClubnameCard(BuildContext context,
-      {ClubListPost club, bool editMode, bool horizontal = true}) {
+      {ClubListPost club, bool editMode, String type, bool horizontal = true}) {
     final workshopThumbnail = new Container(
       // margin: new EdgeInsets.symmetric(vertical: 16.0),
       alignment:
           horizontal ? FractionalOffset.centerLeft : FractionalOffset.center,
-      child: new Hero(
-        tag: "club-hero-${club.id}",
+      child: Hero(
+        tag: "club-hero-${club.id}-$type",
         child: Container(
           child: ClipRRect(
             borderRadius: BorderRadius.circular(20),

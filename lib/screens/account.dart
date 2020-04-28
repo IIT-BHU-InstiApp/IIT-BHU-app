@@ -10,8 +10,9 @@ class AccountScreen extends StatefulWidget {
 }
 
 class _AccountScreenState extends State<AccountScreen> {
-  @override
   BuiltProfilePost profileDetails;
+
+  @override
   void initState() {
     fetchProfileDetails();
     super.initState();
@@ -252,15 +253,18 @@ class _AccountScreenState extends State<AccountScreen> {
                             )
                           : Container(
                               color: Color(0xFF736AB7),
+                              margin: EdgeInsets.symmetric(vertical : 20),
                               child: ListView.builder(
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),
                                 itemCount: profileDetails.subscriptions.length,
                                 itemBuilder: (context, index) {
                                   return CommonWidgets.getOnlyClubnameCard(
-                                        context,
-                                        club: profileDetails.subscriptions[index],
-                                        editMode: false);},
+                                      context,
+                                      club: profileDetails.subscriptions[index],
+                                      editMode: false,
+                                      type: 'subscription');
+                                },
                               ),
                             ),
                       SizedBox(
@@ -282,10 +286,11 @@ class _AccountScreenState extends State<AccountScreen> {
                           physics: const NeverScrollableScrollPhysics(),
                           itemCount: profileDetails.club_privileges.length,
                           itemBuilder: (context, index) {
-                            return CommonWidgets.getOnlyClubnameCard(
-                                        context,
-                                        club: profileDetails.club_privileges[index],
-                                        editMode: false);},
+                            return CommonWidgets.getOnlyClubnameCard(context,
+                                club: profileDetails.club_privileges[index],
+                                editMode: false,
+                                type: 'club_priviledges');
+                          },
                         ),
                       ),
                     ],
