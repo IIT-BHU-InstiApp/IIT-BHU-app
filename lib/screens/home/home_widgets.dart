@@ -99,10 +99,13 @@ class HomeWidgets {
                 )));
       });
 
-  static Widget getWorkshopCard(BuildContext context,
-      {BuiltWorkshopSummaryPost w,
-      bool editMode = false,
-      bool horizontal = true}) {
+  static Widget getWorkshopCard(
+    BuildContext context, {
+    BuiltWorkshopSummaryPost w,
+    bool editMode = false,
+    bool horizontal = true,
+    bool isPast = false,
+  }) {
     final workshopThumbnail = new Container(
       margin: new EdgeInsets.symmetric(vertical: 16.0),
       alignment:
@@ -195,8 +198,8 @@ class HomeWidgets {
         onTap: horizontal
             ? () => Navigator.of(context).push(
                   new PageRouteBuilder(
-                    pageBuilder: (_, __, ___) =>
-                        new DetailPage(workshop: w, editMode: editMode),
+                    pageBuilder: (_, __, ___) => new DetailPage(
+                        workshop: w, editMode: editMode, isPast: isPast),
                     transitionsBuilder: (context, animation, secondaryAnimation,
                             child) =>
                         new FadeTransition(opacity: animation, child: child),

@@ -244,8 +244,8 @@ class _HomeScreenState extends State<HomeScreen>
               : FabCircularMenu(
                   key: fabKey,
                   ringColor: Colors.blue.withOpacity(0.8),
-                  ringDiameter: 600,
-                  ringWidth: 120,
+                  ringDiameter: 400,
+                  ringWidth: 90,
                   fabSize: 65,
                   // animationDuration: Duration(milliseconds: 500),
                   fabOpenColor: Colors.red,
@@ -269,84 +269,95 @@ class _HomeScreenState extends State<HomeScreen>
                                 fit: BoxFit.fill,
                               ),
                             ),
-                            height: 60,
-                            width: 60,
+                            height: 50,
+                            width: 50,
                           ),
                         ),
                       )
                       .toList()),
           appBar: AppBar(
-            backgroundColor: Color(0xff00c6ff),
+            backgroundColor: Colors.blue[200],
             automaticallyImplyLeading: false,
+            elevation: 0,
             actions: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(top: 8.0, left: 8),
-                child: Container(
-                  height: 30.0,
-                  width: 40.0,
-                  child: Builder(
-                    builder: (context) => GestureDetector(
-                        onTap: () => Scaffold.of(context).openDrawer()),
-                  ),
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: AppConstants.currentUser == null
-                              ? AssetImage('assets/profile_test.jpg')
-                              : NetworkImage(AppConstants.currentUser.photoUrl),
-                          fit: BoxFit.cover),
-                      borderRadius: BorderRadius.circular(10.0)),
-                ),
-              ),
-              //TODO: add the search UI to search_workshop.dart
-              Expanded(
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    //labelText: 'Search',
-                    hintText: 'Search by title ...',
-                    suffixIcon: IconButton(
-                      icon: Icon(Icons.search),
-                      onPressed: () {
-                        if (this._searchController.text.isEmpty) {
-                          return;
-                        }
-
-                        this._isSearching = true;
-                        this._searchPost =
-                            BuiltWorkshopSearchByStringPost((b) => b
-                              ..search_by = 'title'
-                              ..search_string = this._searchController.text);
-
-                        setState(() {});
-                      },
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(25.0),
+              Container(
+                width: MediaQuery.of(context).size.width,
+                padding: EdgeInsets.fromLTRB(15, 8, 15, 0),
+                child: Card(
+                  elevation: 5.0,
+                  color: Colors.blue[200],
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: <Widget>[
+                      Container(
+                        margin: EdgeInsets.only(left: 5, right: 10),
+                        height: 35.0,
+                        width: 35.0,
+                        child: Builder(
+                          builder: (context) => GestureDetector(
+                              onTap: () => Scaffold.of(context).openDrawer()),
+                        ),
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                                image: AppConstants.currentUser == null
+                                    ? AssetImage('assets/profile_test.jpg')
+                                    : NetworkImage(
+                                        AppConstants.currentUser.photoUrl),
+                                fit: BoxFit.cover),
+                            borderRadius: BorderRadius.circular(50.0)),
                       ),
-                    ),
-                  ),
-                  onFieldSubmitted: (value) {
-                    if (value.isEmpty) return;
-                    this._isSearching = true;
-                    this._searchPost = BuiltWorkshopSearchByStringPost((b) => b
-                      ..search_by = 'title'
-                      ..search_string = this._searchController.text);
+                      //TODO: add the search UI to search_workshop.dart
+                      Expanded(
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                            //labelText: 'Search',
+                            hintText: 'Search Workshops ...',
+                            suffixIcon: IconButton(
+                              icon: Icon(Icons.search),
+                              onPressed: () {
+                                if (this._searchController.text.isEmpty) {
+                                  return;
+                                }
 
-                    setState(() {});
-                  },
-                  controller: this._searchController,
+                                this._isSearching = true;
+                                this._searchPost =
+                                    BuiltWorkshopSearchByStringPost((b) => b
+                                      ..search_by = 'title'
+                                      ..search_string =
+                                          this._searchController.text);
+
+                                setState(() {});
+                              },
+                            ),
+                          ),
+                          onFieldSubmitted: (value) {
+                            if (value.isEmpty) return;
+                            this._isSearching = true;
+                            this._searchPost = BuiltWorkshopSearchByStringPost(
+                                (b) => b
+                                  ..search_by = 'title'
+                                  ..search_string =
+                                      this._searchController.text);
+
+                            setState(() {});
+                          },
+                          controller: this._searchController,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 8.0, left: 8),
+                        child: Container(
+                          child: InkWell(
+                            child: Icon(Icons.notifications_active,
+                                color: Colors.black),
+                            onTap: () {},
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(right: 5.0),
-                child: Container(
-                  child: InkWell(
-                    child:
-                        Icon(Icons.notifications_active, color: Colors.black),
-                    onTap: () {},
-                  ),
-                ),
-              )
             ],
             bottom: this._isSearching
                 ? PreferredSize(
