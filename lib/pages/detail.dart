@@ -11,7 +11,9 @@ import 'package:iit_app/screens/home/text_style.dart';
 class DetailPage extends StatefulWidget {
   final BuiltWorkshopSummaryPost workshop;
   final bool editMode;
-  const DetailPage({Key key, this.workshop, this.editMode = false})
+  final bool isPast;
+  const DetailPage(
+      {Key key, this.workshop, this.editMode = false, this.isPast = false})
       : super(key: key);
   @override
   _DetailPage createState() => _DetailPage();
@@ -172,7 +174,7 @@ class _DetailPage extends State<DetailPage> {
   Row _getPeopleGoing() {
     return Row(
       children: <Widget>[
-        Text('People Going:',
+        Text(widget.isPast ? 'Interested by:' : 'People Going:',
             style: TextStyle(
                 fontFamily: 'Opensans',
                 fontSize: 15.0,
@@ -182,8 +184,9 @@ class _DetailPage extends State<DetailPage> {
         _workshop == null
             ? loadingAnimation()
             : Container(
-                height: 50.0,
-                width: 100.0,
+                padding: EdgeInsets.only(left: 5.0),
+                height: widget.isPast ? 40 : 50.0,
+                width: widget.isPast ? 50.0 : 100.0,
                 decoration: BoxDecoration(
                     color: Color(0xFF333366),
                     borderRadius: BorderRadius.circular(25.0)),
@@ -193,17 +196,21 @@ class _DetailPage extends State<DetailPage> {
                     SizedBox(height: 7.0),
                     Text('${_workshop.interested_users}',
                         style: TextStyle(fontSize: 14.0, color: Colors.white)),
-                    is_interested == 0
-                        ? Container(
-                            child: loadingAnimation(), height: 20, width: 20)
-                        : InkWell(
-                            child: Icon(Icons.people,
-                                color: is_interested == 1
-                                    ? Colors.blue[400]
-                                    : Colors.blue[100],
-                                size: 25.0),
-                            onTap: () => updateButton(),
-                          ),
+                    widget.isPast
+                        ? Container()
+                        : is_interested == 0
+                            ? Container(
+                                child: loadingAnimation(),
+                                height: 20,
+                                width: 20)
+                            : InkWell(
+                                child: Icon(Icons.people,
+                                    color: is_interested == 1
+                                        ? Colors.blue[400]
+                                        : Colors.blue[100],
+                                    size: 25.0),
+                                onTap: () => updateButton(),
+                              ),
                     SizedBox(height: 7.0)
                   ],
                 ),

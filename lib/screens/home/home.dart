@@ -244,8 +244,8 @@ class _HomeScreenState extends State<HomeScreen>
               : FabCircularMenu(
                   key: fabKey,
                   ringColor: Colors.blue.withOpacity(0.8),
-                  ringDiameter: 600,
-                  ringWidth: 120,
+                  ringDiameter: 400,
+                  ringWidth: 90,
                   fabSize: 65,
                   // animationDuration: Duration(milliseconds: 500),
                   fabOpenColor: Colors.red,
@@ -269,8 +269,8 @@ class _HomeScreenState extends State<HomeScreen>
                                 fit: BoxFit.fill,
                               ),
                             ),
-                            height: 60,
-                            width: 60,
+                            height: 50,
+                            width: 50,
                           ),
                         ),
                       )

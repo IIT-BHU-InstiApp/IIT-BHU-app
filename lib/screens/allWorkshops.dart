@@ -118,8 +118,11 @@ class AllWorkshopsScreen extends StatelessWidget {
             itemCount: posts.past_workshops.length,
             padding: EdgeInsets.all(8),
             itemBuilder: (context, index) {
-              return HomeWidgets.getWorkshopCard(context,
-                  w: posts.past_workshops[index]);
+              return HomeWidgets.getWorkshopCard(
+                context,
+                w: posts.past_workshops[index],
+                isPast: true,
+              );
             },
           ),
         ),
