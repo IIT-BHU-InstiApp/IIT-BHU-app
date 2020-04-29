@@ -104,7 +104,7 @@ class _CouncilPageState extends State<CouncilPage> {
                               ? AssetImage('assets/iitbhu.jpeg')
                               : NetworkImage(councilData.large_image_url),
                           // AssetImage('assets/fmc.jpeg'),
-                          fit: BoxFit.cover,
+                          fit: BoxFit.fill,
                         ),
                         elevation: 2.5,
                       ),
