@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:chopper/chopper.dart';
 import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:flutter/material.dart';
@@ -265,7 +267,8 @@ class _HomeScreenState extends State<HomeScreen>
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               image: DecorationImage(
-                                image: NetworkImage(council.small_image_url),
+                                image: FileImage(File(
+                                    '${AppConstants.deviceDirectoryPath}/council_${council.id}(small)')),
                                 fit: BoxFit.fill,
                               ),
                             ),
