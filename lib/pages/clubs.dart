@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
@@ -23,6 +25,8 @@ class _ClubPageState extends State<ClubPage> {
   bool _loadingWorkshops = true;
   bool _toggling = false;
 
+  File _clubLargeLogoFile;
+
   @override
   void initState() {
     print("Club opened in edit mode:${widget.editMode}");
@@ -34,6 +38,18 @@ class _ClubPageState extends State<ClubPage> {
     if (clubMap == null) {
       clubMap =
           await AppConstants.getClubDetailsFromDatabase(clubId: widget.clubId);
+    }
+    if (clubMap != null) {
+      _clubLargeLogoFile = AppConstants.getImageFile(
+          isClub: true, isSmall: false, id: clubMap.id);
+
+      if (_clubLargeLogoFile == null) {
+        AppConstants.writeImageFileIntoDisk(
+            isClub: true,
+            isSmall: false,
+            id: clubMap.id,
+            url: clubMap.large_image_url);
+      }
     }
     if (!this.mounted) {
       return;
@@ -134,11 +150,11 @@ class _ClubPageState extends State<ClubPage> {
                         color: Color(0xFF736AB7)),
                   ),
                   Container(
-                    child: Image.network(
-                      clubMap.large_image_url,
-                      fit: BoxFit.cover,
-                      height: 300.0,
-                    ),
+                    child: _clubLargeLogoFile == null
+                        ? Image.network(clubMap.large_image_url,
+                            fit: BoxFit.cover, height: 300.0)
+                        : Image.file(_clubLargeLogoFile,
+                            fit: BoxFit.cover, height: 300.0),
                     constraints: new BoxConstraints.expand(height: 295.0),
                   ),
                   ClubWidgets.getGradient(),
@@ -161,7 +177,7 @@ class _ClubPageState extends State<ClubPage> {
               subtitle: clubMap.council.name,
               id: widget.clubId,
               imageUrl: clubMap.large_image_url,
-              isCouncil:false,
+              isCouncil: false,
               context: context),
           SizedBox(height: 8.0),
           Container(

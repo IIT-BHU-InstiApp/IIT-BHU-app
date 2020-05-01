@@ -28,6 +28,7 @@ class _CouncilPageState extends State<CouncilPage> {
 
     _councilLargeLogoFile = AppConstants.getImageFile(
         isCouncil: true, isSmall: false, id: councilData.id);
+
     if (_councilLargeLogoFile == null) {
       AppConstants.writeImageFileIntoDisk(
           isCouncil: true,
@@ -95,11 +96,11 @@ class _CouncilPageState extends State<CouncilPage> {
                         color: Color(0xFF736AB7)),
                   ),
                   Container(
-                    child: Image.network(
-                      councilData.large_image_url,
-                      fit: BoxFit.cover,
-                      height: 300.0,
-                    ),
+                    child: _councilLargeLogoFile == null
+                        ? Image.network(councilData.large_image_url,
+                            fit: BoxFit.cover, height: 300.0)
+                        : Image.file(_councilLargeLogoFile,
+                            fit: BoxFit.cover, height: 300.0),
                     constraints: new BoxConstraints.expand(height: 295.0),
                   ),
                   ClubWidgets.getGradient(),
@@ -142,8 +143,6 @@ class _CouncilPageState extends State<CouncilPage> {
       ),
     );
   }
-
-
 
   Container _getSecies() {
     return councilData == null

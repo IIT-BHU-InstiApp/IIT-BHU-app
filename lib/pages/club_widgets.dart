@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/pages/clubs.dart';
 import 'package:iit_app/screens/home/separator.dart';
 import 'package:iit_app/screens/home/text_style.dart';
@@ -56,6 +59,9 @@ class ClubWidgets {
       int id,
       String imageUrl,
       bool isCouncil}) {
+    final File _largeLogofile = AppConstants.getImageFile(
+        isCouncil: isCouncil, isClub: !isCouncil, isSmall: false, id: id);
+
     final clubThumbnail = Container(
       margin: new EdgeInsets.symmetric(vertical: 16.0),
       alignment: FractionalOffset.center,
@@ -68,7 +74,9 @@ class ClubWidgets {
               fit: BoxFit.contain,
               image: imageUrl == null
                   ? AssetImage('assets/iitbhu.jpeg')
-                  : NetworkImage(imageUrl),
+                  : _largeLogofile == null
+                      ? NetworkImage(imageUrl)
+                      : FileImage(_largeLogofile),
             ),
           ),
           height: 92.0,
@@ -87,7 +95,9 @@ class ClubWidgets {
             fit: BoxFit.contain,
             image: imageUrl == null
                 ? AssetImage('assets/iitbhu.jpeg')
-                : NetworkImage(imageUrl),
+                : _largeLogofile == null
+                    ? NetworkImage(imageUrl)
+                    : FileImage(_largeLogofile),
           ),
         ),
         height: 92.0,
