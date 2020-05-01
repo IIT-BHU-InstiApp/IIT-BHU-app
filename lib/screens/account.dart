@@ -249,22 +249,26 @@ class _AccountScreenState extends State<AccountScreen> {
                               ),
                             )
                           : profileDetails.subscriptions.length == 0
-                          ? Text('You haven\'t subscribed to any channels yet!')
-                          :Container(
-                              color: Color(0xFF736AB7),
-                              child: ListView.builder(
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemCount: profileDetails.subscriptions.length,
-                                itemBuilder: (context, index) {
-                                  return CommonWidgets.getOnlyClubnameCard(
-                                      context,
-                                      club: profileDetails.subscriptions[index],
-                                      editMode: false,
-                                      type: 'subscription');
-                                },
-                              ),
-                            ),
+                              ? Text(
+                                  'You haven\'t subscribed to any channels yet!')
+                              : Container(
+                                  // color: Color(0xFF736AB7),
+                                  child: ListView.builder(
+                                    shrinkWrap: true,
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    itemCount:
+                                        profileDetails.subscriptions.length,
+                                    itemBuilder: (context, index) {
+                                      return CommonWidgets.getOnlyClubnameCard(
+                                          context,
+                                          club: profileDetails
+                                              .subscriptions[index],
+                                          editMode: false,
+                                          type: 'subscription');
+                                    },
+                                  ),
+                                ),
                       SizedBox(
                         height: 22,
                       ),
@@ -278,7 +282,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                   fontWeight: FontWeight.w600),
                             ),
                       Container(
-                        color: Color(0xFF736AB7),
+                        // color: Color(0xFF736AB7),
                         child: ListView.builder(
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),

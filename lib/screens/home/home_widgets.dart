@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/pages/detail.dart';
 import 'package:iit_app/pages/login.dart';
@@ -99,10 +102,16 @@ class HomeWidgets {
                 )));
       });
 
-  static Widget getWorkshopCard(BuildContext context,
-      {BuiltWorkshopSummaryPost w,
-      bool editMode = false,
-      bool horizontal = true}) {
+  static Widget getWorkshopCard(
+    BuildContext context, {
+    BuiltWorkshopSummaryPost w,
+    bool editMode = false,
+    bool horizontal = true,
+    bool isPast = false,
+  }) {
+    final File clubLogoFile =
+        AppConstants.getImageFile(isSmall: true, id: w.club.id, isClub: true);
+
     final workshopThumbnail = new Container(
       margin: new EdgeInsets.symmetric(vertical: 16.0),
       alignment:
@@ -116,7 +125,9 @@ class HomeWidgets {
               fit: BoxFit.contain,
               image: w.club.small_image_url == null
                   ? AssetImage('assets/iitbhu.jpeg')
-                  : NetworkImage(w.club.small_image_url),
+                  : clubLogoFile == null
+                      ? NetworkImage(w.club.small_image_url)
+                      : FileImage(clubLogoFile),
             ),
           ),
           height: 92.0,
@@ -195,8 +206,8 @@ class HomeWidgets {
         onTap: horizontal
             ? () => Navigator.of(context).push(
                   new PageRouteBuilder(
-                    pageBuilder: (_, __, ___) =>
-                        new DetailPage(workshop: w, editMode: editMode),
+                    pageBuilder: (_, __, ___) => new DetailPage(
+                        workshop: w, editMode: editMode, isPast: isPast),
                     transitionsBuilder: (context, animation, secondaryAnimation,
                             child) =>
                         new FadeTransition(opacity: animation, child: child),

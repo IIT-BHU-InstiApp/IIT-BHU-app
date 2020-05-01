@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:chopper/chopper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/database_helpers.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:iit_app/services/connectivityCheck.dart';
+import 'package:http/http.dart' as http;
 
 class AppConstants {
   //  connectivity variables ------------------------------------------
@@ -20,6 +22,8 @@ class AppConstants {
   static bool logInButtonEnabled = true;
   static bool firstTimeFetching = true;
   static bool refreshingHomePage = false;
+
+  static String deviceDirectoryPath;
 
   static String djangoToken;
 
@@ -38,9 +42,9 @@ class AppConstants {
     DatabaseHelper helper = DatabaseHelper.instance;
     var database = await helper.database;
 
-    workshopFromDatabase = await helper.getAllWorkshopsSummary(db: database);
     councilsSummaryfromDatabase =
         await helper.getAllCouncilsSummary(db: database);
+    workshopFromDatabase = await helper.getAllWorkshopsSummary(db: database);
 
     // print(' workshops is empty: ${(workshops.isEmpty == true).toString()}');
 
@@ -61,26 +65,130 @@ class AppConstants {
       final councilSummaryPosts = councilSummarySnapshots.body;
 
 // storing the data fetched from json objects into local database
-      for (var post in workshopPosts) {
-        await helper.insertWorkshopSummaryIntoDatabase(post: post);
-      }
-
+      // ? remember, we use council summary in database while fetching other data (most of time)
       for (var post in councilSummaryPosts) {
         await helper.insertCouncilSummaryIntoDatabase(councilSummary: post);
+      }
+
+      await writeCouncilLogosIntoDisk(councilSummaryPosts);
+
+      for (var post in workshopPosts) {
+        await helper.insertWorkshopSummaryIntoDatabase(post: post);
+        writeImageFileIntoDisk(
+            isClub: true,
+            isSmall: true,
+            id: post.club.id,
+            url: post.club.small_image_url);
       }
 
 // fetching the data from local database and storing it into variables
 // whose scope is throughout the app
 
-      workshopFromDatabase = workshopPosts;
-      // await helper.getAllWorkshopsSummary(db: database);
       councilsSummaryfromDatabase = councilSummaryPosts;
       // await helper.getAllCouncilsSummary(db: database);
+      workshopFromDatabase = workshopPosts;
+      // await helper.getAllWorkshopsSummary(db: database);
+
     }
 
     // helper.closeDatabase(db: database);
     print('workshops and all councils summary fetched ');
   }
+
+  static writeCouncilLogosIntoDisk(
+      BuiltList<BuiltAllCouncilsPost> councils) async {
+    for (var council in councils) {
+      if (File('${AppConstants.deviceDirectoryPath}/council(small)_${council.id}')
+              .existsSync() ==
+          false) {
+        final url = council.small_image_url;
+        http.get(url).catchError((error) {
+          print('Error in downloading image : $error');
+        }).then((response) {
+          if (response.statusCode == 200) {
+            final imageData = response.bodyBytes.toList();
+            final File file = File(
+                '${AppConstants.deviceDirectoryPath}/council(small)_${council.id}');
+            file.writeAsBytesSync(imageData);
+          }
+        });
+      }
+    }
+  }
+
+  /// if [isSmall] is false, then image will be considered as large
+  ///
+  /// [id] will be served for any option , [isCouncil] or [isClub] , whichever is true
+  ///
+  /// if [isCouncil] and [isClub] both are true/false , function produces zero work.
+  static writeImageFileIntoDisk(
+      {bool isCouncil = false,
+      bool isClub = false,
+      @required bool isSmall,
+      @required int id,
+      @required String url}) async {
+    if ((isCouncil == true && isClub == true) ||
+        (isCouncil == false && isClub == false) ||
+        isSmall == null ||
+        id == null ||
+        url == null) {
+      return;
+    }
+
+    String size = isSmall ? 'small' : 'large';
+    String host = isCouncil ? 'council' : 'club';
+
+    File file = File('${AppConstants.deviceDirectoryPath}/$host($size)_$id');
+
+    if (file.existsSync() == false) {
+      http.get(url).catchError((error) {
+        print('Error in downloading image : $error');
+        print('for $host , id = $id');
+      }).then((response) {
+        if (response.statusCode == 200) {
+          final imageData = response.bodyBytes.toList();
+          final File writingFile =
+              File('${AppConstants.deviceDirectoryPath}/$host($size)_$id');
+          writingFile.writeAsBytesSync(imageData);
+          print('image saved into disk = $host , id = $id');
+        }
+      });
+    }
+  }
+
+  /// if file doesn't exist, null is returned
+  ///
+  /// if [isSmall] is false, then image will be considered as large
+  ///
+  /// [id] will be served for any option , [isCouncil] or [isClub] , whichever is true
+  ///
+  /// if [isCouncil] and [isClub] both are true/false, null will be returned
+
+  static File getImageFile({
+    bool isCouncil = false,
+    bool isClub = false,
+    @required bool isSmall,
+    @required int id,
+  }) {
+    if ((isCouncil == true && isClub == true) ||
+        (isCouncil == false && isClub == false) ||
+        isSmall == null ||
+        id == null) {
+      return null;
+    }
+
+    String size = isSmall ? 'small' : 'large';
+    File file;
+    String host = isCouncil ? 'council' : 'club';
+    file = File('${AppConstants.deviceDirectoryPath}/$host($size)_$id');
+
+    if (file.existsSync()) {
+      return file;
+    } else
+      return null;
+  }
+
+// TODO: we fetch council summaries only once in while initializing empty database, make it refreshable.
 
   static Future updateAndPopulateWorkshops() async {
     DatabaseHelper helper = DatabaseHelper.instance;
