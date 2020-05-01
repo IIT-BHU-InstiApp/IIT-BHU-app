@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/built_post.dart';
@@ -161,12 +163,14 @@ class _DetailPage extends State<DetailPage> {
   }
 
   Container _getBackground() {
+    final File clubLogoFile = AppConstants.getImageFile(
+        isSmall: true, id: widget.workshop.club.id, isClub: true);
+
     return new Container(
-      child: Image.network(
-        widget.workshop.club.small_image_url,
-        fit: BoxFit.cover,
-        height: 300.0,
-      ),
+      child: clubLogoFile == null
+          ? Image.network(widget.workshop.club.small_image_url,
+              fit: BoxFit.cover, height: 300.0)
+          : Image.file(clubLogoFile, fit: BoxFit.cover, height: 300),
       constraints: new BoxConstraints.expand(height: 295.0),
     );
   }
