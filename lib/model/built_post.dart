@@ -214,7 +214,7 @@ abstract class ClubListPost
   @nullable
   String get name;
   @nullable
-  int get council;
+  BuiltAllCouncilsPost get council;
   @nullable
   String get small_image_url;
   @nullable

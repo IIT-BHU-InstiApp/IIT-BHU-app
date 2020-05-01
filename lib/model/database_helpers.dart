@@ -54,7 +54,7 @@ Map<String, dynamic> workshopInfoToMap(BuiltWorkshopSummaryPost workshop) {
     idString: workshop.id,
     clubIdString: workshop.club.id,
     clubString: workshop.club.name == null ? '' : workshop.club.name,
-    councilIdString: workshop.club.council,
+    councilIdString: workshop.club.council.id,
     smallImageUrlString: workshop.club.small_image_url == null
         ? ''
         : workshop.club.small_image_url,
@@ -122,7 +122,10 @@ Map<String, dynamic> clubSummaryInfoToMap(ClubListPost clubSummary) {
   Map<String, dynamic> map = {
     idString: clubSummary.id,
     nameString: clubSummary.name == null ? '' : clubSummary.name,
-    councilIdString: clubSummary.council == null ? '' : clubSummary.council,
+    councilIdString:
+        (clubSummary.council == null || clubSummary.council.id == null)
+            ? 0
+            : clubSummary.council.id,
     smallImageUrlString:
         clubSummary.small_image_url == null ? '' : clubSummary.small_image_url,
     largeImageUrlString:
@@ -139,7 +142,7 @@ Map<String, dynamic> clubDetailToMap(BuiltClubPost clubPost) {
     councilIdString: clubPost.council.id,
     councilNameString: clubPost.council.name,
     councilSmallImageUrlString: clubPost.council.small_image_url,
-    councilLargeImageUrlString: clubPost.large_image_url,
+    councilLargeImageUrlString: clubPost.council.large_image_url,
     secyIdString: clubPost.secy == null ? -1 : clubPost.secy.id,
     jointSecyId1String:
         (clubPost.joint_secy.isEmpty) ? -1 : clubPost.joint_secy[0].id,
@@ -155,12 +158,13 @@ Map<String, dynamic> clubDetailToMap(BuiltClubPost clubPost) {
   return map;
 }
 
-BuiltWorkshopSummaryPost workshopSummaryFromMap(dynamic map) {
+BuiltWorkshopSummaryPost workshopSummaryFromMap(
+    dynamic map, BuiltAllCouncilsPost councilSummary) {
   final workshop = BuiltWorkshopSummaryPost((b) => b
     ..id = map[idString]
     ..club.id = map[clubIdString]
     ..club.name = map[clubString]
-    ..club.council = map[councilIdString]
+    ..club.council = councilSummary.toBuilder()
     ..club.small_image_url = map[smallImageUrlString]
     ..club.large_image_url = map[largeImageUrlString]
     ..title = map[titleString]
@@ -190,11 +194,12 @@ SecyPost porHolderInfoFromMap(dynamic map) {
   return porHolder;
 }
 
-ClubListPost clubSummaryFromMap(dynamic map) {
+ClubListPost clubSummaryFromMap(
+    dynamic map, BuiltAllCouncilsPost councilSummary) {
   final clubSummary = ClubListPost((b) => b
     ..id = map[idString]
     ..name = map[nameString]
-    ..council = map[councilIdString]
+    ..council = councilSummary.toBuilder()
     ..small_image_url = map[smallImageUrlString]
     ..large_image_url = map[largeImageUrlString]);
   return clubSummary;
@@ -292,6 +297,7 @@ class DatabaseHelper {
 
         // clubId is only to ease the deletion while deleting club information
         '        $clubIdString INTEGER NOT NULL,'
+        //
         '        $nameString DEFAULT "",'
         '        $emailString DEFAULT "",'
         '        $phoneNumberString DEFAULT "",'
@@ -426,11 +432,41 @@ class DatabaseHelper {
     var builder = list.toBuilder();
 
     for (var map in maps) {
-      BuiltWorkshopSummaryPost workshop = workshopSummaryFromMap(map);
+      // need to fetch council summary data
+
+      BuiltAllCouncilsPost councilSummary =
+          await getCouncilsSummaryById(db: db, councilId: map[councilIdString]);
+
+      BuiltWorkshopSummaryPost workshop =
+          workshopSummaryFromMap(map, councilSummary);
       builder.add(workshop);
     }
     var workshops = builder.build();
     return workshops;
+  }
+
+  Future<BuiltAllCouncilsPost> getCouncilsSummaryById(
+      {@required Database db, @required int councilId}) async {
+    List<Map> maps = await db.query(
+      allCouncislSummaryString,
+      columns: [
+        idString,
+        nameString,
+        smallImageUrlString,
+        largeImageUrlString,
+      ],
+      where: '$idString  = $councilId',
+    );
+
+    if (maps.isEmpty) {
+      return null;
+    }
+
+    var map = maps[0];
+
+    BuiltAllCouncilsPost councilSummary = councilSummaryFromMap(map);
+
+    return councilSummary;
   }
 
   Future<BuiltList<BuiltAllCouncilsPost>> getAllCouncilsSummary(
@@ -560,7 +596,12 @@ class DatabaseHelper {
     var builder = list.toBuilder();
 
     for (var map in maps) {
-      builder.add(clubSummaryFromMap(map));
+// need to fetch council summary data
+
+      BuiltAllCouncilsPost councilSummary =
+          await getCouncilsSummaryById(db: db, councilId: map[councilIdString]);
+
+      builder.add(clubSummaryFromMap(map, councilSummary));
     }
 
     var clubsSummary = builder.build();
