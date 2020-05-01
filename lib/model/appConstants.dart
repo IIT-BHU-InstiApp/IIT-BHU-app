@@ -92,16 +92,56 @@ class AppConstants {
     print('workshops and all councils summary fetched ');
   }
 
-  static Future writeCouncilLogosIntoDisk(
+  static writeCouncilLogosIntoDisk(
       BuiltList<BuiltAllCouncilsPost> councils) async {
     for (var council in councils) {
-      final url = council.small_image_url;
-      final response = await http.get(url);
-      final imageData = response.bodyBytes.toList();
-      final File file = File(
-          '${AppConstants.deviceDirectoryPath}/council_${council.id}(small)');
-      file.writeAsBytesSync(imageData);
+      if (File('${AppConstants.deviceDirectoryPath}/council(small)_${council.id}')
+              .existsSync() ==
+          false) {
+        final url = council.small_image_url;
+        http.get(url).catchError((error) {
+          print('Error in downloading image : $error');
+        }).then((response) {
+          if (response.statusCode == 200) {
+            final imageData = response.bodyBytes.toList();
+            final File file = File(
+                '${AppConstants.deviceDirectoryPath}/council(small)_${council.id}');
+            file.writeAsBytesSync(imageData);
+          }
+        });
+      }
     }
+  }
+
+  /// if [isSmall] is false, then image will be considered as large
+  ///
+  /// [id] will be served for any option , [isCouncil] or [isClub] , whichever is true
+  ///
+  /// if [isCouncil] and [isClub] both are true, null will be returned
+
+  static File imageFile({
+    bool isCouncil = false,
+    bool isClub = false,
+    @required bool isSmall,
+    @required int id,
+  }) {
+    if ((isCouncil == true && isClub == true) ||
+        isSmall == null ||
+        id == null) {
+      return null;
+    }
+
+    String size = isSmall ? 'small' : 'large';
+    File file;
+    if (isCouncil) {
+      file = File('${AppConstants.deviceDirectoryPath}/council($size)_$id');
+    } else if (isClub) {
+      file = File('${AppConstants.deviceDirectoryPath}/club($size)_$id');
+    }
+    if (file.existsSync()) {
+      return file;
+    } else
+      return null;
   }
 
 // TODO: we fetch council summaries only once in while initializing empty database, make it refreshable.
