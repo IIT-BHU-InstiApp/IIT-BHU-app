@@ -798,7 +798,7 @@ class _$ClubListPostSerializer implements StructuredSerializer<ClubListPost> {
       result
         ..add('council')
         ..add(serializers.serialize(object.council,
-            specifiedType: const FullType(int)));
+            specifiedType: const FullType(BuiltAllCouncilsPost)));
     }
     if (object.small_image_url != null) {
       result
@@ -835,8 +835,9 @@ class _$ClubListPostSerializer implements StructuredSerializer<ClubListPost> {
               specifiedType: const FullType(String)) as String;
           break;
         case 'council':
-          result.council = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+          result.council.replace(serializers.deserialize(value,
+                  specifiedType: const FullType(BuiltAllCouncilsPost))
+              as BuiltAllCouncilsPost);
           break;
         case 'small_image_url':
           result.small_image_url = serializers.deserialize(value,
@@ -2664,7 +2665,7 @@ class _$ClubListPost extends ClubListPost {
   @override
   final String name;
   @override
-  final int council;
+  final BuiltAllCouncilsPost council;
   @override
   final String small_image_url;
   @override
@@ -2731,9 +2732,10 @@ class ClubListPostBuilder
   String get name => _$this._name;
   set name(String name) => _$this._name = name;
 
-  int _council;
-  int get council => _$this._council;
-  set council(int council) => _$this._council = council;
+  BuiltAllCouncilsPostBuilder _council;
+  BuiltAllCouncilsPostBuilder get council =>
+      _$this._council ??= new BuiltAllCouncilsPostBuilder();
+  set council(BuiltAllCouncilsPostBuilder council) => _$this._council = council;
 
   String _small_image_url;
   String get small_image_url => _$this._small_image_url;
@@ -2751,7 +2753,7 @@ class ClubListPostBuilder
     if (_$v != null) {
       _id = _$v.id;
       _name = _$v.name;
-      _council = _$v.council;
+      _council = _$v.council?.toBuilder();
       _small_image_url = _$v.small_image_url;
       _large_image_url = _$v.large_image_url;
       _$v = null;
@@ -2774,13 +2776,26 @@ class ClubListPostBuilder
 
   @override
   _$ClubListPost build() {
-    final _$result = _$v ??
-        new _$ClubListPost._(
-            id: id,
-            name: name,
-            council: council,
-            small_image_url: small_image_url,
-            large_image_url: large_image_url);
+    _$ClubListPost _$result;
+    try {
+      _$result = _$v ??
+          new _$ClubListPost._(
+              id: id,
+              name: name,
+              council: _council?.build(),
+              small_image_url: small_image_url,
+              large_image_url: large_image_url);
+    } catch (_) {
+      String _$failedField;
+      try {
+        _$failedField = 'council';
+        _council?.build();
+      } catch (e) {
+        throw new BuiltValueNestedFieldError(
+            'ClubListPost', _$failedField, e.toString());
+      }
+      rethrow;
+    }
     replace(_$result);
     return _$result;
   }

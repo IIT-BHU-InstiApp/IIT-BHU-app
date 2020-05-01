@@ -38,9 +38,9 @@ class AppConstants {
     DatabaseHelper helper = DatabaseHelper.instance;
     var database = await helper.database;
 
-    workshopFromDatabase = await helper.getAllWorkshopsSummary(db: database);
     councilsSummaryfromDatabase =
         await helper.getAllCouncilsSummary(db: database);
+    workshopFromDatabase = await helper.getAllWorkshopsSummary(db: database);
 
     // print(' workshops is empty: ${(workshops.isEmpty == true).toString()}');
 
@@ -61,26 +61,30 @@ class AppConstants {
       final councilSummaryPosts = councilSummarySnapshots.body;
 
 // storing the data fetched from json objects into local database
-      for (var post in workshopPosts) {
-        await helper.insertWorkshopSummaryIntoDatabase(post: post);
-      }
-
+      // ? remember, we use council summary in database while fetching other data (most of time)
       for (var post in councilSummaryPosts) {
         await helper.insertCouncilSummaryIntoDatabase(councilSummary: post);
+      }
+
+      for (var post in workshopPosts) {
+        await helper.insertWorkshopSummaryIntoDatabase(post: post);
       }
 
 // fetching the data from local database and storing it into variables
 // whose scope is throughout the app
 
-      workshopFromDatabase = workshopPosts;
-      // await helper.getAllWorkshopsSummary(db: database);
       councilsSummaryfromDatabase = councilSummaryPosts;
       // await helper.getAllCouncilsSummary(db: database);
+      workshopFromDatabase = workshopPosts;
+      // await helper.getAllWorkshopsSummary(db: database);
+
     }
 
     // helper.closeDatabase(db: database);
     print('workshops and all councils summary fetched ');
   }
+
+// TODO: we fetch council summaries only once in while initializing empty database, make it refreshable.
 
   static Future updateAndPopulateWorkshops() async {
     DatabaseHelper helper = DatabaseHelper.instance;

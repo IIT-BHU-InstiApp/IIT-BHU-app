@@ -4,7 +4,7 @@ import 'package:built_collection/built_collection.dart';
 import 'built_value_converter.dart';
 part 'post_api_service.chopper.dart';
 
-// command for initiating chopper inspector/generator - flutter packages pub run build_runner watch --delete-conflicting-outputs
+// command for initiating chopper inspector/generator - flutter packages pub run build_runner watch --delete-conflicting-outputs --use-polling-watcher
 
 @ChopperApi(baseUrl: '')
 abstract class PostApiService extends ChopperService {
@@ -78,10 +78,8 @@ abstract class PostApiService extends ChopperService {
       @Body() BuiltWorkshopSearchByStringPost body);
 
   @Put(path: '/workshops/{id}/update-contacts/')
-  Future<Response<BuiltList<ContactPost>>> updateContacts(
-      @Path('id') int id,
-      @Header('Authorization') String token,
-      @Body() BuiltContacts body);    
+  Future<Response<BuiltList<ContactPost>>> updateContacts(@Path('id') int id,
+      @Header('Authorization') String token, @Body() BuiltContacts body);
 
   static PostApiService create() {
     final client = ChopperClient(
