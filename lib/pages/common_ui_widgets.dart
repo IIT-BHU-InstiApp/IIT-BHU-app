@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/pages/clubs.dart';
 import 'package:iit_app/screens/home/text_style.dart';
@@ -9,6 +12,14 @@ class CommonWidgets {
 
   static Widget getOnlyClubnameCard(BuildContext context,
       {ClubListPost club, bool editMode, String type, bool horizontal = true}) {
+    final File clubLogoFile =
+        AppConstants.getImageFile(isSmall: true, id: club.id, isClub: true);
+
+    if (clubLogoFile == null) {
+      AppConstants.writeImageFileIntoDisk(
+          isClub: true, isSmall: true, id: club.id, url: club.small_image_url);
+    }
+
     final workshopThumbnail = new Container(
       // margin: new EdgeInsets.symmetric(vertical: 16.0),
       alignment:
@@ -22,7 +33,9 @@ class CommonWidgets {
               fit: BoxFit.contain,
               image: club.small_image_url == null
                   ? AssetImage('assets/iitbhu.jpeg')
-                  : NetworkImage(club.small_image_url),
+                  : clubLogoFile == null
+                      ? NetworkImage(club.small_image_url)
+                      : FileImage(clubLogoFile),
             ),
           ),
           height: 50.0,
@@ -95,6 +108,14 @@ class CommonWidgets {
       String councilName,
       bool editMode = false,
       bool horizontal = true}) {
+    final File clubLogoFile =
+        AppConstants.getImageFile(isSmall: true, id: club.id, isClub: true);
+
+    if (clubLogoFile == null) {
+      AppConstants.writeImageFileIntoDisk(
+          isClub: true, isSmall: true, id: club.id, url: club.small_image_url);
+    }
+
     final workshopThumbnail = new Container(
       margin: new EdgeInsets.symmetric(vertical: 16.0),
       alignment:
@@ -108,7 +129,9 @@ class CommonWidgets {
               fit: BoxFit.contain,
               image: club.small_image_url == null
                   ? AssetImage('assets/iitbhu.jpeg')
-                  : NetworkImage(club.small_image_url),
+                  : clubLogoFile == null
+                      ? NetworkImage(club.small_image_url)
+                      : FileImage(clubLogoFile),
             ),
           ),
           height: 50.0,
