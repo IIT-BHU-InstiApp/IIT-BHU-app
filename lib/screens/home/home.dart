@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:chopper/chopper.dart';
 import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:flutter/material.dart';
@@ -98,6 +100,8 @@ class _HomeScreenState extends State<HomeScreen>
 
   void fetchUpdatedDetails() async {
     await AppConstants.updateAndPopulateWorkshops();
+    await AppConstants.writeCouncilLogosIntoDisk(
+        AppConstants.councilsSummaryfromDatabase);
     setState(() {});
   }
 
@@ -240,7 +244,7 @@ class _HomeScreenState extends State<HomeScreen>
           backgroundColor: Colors.blue[200],
           drawer: getNavDrawer(context),
           floatingActionButton: AppConstants.councilsSummaryfromDatabase == null
-              ? Center(child: CircularProgressIndicator())
+              ? FloatingActionButton(onPressed: null, child: Icon(Icons.menu))
               : FabCircularMenu(
                   key: fabKey,
                   ringColor: Colors.blue.withOpacity(0.8),
@@ -249,32 +253,35 @@ class _HomeScreenState extends State<HomeScreen>
                   fabSize: 65,
                   // animationDuration: Duration(milliseconds: 500),
                   fabOpenColor: Colors.red,
-                  children: AppConstants.councilsSummaryfromDatabase
-                      .map(
-                        (council) => InkWell(
-                          onTap: () {
-                            // setting councilId in AppConstnts
-                            AppConstants.currentCouncilId = council.id;
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => CouncilPage(),
-                              ),
-                            );
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              image: DecorationImage(
-                                image: NetworkImage(council.small_image_url),
-                                fit: BoxFit.fill,
-                              ),
-                            ),
-                            height: 50,
-                            width: 50,
+                  children:
+                      AppConstants.councilsSummaryfromDatabase.map((council) {
+                    File _imageFile = AppConstants.imageFile(
+                        isCouncil: true, isSmall: true, id: council.id);
+                    return InkWell(
+                      onTap: () {
+                        // setting councilId in AppConstnts
+                        AppConstants.currentCouncilId = council.id;
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => CouncilPage(),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                            image: _imageFile != null
+                                ? FileImage(_imageFile)
+                                : NetworkImage(council.small_image_url),
+                            fit: BoxFit.fill,
                           ),
                         ),
-                      )
-                      .toList()),
+                        height: 50,
+                        width: 50,
+                      ),
+                    );
+                  }).toList()),
           appBar: AppBar(
             backgroundColor: Colors.blue[200],
             automaticallyImplyLeading: false,

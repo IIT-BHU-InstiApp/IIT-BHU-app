@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:chopper/chopper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +8,8 @@ import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/database_helpers.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:iit_app/services/connectivityCheck.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:http/http.dart' as http;
 
 class AppConstants {
   //  connectivity variables ------------------------------------------
@@ -20,6 +24,8 @@ class AppConstants {
   static bool logInButtonEnabled = true;
   static bool firstTimeFetching = true;
   static bool refreshingHomePage = false;
+
+  static String deviceDirectoryPath;
 
   static String djangoToken;
 
@@ -66,6 +72,8 @@ class AppConstants {
         await helper.insertCouncilSummaryIntoDatabase(councilSummary: post);
       }
 
+      await writeCouncilLogosIntoDisk(councilSummaryPosts);
+
       for (var post in workshopPosts) {
         await helper.insertWorkshopSummaryIntoDatabase(post: post);
       }
@@ -82,6 +90,58 @@ class AppConstants {
 
     // helper.closeDatabase(db: database);
     print('workshops and all councils summary fetched ');
+  }
+
+  static writeCouncilLogosIntoDisk(
+      BuiltList<BuiltAllCouncilsPost> councils) async {
+    for (var council in councils) {
+      if (File('${AppConstants.deviceDirectoryPath}/council(small)_${council.id}')
+              .existsSync() ==
+          false) {
+        final url = council.small_image_url;
+        http.get(url).catchError((error) {
+          print('Error in downloading image : $error');
+        }).then((response) {
+          if (response.statusCode == 200) {
+            final imageData = response.bodyBytes.toList();
+            final File file = File(
+                '${AppConstants.deviceDirectoryPath}/council(small)_${council.id}');
+            file.writeAsBytesSync(imageData);
+          }
+        });
+      }
+    }
+  }
+
+  /// if [isSmall] is false, then image will be considered as large
+  ///
+  /// [id] will be served for any option , [isCouncil] or [isClub] , whichever is true
+  ///
+  /// if [isCouncil] and [isClub] both are true, null will be returned
+
+  static File imageFile({
+    bool isCouncil = false,
+    bool isClub = false,
+    @required bool isSmall,
+    @required int id,
+  }) {
+    if ((isCouncil == true && isClub == true) ||
+        isSmall == null ||
+        id == null) {
+      return null;
+    }
+
+    String size = isSmall ? 'small' : 'large';
+    File file;
+    if (isCouncil) {
+      file = File('${AppConstants.deviceDirectoryPath}/council($size)_$id');
+    } else if (isClub) {
+      file = File('${AppConstants.deviceDirectoryPath}/club($size)_$id');
+    }
+    if (file.existsSync()) {
+      return file;
+    } else
+      return null;
   }
 
 // TODO: we fetch council summaries only once in while initializing empty database, make it refreshable.

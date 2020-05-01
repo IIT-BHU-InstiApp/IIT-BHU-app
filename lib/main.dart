@@ -11,16 +11,19 @@ import 'package:iit_app/pages/about.dart';
 import 'package:iit_app/screens/settings.dart';
 import 'package:iit_app/services/connectivityCheck.dart';
 import 'package:iit_app/services/crud.dart';
+import 'package:path_provider/path_provider.dart';
 import 'data/post_api_service.dart';
 import 'model/appConstants.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   AppConstants.service = PostApiService.create();
   AppConstants.connectionStatus = ConnectionStatusSingleton.getInstance();
   AppConstants.connectionStatus.initialize();
+  AppConstants.deviceDirectoryPath =
+      (await getApplicationDocumentsDirectory()).path;
 
   // bool logStatus = await CrudMethods.isLoggedIn();
   // print('log status: $logStatus');
