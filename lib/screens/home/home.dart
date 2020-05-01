@@ -242,7 +242,7 @@ class _HomeScreenState extends State<HomeScreen>
           backgroundColor: Colors.blue[200],
           drawer: getNavDrawer(context),
           floatingActionButton: AppConstants.councilsSummaryfromDatabase == null
-              ? Center(child: CircularProgressIndicator())
+              ? FloatingActionButton(onPressed: null, child: Icon(Icons.menu))
               : FabCircularMenu(
                   key: fabKey,
                   ringColor: Colors.blue.withOpacity(0.8),
@@ -267,8 +267,12 @@ class _HomeScreenState extends State<HomeScreen>
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               image: DecorationImage(
-                                image: FileImage(File(
-                                    '${AppConstants.deviceDirectoryPath}/council_${council.id}(small)')),
+                                image: File('${AppConstants.deviceDirectoryPath}/council_${council.id}(small)')
+                                            .existsSync() ==
+                                        true
+                                    ? FileImage(File(
+                                        '${AppConstants.deviceDirectoryPath}/council_${council.id}(small)'))
+                                    : NetworkImage(council.small_image_url),
                                 fit: BoxFit.fill,
                               ),
                             ),
