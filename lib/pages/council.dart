@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
@@ -11,6 +13,7 @@ class CouncilPage extends StatefulWidget {
 
 class _CouncilPageState extends State<CouncilPage> {
   BuiltCouncilPost councilData;
+  File _councilLargeLogoFile;
   @override
   void initState() {
     fetchCouncilById();
@@ -22,6 +25,16 @@ class _CouncilPageState extends State<CouncilPage> {
     councilData = await AppConstants.getCouncilDetailsFromDatabase(
         councilId: AppConstants.currentCouncilId);
 
+    _councilLargeLogoFile = AppConstants.getImageFile(
+        isCouncil: true, isSmall: false, id: councilData.id);
+    if (_councilLargeLogoFile == null) {
+      AppConstants.writeImageFileIntoDisk(
+          isCouncil: true,
+          isSmall: false,
+          id: councilData.id,
+          url: councilData.large_image_url);
+    }
+
     if (!this.mounted) {
       return;
     }
@@ -31,6 +44,9 @@ class _CouncilPageState extends State<CouncilPage> {
 
     councilData = await AppConstants.getAndUpdateCouncilDetailsInDatabase(
         councilId: AppConstants.currentCouncilId);
+
+    _councilLargeLogoFile = AppConstants.getImageFile(
+        isCouncil: true, isSmall: false, id: councilData.id);
 
     if (!this.mounted) {
       return;
@@ -102,7 +118,9 @@ class _CouncilPageState extends State<CouncilPage> {
                           image: councilData.large_image_url == '' ||
                                   councilData.large_image_url == null
                               ? AssetImage('assets/iitbhu.jpeg')
-                              : NetworkImage(councilData.large_image_url),
+                              : _councilLargeLogoFile == null
+                                  ? NetworkImage(councilData.large_image_url)
+                                  : FileImage(_councilLargeLogoFile),
                           // AssetImage('assets/fmc.jpeg'),
                           fit: BoxFit.fill,
                         ),

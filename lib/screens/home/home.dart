@@ -255,7 +255,7 @@ class _HomeScreenState extends State<HomeScreen>
                   fabOpenColor: Colors.red,
                   children:
                       AppConstants.councilsSummaryfromDatabase.map((council) {
-                    File _imageFile = AppConstants.imageFile(
+                    File _imageFile = AppConstants.getImageFile(
                         isCouncil: true, isSmall: true, id: council.id);
                     return InkWell(
                       onTap: () {

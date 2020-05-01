@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:chopper/chopper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +7,6 @@ import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/database_helpers.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:iit_app/services/connectivityCheck.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
 
 class AppConstants {
@@ -76,6 +74,11 @@ class AppConstants {
 
       for (var post in workshopPosts) {
         await helper.insertWorkshopSummaryIntoDatabase(post: post);
+        writeImageFileIntoDisk(
+            isClub: true,
+            isSmall: true,
+            id: post.club.id,
+            url: post.club.small_image_url);
       }
 
 // fetching the data from local database and storing it into variables
@@ -117,15 +120,58 @@ class AppConstants {
   ///
   /// [id] will be served for any option , [isCouncil] or [isClub] , whichever is true
   ///
-  /// if [isCouncil] and [isClub] both are true, null will be returned
+  /// if [isCouncil] and [isClub] both are true/false , function produces zero work.
+  static writeImageFileIntoDisk(
+      {bool isCouncil = false,
+      bool isClub = false,
+      @required bool isSmall,
+      @required int id,
+      @required String url}) async {
+    if ((isCouncil == true && isClub == true) ||
+        (isCouncil == false && isClub == false) ||
+        isSmall == null ||
+        id == null ||
+        url == null) {
+      return;
+    }
 
-  static File imageFile({
+    String size = isSmall ? 'small' : 'large';
+    String host = isCouncil ? 'council' : 'club';
+
+    File file = File('${AppConstants.deviceDirectoryPath}/$host($size)_$id');
+
+    if (file.existsSync() == false) {
+      http.get(url).catchError((error) {
+        print('Error in downloading image : $error');
+        print('for $host , id = $id');
+      }).then((response) {
+        if (response.statusCode == 200) {
+          final imageData = response.bodyBytes.toList();
+          final File writingFile =
+              File('${AppConstants.deviceDirectoryPath}/$host($size)_$id');
+          writingFile.writeAsBytesSync(imageData);
+          print('image saved into disk = $host , id = $id');
+        }
+      });
+    }
+  }
+
+  /// if file doesn't exist, null is returned
+  ///
+  /// if [isSmall] is false, then image will be considered as large
+  ///
+  /// [id] will be served for any option , [isCouncil] or [isClub] , whichever is true
+  ///
+  /// if [isCouncil] and [isClub] both are true/false, null will be returned
+
+  static File getImageFile({
     bool isCouncil = false,
     bool isClub = false,
     @required bool isSmall,
     @required int id,
   }) {
     if ((isCouncil == true && isClub == true) ||
+        (isCouncil == false && isClub == false) ||
         isSmall == null ||
         id == null) {
       return null;
@@ -133,11 +179,9 @@ class AppConstants {
 
     String size = isSmall ? 'small' : 'large';
     File file;
-    if (isCouncil) {
-      file = File('${AppConstants.deviceDirectoryPath}/council($size)_$id');
-    } else if (isClub) {
-      file = File('${AppConstants.deviceDirectoryPath}/club($size)_$id');
-    }
+    String host = isCouncil ? 'council' : 'club';
+    file = File('${AppConstants.deviceDirectoryPath}/$host($size)_$id');
+
     if (file.existsSync()) {
       return file;
     } else
