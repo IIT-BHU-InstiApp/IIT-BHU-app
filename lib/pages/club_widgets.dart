@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:iit_app/screens/home/text_style.dart';
-import 'package:iit_app/screens/home/separator.dart';
 import 'package:iit_app/pages/clubs.dart';
+import 'package:iit_app/screens/home/separator.dart';
+import 'package:iit_app/screens/home/text_style.dart';
 
 class ClubWidgets {
   static Container getToolbar(BuildContext context) {
