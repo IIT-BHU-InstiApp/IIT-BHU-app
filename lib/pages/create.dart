@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'dart:async';
 import 'package:iit_app/model/built_post.dart';
-import 'package:iit_app/pages/clubs.dart';
 import 'package:built_collection/built_collection.dart';
+import 'package:iit_app/model/workshopCreator.dart';
+import 'package:iit_app/pages/dialogBoxes.dart';
 
 class CreateScreen extends StatefulWidget {
   final ClubListPost club;
@@ -68,131 +69,6 @@ class _CreateScreenState extends State<CreateScreen> {
         hint: Text('category'),
       );
 
-  Widget _buildContactsFromSearchPosts(
-    BuildContext context,
-    // BuiltList<BuiltProfilePost> posts
-  ) {
-    return this._searchedDataFetched
-        ? ListView(
-            shrinkWrap: true,
-            children: <Widget>[
-              Container(
-                child: (this._searchedProfileresult == null ||
-                        this._searchedProfileresult.isEmpty)
-                    ? Center(
-                        child: Text(
-                          'No such contact found........',
-                          textAlign: TextAlign.center,
-                          textScaleFactor: 1.5,
-                        ),
-                      )
-                    : ListView.builder(
-                        physics: ScrollPhysics(),
-                        shrinkWrap: true,
-                        scrollDirection: Axis.vertical,
-                        itemCount: _searchedProfileresult.length,
-                        padding: EdgeInsets.all(8),
-                        itemBuilder: (context, index) {
-                          bool _isAdded = this
-                              ._workshop
-                              .contactIds
-                              .contains(_searchedProfileresult[index].id);
-                          print(
-                              '-----------------------------------------------------');
-                          print(this._workshop.contactIds);
-                          print(
-                              '-----------------------------------------------------');
-
-                          return Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 3, vertical: 10),
-                            child: Container(
-                              // color: Colors.lightBlue.withOpacity(0.3),
-                              height: MediaQuery.of(context).size.height / 11,
-                              child: Row(
-                                children: <Widget>[
-                                  Expanded(
-                                    flex: 2,
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                          image: DecorationImage(
-                                        image: (_searchedProfileresult[index]
-                                                        .photo_url ==
-                                                    null ||
-                                                _searchedProfileresult[index]
-                                                    .photo_url
-                                                    .isEmpty)
-                                            ? Image.asset(
-                                                'assets/profile_test.jpg')
-                                            : NetworkImage(
-                                                _searchedProfileresult[index]
-                                                    .photo_url),
-                                      )),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 8,
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 8.0, right: 10.0),
-                                      child: Column(
-                                        children: <Widget>[
-                                          Text(_searchedProfileresult[index]
-                                              .name),
-                                          Text(_searchedProfileresult[index]
-                                              .email),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 2,
-                                    child: OutlineButton(
-                                      onPressed: () {
-                                        int _id =
-                                            _searchedProfileresult[index].id;
-                                        String _name =
-                                            _searchedProfileresult[index]
-                                                    .name
-                                                    .split(' ')[0] +
-                                                ' ' +
-                                                _searchedProfileresult[index]
-                                                    .name
-                                                    .split(' ')[1];
-                                        if (_isAdded) {
-                                          _isAdded = false;
-                                          this._workshop.contactIds.remove(_id);
-                                          this
-                                              ._workshop
-                                              .contactNameofId
-                                              .remove(_id);
-                                        } else {
-                                          _isAdded = true;
-                                          this._workshop.contactIds.add(_id);
-                                          this._workshop.contactNameofId[_id] =
-                                              _name;
-                                        }
-                                        if (!this.mounted) return;
-                                        setState(() {});
-                                      },
-                                      child: Icon(
-                                          _isAdded ? Icons.remove : Icons.add),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-              ),
-            ],
-          )
-        : Center(
-            child: CircularProgressIndicator(),
-          );
-  }
-
   @override
   void initState() {
     this._titleController = TextEditingController();
@@ -216,128 +92,13 @@ class _CreateScreenState extends State<CreateScreen> {
       widget.workshopData.contacts.forEach((contact) {
         this._workshop.contactIds.add(contact.id);
         this._workshop.contactNameofId[contact.id] =
-            contact.name.split(' ')[0] + ' ' + contact.name.split(' ')[1];
+            WorkshopCreater.nameOfContact(contact.name);
       });
     } else {
       _workshop = WorkshopCreater();
     }
 
     super.initState();
-  }
-
-  showSuccessfulDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Successful!"),
-          content: widget.workshopData == null
-              ? Text("Workshop succesfully created!")
-              : Text("Workshop edited succesfully!"),
-          actions: <Widget>[
-            FlatButton(
-              child: new Text("yay"),
-              onPressed: () {
-                Navigator.pop(context);
-                Navigator.pop(context);
-                Navigator.pop(context);
-                if (widget.workshopData != null) {
-                  Navigator.pop(context);
-                }
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            ClubPage(club: widget.club, editMode: true)));
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Future showUnSuccessfulDialog() async {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("UnSuccessful :("),
-          content: new Text("Please try again"),
-          actions: <Widget>[
-            FlatButton(
-              child: new Text("Ok"),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Future<bool> confirmDialog() async {
-    return showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: widget.workshopData == null
-              ? Text("Create workshop")
-              : Text("Edit workshop"),
-          content: widget.workshopData == null
-              ? Text("Are you sure to create this new workshop?")
-              : Text("Are you sure to edit this workshop?"),
-          actions: <Widget>[
-            FlatButton(
-              child: new Text("Yup!"),
-              onPressed: () {
-                Navigator.of(context).pop(true);
-              },
-            ),
-            FlatButton(
-              child: new Text("nope, let me rethink.."),
-              onPressed: () {
-                Navigator.of(context).pop(false);
-                return false;
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Future<Null> _selectDate(BuildContext context) async {
-    int _editingyear = int.parse(this._editingDate.substring(0, 4));
-    int _editingmonth = int.parse(this._editingDate.substring(5, 7));
-    int _editingday = int.parse(this._editingDate.substring(8, 10));
-    final DateTime picked = await showDatePicker(
-        context: context,
-        initialDate: widget.workshopData == null
-            ? DateTime.now()
-            : DateTime(_editingyear, _editingmonth, _editingday),
-        firstDate: new DateTime(2018),
-        lastDate: new DateTime(2022));
-
-    if (picked != null && picked != DateTime.now()) {
-      setState(() {
-        _workshop.date = _workshop.convertDate(picked);
-      });
-    }
-  }
-
-  Future<Null> _selectTime(BuildContext context) async {
-    final TimeOfDay picked = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.now(),
-    );
-
-    if (picked != null && picked != TimeOfDay.now()) {
-      setState(() {
-        _workshop.time = _workshop.converTime(picked);
-      });
-    }
   }
 
   @override
@@ -558,85 +319,25 @@ class _CreateScreenState extends State<CreateScreen> {
                           ),
                         );
 
-                        bool isconfirmed = await confirmDialog();
+                        bool isconfirmed =
+                            await CreatePageDialogBoxes.confirmDialog(
+                                context: context,
+                                isEditing:
+                                    widget.workshopData == null ? false : true);
 
                         if (isconfirmed == false) return;
 
                         if (widget.workshopData == null) {
-                          final newWorkshop = BuiltWorkshopCreatePost((b) => b
-                            ..title = _workshop.title
-                            ..description = _workshop.description
-                            ..club = widget.club.id
-                            ..date = _workshop.date
-                            ..time = _workshop.time
-                            ..location = _workshop.location
-                            ..audience = _workshop.audience
-                            ..resources = _workshop.resources
-                            ..contacts =
-                                _workshop.contactIds.build().toBuilder());
-
-                          await AppConstants.service
-                              .postNewWorkshop(
-                                  "token ${AppConstants.djangoToken}",
-                                  newWorkshop)
-                              .catchError((onError) {
-                            print(
-                                'Error creating workshop: ${onError.toString()}');
-                            showUnSuccessfulDialog();
-                          }).then((value) {
-                            if (value.isSuccessful) {
-                              print('Created!');
-                              showSuccessfulDialog();
-                            }
-                          }).catchError((onError) {
-                            print(
-                                'Error printing CREATED workshop: ${onError.toString()}');
-                          });
+                          await WorkshopCreater.create(
+                              context: context,
+                              workshop: _workshop,
+                              club: widget.club);
                         } else {
-                          final editedWorkshop =
-                              BuiltWorkshopDetailPost((b) => b
-                                ..title = _workshop.title
-                                ..description = _workshop.description
-                                ..date = _workshop.date
-                                ..time = _workshop.time
-                                ..location = _workshop.location
-                                ..audience = _workshop.audience
-                                ..resources = _workshop.resources);
-
-                          await AppConstants.service
-                              .updateWorkshopByPatch(
-                                  widget.workshopData.id,
-                                  "token ${AppConstants.djangoToken}",
-                                  editedWorkshop)
-                              .catchError((onError) {
-                            print(
-                                'Error editing workshop: ${onError.toString()}');
-                            showUnSuccessfulDialog();
-                          }).then((value) {
-                            if (value.isSuccessful) {
-                              print('Edited!');
-                              showSuccessfulDialog();
-                            }
-                          }).catchError((onError) {
-                            print(
-                                'Error printing EDITED workshop: ${onError.toString()}');
-                          });
-
-                          await AppConstants.service
-                              .updateContacts(
-                            widget.workshopData.id,
-                            "token ${AppConstants.djangoToken}",
-                            BuiltContacts(
-                              (b) => b
-                                ..contacts =
-                                    _workshop.contactIds.build().toBuilder(),
-                            ),
-                          )
-                              .catchError((onError) {
-                            print(
-                                'Error editing contacts in edited workshop: ${onError.toString()}');
-                            // showUnSuccessfulDialog();
-                          });
+                          WorkshopCreater.edit(
+                              context: context,
+                              workshop: _workshop,
+                              club: widget.club,
+                              widgetWorkshopData: widget.workshopData);
                         }
                       }
                     },
@@ -652,35 +353,155 @@ class _CreateScreenState extends State<CreateScreen> {
       ),
     );
   }
-}
 
-class WorkshopCreater {
-  String title;
-  String description;
-  int clubId;
-  String date;
-  String time;
-  String location;
-  String audience;
-  String resources;
-  List<int> contactIds = [];
-  Map<int, String> contactNameofId = {};
-  // TODO: add image_url
+  Widget _buildContactsFromSearchPosts(
+    BuildContext context,
+  ) {
+    return this._searchedDataFetched
+        ? ListView(
+            shrinkWrap: true,
+            children: <Widget>[
+              Container(
+                child: (this._searchedProfileresult == null ||
+                        this._searchedProfileresult.isEmpty)
+                    ? Center(
+                        child: Text(
+                          'No such contact found........',
+                          textAlign: TextAlign.center,
+                          textScaleFactor: 1.5,
+                        ),
+                      )
+                    : ListView.builder(
+                        physics: ScrollPhysics(),
+                        shrinkWrap: true,
+                        scrollDirection: Axis.vertical,
+                        itemCount: _searchedProfileresult.length,
+                        padding: EdgeInsets.all(8),
+                        itemBuilder: (context, index) {
+                          bool _isAdded = this
+                              ._workshop
+                              .contactIds
+                              .contains(_searchedProfileresult[index].id);
 
-  WorkshopCreater({String editingDate, String editingTime}) {
-    if (editingDate == null) {
-      date = convertDate(DateTime.now());
-      time = converTime(TimeOfDay.now());
-    } else {
-      date = editingDate;
-      time = editingTime;
+                          return Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 3, vertical: 10),
+                            child: Container(
+                              // color: Colors.lightBlue.withOpacity(0.3),
+                              height: MediaQuery.of(context).size.height / 11,
+                              child: Row(
+                                children: <Widget>[
+                                  Expanded(
+                                    flex: 2,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                        image: (_searchedProfileresult[index]
+                                                        .photo_url ==
+                                                    null ||
+                                                _searchedProfileresult[index]
+                                                    .photo_url
+                                                    .isEmpty)
+                                            ? Image.asset(
+                                                'assets/profile_test.jpg')
+                                            : NetworkImage(
+                                                _searchedProfileresult[index]
+                                                    .photo_url),
+                                      )),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 8,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 8.0, right: 10.0),
+                                      child: Column(
+                                        children: <Widget>[
+                                          Text(_searchedProfileresult[index]
+                                              .name),
+                                          Text(_searchedProfileresult[index]
+                                              .email),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 2,
+                                    child: OutlineButton(
+                                      onPressed: () {
+                                        int _id =
+                                            _searchedProfileresult[index].id;
+                                        String _name =
+                                            WorkshopCreater.nameOfContact(
+                                                _searchedProfileresult[index]
+                                                    .name);
+
+                                        if (_isAdded) {
+                                          _isAdded = false;
+                                          this._workshop.contactIds.remove(_id);
+                                          this
+                                              ._workshop
+                                              .contactNameofId
+                                              .remove(_id);
+                                        } else {
+                                          _isAdded = true;
+                                          this._workshop.contactIds.add(_id);
+                                          this._workshop.contactNameofId[_id] =
+                                              _name;
+                                        }
+                                        if (!this.mounted) return;
+                                        setState(() {});
+                                      },
+                                      child: Icon(
+                                          _isAdded ? Icons.remove : Icons.add),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+              ),
+            ],
+          )
+        : Center(
+            child: CircularProgressIndicator(),
+          );
+  }
+
+  Future<Null> _selectDate(BuildContext context) async {
+    if (this._editingDate == null) {
+      this._editingDate = DateTime.now().toString();
+    }
+    int _editingyear = int.parse(this._editingDate.substring(0, 4));
+    int _editingmonth = int.parse(this._editingDate.substring(5, 7));
+    int _editingday = int.parse(this._editingDate.substring(8, 10));
+    final DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: widget.workshopData == null
+            ? DateTime.now()
+            : DateTime(_editingyear, _editingmonth, _editingday),
+        firstDate: new DateTime(2018),
+        lastDate: new DateTime(2022));
+
+    if (picked != null && picked != DateTime.now()) {
+      setState(() {
+        _workshop.date = _workshop.convertDate(picked);
+      });
     }
   }
-  String convertDate(DateTime date) {
-    return date.toString().substring(0, 10);
-  }
 
-  String converTime(TimeOfDay time) {
-    return time.toString().substring(10, 15);
+  Future<Null> _selectTime(BuildContext context) async {
+    final TimeOfDay picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+
+    if (picked != null && picked != TimeOfDay.now()) {
+      setState(() {
+        _workshop.time = _workshop.converTime(picked);
+      });
+    }
   }
 }
