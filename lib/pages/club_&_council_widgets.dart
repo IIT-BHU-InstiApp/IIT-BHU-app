@@ -9,7 +9,6 @@ import 'package:iit_app/ui/text_style.dart';
 import 'clubs.dart';
 
 class ClubWidgets {
-
   static Container getSecies(BuildContext context, {secy, joint_secy}) {
     return Container(
       color: Colors.grey[300],
@@ -117,7 +116,7 @@ class ClubWidgets {
   static Widget getClubCard(
       {BuildContext context,
       String title,
-      String subtitle = '',
+      String subtitle,
       int id,
       String imageUrl,
       bool isCouncil,
@@ -179,18 +178,18 @@ class ClubWidgets {
     );
 
     final clubCardContent = Container(
-      margin: new EdgeInsets.fromLTRB(
-          horizontal ? 40.0 : 10.0, horizontal ? 16.0 : 42.0, 10.0, 10.0),
+      margin: new EdgeInsets.only(left: horizontal ? 40.0 : 10.0, right: 10.0),
       constraints: new BoxConstraints.expand(),
       child: new Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment:
             horizontal ? CrossAxisAlignment.start : CrossAxisAlignment.center,
         children: <Widget>[
           horizontal ? Container() : SizedBox(height: 4.0),
           Text(title, style: Style.titleTextStyle),
           Container(height: horizontal ? 4 : 10),
-          subtitle == ''
-              ? SizedBox(height: 1.0)
+          subtitle == null
+              ? Container()
               : Text(subtitle, style: Style.commonTextStyle),
           horizontal ? Container() : Separator(),
         ],
