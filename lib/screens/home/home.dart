@@ -61,6 +61,7 @@ class _HomeScreenState extends State<HomeScreen>
                       : NetworkImage(AppConstants.currentUser.photoUrl),
                   fit: BoxFit.cover)),
           getNavItem(Icons.home, "Home", '/home', replacement: true),
+          getNavItem(Icons.map, "Map", '/mapScreen'),
           getNavItem(Icons.local_dining, "Mess management", '/mess'),
           getNavItem(Icons.group_work, "All Workshops", '/allWorkshops'),
           getNavItem(Icons.account_box, "Account", '/account'),
