@@ -6,12 +6,12 @@ import 'package:iit_app/pages/clubs.dart';
 import 'package:built_collection/built_collection.dart';
 
 class CreateScreen extends StatefulWidget {
-  final int clubId;
+  final ClubListPost club;
   final String clubName;
   final BuiltWorkshopDetailPost workshopData;
   const CreateScreen(
       {Key key,
-      @required this.clubId,
+      @required this.club,
       @required this.clubName,
       this.workshopData})
       : super(key: key);
@@ -248,7 +248,7 @@ class _CreateScreenState extends State<CreateScreen> {
                     context,
                     MaterialPageRoute(
                         builder: (context) =>
-                            ClubPage(clubId: widget.clubId, editMode: true)));
+                            ClubPage(club: widget.club, editMode: true)));
               },
             ),
           ],
@@ -566,7 +566,7 @@ class _CreateScreenState extends State<CreateScreen> {
                           final newWorkshop = BuiltWorkshopCreatePost((b) => b
                             ..title = _workshop.title
                             ..description = _workshop.description
-                            ..club = widget.clubId
+                            ..club = widget.club.id
                             ..date = _workshop.date
                             ..time = _workshop.time
                             ..location = _workshop.location

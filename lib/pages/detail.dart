@@ -51,7 +51,7 @@ class _DetailPage extends State<DetailPage> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => ClubPage(
-                            clubId: _workshop.club.id, editMode: true)));
+                            club: _workshop.club, editMode: true)));
               },
             ),
           ],
@@ -291,7 +291,7 @@ class _DetailPage extends State<DetailPage> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => CreateScreen(
-                        clubId: _workshop.club.id,
+                        club: _workshop.club,
                         clubName: _workshop.club.name,
                         workshopData: _workshop,
                       ),
