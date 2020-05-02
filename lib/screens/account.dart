@@ -260,7 +260,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                     itemCount:
                                         profileDetails.subscriptions.length,
                                     itemBuilder: (context, index) {
-                                      return ClubWidgets.getClubCard(
+                                      return ClubAndCouncilWidgets.getClubCard(
                                         clubTypeForHero: 'Subscriptions',
                                           context: context,
                                           title: profileDetails
@@ -300,7 +300,7 @@ class _AccountScreenState extends State<AccountScreen> {
                           physics: const NeverScrollableScrollPhysics(),
                           itemCount: profileDetails.club_privileges.length,
                           itemBuilder: (context, index) {
-                            return ClubWidgets.getClubCard(
+                            return ClubAndCouncilWidgets.getClubCard(
                                 clubTypeForHero: 'Club Privileges',
                                 context: context,
                                 title:

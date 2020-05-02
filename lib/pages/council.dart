@@ -96,9 +96,9 @@ class _CouncilPageState extends State<CouncilPage> {
                             fit: BoxFit.cover, height: 300.0),
                     constraints: new BoxConstraints.expand(height: 295.0),
                   ),
-                  ClubWidgets.getGradient(),
+                  ClubAndCouncilWidgets.getGradient(),
                   _getDescription(),
-                  ClubWidgets.getToolbar(context),
+                  ClubAndCouncilWidgets.getToolbar(context),
                 ],
               ),
       ),
@@ -111,7 +111,7 @@ class _CouncilPageState extends State<CouncilPage> {
       child: new ListView(
         padding: new EdgeInsets.fromLTRB(0.0, 72.0, 0.0, 32.0),
         children: <Widget>[
-          ClubWidgets.getClubCard(
+          ClubAndCouncilWidgets.getClubCard(
               title: councilData.name,
               id: councilData.id,
               imageUrl: councilData.large_image_url,
@@ -152,7 +152,7 @@ class _CouncilPageState extends State<CouncilPage> {
               physics: const NeverScrollableScrollPhysics(),
               itemCount: councilData.clubs.length,
               itemBuilder: (context, index) {
-                return ClubWidgets.getClubCard(
+                return ClubAndCouncilWidgets.getClubCard(
                   context: context,
                   title: councilData.clubs[index].name,
                   subtitle: councilData.name,
@@ -211,7 +211,7 @@ class _CouncilPageState extends State<CouncilPage> {
                           ? Container(
                               height: MediaQuery.of(context).size.height / 4,
                               child: Center(child: CircularProgressIndicator()))
-                          : ClubWidgets.getSecies(context,
+                          : ClubAndCouncilWidgets.getSecies(context,
                               secy: councilData.gensec,
                               joint_secy: councilData.joint_gensec),
                     ],

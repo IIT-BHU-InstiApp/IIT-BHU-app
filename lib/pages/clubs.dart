@@ -152,9 +152,9 @@ class _ClubPageState extends State<ClubPage> {
                             fit: BoxFit.cover, height: 300.0),
                     constraints: new BoxConstraints.expand(height: 295.0),
                   ),
-            ClubWidgets.getGradient(),
+            ClubAndCouncilWidgets.getGradient(),
             _getClubCardAndDescription(),
-            ClubWidgets.getToolbar(context),
+            ClubAndCouncilWidgets.getToolbar(context),
           ],
         ),
       ),
@@ -167,7 +167,7 @@ class _ClubPageState extends State<ClubPage> {
       child: new ListView(
         padding: new EdgeInsets.fromLTRB(0.0, 72.0, 0.0, 32.0),
         children: <Widget>[
-          ClubWidgets.getClubCard(
+          ClubAndCouncilWidgets.getClubCard(
               title: widget.club.name,
               subtitle: widget.club.council.name,
               id: widget.club.id,
@@ -305,7 +305,7 @@ class _ClubPageState extends State<ClubPage> {
                     ? Container(
                         height: MediaQuery.of(context).size.height / 4,
                         child: Center(child: CircularProgressIndicator()))
-                    : ClubWidgets.getSecies(context,
+                    : ClubAndCouncilWidgets.getSecies(context,
                         secy: clubMap.secy, joint_secy: clubMap.joint_secy),
               ],
             ),

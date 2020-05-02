@@ -8,7 +8,7 @@ import 'package:iit_app/ui/text_style.dart';
 
 import 'clubs.dart';
 
-class ClubWidgets {
+class ClubAndCouncilWidgets {
   static Container getSecies(BuildContext context, {secy, joint_secy}) {
     return Container(
       color: Colors.grey[300],
@@ -19,7 +19,7 @@ class ClubWidgets {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               joint_secy.length > 0
-                  ? ClubWidgets.getPosHolder(
+                  ? ClubAndCouncilWidgets.getPosHolder(
                       context: context,
                       imageUrl: joint_secy[0].photo_url,
                       desg: 'Joint-Secy',
@@ -29,7 +29,7 @@ class ClubWidgets {
                   : SizedBox(width: 1),
               secy == null
                   ? SizedBox(width: 1)
-                  : ClubWidgets.getPosHolder(
+                  : ClubAndCouncilWidgets.getPosHolder(
                       context: context,
                       imageUrl: secy.photo_url,
                       desg: 'Secy',
@@ -37,7 +37,7 @@ class ClubWidgets {
                       email: secy.email,
                     ),
               joint_secy.length > 1
-                  ? ClubWidgets.getPosHolder(
+                  ? ClubAndCouncilWidgets.getPosHolder(
                       context: context,
                       imageUrl: joint_secy[1].photo_url,
                       desg: 'Joint Secy',
