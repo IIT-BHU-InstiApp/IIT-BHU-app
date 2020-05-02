@@ -4,7 +4,7 @@ import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/appConstants.dart';
-import 'package:iit_app/pages/clubs.dart';
+import 'package:iit_app/pages/club/club.dart';
 import 'package:iit_app/pages/create.dart';
 import 'package:iit_app/screens/home/home_widgets.dart';
 import 'package:iit_app/ui/separator.dart';

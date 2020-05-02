@@ -147,10 +147,10 @@ class HomeWidgets {
     }
 
     final workshopCardContent = new Container(
-      margin: new EdgeInsets.fromLTRB(
-          horizontal ? 60.0 : 16.0, horizontal ? 16.0 : 42.0, 16.0, 16.0),
+      margin: new EdgeInsets.only(left: horizontal ? 60.0 : 16.0, right: 16.0),
       constraints: new BoxConstraints.expand(),
       child: new Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment:
             horizontal ? CrossAxisAlignment.start : CrossAxisAlignment.center,
         children: <Widget>[

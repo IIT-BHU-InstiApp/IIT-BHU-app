@@ -9,6 +9,7 @@ import 'package:iit_app/pages/create.dart';
 import 'package:iit_app/screens/home/home_widgets.dart';
 import 'package:iit_app/ui/separator.dart';
 import 'package:iit_app/ui/text_style.dart';
+import 'workshop_tabs.dart';
 
 class ClubPage extends StatefulWidget {
   final ClubListPost club;
@@ -19,17 +20,20 @@ class ClubPage extends StatefulWidget {
   _ClubPageState createState() => _ClubPageState();
 }
 
-class _ClubPageState extends State<ClubPage> {
+class _ClubPageState extends State<ClubPage>
+    with SingleTickerProviderStateMixin {
   TextStyle tempStyle = TextStyle(fontSize: 50.0, fontWeight: FontWeight.bold);
   BuiltClubPost clubMap;
   bool _loadingWorkshops = true;
   bool _toggling = false;
+  TabController _tabController;
 
   File _clubLargeLogoFile;
 
   @override
   void initState() {
     print("Club opened in edit mode:${widget.editMode}");
+    _tabController = new TabController(length: 2, vsync: this);
     fetchClubDataById();
     super.initState();
   }
@@ -201,54 +205,6 @@ class _ClubPageState extends State<ClubPage> {
     );
   }
 
-  Widget _getActiveWorkshops() {
-    return clubMap == null || this._loadingWorkshops
-        ? Container(
-            height: MediaQuery.of(context).size.height / 4,
-            child: Center(
-              child: CircularProgressIndicator(),
-            ))
-        : ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            scrollDirection: Axis.vertical,
-            itemCount: clubMap.active_workshops.length,
-            // posts.length,
-            padding: EdgeInsets.all(8),
-            itemBuilder: (context, index) {
-              return HomeWidgets.getWorkshopCard(
-                context,
-                w: clubMap.active_workshops[index],
-                editMode: widget.editMode,
-              );
-            },
-          );
-  }
-
-  Widget _getPastWorkshops() {
-    return clubMap == null || this._loadingWorkshops
-        ? Container(
-            child: Center(
-              child: CircularProgressIndicator(),
-            ),
-          )
-        : ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            scrollDirection: Axis.vertical,
-            itemCount: clubMap.past_workshops.length,
-            // posts.length,
-            padding: EdgeInsets.all(8),
-            itemBuilder: (context, index) {
-              return HomeWidgets.getWorkshopCard(
-                context,
-                w: clubMap.past_workshops[index],
-                editMode: widget.editMode,
-              );
-            },
-          );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -286,20 +242,8 @@ class _ClubPageState extends State<ClubPage> {
                             ),
                           );
                         }),
-                widget.editMode
-                    ? Center(
-                        child: Text('Edit Workshops Here:',
-                            style: Style.headingStyle),
-                      )
-                    : SizedBox(height: 1),
-                Center(
-                  child: Text('Active Workshops', style: Style.headingStyle),
-                ),
-                _getActiveWorkshops(),
-                Center(
-                  child: Text('Past Workshops', style: Style.headingStyle),
-                ),
-                _getPastWorkshops(),
+                WorkshopTabs.getActiveAndPastTabBar(
+                    club: clubMap, tabController: _tabController),
                 space,
                 clubMap == null
                     ? Container(

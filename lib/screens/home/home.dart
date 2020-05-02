@@ -86,6 +86,7 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   void initState() {
     _tabController = new TabController(length: 2, vsync: this);
+    print(this);
 
     fetchWorkshopsAndCouncilButtons();
     super.initState();

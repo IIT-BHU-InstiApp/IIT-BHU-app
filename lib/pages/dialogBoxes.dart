@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/built_post.dart';
-import 'package:iit_app/pages/clubs.dart';
+import 'package:iit_app/pages/club/club.dart';
 
 class CreatePageDialogBoxes {
   static showSuccesfulDialog({
