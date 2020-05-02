@@ -194,7 +194,7 @@ class HomeWidgets {
         borderRadius: new BorderRadius.circular(8.0),
         boxShadow: <BoxShadow>[
           new BoxShadow(
-            color: Colors.black12,
+            color: Colors.black26,
             blurRadius: 10.0,
             offset: new Offset(0.0, 10.0),
           ),
