@@ -8,7 +8,50 @@ import 'package:iit_app/ui/text_style.dart';
 
 import 'clubs.dart';
 
-class ClubWidgets {
+class ClubAndCouncilWidgets {
+  static Container getSecies(BuildContext context, {secy, joint_secy}) {
+    return Container(
+      color: Colors.grey[300],
+      child: Column(
+        children: [
+          Center(child: Text('Secys:', style: Style.headingStyle)),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              joint_secy.length > 0
+                  ? ClubAndCouncilWidgets.getPosHolder(
+                      context: context,
+                      imageUrl: joint_secy[0].photo_url,
+                      desg: 'Joint-Secy',
+                      name: joint_secy[0].name,
+                      email: joint_secy[0].email,
+                    )
+                  : SizedBox(width: 1),
+              secy == null
+                  ? SizedBox(width: 1)
+                  : ClubAndCouncilWidgets.getPosHolder(
+                      context: context,
+                      imageUrl: secy.photo_url,
+                      desg: 'Secy',
+                      name: secy.name,
+                      email: secy.email,
+                    ),
+              joint_secy.length > 1
+                  ? ClubAndCouncilWidgets.getPosHolder(
+                      context: context,
+                      imageUrl: joint_secy[1].photo_url,
+                      desg: 'Joint Secy',
+                      name: joint_secy[1].name,
+                      email: joint_secy[1].email,
+                    )
+                  : SizedBox(width: 1),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
   static Container getToolbar(BuildContext context) {
     return new Container(
       margin: new EdgeInsets.only(top: MediaQuery.of(context).padding.top),
@@ -73,7 +116,7 @@ class ClubWidgets {
   static Widget getClubCard(
       {BuildContext context,
       String title,
-      String subtitle = '',
+      String subtitle,
       int id,
       String imageUrl,
       bool isCouncil,
@@ -135,18 +178,18 @@ class ClubWidgets {
     );
 
     final clubCardContent = Container(
-      margin: new EdgeInsets.fromLTRB(
-          horizontal ? 40.0 : 10.0, horizontal ? 16.0 : 42.0, 10.0, 10.0),
+      margin: new EdgeInsets.only(left: horizontal ? 40.0 : 10.0, right: 10.0),
       constraints: new BoxConstraints.expand(),
       child: new Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment:
             horizontal ? CrossAxisAlignment.start : CrossAxisAlignment.center,
         children: <Widget>[
           horizontal ? Container() : SizedBox(height: 4.0),
           Text(title, style: Style.titleTextStyle),
           Container(height: horizontal ? 4 : 10),
-          subtitle == ''
-              ? SizedBox(height: 1.0)
+          subtitle == null
+              ? Container()
               : Text(subtitle, style: Style.commonTextStyle),
           horizontal ? Container() : Separator(),
         ],

@@ -62,12 +62,6 @@ class _CouncilPageState extends State<CouncilPage> {
 
   final space = SizedBox(height: 8.0);
 
-  final headingStyle = TextStyle(
-      fontSize: 30.0,
-      color: Colors.black,
-      fontWeight: FontWeight.bold,
-      letterSpacing: 1.0);
-  final generalTextStyle = TextStyle(fontSize: 20.0, color: Colors.black);
   final divide = Divider(height: 8.0, thickness: 2.0, color: Colors.blue);
 
   SliverAppBar _getSliverAppBar(context) {
@@ -102,9 +96,9 @@ class _CouncilPageState extends State<CouncilPage> {
                             fit: BoxFit.cover, height: 300.0),
                     constraints: new BoxConstraints.expand(height: 295.0),
                   ),
-                  ClubWidgets.getGradient(),
+                  ClubAndCouncilWidgets.getGradient(),
                   _getDescription(),
-                  ClubWidgets.getToolbar(context),
+                  ClubAndCouncilWidgets.getToolbar(context),
                 ],
               ),
       ),
@@ -117,7 +111,7 @@ class _CouncilPageState extends State<CouncilPage> {
       child: new ListView(
         padding: new EdgeInsets.fromLTRB(0.0, 72.0, 0.0, 32.0),
         children: <Widget>[
-          ClubWidgets.getClubCard(
+          ClubAndCouncilWidgets.getClubCard(
               title: councilData.name,
               id: councilData.id,
               imageUrl: councilData.large_image_url,
@@ -143,51 +137,6 @@ class _CouncilPageState extends State<CouncilPage> {
     );
   }
 
-  Container _getSecies(context) {
-    return councilData == null
-        ? Container(
-            height: MediaQuery.of(context).size.height / 4,
-            child: Center(
-              child: CircularProgressIndicator(),
-            ),
-          )
-        : Container(
-            color: Colors.grey[300],
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                councilData.joint_gensec.length > 0
-                    ? ClubWidgets.getPosHolder(
-                        context: context,
-                        imageUrl: councilData.joint_gensec[0].photo_url,
-                        desg: 'joint gensec',
-                        name: councilData.joint_gensec[0].name,
-                        email: councilData.joint_gensec[0].email,
-                      )
-                    : SizedBox(width: 1),
-                councilData.gensec == null
-                    ? SizedBox(width: 1)
-                    : ClubWidgets.getPosHolder(
-                        context: context,
-                        imageUrl: councilData.gensec.photo_url,
-                        desg: 'gensec',
-                        name: councilData.gensec.name,
-                        email: councilData.gensec.email,
-                      ),
-                councilData.joint_gensec.length > 1
-                    ? ClubWidgets.getPosHolder(
-                        context: context,
-                        imageUrl: councilData.joint_gensec[1].photo_url,
-                        desg: 'joint gensec',
-                        name: councilData.joint_gensec[1].name,
-                        email: councilData.joint_gensec[1].email,
-                      )
-                    : SizedBox(width: 1),
-              ],
-            ),
-          );
-  }
-
   Widget _getClubs() {
     return councilData == null
         ? Container(
@@ -203,7 +152,7 @@ class _CouncilPageState extends State<CouncilPage> {
               physics: const NeverScrollableScrollPhysics(),
               itemCount: councilData.clubs.length,
               itemBuilder: (context, index) {
-                return ClubWidgets.getClubCard(
+                return ClubAndCouncilWidgets.getClubCard(
                   context: context,
                   title: councilData.clubs[index].name,
                   subtitle: councilData.name,
@@ -235,7 +184,6 @@ class _CouncilPageState extends State<CouncilPage> {
                     //scrollDirection: Axis.vertical,
                     children: <Widget>[
                       space,
-                      _getSecies(context),
                       Container(
                         color: Colors.white,
                         //margin: EdgeInsets.all(8.0),
@@ -248,11 +196,9 @@ class _CouncilPageState extends State<CouncilPage> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  Text(
-                                    'Clubs',
-                                    style: headingStyle,
-                                    textAlign: TextAlign.left,
-                                  ),
+                                  Text('Clubs',
+                                      style: Style.headingStyle,
+                                      textAlign: TextAlign.left),
                                   divide,
                                 ],
                               ),
@@ -261,6 +207,13 @@ class _CouncilPageState extends State<CouncilPage> {
                         ),
                       ),
                       _getClubs(),
+                      councilData == null
+                          ? Container(
+                              height: MediaQuery.of(context).size.height / 4,
+                              child: Center(child: CircularProgressIndicator()))
+                          : ClubAndCouncilWidgets.getSecies(context,
+                              secy: councilData.gensec,
+                              joint_secy: councilData.joint_gensec),
                     ],
                   ),
                 ),

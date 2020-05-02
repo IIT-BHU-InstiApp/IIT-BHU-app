@@ -119,11 +119,6 @@ class _ClubPageState extends State<ClubPage> {
 
   final divide = Divider(height: 8.0, thickness: 2.0, color: Colors.blue);
   final space = SizedBox(height: 8.0);
-  final headingStyle = TextStyle(
-      fontSize: 30.0,
-      color: Colors.black,
-      fontWeight: FontWeight.bold,
-      letterSpacing: 1.0);
 
   SliverAppBar _getSliverAppBar(context) {
     return SliverAppBar(
@@ -157,9 +152,9 @@ class _ClubPageState extends State<ClubPage> {
                             fit: BoxFit.cover, height: 300.0),
                     constraints: new BoxConstraints.expand(height: 295.0),
                   ),
-            ClubWidgets.getGradient(),
+            ClubAndCouncilWidgets.getGradient(),
             _getClubCardAndDescription(),
-            ClubWidgets.getToolbar(context),
+            ClubAndCouncilWidgets.getToolbar(context),
           ],
         ),
       ),
@@ -172,7 +167,7 @@ class _ClubPageState extends State<ClubPage> {
       child: new ListView(
         padding: new EdgeInsets.fromLTRB(0.0, 72.0, 0.0, 32.0),
         children: <Widget>[
-          ClubWidgets.getClubCard(
+          ClubAndCouncilWidgets.getClubCard(
               title: widget.club.name,
               subtitle: widget.club.council.name,
               id: widget.club.id,
@@ -204,39 +199,6 @@ class _ClubPageState extends State<ClubPage> {
         ],
       ),
     );
-  }
-
-  Container _getSecies(context) {
-    return clubMap == null
-        ? Container(
-            height: MediaQuery.of(context).size.height / 4,
-            child: Center(
-              child: CircularProgressIndicator(),
-            ),
-          )
-        : Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                clubMap.secy == null
-                    ? Container()
-                    : ClubWidgets.getPosHolder(
-                        name: clubMap.secy.name,
-                        desg: 'Secy',
-                        imageUrl: clubMap.secy.photo_url,
-                        context: context,
-                        email: clubMap.secy.email),
-                // ClubWidgets.getPosHolder(
-                //     name: clubMap.joint_secy[0].name,
-                //     desg: 'JointSecy',
-                //     imageUrl: clubMap.joint_secy[0].photo_url),
-                // ClubWidgets.getPosHolder(
-                //     name: clubMap.joint_secy[1].name,
-                //     desg: 'JointSecy',
-                //     imageUrl: clubMap.joint_secy[1].photo_url),
-              ],
-            ),
-          );
   }
 
   Widget _getActiveWorkshops() {
@@ -312,8 +274,6 @@ class _ClubPageState extends State<ClubPage> {
             delegate: SliverChildListDelegate(
               [
                 space,
-                _getSecies(context),
-                space,
                 clubMap == null
                     ? Container()
                     : RaisedButton(
@@ -328,26 +288,25 @@ class _ClubPageState extends State<ClubPage> {
                         }),
                 widget.editMode
                     ? Center(
-                        child: Text(
-                          'Edit Workshops Here:',
-                          style: headingStyle,
-                        ),
+                        child: Text('Edit Workshops Here:',
+                            style: Style.headingStyle),
                       )
                     : SizedBox(height: 1),
                 Center(
-                  child: Text(
-                    'Active Workshops',
-                    style: headingStyle,
-                  ),
+                  child: Text('Active Workshops', style: Style.headingStyle),
                 ),
                 _getActiveWorkshops(),
                 Center(
-                  child: Text(
-                    'Past Workshops',
-                    style: headingStyle,
-                  ),
+                  child: Text('Past Workshops', style: Style.headingStyle),
                 ),
                 _getPastWorkshops(),
+                space,
+                clubMap == null
+                    ? Container(
+                        height: MediaQuery.of(context).size.height / 4,
+                        child: Center(child: CircularProgressIndicator()))
+                    : ClubAndCouncilWidgets.getSecies(context,
+                        secy: clubMap.secy, joint_secy: clubMap.joint_secy),
               ],
             ),
           ),
