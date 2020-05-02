@@ -45,12 +45,12 @@ class WorkshopCreater {
   static create({
     @required BuildContext context,
     @required WorkshopCreater workshop,
-    @required int clubId,
+    @required ClubListPost club,
   }) async {
     final newWorkshop = BuiltWorkshopCreatePost((b) => b
       ..title = workshop.title
       ..description = workshop.description
-      ..club = clubId
+      ..club = club.id
       ..date = workshop.date
       ..time = workshop.time
       ..location = workshop.location
@@ -66,8 +66,7 @@ class WorkshopCreater {
     }).then((value) {
       if (value.isSuccessful) {
         print('Created!');
-        CreatePageDialogBoxes.showSuccessfulDialog(
-            context: context, clubId: clubId);
+        CreatePageDialogBoxes.showSuccesfulDialog(context: context, club: club);
       }
     }).catchError((onError) {
       print('Error printing CREATED workshop: ${onError.toString()}');
@@ -77,7 +76,7 @@ class WorkshopCreater {
   static edit(
       {@required BuildContext context,
       @required WorkshopCreater workshop,
-      @required int clubId,
+      @required ClubListPost club,
       @required BuiltWorkshopDetailPost widgetWorkshopData}) async {
     final editedWorkshop = BuiltWorkshopDetailPost((b) => b
       ..title = workshop.title
@@ -97,8 +96,8 @@ class WorkshopCreater {
     }).then((value) {
       if (value.isSuccessful) {
         print('Edited!');
-        CreatePageDialogBoxes.showSuccessfulDialog(
-            context: context, clubId: clubId, isEditing: true);
+        CreatePageDialogBoxes.showSuccesfulDialog(
+            context: context, club: club, isEditing: true);
       }
     }).catchError((onError) {
       print('Error printing EDITED workshop: ${onError.toString()}');

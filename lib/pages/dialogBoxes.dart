@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/pages/clubs.dart';
 
 class CreatePageDialogBoxes {
-  static showSuccessfulDialog({
+  static showSuccesfulDialog({
     @required BuildContext context,
-    @required int clubId,
+    @required ClubListPost club,
     bool isEditing = false,
   }) {
     showDialog(
@@ -29,7 +30,7 @@ class CreatePageDialogBoxes {
                     context,
                     MaterialPageRoute(
                         builder: (context) =>
-                            ClubPage(clubId: clubId, editMode: true)));
+                            ClubPage(club: club, editMode: true)));
               },
             ),
           ],

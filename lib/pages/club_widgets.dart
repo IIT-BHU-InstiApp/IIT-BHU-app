@@ -29,26 +29,42 @@ class ClubWidgets {
     );
   }
 
-  static Widget getPosHolder({String imageUrl, String name, String desg}) {
-    return Column(
-      children: <Widget>[
-        SizedBox(height: 4.0),
-        Center(
-          child: CircleAvatar(
-            backgroundImage: imageUrl == null
-                ? AssetImage('assets/iitbhu.jpeg')
-                : NetworkImage(imageUrl),
-            radius: 30.0,
-            backgroundColor: Colors.transparent,
+  static Widget getPosHolder(
+      {String desg,
+      BuildContext context,
+      String name,
+      String imageUrl,
+      String email,
+      String phone}) {
+    return GestureDetector(
+      onTap: () {
+        detailsDialog(
+          context: context,
+          name: name,
+          imageUrl: imageUrl,
+          email: email,
+        );
+      },
+      child: Column(
+        children: <Widget>[
+          SizedBox(height: 4.0),
+          Center(
+            child: CircleAvatar(
+              backgroundImage: imageUrl == null
+                  ? AssetImage('assets/iitbhu.jpeg')
+                  : NetworkImage(imageUrl),
+              radius: 30.0,
+              backgroundColor: Colors.transparent,
+            ),
           ),
-        ),
-        Container(
-          child: Text(name, textAlign: TextAlign.center),
-          width: 100,
-        ),
-        Text(desg, textAlign: TextAlign.center),
-        SizedBox(height: 4.0),
-      ],
+          Container(
+            child: Text(name, textAlign: TextAlign.center),
+            width: 100,
+          ),
+          Text(desg, textAlign: TextAlign.center),
+          SizedBox(height: 4.0),
+        ],
+      ),
     );
   }
 
@@ -160,4 +176,114 @@ class ClubWidgets {
         ],
       );
   }
+
+  static Future detailsDialog(
+          {BuildContext context,
+          String name,
+          String imageUrl,
+          String email,
+          String phone}) =>
+      showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext context) {
+          final dialogColor = Color(0xFFAFAFAF);
+          Container details = Container(
+            child: Stack(
+              children: [
+                Container(
+                  constraints: new BoxConstraints.expand(),
+                  margin: EdgeInsets.fromLTRB(0.0, 50.0, 0.0, 0.0),
+                  padding: EdgeInsets.fromLTRB(0.0, 50.0, 0.0, 0.0),
+                  decoration: new BoxDecoration(
+                    color: Color(0xFF004681),
+                    shape: BoxShape.rectangle,
+                    borderRadius: new BorderRadius.circular(8.0),
+                    boxShadow: <BoxShadow>[
+                      new BoxShadow(
+                        color: Colors.black12,
+                        blurRadius: 10.0,
+                        offset: new Offset(0.0, 10.0),
+                      ),
+                    ],
+                  ),
+                  child: ListView(
+                    //crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        name,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 25.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                      SizedBox(height: 10.0),
+                      ListTile(
+                        leading: Icon(
+                          Icons.email,
+                          color: dialogColor,
+                        ),
+                        title: Text(
+                          email,
+                          style: TextStyle(
+                            color: dialogColor,
+                          ),
+                        ),
+                      ),
+                      ListTile(
+                        leading: Icon(
+                          Icons.phone,
+                          color: dialogColor,
+                        ),
+                        title: Text(
+                          //phone,
+                          'No Phone',
+                          style: TextStyle(
+                            color: dialogColor,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  /*decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black12,
+                        blurRadius: 20.0,
+                        offset: new Offset(0.0, -10.0),
+                      ),
+                    ],
+                  ),*/
+                  alignment: Alignment.topCenter,
+                  padding: EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 0.0),
+                  child: CircleAvatar(
+                    backgroundColor: Colors.transparent,
+                    radius: 35.0,
+                    backgroundImage: NetworkImage(imageUrl),
+                  ),
+                ),
+              ],
+            ),
+          );
+          Container outerBox = Container(
+            child: details,
+            height: 270.0,
+            color: Colors.transparent,
+            margin: EdgeInsets.fromLTRB(0.0, 25.0, 0.0, 0.0),
+          );
+
+          return Dialog(
+            backgroundColor: Colors.transparent,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15.0),
+            ),
+            child: outerBox,
+          );
+        },
+      );
 }

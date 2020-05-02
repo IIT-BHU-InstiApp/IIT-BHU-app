@@ -11,9 +11,9 @@ import 'package:iit_app/screens/home/separator.dart';
 import 'package:iit_app/screens/home/text_style.dart';
 
 class ClubPage extends StatefulWidget {
-  final int clubId;
+  final ClubListPost club;
   final bool editMode;
-  const ClubPage({Key key, @required this.clubId, this.editMode = false})
+  const ClubPage({Key key, @required this.club, this.editMode = false})
       : super(key: key);
   @override
   _ClubPageState createState() => _ClubPageState();
@@ -37,7 +37,7 @@ class _ClubPageState extends State<ClubPage> {
   fetchClubDataById() async {
     if (clubMap == null) {
       clubMap =
-          await AppConstants.getClubDetailsFromDatabase(clubId: widget.clubId);
+          await AppConstants.getClubDetailsFromDatabase(clubId: widget.club.id);
     }
     if (clubMap != null) {
       _clubLargeLogoFile = AppConstants.getImageFile(
@@ -57,7 +57,7 @@ class _ClubPageState extends State<ClubPage> {
     setState(() {});
 
     Response<BuiltClubPost> snapshots = await AppConstants.service
-        .getClub(widget.clubId, "token ${AppConstants.djangoToken}")
+        .getClub(widget.club.id, "token ${AppConstants.djangoToken}")
         .catchError((onError) {
       print("Error in fetching clubs: ${onError.toString()}");
     });
@@ -86,12 +86,12 @@ class _ClubPageState extends State<ClubPage> {
 
     await AppConstants.service
         .toggleClubSubscription(
-            widget.clubId, "token ${AppConstants.djangoToken}")
+            widget.club.id, "token ${AppConstants.djangoToken}")
         .then((snapshot) async {
       print("status of club subscription: ${snapshot.statusCode}");
       if (snapshot.statusCode == 200) {
         await AppConstants.updateClubSubscriptionInDatabase(
-            clubId: widget.clubId,
+            clubId: widget.club.id,
             isSubscribed: !clubMap.is_subscribed,
             currentSubscribedUsers: clubMap.subscribed_users);
 
@@ -99,7 +99,7 @@ class _ClubPageState extends State<ClubPage> {
         var pastWorkshops = clubMap.past_workshops;
 
         clubMap = await AppConstants.getClubDetailsFromDatabase(
-            clubId: widget.clubId);
+            clubId: widget.club.id);
 
         clubMap = clubMap.rebuild((b) => b
           ..active_workshops = activeWorkshops.toBuilder()
@@ -132,24 +132,24 @@ class _ClubPageState extends State<ClubPage> {
       floating: true,
       expandedHeight: MediaQuery.of(context).size.height * 3 / 4,
       flexibleSpace: FlexibleSpaceBar(
-        background: clubMap == null
-            ? Container(
-                height: MediaQuery.of(context).size.height * 3 / 4,
-                child: Center(
-                  child: CircularProgressIndicator(),
-                ),
-              )
-            : Stack(
-                children: [
-                  Container(
-                    //height: MediaQuery.of(context).size.height * 0.75,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(35.0),
-                            bottomRight: Radius.circular(35.0)),
-                        color: Color(0xFF736AB7)),
-                  ),
-                  Container(
+        background: Stack(
+          children: [
+            Container(
+              //height: MediaQuery.of(context).size.height * 0.75,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(35.0),
+                      bottomRight: Radius.circular(35.0)),
+                  color: Color(0xFF736AB7)),
+            ),
+            clubMap == null
+                ? Container(
+                    height: MediaQuery.of(context).size.height * 3 / 4,
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  )
+                : Container(
                     child: _clubLargeLogoFile == null
                         ? Image.network(clubMap.large_image_url,
                             fit: BoxFit.cover, height: 300.0)
@@ -157,49 +157,56 @@ class _ClubPageState extends State<ClubPage> {
                             fit: BoxFit.cover, height: 300.0),
                     constraints: new BoxConstraints.expand(height: 295.0),
                   ),
-                  ClubWidgets.getGradient(),
-                  _getDescription(),
-                  ClubWidgets.getToolbar(context),
-                ],
-              ),
+            ClubWidgets.getGradient(),
+            _getClubCardAndDescription(),
+            ClubWidgets.getToolbar(context),
+          ],
+        ),
       ),
     );
   }
 
-  Container _getDescription() {
+  Container _getClubCardAndDescription() {
     final _overviewTitle = "Description".toUpperCase();
     return new Container(
       child: new ListView(
         padding: new EdgeInsets.fromLTRB(0.0, 72.0, 0.0, 32.0),
         children: <Widget>[
           ClubWidgets.getClubCard(
-              title: clubMap.name,
-              subtitle: clubMap.council.name,
-              id: widget.clubId,
-              imageUrl: clubMap.large_image_url,
+              title: widget.club.name,
+              subtitle: widget.club.council.name,
+              id: widget.club.id,
+              imageUrl: widget.club.large_image_url,
               isCouncil: false,
               context: context),
           SizedBox(height: 8.0),
-          Container(
-            padding: new EdgeInsets.symmetric(horizontal: 32.0),
-            child: new Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                new Text(
-                  _overviewTitle,
-                  style: Style.headerTextStyle,
+          clubMap == null
+              ? Container(
+                  height: MediaQuery.of(context).size.height * 3 / 4,
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                )
+              : Container(
+                  padding: new EdgeInsets.symmetric(horizontal: 32.0),
+                  child: new Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      new Text(
+                        _overviewTitle,
+                        style: Style.headerTextStyle,
+                      ),
+                      Separator(),
+                      Text(clubMap.description, style: Style.commonTextStyle),
+                    ],
+                  ),
                 ),
-                Separator(),
-                Text(clubMap.description, style: Style.commonTextStyle),
-              ],
-            ),
-          ),
         ],
       ),
     );
   }
 
-  Container _getSecies() {
+  Container _getSecies(context) {
     return clubMap == null
         ? Container(
             height: MediaQuery.of(context).size.height / 4,
@@ -216,7 +223,9 @@ class _ClubPageState extends State<ClubPage> {
                     : ClubWidgets.getPosHolder(
                         name: clubMap.secy.name,
                         desg: 'Secy',
-                        imageUrl: clubMap.secy.photo_url),
+                        imageUrl: clubMap.secy.photo_url,
+                        context: context,
+                        email: clubMap.secy.email),
                 // ClubWidgets.getPosHolder(
                 //     name: clubMap.joint_secy[0].name,
                 //     desg: 'JointSecy',
@@ -303,7 +312,7 @@ class _ClubPageState extends State<ClubPage> {
             delegate: SliverChildListDelegate(
               [
                 space,
-                _getSecies(),
+                _getSecies(context),
                 space,
                 clubMap == null
                     ? Container()
@@ -313,7 +322,7 @@ class _ClubPageState extends State<ClubPage> {
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (context) => CreateScreen(
-                                  clubId: clubMap.id, clubName: clubMap.name),
+                                  club: widget.club, clubName: clubMap.name),
                             ),
                           );
                         }),

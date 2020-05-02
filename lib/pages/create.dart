@@ -7,12 +7,12 @@ import 'package:iit_app/model/workshopCreator.dart';
 import 'package:iit_app/pages/dialogBoxes.dart';
 
 class CreateScreen extends StatefulWidget {
-  final int clubId;
+  final ClubListPost club;
   final String clubName;
   final BuiltWorkshopDetailPost workshopData;
   const CreateScreen(
       {Key key,
-      @required this.clubId,
+      @required this.club,
       @required this.clubName,
       this.workshopData})
       : super(key: key);
@@ -331,12 +331,12 @@ class _CreateScreenState extends State<CreateScreen> {
                           await WorkshopCreater.create(
                               context: context,
                               workshop: _workshop,
-                              clubId: widget.clubId);
+                              club: widget.club);
                         } else {
                           WorkshopCreater.edit(
                               context: context,
                               workshop: _workshop,
-                              clubId: widget.clubId,
+                              club: widget.club,
                               widgetWorkshopData: widget.workshopData);
                         }
                       }

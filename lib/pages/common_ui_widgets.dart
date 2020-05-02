@@ -82,7 +82,7 @@ class CommonWidgets {
             ? () => Navigator.of(context).push(
                   new PageRouteBuilder(
                     pageBuilder: (_, __, ___) =>
-                        new ClubPage(clubId: club.id, editMode: editMode),
+                        new ClubPage(club: club, editMode: editMode),
                     transitionsBuilder: (context, animation, secondaryAnimation,
                             child) =>
                         new FadeTransition(opacity: animation, child: child),
@@ -180,7 +180,7 @@ class CommonWidgets {
             ? () => Navigator.of(context).push(
                   new PageRouteBuilder(
                     pageBuilder: (_, __, ___) =>
-                        new ClubPage(clubId: club.id, editMode: editMode),
+                        new ClubPage(club: club, editMode: editMode),
                     transitionsBuilder: (context, animation, secondaryAnimation,
                             child) =>
                         new FadeTransition(opacity: animation, child: child),
