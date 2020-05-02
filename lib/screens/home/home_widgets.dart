@@ -207,7 +207,7 @@ class HomeWidgets {
             ? () => Navigator.of(context).push(
                   new PageRouteBuilder(
                     pageBuilder: (_, __, ___) => new DetailPage(
-                        workshop: w, editMode: editMode, isPast: isPast),
+                        workshop: w, isPast: isPast),
                     transitionsBuilder: (context, animation, secondaryAnimation,
                             child) =>
                         new FadeTransition(opacity: animation, child: child),

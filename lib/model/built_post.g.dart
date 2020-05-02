@@ -281,6 +281,18 @@ class _$BuiltWorkshopDetailPostSerializer
         ..add(serializers.serialize(object.interested_users,
             specifiedType: const FullType(int)));
     }
+    if (object.is_workshop_contact != null) {
+      result
+        ..add('is_workshop_contact')
+        ..add(serializers.serialize(object.is_workshop_contact,
+            specifiedType: const FullType(bool)));
+    }
+    if (object.is_por_holder != null) {
+      result
+        ..add('is_por_holder')
+        ..add(serializers.serialize(object.is_por_holder,
+            specifiedType: const FullType(bool)));
+    }
     return result;
   }
 
@@ -349,6 +361,14 @@ class _$BuiltWorkshopDetailPostSerializer
         case 'interested_users':
           result.interested_users = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
+          break;
+        case 'is_workshop_contact':
+          result.is_workshop_contact = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
+        case 'is_por_holder':
+          result.is_por_holder = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
           break;
       }
     }
@@ -1785,6 +1805,10 @@ class _$BuiltWorkshopDetailPost extends BuiltWorkshopDetailPost {
   final bool is_interested;
   @override
   final int interested_users;
+  @override
+  final bool is_workshop_contact;
+  @override
+  final bool is_por_holder;
 
   factory _$BuiltWorkshopDetailPost(
           [void Function(BuiltWorkshopDetailPostBuilder) updates]) =>
@@ -1803,7 +1827,9 @@ class _$BuiltWorkshopDetailPost extends BuiltWorkshopDetailPost {
       this.contacts,
       this.image_url,
       this.is_interested,
-      this.interested_users})
+      this.interested_users,
+      this.is_workshop_contact,
+      this.is_por_holder})
       : super._();
 
   @override
@@ -1831,7 +1857,9 @@ class _$BuiltWorkshopDetailPost extends BuiltWorkshopDetailPost {
         contacts == other.contacts &&
         image_url == other.image_url &&
         is_interested == other.is_interested &&
-        interested_users == other.interested_users;
+        interested_users == other.interested_users &&
+        is_workshop_contact == other.is_workshop_contact &&
+        is_por_holder == other.is_por_holder;
   }
 
   @override
@@ -1847,19 +1875,23 @@ class _$BuiltWorkshopDetailPost extends BuiltWorkshopDetailPost {
                                     $jc(
                                         $jc(
                                             $jc(
-                                                $jc($jc(0, id.hashCode),
-                                                    title.hashCode),
-                                                description.hashCode),
-                                            club.hashCode),
-                                        date.hashCode),
-                                    time.hashCode),
-                                location.hashCode),
-                            audience.hashCode),
-                        resources.hashCode),
-                    contacts.hashCode),
-                image_url.hashCode),
-            is_interested.hashCode),
-        interested_users.hashCode));
+                                                $jc(
+                                                    $jc(
+                                                        $jc($jc(0, id.hashCode),
+                                                            title.hashCode),
+                                                        description.hashCode),
+                                                    club.hashCode),
+                                                date.hashCode),
+                                            time.hashCode),
+                                        location.hashCode),
+                                    audience.hashCode),
+                                resources.hashCode),
+                            contacts.hashCode),
+                        image_url.hashCode),
+                    is_interested.hashCode),
+                interested_users.hashCode),
+            is_workshop_contact.hashCode),
+        is_por_holder.hashCode));
   }
 
   @override
@@ -1877,7 +1909,9 @@ class _$BuiltWorkshopDetailPost extends BuiltWorkshopDetailPost {
           ..add('contacts', contacts)
           ..add('image_url', image_url)
           ..add('is_interested', is_interested)
-          ..add('interested_users', interested_users))
+          ..add('interested_users', interested_users)
+          ..add('is_workshop_contact', is_workshop_contact)
+          ..add('is_por_holder', is_por_holder))
         .toString();
   }
 }
@@ -1943,6 +1977,16 @@ class BuiltWorkshopDetailPostBuilder
   set interested_users(int interested_users) =>
       _$this._interested_users = interested_users;
 
+  bool _is_workshop_contact;
+  bool get is_workshop_contact => _$this._is_workshop_contact;
+  set is_workshop_contact(bool is_workshop_contact) =>
+      _$this._is_workshop_contact = is_workshop_contact;
+
+  bool _is_por_holder;
+  bool get is_por_holder => _$this._is_por_holder;
+  set is_por_holder(bool is_por_holder) =>
+      _$this._is_por_holder = is_por_holder;
+
   BuiltWorkshopDetailPostBuilder();
 
   BuiltWorkshopDetailPostBuilder get _$this {
@@ -1960,6 +2004,8 @@ class BuiltWorkshopDetailPostBuilder
       _image_url = _$v.image_url;
       _is_interested = _$v.is_interested;
       _interested_users = _$v.interested_users;
+      _is_workshop_contact = _$v.is_workshop_contact;
+      _is_por_holder = _$v.is_por_holder;
       _$v = null;
     }
     return this;
@@ -1996,7 +2042,9 @@ class BuiltWorkshopDetailPostBuilder
               contacts: _contacts?.build(),
               image_url: image_url,
               is_interested: is_interested,
-              interested_users: interested_users);
+              interested_users: interested_users,
+              is_workshop_contact: is_workshop_contact,
+              is_por_holder: is_por_holder);
     } catch (_) {
       String _$failedField;
       try {
