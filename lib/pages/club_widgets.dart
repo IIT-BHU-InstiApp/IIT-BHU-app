@@ -273,13 +273,14 @@ class ClubWidgets {
           Container outerBox = Container(
             child: details,
             height: 270.0,
-            color: Colors.white,
-            margin: EdgeInsets.fromLTRB(15.0, 25.0, 15.0, 15.0),
+            color: Colors.transparent,
+            margin: EdgeInsets.fromLTRB(0.0, 25.0, 0.0, 0.0),
           );
 
           return Dialog(
+            backgroundColor: Colors.transparent,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
+              borderRadius: BorderRadius.circular(15.0),
             ),
             child: outerBox,
           );
