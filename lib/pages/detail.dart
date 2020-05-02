@@ -12,10 +12,8 @@ import 'package:iit_app/screens/home/text_style.dart';
 
 class DetailPage extends StatefulWidget {
   final BuiltWorkshopSummaryPost workshop;
-  final bool editMode;
   final bool isPast;
-  const DetailPage(
-      {Key key, this.workshop, this.editMode = false, this.isPast = false})
+  const DetailPage({Key key, this.workshop, this.isPast = false})
       : super(key: key);
   @override
   _DetailPage createState() => _DetailPage();
@@ -329,13 +327,13 @@ class _DetailPage extends State<DetailPage> {
           SliverAppBar(
             leading: Container(),
             backgroundColor: Colors.white,
-            expandedHeight: MediaQuery.of(context).size.height*0.75,
+            expandedHeight: MediaQuery.of(context).size.height * 0.75,
             floating: false,
             flexibleSpace: FlexibleSpaceBar(
               background: Stack(
                 children: [
                   Container(
-                    height: MediaQuery.of(context).size.height*0.75,
+                    height: MediaQuery.of(context).size.height * 0.75,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.only(
                             bottomLeft: Radius.circular(35.0),
@@ -346,7 +344,11 @@ class _DetailPage extends State<DetailPage> {
                   _getGradient(),
                   _getContent(), //_workshop == null
                   _getToolbar(context),
-                  widget.editMode == false ? Container() : editWorkshopOptions()
+                  _workshop == null
+                      ? Container()
+                      : _workshop.is_por_holder == false
+                          ? Container()
+                          : editWorkshopOptions()
                 ],
               ),
             ),

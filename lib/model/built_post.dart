@@ -73,6 +73,10 @@ abstract class BuiltWorkshopDetailPost
   bool get is_interested;
   @nullable
   int get interested_users;
+  @nullable
+  bool get is_workshop_contact;
+  @nullable
+  bool get is_por_holder;
 
   BuiltWorkshopDetailPost._();
 
