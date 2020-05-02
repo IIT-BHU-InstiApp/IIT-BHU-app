@@ -9,6 +9,50 @@ import 'package:iit_app/ui/text_style.dart';
 import 'clubs.dart';
 
 class ClubWidgets {
+
+  static Container getSecies(BuildContext context, {secy, joint_secy}) {
+    return Container(
+      color: Colors.grey[300],
+      child: Column(
+        children: [
+          Center(child: Text('Secys:', style: Style.headingStyle)),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              joint_secy.length > 0
+                  ? ClubWidgets.getPosHolder(
+                      context: context,
+                      imageUrl: joint_secy[0].photo_url,
+                      desg: 'Joint-Secy',
+                      name: joint_secy[0].name,
+                      email: joint_secy[0].email,
+                    )
+                  : SizedBox(width: 1),
+              secy == null
+                  ? SizedBox(width: 1)
+                  : ClubWidgets.getPosHolder(
+                      context: context,
+                      imageUrl: secy.photo_url,
+                      desg: 'Secy',
+                      name: secy.name,
+                      email: secy.email,
+                    ),
+              joint_secy.length > 1
+                  ? ClubWidgets.getPosHolder(
+                      context: context,
+                      imageUrl: joint_secy[1].photo_url,
+                      desg: 'Joint Secy',
+                      name: joint_secy[1].name,
+                      email: joint_secy[1].email,
+                    )
+                  : SizedBox(width: 1),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
   static Container getToolbar(BuildContext context) {
     return new Container(
       margin: new EdgeInsets.only(top: MediaQuery.of(context).padding.top),
