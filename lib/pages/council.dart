@@ -144,7 +144,7 @@ class _CouncilPageState extends State<CouncilPage> {
     );
   }
 
-  Container _getSecies() {
+  Container _getSecies(context) {
     return councilData == null
         ? Container(
             height: MediaQuery.of(context).size.height / 4,
@@ -159,23 +159,29 @@ class _CouncilPageState extends State<CouncilPage> {
               children: <Widget>[
                 councilData.joint_gensec.length > 0
                     ? ClubWidgets.getPosHolder(
+                        context: context,
                         imageUrl: councilData.joint_gensec[0].photo_url,
                         desg: 'joint gensec',
                         name: councilData.joint_gensec[0].name,
+                        email: councilData.joint_gensec[0].email,
                       )
                     : SizedBox(width: 1),
                 councilData.gensec == null
                     ? SizedBox(width: 1)
                     : ClubWidgets.getPosHolder(
+                        context: context,
                         imageUrl: councilData.gensec.photo_url,
                         desg: 'gensec',
                         name: councilData.gensec.name,
+                        email: councilData.gensec.email,
                       ),
                 councilData.joint_gensec.length > 1
                     ? ClubWidgets.getPosHolder(
+                        context: context,
                         imageUrl: councilData.joint_gensec[1].photo_url,
                         desg: 'joint gensec',
                         name: councilData.joint_gensec[1].name,
+                        email: councilData.joint_gensec[1].email,
                       )
                     : SizedBox(width: 1),
               ],
@@ -226,7 +232,7 @@ class _CouncilPageState extends State<CouncilPage> {
                     //scrollDirection: Axis.vertical,
                     children: <Widget>[
                       space,
-                      _getSecies(),
+                      _getSecies(context),
                       Container(
                         color: Colors.white,
                         //margin: EdgeInsets.all(8.0),
