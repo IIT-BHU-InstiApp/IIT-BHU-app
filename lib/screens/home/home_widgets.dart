@@ -3,10 +3,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
-import 'package:iit_app/pages/detail.dart';
 import 'package:iit_app/pages/login.dart';
-import 'separator.dart';
-import 'text_style.dart';
+import 'package:iit_app/ui/separator.dart';
+import 'package:iit_app/ui/text_style.dart';
+import 'workshop_detail.dart';
 
 class HomeWidgets {
   static final Color textPaleColor = Color(0xFFAFAFAF);
@@ -206,8 +206,8 @@ class HomeWidgets {
         onTap: horizontal
             ? () => Navigator.of(context).push(
                   new PageRouteBuilder(
-                    pageBuilder: (_, __, ___) => new DetailPage(
-                        workshop: w, isPast: isPast),
+                    pageBuilder: (_, __, ___) =>
+                        new WorkshopDetailPage(workshop: w, isPast: isPast),
                     transitionsBuilder: (context, animation, secondaryAnimation,
                             child) =>
                         new FadeTransition(opacity: animation, child: child),

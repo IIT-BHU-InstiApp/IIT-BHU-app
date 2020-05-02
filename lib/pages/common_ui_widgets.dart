@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/pages/clubs.dart';
-import 'package:iit_app/screens/home/text_style.dart';
+import 'package:iit_app/ui/text_style.dart';
 
 class CommonWidgets {
   static final Color textPaleColor = Color(0xFFAFAFAF);

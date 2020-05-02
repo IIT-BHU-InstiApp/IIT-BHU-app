@@ -4,8 +4,8 @@ import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/pages/club_widgets.dart';
 import 'package:iit_app/pages/common_ui_widgets.dart';
-import 'package:iit_app/screens/home/separator.dart';
-import 'package:iit_app/screens/home/text_style.dart';
+import 'package:iit_app/ui/separator.dart';
+import 'package:iit_app/ui/text_style.dart';
 
 class CouncilPage extends StatefulWidget {
   @override
