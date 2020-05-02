@@ -2,8 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
-import 'package:iit_app/pages/club_widgets.dart';
-import 'package:iit_app/pages/common_ui_widgets.dart';
+import 'package:iit_app/pages/club_&_council_widgets.dart';
 import 'package:iit_app/ui/separator.dart';
 import 'package:iit_app/ui/text_style.dart';
 
@@ -204,11 +203,15 @@ class _CouncilPageState extends State<CouncilPage> {
               physics: const NeverScrollableScrollPhysics(),
               itemCount: councilData.clubs.length,
               itemBuilder: (context, index) {
-                return CommonWidgets.getClubSummaryCard(
-                  context,
+                return ClubWidgets.getClubCard(
+                  context: context,
+                  title: councilData.clubs[index].name,
+                  subtitle: councilData.name,
+                  id: councilData.clubs[index].id,
+                  imageUrl: councilData.clubs[index].small_image_url,
+                  isCouncil: false,
                   club: councilData.clubs[index],
-                  councilName: councilData.name,
-                  editMode: false,
+                  horizontal: true,
                 );
               },
             ),
