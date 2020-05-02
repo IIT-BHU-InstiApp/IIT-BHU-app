@@ -78,7 +78,8 @@ class ClubWidgets {
       String imageUrl,
       bool isCouncil,
       horizontal = false,
-      ClubListPost club}) {
+      ClubListPost club,
+      String clubTypeForHero = 'default'}) {
     final File clubLogoFile =
         AppConstants.getImageFile(isSmall: true, id: id, isClub: true);
 
@@ -94,7 +95,7 @@ class ClubWidgets {
       alignment:
           horizontal ? FractionalOffset.centerLeft : FractionalOffset.center,
       child: Hero(
-        tag: "club-hero-${id}",
+        tag: "club-hero-$id-$clubTypeForHero",
         child: Container(
           child: ClipRRect(
             borderRadius: BorderRadius.circular(20),

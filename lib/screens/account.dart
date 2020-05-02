@@ -261,6 +261,8 @@ class _AccountScreenState extends State<AccountScreen> {
                                         profileDetails.subscriptions.length,
                                     itemBuilder: (context, index) {
                                       return ClubWidgets.getClubCard(
+                                        clubTypeForHero: 'Subscriptions',
+                                          context: context,
                                           title: profileDetails
                                               .subscriptions[index].name,
                                           subtitle: profileDetails
@@ -299,6 +301,8 @@ class _AccountScreenState extends State<AccountScreen> {
                           itemCount: profileDetails.club_privileges.length,
                           itemBuilder: (context, index) {
                             return ClubWidgets.getClubCard(
+                                clubTypeForHero: 'Club Privileges',
+                                context: context,
                                 title:
                                     profileDetails.club_privileges[index].name,
                                 subtitle: profileDetails
@@ -307,7 +311,8 @@ class _AccountScreenState extends State<AccountScreen> {
                                 imageUrl: profileDetails
                                     .club_privileges[index].small_image_url,
                                 club: profileDetails.club_privileges[index],
-                                isCouncil: false);
+                                isCouncil: false,
+                                horizontal: true);
                           },
                         ),
                       ),
