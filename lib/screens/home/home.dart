@@ -407,8 +407,7 @@ class _HomeScreenState extends State<HomeScreen>
           body: Container(
             margin: EdgeInsets.fromLTRB(12, 10, 12, 0),
             decoration: new BoxDecoration(
-                border: Border.all(width: 2),
-                color: Color(0xFF736AB7), //new Color.fromRGBO(255, 0, 0, 0.0),
+                color: Color(0xFF736AB7),
                 borderRadius: new BorderRadius.only(
                     topLeft: const Radius.circular(40.0),
                     topRight: const Radius.circular(40.0))),
@@ -420,8 +419,8 @@ class _HomeScreenState extends State<HomeScreen>
                     children: [
                       TabBar(
                         indicatorSize: TabBarIndicatorSize.tab,
-                        indicatorColor: Color(0xFF333366),
-                        indicatorWeight: 2.5,
+                        indicatorColor: Colors.deepPurple,
+                        // indicatorWeight: 2.5,
                         unselectedLabelColor: Colors.white70,
                         labelColor: Colors.black,
                         tabs: [

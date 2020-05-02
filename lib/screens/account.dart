@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
-import 'package:iit_app/pages/common_ui_widgets.dart';
+import 'package:iit_app/pages/club_&_council_widgets.dart';
 
 class AccountScreen extends StatefulWidget {
   @override
@@ -260,12 +260,24 @@ class _AccountScreenState extends State<AccountScreen> {
                                     itemCount:
                                         profileDetails.subscriptions.length,
                                     itemBuilder: (context, index) {
-                                      return CommonWidgets.getOnlyClubnameCard(
-                                          context,
+                                      return ClubWidgets.getClubCard(
+                                        clubTypeForHero: 'Subscriptions',
+                                          context: context,
+                                          title: profileDetails
+                                              .subscriptions[index].name,
+                                          subtitle: profileDetails
+                                              .subscriptions[index]
+                                              .council
+                                              .name,
+                                          id: profileDetails
+                                              .subscriptions[index].id,
+                                          imageUrl: profileDetails
+                                              .subscriptions[index]
+                                              .small_image_url,
                                           club: profileDetails
                                               .subscriptions[index],
-                                          editMode: false,
-                                          type: 'subscription');
+                                          isCouncil: false,
+                                          horizontal: true);
                                     },
                                   ),
                                 ),
@@ -288,10 +300,19 @@ class _AccountScreenState extends State<AccountScreen> {
                           physics: const NeverScrollableScrollPhysics(),
                           itemCount: profileDetails.club_privileges.length,
                           itemBuilder: (context, index) {
-                            return CommonWidgets.getOnlyClubnameCard(context,
+                            return ClubWidgets.getClubCard(
+                                clubTypeForHero: 'Club Privileges',
+                                context: context,
+                                title:
+                                    profileDetails.club_privileges[index].name,
+                                subtitle: profileDetails
+                                    .club_privileges[index].council.name,
+                                id: profileDetails.club_privileges[index].id,
+                                imageUrl: profileDetails
+                                    .club_privileges[index].small_image_url,
                                 club: profileDetails.club_privileges[index],
-                                editMode: false,
-                                type: 'club_priviledges');
+                                isCouncil: false,
+                                horizontal: true);
                           },
                         ),
                       ),

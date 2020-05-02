@@ -2,9 +2,11 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
-import 'package:iit_app/pages/clubs.dart';
-import 'package:iit_app/screens/home/separator.dart';
-import 'package:iit_app/screens/home/text_style.dart';
+import 'package:iit_app/model/built_post.dart';
+import 'package:iit_app/ui/separator.dart';
+import 'package:iit_app/ui/text_style.dart';
+
+import 'clubs.dart';
 
 class ClubWidgets {
   static Container getToolbar(BuildContext context) {
@@ -74,15 +76,26 @@ class ClubWidgets {
       String subtitle = '',
       int id,
       String imageUrl,
-      bool isCouncil}) {
+      bool isCouncil,
+      horizontal = false,
+      ClubListPost club,
+      String clubTypeForHero = 'default'}) {
+    final File clubLogoFile =
+        AppConstants.getImageFile(isSmall: true, id: id, isClub: true);
+
+    if (clubLogoFile == null) {
+      AppConstants.writeImageFileIntoDisk(
+          isClub: true, isSmall: true, id: id, url: imageUrl);
+    }
     final File _largeLogofile = AppConstants.getImageFile(
         isCouncil: isCouncil, isClub: !isCouncil, isSmall: false, id: id);
 
     final clubThumbnail = Container(
       margin: new EdgeInsets.symmetric(vertical: 16.0),
-      alignment: FractionalOffset.center,
+      alignment:
+          horizontal ? FractionalOffset.centerLeft : FractionalOffset.center,
       child: Hero(
-        tag: "club-hero-${id}",
+        tag: "club-hero-$id-$clubTypeForHero",
         child: Container(
           child: ClipRRect(
             borderRadius: BorderRadius.circular(20),
@@ -95,8 +108,8 @@ class ClubWidgets {
                       : FileImage(_largeLogofile),
             ),
           ),
-          height: 92.0,
-          width: 92.0,
+          height: horizontal ? 50 : 82,
+          width: horizontal ? 50 : 82,
         ),
       ),
     );
@@ -122,26 +135,30 @@ class ClubWidgets {
     );
 
     final clubCardContent = Container(
-      margin: new EdgeInsets.fromLTRB(16.0, 50.0, 16.0, 16.0),
+      margin: new EdgeInsets.fromLTRB(
+          horizontal ? 40.0 : 10.0, horizontal ? 16.0 : 42.0, 10.0, 10.0),
       constraints: new BoxConstraints.expand(),
       child: new Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment:
+            horizontal ? CrossAxisAlignment.start : CrossAxisAlignment.center,
         children: <Widget>[
-          SizedBox(height: 4.0),
+          horizontal ? Container() : SizedBox(height: 4.0),
           Text(title, style: Style.titleTextStyle),
-          Container(height: 10.0),
+          Container(height: horizontal ? 4 : 10),
           subtitle == ''
               ? SizedBox(height: 1.0)
               : Text(subtitle, style: Style.commonTextStyle),
-          Separator(),
+          horizontal ? Container() : Separator(),
         ],
       ),
     );
 
     final clubCard = Container(
       child: clubCardContent,
-      height: 154.0,
-      margin: EdgeInsets.fromLTRB(20.0, 120.0, 20.0, 0.0),
+      height: horizontal ? 75.0 : 154.0,
+      margin: horizontal
+          ? new EdgeInsets.only(left: 30.0)
+          : new EdgeInsets.only(top: 72.0),
       decoration: new BoxDecoration(
         color: new Color(0xFF333366),
         shape: BoxShape.rectangle,
@@ -155,26 +172,31 @@ class ClubWidgets {
         ],
       ),
     );
-    if (isCouncil == true)
-      return Stack(
-        children: [
-          clubCard,
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0.0, 60.0, 0.0, 0.0),
-            child: councilThumbnail,
+
+    return GestureDetector(
+        onTap: horizontal
+            ? () => Navigator.of(context).push(
+                  new PageRouteBuilder(
+                    pageBuilder: (_, __, ___) =>
+                        new ClubPage(club: club, editMode: true),
+                    transitionsBuilder: (context, animation, secondaryAnimation,
+                            child) =>
+                        new FadeTransition(opacity: animation, child: child),
+                  ),
+                )
+            : null,
+        child: new Container(
+          margin: const EdgeInsets.symmetric(
+            vertical: 1.0,
+            horizontal: 15.0,
           ),
-        ],
-      );
-    else
-      return Stack(
-        children: [
-          clubCard,
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0.0, 60.0, 0.0, 0.0),
-            child: clubThumbnail,
+          child: new Stack(
+            children: <Widget>[
+              clubCard,
+              isCouncil == true ? councilThumbnail : clubThumbnail,
+            ],
           ),
-        ],
-      );
+        ));
   }
 
   static Future detailsDialog(

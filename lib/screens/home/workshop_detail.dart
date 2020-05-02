@@ -7,19 +7,19 @@ import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/pages/clubs.dart';
 import 'package:iit_app/pages/create.dart';
 import 'package:iit_app/screens/home/home_widgets.dart';
-import 'package:iit_app/screens/home/separator.dart';
-import 'package:iit_app/screens/home/text_style.dart';
+import 'package:iit_app/ui/separator.dart';
+import 'package:iit_app/ui/text_style.dart';
 
-class DetailPage extends StatefulWidget {
+class WorkshopDetailPage extends StatefulWidget {
   final BuiltWorkshopSummaryPost workshop;
   final bool isPast;
-  const DetailPage({Key key, this.workshop, this.isPast = false})
+  const WorkshopDetailPage({Key key, this.workshop, this.isPast = false})
       : super(key: key);
   @override
-  _DetailPage createState() => _DetailPage();
+  _WorkshopDetailPage createState() => _WorkshopDetailPage();
 }
 
-class _DetailPage extends State<DetailPage> {
+class _WorkshopDetailPage extends State<WorkshopDetailPage> {
   BuiltWorkshopDetailPost _workshop;
   int is_interested;
   @override
