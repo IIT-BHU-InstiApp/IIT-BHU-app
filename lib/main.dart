@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:iit_app/pages/map.dart';
 import 'package:iit_app/screens/account.dart';
 import 'package:iit_app/screens/allWorkshops.dart';
 import 'package:iit_app/screens/complaints.dart';
@@ -49,6 +50,7 @@ void main() async {
       '/settings': (BuildContext context) => SettingsScreen(),
       '/login': (BuildContext context) => LoginPage(),
       '/about': (BuildContext context) => AboutPage(),
+      '/mapScreen': (BuildContext context) => MapScreen(),
     },
   )
 
