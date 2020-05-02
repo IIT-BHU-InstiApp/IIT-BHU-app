@@ -199,7 +199,7 @@ class _ClubPageState extends State<ClubPage> {
     );
   }
 
-  Container _getSecies() {
+  Container _getSecies(context) {
     return clubMap == null
         ? Container(
             height: MediaQuery.of(context).size.height / 4,
@@ -216,7 +216,9 @@ class _ClubPageState extends State<ClubPage> {
                     : ClubWidgets.getPosHolder(
                         name: clubMap.secy.name,
                         desg: 'Secy',
-                        imageUrl: clubMap.secy.photo_url),
+                        imageUrl: clubMap.secy.photo_url,
+                        context: context,
+                        email: clubMap.secy.email),
                 // ClubWidgets.getPosHolder(
                 //     name: clubMap.joint_secy[0].name,
                 //     desg: 'JointSecy',
@@ -303,7 +305,7 @@ class _ClubPageState extends State<ClubPage> {
             delegate: SliverChildListDelegate(
               [
                 space,
-                _getSecies(),
+                _getSecies(context),
                 space,
                 clubMap == null
                     ? Container()
