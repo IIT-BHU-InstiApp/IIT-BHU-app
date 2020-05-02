@@ -164,7 +164,8 @@ BuiltWorkshopSummaryPost workshopSummaryFromMap(
     ..id = map[idString]
     ..club.id = map[clubIdString]
     ..club.name = map[clubString]
-    ..club.council = councilSummary.toBuilder()
+    ..club.council =
+        councilSummary == null ? null : (councilSummary.toBuilder())
     ..club.small_image_url = map[smallImageUrlString]
     ..club.large_image_url = map[largeImageUrlString]
     ..title = map[titleString]
@@ -199,7 +200,7 @@ ClubListPost clubSummaryFromMap(
   final clubSummary = ClubListPost((b) => b
     ..id = map[idString]
     ..name = map[nameString]
-    ..council = councilSummary.toBuilder()
+    ..council = councilSummary == null ? null : (councilSummary.toBuilder())
     ..small_image_url = map[smallImageUrlString]
     ..large_image_url = map[largeImageUrlString]);
   return clubSummary;
@@ -547,9 +548,9 @@ class DatabaseHelper {
       ..id = map[idString]
       ..name = map[nameString]
       ..description = map[descriptionString]
-      ..gensec = gensec.toBuilder()
-      ..joint_gensec = jointGensec.toBuilder()
-      ..clubs = clubs.toBuilder()
+      ..gensec = gensec == null ? null : (gensec.toBuilder())
+      ..joint_gensec = jointGensec == null ? null : (jointGensec.toBuilder())
+      ..clubs = clubs == null ? null : (clubs.toBuilder())
       ..small_image_url = map[smallImageUrlString]
       ..large_image_url = map[largeImageUrlString]);
     return councilDetails;
@@ -672,9 +673,9 @@ class DatabaseHelper {
       ..id = map[idString]
       ..name = map[nameString]
       ..description = map[descriptionString]
-      ..council = council.toBuilder()
-      ..secy = secy.toBuilder()
-      ..joint_secy = jointSecy.toBuilder()
+      ..council = council == null ? null : (council.toBuilder())
+      ..secy = secy == null ? null : (secy.toBuilder())
+      ..joint_secy = jointSecy == null ? null : (jointSecy.toBuilder())
       ..small_image_url = map[smallImageUrlString]
       ..large_image_url = map[largeImageUrlString]
       ..is_subscribed = map[isSubscribedString] == 1 ? true : false

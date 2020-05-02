@@ -145,7 +145,7 @@ class AppConstants {
         print('Error in downloading image : $error');
         print('for $host , id = $id');
       }).then((response) {
-        if (response.statusCode == 200) {
+        if (response != null && response.statusCode == 200) {
           final imageData = response.bodyBytes.toList();
           final File writingFile =
               File('${AppConstants.deviceDirectoryPath}/$host($size)_$id');

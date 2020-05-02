@@ -305,16 +305,18 @@ class _ClubPageState extends State<ClubPage> {
                 space,
                 _getSecies(),
                 space,
-                RaisedButton(
-                    child: Text('Create workshop'),
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => CreateScreen(
-                              clubId: clubMap.id, clubName: clubMap.name),
-                        ),
-                      );
-                    }),
+                clubMap == null
+                    ? Container()
+                    : RaisedButton(
+                        child: Text('Create workshop'),
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => CreateScreen(
+                                  clubId: clubMap.id, clubName: clubMap.name),
+                            ),
+                          );
+                        }),
                 widget.editMode
                     ? Center(
                         child: Text(
