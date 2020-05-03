@@ -8,6 +8,7 @@ import 'package:iit_app/model/database_helpers.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:iit_app/services/connectivityCheck.dart';
 import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
 
 class AppConstants {
   //  connectivity variables ------------------------------------------
@@ -23,7 +24,7 @@ class AppConstants {
   static bool firstTimeFetching = true;
   static bool refreshingHomePage = false;
 
-  static String deviceDirectoryPath;
+  static String deviceDirectoryPathImages;
 
   static String djangoToken;
 
@@ -31,12 +32,20 @@ class AppConstants {
   static PostApiService service;
 
   static BuiltList<BuiltWorkshopSummaryPost> workshopFromDatabase;
-
-  // !-------------------------
   static BuiltList<BuiltAllCouncilsPost> councilsSummaryfromDatabase;
-  // !-------------------------
 
   static int currentCouncilId;
+
+  static Future setDeviceDirectoryForImages() async {
+    String path = (await getApplicationDocumentsDirectory()).path + '/Images';
+
+    Directory(path).exists().then((exist) {
+      if (exist == false) {
+        Directory(path).createSync();
+      }
+      AppConstants.deviceDirectoryPathImages = path;
+    });
+  }
 
   static Future populateWorkshopsAndCouncilButtons() async {
     DatabaseHelper helper = DatabaseHelper.instance;
@@ -98,7 +107,7 @@ class AppConstants {
   static writeCouncilLogosIntoDisk(
       BuiltList<BuiltAllCouncilsPost> councils) async {
     for (var council in councils) {
-      if (File('${AppConstants.deviceDirectoryPath}/council(small)_${council.id}')
+      if (File('${AppConstants.deviceDirectoryPathImages}/council(small)_${council.id}')
               .existsSync() ==
           false) {
         final url = council.small_image_url;
@@ -108,7 +117,7 @@ class AppConstants {
           if (response.statusCode == 200) {
             final imageData = response.bodyBytes.toList();
             final File file = File(
-                '${AppConstants.deviceDirectoryPath}/council(small)_${council.id}');
+                '${AppConstants.deviceDirectoryPathImages}/council(small)_${council.id}');
             file.writeAsBytesSync(imageData);
           }
         });
@@ -138,7 +147,8 @@ class AppConstants {
     String size = isSmall ? 'small' : 'large';
     String host = isCouncil ? 'council' : 'club';
 
-    File file = File('${AppConstants.deviceDirectoryPath}/$host($size)_$id');
+    File file =
+        File('${AppConstants.deviceDirectoryPathImages}/$host($size)_$id');
 
     if (file.existsSync() == false) {
       http.get(url).catchError((error) {
@@ -147,8 +157,8 @@ class AppConstants {
       }).then((response) {
         if (response != null && response.statusCode == 200) {
           final imageData = response.bodyBytes.toList();
-          final File writingFile =
-              File('${AppConstants.deviceDirectoryPath}/$host($size)_$id');
+          final File writingFile = File(
+              '${AppConstants.deviceDirectoryPathImages}/$host($size)_$id');
           writingFile.writeAsBytesSync(imageData);
           print('image saved into disk = $host , id = $id');
         }
@@ -180,7 +190,7 @@ class AppConstants {
     String size = isSmall ? 'small' : 'large';
     File file;
     String host = isCouncil ? 'council' : 'club';
-    file = File('${AppConstants.deviceDirectoryPath}/$host($size)_$id');
+    file = File('${AppConstants.deviceDirectoryPathImages}/$host($size)_$id');
 
     if (file.existsSync()) {
       return file;
@@ -209,8 +219,6 @@ class AppConstants {
     workshopFromDatabase = workshopPosts;
 
     print('workshops fetched and updated ');
-
-    // helper.closeDatabase(db: database);
   }
 
   static Future getCouncilDetailsFromDatabase({@required int councilId}) async {
@@ -232,24 +240,25 @@ class AppConstants {
     return councilPost;
   }
 
-  static Future getAndUpdateCouncilDetailsInDatabase(
-      {@required int councilId}) async {
-    DatabaseHelper helper = DatabaseHelper.instance;
-    var database = await helper.database;
+  /// To update any particular council data
+  // static Future getAndUpdateCouncilDetailsInDatabase(
+  //     {@required int councilId}) async {
+  //   DatabaseHelper helper = DatabaseHelper.instance;
+  //   var database = await helper.database;
 
-    print('deleting council entries ---------------------------');
-    await helper.deleteEntryOfCouncilDetail(db: database, councilId: councilId);
-    print('deleted ---------------------------');
+  //   print('deleting council entries ---------------------------');
+  //   await helper.deleteEntryOfCouncilDetail(db: database, councilId: councilId);
+  //   print('deleted ---------------------------');
 
-    Response<BuiltCouncilPost> councilSnapshots =
-        await AppConstants.service.getCouncil(councilId);
+  //   Response<BuiltCouncilPost> councilSnapshots =
+  //       await AppConstants.service.getCouncil(councilId);
 
-    var councilPost = councilSnapshots.body;
+  //   var councilPost = councilSnapshots.body;
 
-    await helper.insertCouncilDetailsIntoDatabase(councilPost: councilPost);
+  //   await helper.insertCouncilDetailsIntoDatabase(councilPost: councilPost);
 
-    return councilPost;
-  }
+  //   return councilPost;
+  // }
 
   static Future getClubDetailsFromDatabase({@required int clubId}) async {
     DatabaseHelper helper = DatabaseHelper.instance;
@@ -272,19 +281,20 @@ class AppConstants {
     return clubPost;
   }
 
-  static Future updateClubDetailsInDatabase(
-      {@required BuiltClubPost clubPost}) async {
-    DatabaseHelper helper = DatabaseHelper.instance;
-    var database = await helper.database;
+  /// To update any particular club data
+//   static Future updateClubDetailsInDatabase(
+//       {@required BuiltClubPost clubPost}) async {
+//     DatabaseHelper helper = DatabaseHelper.instance;
+//     var database = await helper.database;
 
-// here, we are not doing exactly like we did for council. because everytime we have to fetch workshops
-// so  API request will be sent anyway. Therefore to ensure minimum requests, we will fetch all data altogether.
-// Keep in mind: Use of local database is done to achieve quick fetching of club data except workshops
+// // here, we are not doing exactly like we did for council. because everytime we have to fetch workshops
+// // so  API request will be sent anyway. Therefore to ensure minimum requests, we will fetch all data altogether.
+// // Keep in mind: Use of local database is done to achieve quick fetching of club data except workshops
 
-    await helper.deleteEntryOfClubDetail(db: database, clubId: clubPost.id);
+//     await helper.deleteEntryOfClubDetail(db: database, clubId: clubPost.id);
 
-    await helper.insertClubDetailsIntoDatabase(clubPost: clubPost);
-  }
+//     await helper.insertClubDetailsIntoDatabase(clubPost: clubPost);
+//   }
 
   static Future updateClubSubscriptionInDatabase(
       {@required int clubId,
@@ -300,5 +310,26 @@ class AppConstants {
         clubId: clubId,
         isSubscribed: isSubscribed,
         subscribedUsers: subscribedUsers);
+  }
+
+  /// All locally stored data will be deleted (database and images).
+  static Future deleteAllLocalData() async {
+    DatabaseHelper helper = DatabaseHelper.instance;
+    var database = await helper.database;
+    await helper.deleteWholeDatabase(db: database);
+    print('-----------------------------');
+    Directory(AppConstants.deviceDirectoryPathImages)
+        .listSync(recursive: true)
+        .forEach((f) {
+      print('deleted : ' +
+          (f.path.split('Images/').length > 1
+              ? f.path.split('Images/')[1]
+              : 'nothing was here'));
+      f.deleteSync();
+    });
+
+    AppConstants.firstTimeFetching = true;
+    AppConstants.workshopFromDatabase = null;
+    AppConstants.councilsSummaryfromDatabase = null;
   }
 }

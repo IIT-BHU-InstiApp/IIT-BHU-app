@@ -40,19 +40,6 @@ class _CouncilPageState extends State<CouncilPage> {
       return;
     }
     setState(() {});
-
-    print('updating council data ');
-
-    councilData = await AppConstants.getAndUpdateCouncilDetailsInDatabase(
-        councilId: AppConstants.currentCouncilId);
-
-    _councilLargeLogoFile = AppConstants.getImageFile(
-        isCouncil: true, isSmall: false, id: councilData.id);
-
-    if (!this.mounted) {
-      return;
-    }
-    setState(() {});
   }
 
   @override

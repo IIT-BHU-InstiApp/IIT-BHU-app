@@ -1,12 +1,10 @@
 import 'dart:io';
-
 import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/pages/club_&_council_widgets.dart';
 import 'package:iit_app/pages/create.dart';
-import 'package:iit_app/screens/home/home_widgets.dart';
 import 'package:iit_app/ui/separator.dart';
 import 'package:iit_app/ui/text_style.dart';
 import 'workshop_tabs.dart';
@@ -69,7 +67,6 @@ class _ClubPageState extends State<ClubPage>
     if (!this.mounted) {
       return;
     }
-    AppConstants.updateClubDetailsInDatabase(clubPost: clubMap);
     setState(() {
       this._loadingWorkshops = false;
     });

@@ -92,7 +92,7 @@ class _HomeScreenState extends State<HomeScreen>
     super.initState();
   }
 
-  void fetchWorkshopsAndCouncilButtons() async {
+  fetchWorkshopsAndCouncilButtons() async {
     await AppConstants.populateWorkshopsAndCouncilButtons();
     setState(() {
       AppConstants.firstTimeFetching = false;
@@ -105,6 +105,16 @@ class _HomeScreenState extends State<HomeScreen>
     await AppConstants.writeCouncilLogosIntoDisk(
         AppConstants.councilsSummaryfromDatabase);
     setState(() {});
+  }
+
+  Future<void> refreshHome() async {
+    setState(() {
+      AppConstants.firstTimeFetching = true;
+    });
+    await AppConstants.updateAndPopulateWorkshops();
+    setState(() {
+      AppConstants.firstTimeFetching = false;
+    });
   }
 
   FutureBuilder<Response> _buildWorkshopsFromSearch(BuildContext context) {
@@ -145,16 +155,6 @@ class _HomeScreenState extends State<HomeScreen>
         }
       },
     );
-  }
-
-  void refresh() async {
-    setState(() {
-      AppConstants.refreshingHomePage = true;
-    });
-    await AppConstants.updateAndPopulateWorkshops();
-    setState(() {
-      AppConstants.refreshingHomePage = false;
-    });
   }
 
   Future<bool> _onPopHome() {
@@ -236,10 +236,6 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   Widget build(BuildContext context) {
-    // Get User Details (for I am going or not?)
-    // Get all Workshop JSONS
-    // for every json: convert json to workshop object ; List<Widget> cardList = List.append(_buildCard(workshop))
-
     return WillPopScope(
         onWillPop: _onPopHome,
         child: Scaffold(
@@ -437,7 +433,16 @@ class _HomeScreenState extends State<HomeScreen>
                             Container(
                               child: AppConstants.firstTimeFetching
                                   ? Center(child: CircularProgressIndicator())
-                                  : _buildCurrentWorkshopPosts(context),
+                                  : RefreshIndicator(
+                                      displacement: 60,
+                                      onRefresh: refreshHome,
+                                      // () async {
+                                      //   print('refreshed 111');
+                                      //   await Future.delayed(
+                                      //       Duration(seconds: 1));
+                                      // },
+                                      child:
+                                          _buildCurrentWorkshopPosts(context)),
                             ),
                             Container(
                               child: _buildInterestedWorkshopsBody(context),

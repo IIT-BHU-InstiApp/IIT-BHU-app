@@ -8,7 +8,7 @@ class WorkshopTabs {
     return workshops == null
         ? Container(child: Center(child: CircularProgressIndicator()))
         : workshops.length == 0
-            ? Center(child: Text('No workshops here :)'))
+            ? Center(child: Text('No workshops here :('))
             : ListView.builder(
                 physics: BouncingScrollPhysics(),
                 scrollDirection: Axis.vertical,
