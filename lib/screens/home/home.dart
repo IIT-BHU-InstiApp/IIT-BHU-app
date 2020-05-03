@@ -20,11 +20,11 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
-  CrudMethods crudObj = new CrudMethods();
   Stream workshops;
   TabController _tabController;
 
   final GlobalKey<FabCircularMenuState> fabKey = GlobalKey();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   TextEditingController _searchController = TextEditingController();
 
@@ -157,7 +157,11 @@ class _HomeScreenState extends State<HomeScreen>
     );
   }
 
-  Future<bool> _onPopHome() {
+  Future<bool> _onPopHome() async {
+    if (_scaffoldKey.currentState.isDrawerOpen) {
+      Navigator.of(context).pop();
+      return false;
+    }
     return showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -239,6 +243,7 @@ class _HomeScreenState extends State<HomeScreen>
     return WillPopScope(
         onWillPop: _onPopHome,
         child: Scaffold(
+          key: _scaffoldKey,
           backgroundColor: Colors.blue[200],
           drawer: getNavDrawer(context),
           floatingActionButton: AppConstants.councilsSummaryfromDatabase == null
