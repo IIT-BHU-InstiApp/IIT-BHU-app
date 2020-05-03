@@ -8,6 +8,7 @@ import 'package:iit_app/model/database_helpers.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:iit_app/services/connectivityCheck.dart';
 import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
 
 class AppConstants {
   //  connectivity variables ------------------------------------------
@@ -23,7 +24,7 @@ class AppConstants {
   static bool firstTimeFetching = true;
   static bool refreshingHomePage = false;
 
-  static String deviceDirectoryPath;
+  static String deviceDirectoryPathImages;
 
   static String djangoToken;
 
@@ -31,12 +32,20 @@ class AppConstants {
   static PostApiService service;
 
   static BuiltList<BuiltWorkshopSummaryPost> workshopFromDatabase;
-
-  // !-------------------------
   static BuiltList<BuiltAllCouncilsPost> councilsSummaryfromDatabase;
-  // !-------------------------
 
   static int currentCouncilId;
+
+  static Future setDeviceDirectoryForImages() async {
+    String path = (await getApplicationDocumentsDirectory()).path + '/Images';
+
+    Directory(path).exists().then((exist) {
+      if (exist == false) {
+        Directory(path).createSync();
+      }
+      AppConstants.deviceDirectoryPathImages = path;
+    });
+  }
 
   static Future populateWorkshopsAndCouncilButtons() async {
     DatabaseHelper helper = DatabaseHelper.instance;
@@ -98,7 +107,7 @@ class AppConstants {
   static writeCouncilLogosIntoDisk(
       BuiltList<BuiltAllCouncilsPost> councils) async {
     for (var council in councils) {
-      if (File('${AppConstants.deviceDirectoryPath}/council(small)_${council.id}')
+      if (File('${AppConstants.deviceDirectoryPathImages}/council(small)_${council.id}')
               .existsSync() ==
           false) {
         final url = council.small_image_url;
@@ -108,7 +117,7 @@ class AppConstants {
           if (response.statusCode == 200) {
             final imageData = response.bodyBytes.toList();
             final File file = File(
-                '${AppConstants.deviceDirectoryPath}/council(small)_${council.id}');
+                '${AppConstants.deviceDirectoryPathImages}/council(small)_${council.id}');
             file.writeAsBytesSync(imageData);
           }
         });
@@ -138,7 +147,8 @@ class AppConstants {
     String size = isSmall ? 'small' : 'large';
     String host = isCouncil ? 'council' : 'club';
 
-    File file = File('${AppConstants.deviceDirectoryPath}/$host($size)_$id');
+    File file =
+        File('${AppConstants.deviceDirectoryPathImages}/$host($size)_$id');
 
     if (file.existsSync() == false) {
       http.get(url).catchError((error) {
@@ -147,8 +157,8 @@ class AppConstants {
       }).then((response) {
         if (response != null && response.statusCode == 200) {
           final imageData = response.bodyBytes.toList();
-          final File writingFile =
-              File('${AppConstants.deviceDirectoryPath}/$host($size)_$id');
+          final File writingFile = File(
+              '${AppConstants.deviceDirectoryPathImages}/$host($size)_$id');
           writingFile.writeAsBytesSync(imageData);
           print('image saved into disk = $host , id = $id');
         }
@@ -180,7 +190,7 @@ class AppConstants {
     String size = isSmall ? 'small' : 'large';
     File file;
     String host = isCouncil ? 'council' : 'club';
-    file = File('${AppConstants.deviceDirectoryPath}/$host($size)_$id');
+    file = File('${AppConstants.deviceDirectoryPathImages}/$host($size)_$id');
 
     if (file.existsSync()) {
       return file;
@@ -302,11 +312,24 @@ class AppConstants {
         subscribedUsers: subscribedUsers);
   }
 
-  /// Except images, rest of locally stored data will be deleted.
-  // static Future deleteLocalDatabase() async {
-  //   DatabaseHelper helper = DatabaseHelper.instance;
-  //   var database = await helper.database;
+  /// All locally stored data will be deleted (database and images).
+  static Future deleteAllLocalData() async {
+    DatabaseHelper helper = DatabaseHelper.instance;
+    var database = await helper.database;
+    await helper.deleteWholeDatabase(db: database);
+    print('-----------------------------');
+    Directory(AppConstants.deviceDirectoryPathImages)
+        .listSync(recursive: true)
+        .forEach((f) {
+      print('deleted : ' +
+          (f.path.split('Images/').length > 1
+              ? f.path.split('Images/')[1]
+              : 'nothing was here'));
+      f.deleteSync();
+    });
 
-  //   await helper.deleteWholeDatabase(db: database);
-  // }
+    AppConstants.firstTimeFetching = true;
+    AppConstants.workshopFromDatabase = null;
+    AppConstants.councilsSummaryfromDatabase = null;
+  }
 }
