@@ -12,6 +12,7 @@ import 'package:iit_app/services/crud.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:iit_app/screens/drawer.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -23,65 +24,16 @@ class _HomeScreenState extends State<HomeScreen>
   Stream workshops;
   TabController _tabController;
 
-  final GlobalKey<FabCircularMenuState> fabKey = GlobalKey();
+  final GlobalKey<FabCircularMenuState> fabKey =
+      GlobalKey<FabCircularMenuState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final GlobalKey<DrawerControllerState> _drawerKey =
+      GlobalKey<DrawerControllerState>();
 
   TextEditingController _searchController = TextEditingController();
 
   bool _isSearching = false;
   var _searchPost;
-
-  Drawer getNavDrawer(BuildContext context) {
-    ListTile getNavItem(var icon, String s, String routeName,
-        {bool replacement = false}) {
-      return ListTile(
-        leading: Icon(icon),
-        title: Text(s),
-        onTap: () {
-          // pop closes the drawer
-          Navigator.of(context).pop();
-          // navigate to the route
-          if (replacement)
-            Navigator.of(context).pushReplacementNamed(routeName);
-          else
-            Navigator.of(context).pushNamed(routeName);
-        },
-      );
-    }
-
-    return Drawer(
-      child: ListView(
-        children: <Widget>[
-          UserAccountsDrawerHeader(
-              accountName: Text(AppConstants.currentUser.displayName),
-              accountEmail: Text(AppConstants.currentUser.email),
-              currentAccountPicture: Image(
-                  image: AppConstants.currentUser == null
-                      ? AssetImage('assets/profile_test.jpg')
-                      : NetworkImage(AppConstants.currentUser.photoUrl),
-                  fit: BoxFit.cover)),
-          getNavItem(Icons.home, "Home", '/home', replacement: true),
-          getNavItem(Icons.map, "Map", '/mapScreen'),
-          getNavItem(Icons.local_dining, "Mess management", '/mess'),
-          getNavItem(Icons.group_work, "All Workshops", '/allWorkshops'),
-          getNavItem(Icons.account_box, "Account", '/account'),
-          getNavItem(Icons.comment, "Complaints & Suggestions", '/complaints'),
-          getNavItem(Icons.settings, "Settings", '/settings'),
-          ListTile(
-            leading: Icon(Icons.exit_to_app),
-            title: Text('LogOut'),
-            onTap: () async {
-              await signOutGoogle();
-              SharedPreferences prefs = await SharedPreferences.getInstance();
-              prefs.clear();
-              Navigator.of(context).pushReplacementNamed('/login');
-            },
-          ),
-          getNavItem(Icons.info, "About", '/about'),
-        ],
-      ),
-    );
-  }
 
   @override
   void initState() {
@@ -158,6 +110,11 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   Future<bool> _onPopHome() async {
+    if (fabKey.currentState.isOpen) {
+      print('fab is open');
+      fabKey.currentState.close();
+      return false;
+    }
     if (_scaffoldKey.currentState.isDrawerOpen) {
       Navigator.of(context).pop();
       return false;
@@ -245,7 +202,7 @@ class _HomeScreenState extends State<HomeScreen>
         child: Scaffold(
           key: _scaffoldKey,
           backgroundColor: Colors.blue[200],
-          drawer: getNavDrawer(context),
+          drawer: SideBar(context: context),
           floatingActionButton: AppConstants.councilsSummaryfromDatabase == null
               ? FloatingActionButton(onPressed: null, child: Icon(Icons.menu))
               : FabCircularMenu(
