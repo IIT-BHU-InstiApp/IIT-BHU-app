@@ -111,9 +111,7 @@ class _HomeScreenState extends State<HomeScreen>
     setState(() {
       AppConstants.firstTimeFetching = true;
     });
-    print('deleting database');
-    await AppConstants.deleteLocalDatabase();
-    await AppConstants.populateWorkshopsAndCouncilButtons();
+    await AppConstants.updateAndPopulateWorkshops();
     setState(() {
       AppConstants.firstTimeFetching = false;
     });
