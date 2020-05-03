@@ -4,9 +4,23 @@ import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/screens/drawer.dart';
 import 'package:iit_app/screens/home/home_widgets.dart';
+import 'package:iit_app/screens/home/search_workshop.dart';
 
-class AllWorkshopsScreen extends StatelessWidget {
+class AllWorkshopsScreen extends StatefulWidget {
+  @override
+  _AllWorkshopsScreenState createState() => _AllWorkshopsScreenState();
+}
+
+class _AllWorkshopsScreenState extends State<AllWorkshopsScreen>
+    with SingleTickerProviderStateMixin {
+  SearchBarWidget searchBarWidget = SearchBarWidget();
   TabController _tabController;
+
+  @override
+  void initState() {
+    _tabController = new TabController(length: 2, vsync: this);
+    super.initState();
+  }
 
   FutureBuilder<Response> _buildAllWorkshopsBody(BuildContext context) {
     return FutureBuilder<Response<BuiltAllWorkshopsPost>>(
@@ -41,44 +55,7 @@ class AllWorkshopsScreen extends StatelessWidget {
 
   Widget _buildAllWorkshopPosts(
       BuildContext context, BuiltAllWorkshopsPost posts) {
-    return
-        // TabBarView(
-        //   controller: _tabController,
-        //   children: <Widget>[
-        //     Container(
-        //       height: 400,
-        //       child: ListView.builder(
-        // physics: ScrollPhysics(),
-        //         shrinkWrap: true,
-        //         scrollDirection: Axis.vertical,
-        //         itemCount: posts.active_workshops.length,
-        //         padding: EdgeInsets.all(8),
-        //         itemBuilder: (context, index) {
-        //           return HomeWidgets.getWorkshopCard(context,
-        //               w: Workshop.createWorkshopFromMap(
-        //                   posts.active_workshops[index]));
-        //         },
-        //       ),
-        //     ),
-        //     Container(
-        //       height: 400,
-        //       child: ListView.builder(
-        // physics: ScrollPhysics(),
-        //         shrinkWrap: true,
-        //         scrollDirection: Axis.vertical,
-        //         itemCount: posts.past_workshops.length,
-        //         padding: EdgeInsets.all(8),
-        //         itemBuilder: (context, index) {
-        //           return HomeWidgets.getWorkshopCard(context,
-        //               w: Workshop.createWorkshopFromMap(
-        //                   posts.past_workshops[index]));
-        //         },
-        //       ),
-        //     ),
-        //   ],
-        // );
-
-        ListView(
+    return ListView(
       children: <Widget>[
         Padding(
           padding: const EdgeInsets.all(15.0),
@@ -138,15 +115,7 @@ class AllWorkshopsScreen extends StatelessWidget {
         automaticallyImplyLeading: false,
         title: Text("All Workshops"),
         actions: <Widget>[
-          Expanded(
-            child: TextField(
-              decoration: InputDecoration(
-                  hintText: 'Search',
-                  prefixIcon: Icon(Icons.search),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(25.0)))),
-            ),
-          ),
+          Expanded(child: searchBarWidget.getSearchTextFeild(context)),
         ],
         // bottom: TabBar(
         //   unselectedLabelColor: Colors.grey,

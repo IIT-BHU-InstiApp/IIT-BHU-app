@@ -117,6 +117,7 @@ class _CreateScreenState extends State<CreateScreen> {
               children: [
                 Text(widget.clubName),
                 TextFormField(
+                  autovalidate: true,
                   decoration:
                       InputDecoration(labelText: 'Title of the Workshop'),
                   controller: this._titleController,
@@ -129,6 +130,7 @@ class _CreateScreenState extends State<CreateScreen> {
                   onSaved: (val) => setState(() => _workshop.title = val),
                 ),
                 TextFormField(
+                    autovalidate: true,
                     decoration: InputDecoration(labelText: 'Description'),
                     controller: this._descriptionController,
                     validator: (value) {
@@ -158,6 +160,7 @@ class _CreateScreenState extends State<CreateScreen> {
                   ],
                 ),
                 TextFormField(
+                    autovalidate: true,
                     decoration: InputDecoration(labelText: 'Location'),
                     controller: this._locationController,
                     validator: (value) {
@@ -165,6 +168,7 @@ class _CreateScreenState extends State<CreateScreen> {
                     },
                     onSaved: (val) => setState(() => _workshop.location = val)),
                 TextFormField(
+                  autovalidate: true,
                   decoration: InputDecoration(labelText: 'Audience'),
                   controller: this._audienceController,
                   validator: (value) {
@@ -173,6 +177,7 @@ class _CreateScreenState extends State<CreateScreen> {
                   onSaved: (val) => setState(() => _workshop.audience = val),
                 ),
                 TextFormField(
+                  autovalidate: true,
                   decoration: InputDecoration(labelText: 'Resources'),
                   controller: this._resourcesController,
                   validator: (value) {
@@ -187,6 +192,7 @@ class _CreateScreenState extends State<CreateScreen> {
                       _searchCategoryDropDown(),
                       Expanded(
                         child: TextFormField(
+                          autovalidate: true,
                           decoration: InputDecoration(
                               labelText:
                                   'Search contacts by ${this._searchByValue}'),

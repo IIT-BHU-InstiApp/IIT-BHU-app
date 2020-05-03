@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/screens/home/home_widgets.dart';
-import 'package:iit_app/ui/text_style.dart';
 
 class WorkshopTabs {
   static Widget _getWorkshops(workshops) {
