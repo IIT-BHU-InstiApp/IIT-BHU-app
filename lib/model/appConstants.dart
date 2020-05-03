@@ -301,4 +301,12 @@ class AppConstants {
         isSubscribed: isSubscribed,
         subscribedUsers: subscribedUsers);
   }
+
+  /// Except images, rest of locally stored data will be deleted.
+  static Future deleteLocalDatabase() async {
+    DatabaseHelper helper = DatabaseHelper.instance;
+    var database = await helper.database;
+
+    await helper.deleteWholeDatabase(db: database);
+  }
 }
