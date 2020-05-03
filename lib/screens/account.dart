@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/pages/club_&_council_widgets.dart';
+import 'package:iit_app/screens/drawer.dart';
 
 class AccountScreen extends StatefulWidget {
   @override
@@ -119,7 +120,12 @@ class _AccountScreenState extends State<AccountScreen> {
           elevation: 0.0,
           brightness: Brightness.light,
           iconTheme: IconThemeData(color: Colors.black87),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: Colors.black),
+            onPressed: () => Navigator.pop(context),
+          ),
         ),
+        drawer: SideBar(context: context),
         body: SingleChildScrollView(
           child: profileDetails == null
               ? Container(
@@ -261,7 +267,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                         profileDetails.subscriptions.length,
                                     itemBuilder: (context, index) {
                                       return ClubAndCouncilWidgets.getClubCard(
-                                        clubTypeForHero: 'Subscriptions',
+                                          clubTypeForHero: 'Subscriptions',
                                           context: context,
                                           title: profileDetails
                                               .subscriptions[index].name,

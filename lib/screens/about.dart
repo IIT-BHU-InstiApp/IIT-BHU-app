@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:built_collection/built_collection.dart';
+import 'package:iit_app/screens/drawer.dart';
 
 class AboutPage extends StatefulWidget {
   @override
@@ -71,6 +72,7 @@ class _AboutPageState extends State<AboutPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFF736AB7),
+      drawer: SideBar(context: context),
       body: teamData == null
           ? Container(
               height: MediaQuery.of(context).size.height / 4,

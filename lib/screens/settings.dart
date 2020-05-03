@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
+import 'package:iit_app/screens/drawer.dart';
 import 'package:iit_app/screens/home/home.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -29,7 +30,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Settings"),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
+      drawer: SideBar(context: context),
       body: Container(
           child: Center(
         child: this._refreshing

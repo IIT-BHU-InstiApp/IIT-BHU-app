@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:iit_app/screens/drawer.dart';
 
 // TODO: in androidManifest.xml , api key has to be changed  (register on goole cloud platform from original gmail and generate api key and enable required services)
 
@@ -7,7 +8,15 @@ class MapScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Google Maps (under dev)'), centerTitle: true),
+      appBar: AppBar(
+        title: Text('Google Maps (under dev)'),
+        centerTitle: true,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
+      drawer: SideBar(context: context),
       body: LocationScreen(),
     );
   }

@@ -50,8 +50,8 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => ClubPage(
-                            club: _workshop.club, editMode: true)));
+                        builder: (context) =>
+                            ClubPage(club: _workshop.club, editMode: true)));
               },
             ),
           ],
@@ -116,6 +116,7 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
     });
     _workshop = snapshots.body;
     is_interested = _workshop.is_interested ? 1 : -1;
+    if (!this.mounted) return;
     setState(() {});
   }
 
