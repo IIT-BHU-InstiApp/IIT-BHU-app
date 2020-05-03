@@ -5,6 +5,7 @@ import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/pages/club_&_council_widgets.dart';
 import 'package:iit_app/ui/separator.dart';
 import 'package:iit_app/ui/text_style.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class CouncilPage extends StatefulWidget {
   @override
@@ -51,50 +52,47 @@ class _CouncilPageState extends State<CouncilPage> {
 
   final divide = Divider(height: 8.0, thickness: 2.0, color: Colors.blue);
 
-  SliverAppBar _getSliverAppBar(context) {
-    return SliverAppBar(
-      leading: Container(),
-      backgroundColor: Colors.white,
-      floating: true,
-      expandedHeight: MediaQuery.of(context).size.height * 3 / 4,
-      flexibleSpace: FlexibleSpaceBar(
-        background: councilData == null
-            ? Container(
-                height: MediaQuery.of(context).size.height * 3 / 4,
-                child: Center(
-                  child: CircularProgressIndicator(),
-                ),
-              )
-            : Stack(
-                children: [
-                  Container(
-                    //height: MediaQuery.of(context).size.height * 0.75,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(35.0),
-                            bottomRight: Radius.circular(35.0)),
-                        color: Color(0xFF736AB7)),
-                  ),
-                  Container(
-                    child: _councilLargeLogoFile == null
-                        ? Image.network(councilData.large_image_url,
-                            fit: BoxFit.cover, height: 300.0)
-                        : Image.file(_councilLargeLogoFile,
-                            fit: BoxFit.cover, height: 300.0),
-                    constraints: new BoxConstraints.expand(height: 295.0),
-                  ),
-                  ClubAndCouncilWidgets.getGradient(),
-                  _getDescription(),
-                  ClubAndCouncilWidgets.getToolbar(context),
-                ],
+  Widget _getBackground(context) {
+    return Container(
+      child: councilData == null
+          ? Container(
+              height: MediaQuery.of(context).size.height * 3 / 4,
+              child: Center(
+                child: CircularProgressIndicator(),
               ),
-      ),
+            )
+          : Stack(
+              children: [
+                Container(
+                  color: Color(0xFF736AB7),
+                  //height: MediaQuery.of(context).size.height,
+                  height: MediaQuery.of(context).size.height * 3 / 4,
+                  /*decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(35.0),
+                          bottomRight: Radius.circular(35.0)),
+                      color: Color(0xFF736AB7)),*/
+                ),
+                Container(
+                  child: _councilLargeLogoFile == null
+                      ? Image.network(councilData.large_image_url,
+                          fit: BoxFit.cover, height: 300.0)
+                      : Image.file(_councilLargeLogoFile,
+                          fit: BoxFit.cover, height: 300.0),
+                  constraints: new BoxConstraints.expand(height: 295.0),
+                ),
+                ClubAndCouncilWidgets.getGradient(),
+                _getDescription(),
+                ClubAndCouncilWidgets.getToolbar(context),
+              ],
+            ),
     );
   }
 
   Container _getDescription() {
     final _overviewTitle = "Description".toUpperCase();
     return new Container(
+      height: MediaQuery.of(context).size.height * 3 / 4,
       child: new ListView(
         padding: new EdgeInsets.fromLTRB(0.0, 72.0, 0.0, 32.0),
         children: <Widget>[
@@ -154,58 +152,81 @@ class _CouncilPageState extends State<CouncilPage> {
           );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: CustomScrollView(
-        slivers: [
-          _getSliverAppBar(context),
-          SliverList(
-            delegate: SliverChildListDelegate(
-              [
+  Widget _getPanel() {
+    return Container(
+      //padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
+      /*decoration: BoxDecoration(
+        borderRadius: radius,
+      ),*/
+      child: ListView(
+        //crossAxisAlignment: CrossAxisAlignment.stretch,
+        //scrollDirection: Axis.vertical,
+        children: <Widget>[
+          space,
+          Container(
+            color: Colors.white,
+            //margin: EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
                 Container(
-                  padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
+                  color: Colors.white,
+                  padding: EdgeInsets.all(5.0),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    //scrollDirection: Axis.vertical,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      space,
-                      Container(
-                        color: Colors.white,
-                        //margin: EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Container(
-                              color: Colors.white,
-                              padding: EdgeInsets.all(5.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text('Clubs',
-                                      style: Style.headingStyle,
-                                      textAlign: TextAlign.left),
-                                  divide,
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      _getClubs(),
-                      councilData == null
-                          ? Container(
-                              height: MediaQuery.of(context).size.height / 4,
-                              child: Center(child: CircularProgressIndicator()))
-                          : ClubAndCouncilWidgets.getSecies(context,
-                              secy: councilData.gensec,
-                              joint_secy: councilData.joint_gensec),
+                      Text('Clubs',
+                          style: Style.headingStyle, textAlign: TextAlign.left),
+                      divide,
                     ],
                   ),
                 ),
               ],
             ),
+          ),
+          _getClubs(),
+          councilData == null
+              ? Container(
+                  height: MediaQuery.of(context).size.height / 4,
+                  child: Center(child: CircularProgressIndicator()))
+              : ClubAndCouncilWidgets.getSecies(context,
+                  secy: councilData.gensec,
+                  joint_secy: councilData.joint_gensec),
+        ],
+      ),
+    );
+  }
+
+  BorderRadiusGeometry radius = BorderRadius.only(
+    topLeft: Radius.circular(24.0),
+    topRight: Radius.circular(24.0),
+  );
+  PanelController _pc = PanelController();
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Color(0xFF736AB7),
+      body: Stack(
+        children: [
+          _getBackground(context),
+          SlidingUpPanel(
+            controller: _pc,
+            borderRadius: radius,
+            collapsed: Container(
+              decoration: BoxDecoration(
+                borderRadius: radius,
+              ),
+            ),
+            backdropEnabled: true,
+            panel: Dismissible(
+              key: Key('clubs'),
+              direction: DismissDirection.down,
+              onDismissed: (_) => _pc.close(),
+              child: _getPanel(),
+            ),
+            minHeight: MediaQuery.of(context).size.height / 4,
+            maxHeight: MediaQuery.of(context).size.height - 10.0,
+            header: ClubAndCouncilWidgets.getHeader(context),
           ),
         ],
       ),
