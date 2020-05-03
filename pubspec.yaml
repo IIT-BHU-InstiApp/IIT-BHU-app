@@ -36,6 +36,7 @@ dependencies:
   fab_circular_menu: ^1.0.0
   http: ^0.12.1
   google_maps_flutter: 
+  sliding_up_panel: ^1.0.2
   
 
 dev_dependencies:

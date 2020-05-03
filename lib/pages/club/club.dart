@@ -7,6 +7,7 @@ import 'package:iit_app/pages/club_&_council_widgets.dart';
 import 'package:iit_app/pages/create.dart';
 import 'package:iit_app/ui/separator.dart';
 import 'package:iit_app/ui/text_style.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'workshop_tabs.dart';
 
 class ClubPage extends StatefulWidget {
@@ -121,50 +122,44 @@ class _ClubPageState extends State<ClubPage>
   final divide = Divider(height: 8.0, thickness: 2.0, color: Colors.blue);
   final space = SizedBox(height: 8.0);
 
-  SliverAppBar _getSliverAppBar(context) {
-    return SliverAppBar(
-      leading: Container(),
-      backgroundColor: Colors.white,
-      floating: true,
-      expandedHeight: MediaQuery.of(context).size.height * 3 / 4,
-      flexibleSpace: FlexibleSpaceBar(
-        background: Stack(
-          children: [
-            Container(
-              //height: MediaQuery.of(context).size.height * 0.75,
-              decoration: BoxDecoration(
+  Widget _getBackground(context) {
+    return Stack(
+      children: [
+        Container(
+          color: Color(0xFF736AB7),
+          height: MediaQuery.of(context).size.height * 3 / 4,
+          /*decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(35.0),
                       bottomRight: Radius.circular(35.0)),
-                  color: Color(0xFF736AB7)),
-            ),
-            clubMap == null
-                ? Container(
-                    height: MediaQuery.of(context).size.height * 3 / 4,
-                    child: Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  )
-                : Container(
-                    child: _clubLargeLogoFile == null
-                        ? Image.network(clubMap.large_image_url,
-                            fit: BoxFit.cover, height: 300.0)
-                        : Image.file(_clubLargeLogoFile,
-                            fit: BoxFit.cover, height: 300.0),
-                    constraints: new BoxConstraints.expand(height: 295.0),
-                  ),
-            ClubAndCouncilWidgets.getGradient(),
-            _getClubCardAndDescription(),
-            ClubAndCouncilWidgets.getToolbar(context),
-          ],
+                  color: Color(0xFF736AB7)),*/
         ),
-      ),
+        clubMap == null
+            ? Container(
+                height: MediaQuery.of(context).size.height * 3 / 4,
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              )
+            : Container(
+                child: _clubLargeLogoFile == null
+                    ? Image.network(clubMap.large_image_url,
+                        fit: BoxFit.cover, height: 300.0)
+                    : Image.file(_clubLargeLogoFile,
+                        fit: BoxFit.cover, height: 300.0),
+                constraints: new BoxConstraints.expand(height: 295.0),
+              ),
+        ClubAndCouncilWidgets.getGradient(),
+        _getClubCardAndDescription(),
+        ClubAndCouncilWidgets.getToolbar(context),
+      ],
     );
   }
 
   Container _getClubCardAndDescription() {
     final _overviewTitle = "Description".toUpperCase();
     return new Container(
+      height: MediaQuery.of(context).size.height * 3 / 4,
       child: new ListView(
         padding: new EdgeInsets.fromLTRB(0.0, 72.0, 0.0, 32.0),
         children: <Widget>[
@@ -202,9 +197,46 @@ class _ClubPageState extends State<ClubPage>
     );
   }
 
+  Widget _getPanel() {
+    return Container(
+      child: ListView(
+        children: [
+          space,
+          clubMap == null
+              ? Container()
+              : RaisedButton(
+                  child: Text('Create workshop'),
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => CreateScreen(
+                            club: widget.club, clubName: clubMap.name),
+                      ),
+                    );
+                  }),
+          WorkshopTabs.getActiveAndPastTabBar(
+              club: clubMap, tabController: _tabController),
+          space,
+          clubMap == null
+              ? Container(
+                  height: MediaQuery.of(context).size.height / 4,
+                  child: Center(child: CircularProgressIndicator()))
+              : ClubAndCouncilWidgets.getSecies(context,
+                  secy: clubMap.secy, joint_secy: clubMap.joint_secy),
+        ],
+      ),
+    );
+  }
+
+  BorderRadiusGeometry radius = BorderRadius.only(
+    topLeft: Radius.circular(24.0),
+    topRight: Radius.circular(24.0),
+  );
+  PanelController _pc = PanelController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFF736AB7),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.white,
         onPressed: () {
@@ -219,35 +251,43 @@ class _ClubPageState extends State<ClubPage>
                 color: clubMap.is_subscribed ? Colors.red : Colors.black26,
               ),
       ),
-      body: CustomScrollView(
-        scrollDirection: Axis.vertical,
-        slivers: [
-          _getSliverAppBar(context),
-          SliverList(
-            delegate: SliverChildListDelegate(
-              [
-                space,
-                clubMap == null
-                    ? Container()
-                    : RaisedButton(
-                        child: Text('Create workshop'),
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => CreateScreen(
-                                  club: widget.club, clubName: clubMap.name),
-                            ),
-                          );
-                        }),
-                WorkshopTabs.getActiveAndPastTabBar(
-                    club: clubMap, tabController: _tabController),
-                space,
-                clubMap == null
-                    ? Container(
-                        height: MediaQuery.of(context).size.height / 4,
-                        child: Center(child: CircularProgressIndicator()))
-                    : ClubAndCouncilWidgets.getSecies(context,
-                        secy: clubMap.secy, joint_secy: clubMap.joint_secy),
+      body: Stack(
+        children: [
+          _getBackground(context),
+          SlidingUpPanel(
+            controller: _pc,
+            borderRadius: radius,
+            collapsed: Container(
+              decoration: BoxDecoration(
+                borderRadius: radius,
+              ),
+            ),
+            backdropEnabled: true,
+            panel: Dismissible(
+              key: Key('clubs'),
+              direction: DismissDirection.down,
+              onDismissed: (_) => _pc.close(),
+              child: _getPanel(),
+            ),
+            minHeight: MediaQuery.of(context).size.height / 4,
+            maxHeight: MediaQuery.of(context).size.height - 10.0,
+            header: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: Color(0xff00c6ff),
+                    borderRadius: BorderRadius.circular(2.0),
+                  ),
+                  margin: EdgeInsets.fromLTRB(
+                      MediaQuery.of(context).size.width / 2 - 9.0,
+                      10.0,
+                      0.0,
+                      0.0),
+                  height: 4.0,
+                  width: 18.0,
+                  //color: new Color(0xff00c6ff)
+                ),
               ],
             ),
           ),
