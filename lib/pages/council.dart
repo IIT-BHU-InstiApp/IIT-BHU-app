@@ -226,26 +226,7 @@ class _CouncilPageState extends State<CouncilPage> {
             ),
             minHeight: MediaQuery.of(context).size.height / 4,
             maxHeight: MediaQuery.of(context).size.height - 10.0,
-            header: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                    decoration: BoxDecoration(
-                      color:Color(0xff00c6ff),
-                      borderRadius: BorderRadius.circular(2.0),
-                      
-                    ),
-                    margin: EdgeInsets.fromLTRB(
-                        MediaQuery.of(context).size.width / 2 - 9.0,
-                        10.0,
-                        0.0,
-                        0.0),
-                    height: 4.0,
-                    width: 18.0,
-                    //color: new Color(0xff00c6ff)
-                    ),
-              ],
-            ),
+            header: ClubAndCouncilWidgets.getHeader(context),
           ),
         ],
       ),
