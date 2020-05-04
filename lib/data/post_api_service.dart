@@ -8,22 +8,22 @@ part 'post_api_service.chopper.dart';
 
 @ChopperApi(baseUrl: '')
 abstract class PostApiService extends ChopperService {
+//! ------------------------------------------ Workshop end point APIs --------------------------------------------------------------
+
+  //? ----------------------------------- Get -------------------------------
+
   @Get(path: '/workshops/')
   Future<Response<BuiltAllWorkshopsPost>> getAllWorkshops();
 
   @Get(path: '/workshops/active/')
   Future<Response<BuiltList<BuiltWorkshopSummaryPost>>> getActiveWorkshops();
 
-  @Get(path: '/workshops/past/')
-  Future<Response<BuiltList<BuiltWorkshopSummaryPost>>> getPastWorkshops();
-
   @Get(path: '/workshops/interested/')
   Future<Response<BuiltList<BuiltWorkshopSummaryPost>>> getInterestedWorkshops(
       @Header('Authorization') String token);
 
-  @Delete(path: '/workshops/{id}/')
-  Future<Response> removeWorkshop(
-      @Path('id') int id, @Header('Authorization') String token);
+  @Get(path: '/workshops/past/')
+  Future<Response<BuiltList<BuiltWorkshopSummaryPost>>> getPastWorkshops();
 
   @Get(path: '/workshops/{id}/')
   Future<Response<BuiltWorkshopDetailPost>> getWorkshopDetailsPost(
@@ -33,11 +33,80 @@ abstract class PostApiService extends ChopperService {
   Future<Response> toggleInterestedWorkshop(
       @Path('id') int id, @Header('Authorization') String token);
 
+  //? ----------------------------------- Post -------------------------------
+
+  @Post(path: '/workshops/create/')
+  Future<Response> postNewWorkshop(@Header('Authorization') String token,
+      @Body() BuiltWorkshopCreatePost body);
+
+  @Post(path: '/workshops/search/')
+  Future<Response<BuiltAllWorkshopsPost>> searchWorkshop(
+      @Body() BuiltWorkshopSearchByStringPost body);
+
+  //? ----------------------------------- Put -------------------------------
+
+  @Put(path: '/workshops/{id}/update-tags/')
+  Future<Response<BuiltList<ContactPost>>> updateContacts(@Path('id') int id,
+      @Header('Authorization') String token, @Body() BuiltContacts body);
+
+  @Put(path: '/workshops/{id}/update-contacts/')
+  Future<Response<BuiltList<ContactPost>>> updateTags(@Path('id') int id,
+      @Header('Authorization') String token, @Body() BuiltTags body);
+
+  @Put(path: '/workshops/{id}/')
+  Future<Response> updateWorkshopByPut(
+      @Path('id') int id,
+      @Header('Authorization') String token,
+      @Body() BuiltWorkshopDetailPost body);
+
+  //? ----------------------------------- Patch -------------------------------
+
+  @Patch(path: '/workshops/{id}/')
+  Future<Response> updateWorkshopByPatch(
+      @Path('id') int id,
+      @Header('Authorization') String token,
+      @Body() BuiltWorkshopDetailPost body);
+
+  //? ----------------------------------- Delete -------------------------------
+
+  @Delete(path: '/workshops/{id}/')
+  Future<Response> removeWorkshop(
+      @Path('id') int id, @Header('Authorization') String token);
+
+//! ------------------------------------------ Workshop end point APIs --------------------------------------------------------------
+
+//? --------------------------------------------------------------------------------------------------------------------
+//? --------------------------------------------------------------------------------------------------------------------
+
+//! ------------------------------------------ Council end point APIs --------------------------------------------------------------
+
+  //? ----------------------------------- Get -------------------------------
+
   @Get(path: '/councils/')
   Future<Response<BuiltList<BuiltAllCouncilsPost>>> getAllCouncils();
 
   @Get(path: '/councils/{id}/')
   Future<Response<BuiltCouncilPost>> getCouncil(@Path('id') int id);
+
+  //? ----------------------------------- Put -------------------------------
+  @Put(path: '/councils/{id}/')
+  Future<Response> updateCouncilByPut(@Path('id') int id,
+      @Header('Authorization') String token, @Body() BuiltCouncilPost body);
+
+  //? ----------------------------------- Patch -------------------------------
+
+  @Patch(path: '/councils/{id}/')
+  Future<Response> updateCouncilByPatch(@Path('id') int id,
+      @Header('Authorization') String token, @Body() BuiltCouncilPost body);
+
+//! ------------------------------------------ Council end point APIs --------------------------------------------------------------
+
+//? --------------------------------------------------------------------------------------------------------------------
+//? --------------------------------------------------------------------------------------------------------------------
+
+//! ------------------------------------------ Club end point APIs --------------------------------------------------------------
+
+  //? ----------------------------------- Get -------------------------------
 
   @Get(path: '/clubs/{id}/')
   Future<Response<BuiltClubPost>> getClub(
@@ -47,39 +116,80 @@ abstract class PostApiService extends ChopperService {
   Future<Response> toggleClubSubscription(
       @Path('id') int id, @Header('Authorization') String token);
 
+  @Get(path: '/clubs/{id}/workshops/')
+  Future<Response<BuiltAllWorkshopsPost>> getClubWorkshops(
+      @Path('id') int id, @Header('Authorization') String token);
+
+  //? ----------------------------------- Put -------------------------------
+  @Put(path: '/club/{id}/')
+  Future<Response> updateClubByPut(@Path('id') int id,
+      @Header('Authorization') String token, @Body() BuiltClubPost body);
+
+  //? ----------------------------------- Patch -------------------------------
+
+  @Patch(path: '/club/{id}/')
+  Future<Response> updateClubByPatch(@Path('id') int id,
+      @Header('Authorization') String token, @Body() BuiltClubPost body);
+
+//! ------------------------------------------ Club end point APIs --------------------------------------------------------------
+
+//? --------------------------------------------------------------------------------------------------------------------
+//? --------------------------------------------------------------------------------------------------------------------
+
+//! ------------------------------------------ Profile end point APIs --------------------------------------------------------------
+
+  //? ----------------------------------- Get -------------------------------
+
   @Get(path: '/profile/')
   Future<Response<BuiltProfilePost>> getProfile(
       @Header('Authorization') String token);
 
-  @Patch(path: '/profile/')
-  Future<Response<BuiltProfilePost>> updateProfileByPatch(
-      @Header('Authorization') String token, @Body() BuiltProfilePost body);
+  //? ----------------------------------- Post -------------------------------
 
   @Post(path: '/profile/search/')
   Future<Response<BuiltList<BuiltProfilePost>>> searchProfile(
       @Header('Authorization') String token,
       @Body() BuiltProfileSearchPost body);
 
+  //? ----------------------------------- Put -------------------------------
+  @Put(path: '/profile/')
+  Future<Response<BuiltProfilePost>> updateProfileByPut(
+      @Header('Authorization') String token, @Body() BuiltProfilePost body);
+
+  //? ----------------------------------- Patch -------------------------------
+
+  @Patch(path: '/profile/')
+  Future<Response<BuiltProfilePost>> updateProfileByPatch(
+      @Header('Authorization') String token, @Body() BuiltProfilePost body);
+
+//! ------------------------------------------ Profile end point APIs --------------------------------------------------------------
+
+//? --------------------------------------------------------------------------------------------------------------------
+//? --------------------------------------------------------------------------------------------------------------------
+
+//! ------------------------------------------ Other (Team,Tags,Login) end point APIs --------------------------------------------------------------
+
+  //? ----------------------------------- Get -------------------------------
+
   @Get(path: '/team/')
   Future<Response<BuiltList<BuiltTeamMemberPost>>> getTeam();
 
-  @Post(path: '/workshops/create/')
-  Future<Response> postNewWorkshop(@Header('Authorization') String token,
-      @Body() BuiltWorkshopCreatePost body);
+  //? ----------------------------------- Post -------------------------------
 
-  @Patch(path: '/workshops/{id}/')
-  Future<Response> updateWorkshopByPatch(
-      @Path('id') int id,
-      @Header('Authorization') String token,
-      @Body() BuiltWorkshopDetailPost body);
+  @Post(path: '/tags/create/')
+  Future<Response> createTag(
+      @Header('Authorization') String token, @Body() TagCreate body);
 
-  @Post(path: '/workshops/search/')
-  Future<Response<BuiltAllWorkshopsPost>> searchWorkshop(
-      @Body() BuiltWorkshopSearchByStringPost body);
+// TODO: what is the return response body of searchTag ?
+  // @Post(path: '/tags/search/')
+  // Future<Response<(type of body)>> searchTag(
+  //     @Header('Authorization') String token, @Body() TagSearch body);
 
-  @Put(path: '/workshops/{id}/update-contacts/')
-  Future<Response<BuiltList<ContactPost>>> updateContacts(@Path('id') int id,
-      @Header('Authorization') String token, @Body() BuiltContacts body);
+// TODO: Use this funciton to verify Token
+  @Post(path: '/login/')
+  Future<Response<Token>> logInPost(@Body() LoginPost body);
+
+//! ------------------------------------------ Other (Team,Tags,Login) end point APIs --------------------------------------------------------------
 
   static PostApiService create() {
     final client = ChopperClient(

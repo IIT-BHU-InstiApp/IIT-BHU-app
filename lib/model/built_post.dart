@@ -105,9 +105,9 @@ abstract class BuiltWorkshopDetailPost
   String get location;
 
   @nullable
-  String get latitude;
+  double get latitude;
   @nullable
-  String get longitude;
+  double get longitude;
 
   @nullable
   String get audience;
@@ -357,9 +357,9 @@ abstract class BuiltWorkshopCreatePost
   String get location;
 
   @nullable
-  String get latitude;
+  double get latitude;
   @nullable
-  String get longitude;
+  double get longitude;
 
   @nullable
   String get audience;
@@ -474,4 +474,20 @@ abstract class BuiltTags implements Built<BuiltTags, BuiltTagsBuilder> {
   BuiltTags._();
   factory BuiltTags([updates(BuiltTagsBuilder b)]) = _$BuiltTags;
   static Serializer<BuiltTags> get serializer => _$builtTagsSerializer;
+}
+
+abstract class LoginPost implements Built<LoginPost, LoginPostBuilder> {
+  String get id_token;
+
+  LoginPost._();
+  factory LoginPost([updates(LoginPostBuilder b)]) = _$LoginPost;
+  static Serializer<LoginPost> get serializer => _$loginPostSerializer;
+}
+
+abstract class Token implements Built<Token, TokenBuilder> {
+  String get token;
+
+  Token._();
+  factory Token([updates(TokenBuilder b)]) = _$Token;
+  static Serializer<Token> get serializer => _$tokenSerializer;
 }

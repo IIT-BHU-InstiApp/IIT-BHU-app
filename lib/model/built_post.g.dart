@@ -40,6 +40,8 @@ Serializer<TeamMember> _$teamMemberSerializer = new _$TeamMemberSerializer();
 Serializer<BuiltContacts> _$builtContactsSerializer =
     new _$BuiltContactsSerializer();
 Serializer<BuiltTags> _$builtTagsSerializer = new _$BuiltTagsSerializer();
+Serializer<LoginPost> _$loginPostSerializer = new _$LoginPostSerializer();
+Serializer<Token> _$tokenSerializer = new _$TokenSerializer();
 
 class _$TagCreateSerializer implements StructuredSerializer<TagCreate> {
   @override
@@ -448,13 +450,13 @@ class _$BuiltWorkshopDetailPostSerializer
       result
         ..add('latitude')
         ..add(serializers.serialize(object.latitude,
-            specifiedType: const FullType(String)));
+            specifiedType: const FullType(double)));
     }
     if (object.longitude != null) {
       result
         ..add('longitude')
         ..add(serializers.serialize(object.longitude,
-            specifiedType: const FullType(String)));
+            specifiedType: const FullType(double)));
     }
     if (object.audience != null) {
       result
@@ -557,11 +559,11 @@ class _$BuiltWorkshopDetailPostSerializer
           break;
         case 'latitude':
           result.latitude = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(double)) as double;
           break;
         case 'longitude':
           result.longitude = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(double)) as double;
           break;
         case 'audience':
           result.audience = serializers.deserialize(value,
@@ -1434,13 +1436,13 @@ class _$BuiltWorkshopCreatePostSerializer
       result
         ..add('latitude')
         ..add(serializers.serialize(object.latitude,
-            specifiedType: const FullType(String)));
+            specifiedType: const FullType(double)));
     }
     if (object.longitude != null) {
       result
         ..add('longitude')
         ..add(serializers.serialize(object.longitude,
-            specifiedType: const FullType(String)));
+            specifiedType: const FullType(double)));
     }
     if (object.audience != null) {
       result
@@ -1519,11 +1521,11 @@ class _$BuiltWorkshopCreatePostSerializer
           break;
         case 'latitude':
           result.latitude = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(double)) as double;
           break;
         case 'longitude':
           result.longitude = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(double)) as double;
           break;
         case 'audience':
           result.audience = serializers.deserialize(value,
@@ -1944,6 +1946,86 @@ class _$BuiltTagsSerializer implements StructuredSerializer<BuiltTags> {
                   specifiedType:
                       const FullType(BuiltList, const [const FullType(int)]))
               as BuiltList<dynamic>);
+          break;
+      }
+    }
+
+    return result.build();
+  }
+}
+
+class _$LoginPostSerializer implements StructuredSerializer<LoginPost> {
+  @override
+  final Iterable<Type> types = const [LoginPost, _$LoginPost];
+  @override
+  final String wireName = 'LoginPost';
+
+  @override
+  Iterable<Object> serialize(Serializers serializers, LoginPost object,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = <Object>[
+      'id_token',
+      serializers.serialize(object.id_token,
+          specifiedType: const FullType(String)),
+    ];
+
+    return result;
+  }
+
+  @override
+  LoginPost deserialize(Serializers serializers, Iterable<Object> serialized,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = new LoginPostBuilder();
+
+    final iterator = serialized.iterator;
+    while (iterator.moveNext()) {
+      final key = iterator.current as String;
+      iterator.moveNext();
+      final dynamic value = iterator.current;
+      switch (key) {
+        case 'id_token':
+          result.id_token = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+      }
+    }
+
+    return result.build();
+  }
+}
+
+class _$TokenSerializer implements StructuredSerializer<Token> {
+  @override
+  final Iterable<Type> types = const [Token, _$Token];
+  @override
+  final String wireName = 'Token';
+
+  @override
+  Iterable<Object> serialize(Serializers serializers, Token object,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = <Object>[
+      'token',
+      serializers.serialize(object.token,
+          specifiedType: const FullType(String)),
+    ];
+
+    return result;
+  }
+
+  @override
+  Token deserialize(Serializers serializers, Iterable<Object> serialized,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = new TokenBuilder();
+
+    final iterator = serialized.iterator;
+    while (iterator.moveNext()) {
+      final key = iterator.current as String;
+      iterator.moveNext();
+      final dynamic value = iterator.current;
+      switch (key) {
+        case 'token':
+          result.token = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
           break;
       }
     }
@@ -2526,9 +2608,9 @@ class _$BuiltWorkshopDetailPost extends BuiltWorkshopDetailPost {
   @override
   final String location;
   @override
-  final String latitude;
+  final double latitude;
   @override
-  final String longitude;
+  final double longitude;
   @override
   final String audience;
   @override
@@ -2708,13 +2790,13 @@ class BuiltWorkshopDetailPostBuilder
   String get location => _$this._location;
   set location(String location) => _$this._location = location;
 
-  String _latitude;
-  String get latitude => _$this._latitude;
-  set latitude(String latitude) => _$this._latitude = latitude;
+  double _latitude;
+  double get latitude => _$this._latitude;
+  set latitude(double latitude) => _$this._latitude = latitude;
 
-  String _longitude;
-  String get longitude => _$this._longitude;
-  set longitude(String longitude) => _$this._longitude = longitude;
+  double _longitude;
+  double get longitude => _$this._longitude;
+  set longitude(double longitude) => _$this._longitude = longitude;
 
   String _audience;
   String get audience => _$this._audience;
@@ -4059,9 +4141,9 @@ class _$BuiltWorkshopCreatePost extends BuiltWorkshopCreatePost {
   @override
   final String location;
   @override
-  final String latitude;
+  final double latitude;
   @override
-  final String longitude;
+  final double longitude;
   @override
   final String audience;
   @override
@@ -4217,13 +4299,13 @@ class BuiltWorkshopCreatePostBuilder
   String get location => _$this._location;
   set location(String location) => _$this._location = location;
 
-  String _latitude;
-  String get latitude => _$this._latitude;
-  set latitude(String latitude) => _$this._latitude = latitude;
+  double _latitude;
+  double get latitude => _$this._latitude;
+  set latitude(double latitude) => _$this._latitude = latitude;
 
-  String _longitude;
-  String get longitude => _$this._longitude;
-  set longitude(String longitude) => _$this._longitude = longitude;
+  double _longitude;
+  double get longitude => _$this._longitude;
+  set longitude(double longitude) => _$this._longitude = longitude;
 
   String _audience;
   String get audience => _$this._audience;
@@ -4983,6 +5065,158 @@ class BuiltTagsBuilder implements Builder<BuiltTags, BuiltTagsBuilder> {
       }
       rethrow;
     }
+    replace(_$result);
+    return _$result;
+  }
+}
+
+class _$LoginPost extends LoginPost {
+  @override
+  final String id_token;
+
+  factory _$LoginPost([void Function(LoginPostBuilder) updates]) =>
+      (new LoginPostBuilder()..update(updates)).build();
+
+  _$LoginPost._({this.id_token}) : super._() {
+    if (id_token == null) {
+      throw new BuiltValueNullFieldError('LoginPost', 'id_token');
+    }
+  }
+
+  @override
+  LoginPost rebuild(void Function(LoginPostBuilder) updates) =>
+      (toBuilder()..update(updates)).build();
+
+  @override
+  LoginPostBuilder toBuilder() => new LoginPostBuilder()..replace(this);
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(other, this)) return true;
+    return other is LoginPost && id_token == other.id_token;
+  }
+
+  @override
+  int get hashCode {
+    return $jf($jc(0, id_token.hashCode));
+  }
+
+  @override
+  String toString() {
+    return (newBuiltValueToStringHelper('LoginPost')..add('id_token', id_token))
+        .toString();
+  }
+}
+
+class LoginPostBuilder implements Builder<LoginPost, LoginPostBuilder> {
+  _$LoginPost _$v;
+
+  String _id_token;
+  String get id_token => _$this._id_token;
+  set id_token(String id_token) => _$this._id_token = id_token;
+
+  LoginPostBuilder();
+
+  LoginPostBuilder get _$this {
+    if (_$v != null) {
+      _id_token = _$v.id_token;
+      _$v = null;
+    }
+    return this;
+  }
+
+  @override
+  void replace(LoginPost other) {
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
+    _$v = other as _$LoginPost;
+  }
+
+  @override
+  void update(void Function(LoginPostBuilder) updates) {
+    if (updates != null) updates(this);
+  }
+
+  @override
+  _$LoginPost build() {
+    final _$result = _$v ?? new _$LoginPost._(id_token: id_token);
+    replace(_$result);
+    return _$result;
+  }
+}
+
+class _$Token extends Token {
+  @override
+  final String token;
+
+  factory _$Token([void Function(TokenBuilder) updates]) =>
+      (new TokenBuilder()..update(updates)).build();
+
+  _$Token._({this.token}) : super._() {
+    if (token == null) {
+      throw new BuiltValueNullFieldError('Token', 'token');
+    }
+  }
+
+  @override
+  Token rebuild(void Function(TokenBuilder) updates) =>
+      (toBuilder()..update(updates)).build();
+
+  @override
+  TokenBuilder toBuilder() => new TokenBuilder()..replace(this);
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(other, this)) return true;
+    return other is Token && token == other.token;
+  }
+
+  @override
+  int get hashCode {
+    return $jf($jc(0, token.hashCode));
+  }
+
+  @override
+  String toString() {
+    return (newBuiltValueToStringHelper('Token')..add('token', token))
+        .toString();
+  }
+}
+
+class TokenBuilder implements Builder<Token, TokenBuilder> {
+  _$Token _$v;
+
+  String _token;
+  String get token => _$this._token;
+  set token(String token) => _$this._token = token;
+
+  TokenBuilder();
+
+  TokenBuilder get _$this {
+    if (_$v != null) {
+      _token = _$v.token;
+      _$v = null;
+    }
+    return this;
+  }
+
+  @override
+  void replace(Token other) {
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
+    _$v = other as _$Token;
+  }
+
+  @override
+  void update(void Function(TokenBuilder) updates) {
+    if (updates != null) updates(this);
+  }
+
+  @override
+  _$Token build() {
+    final _$result = _$v ?? new _$Token._(token: token);
     replace(_$result);
     return _$result;
   }

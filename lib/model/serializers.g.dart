@@ -22,11 +22,13 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..add(BuiltWorkshopSummaryPost.serializer)
       ..add(ClubListPost.serializer)
       ..add(ContactPost.serializer)
+      ..add(LoginPost.serializer)
       ..add(SecyPost.serializer)
       ..add(TagCreate.serializer)
       ..add(TagDetail.serializer)
       ..add(TagSearch.serializer)
       ..add(TeamMember.serializer)
+      ..add(Token.serializer)
       ..addBuilderFactory(
           const FullType(
               BuiltList, const [const FullType(BuiltWorkshopSummaryPost)]),
