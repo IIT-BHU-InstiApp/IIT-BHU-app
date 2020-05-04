@@ -3,7 +3,8 @@ import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
-import 'package:iit_app/pages/club_&_council_widgets.dart';
+import 'package:iit_app/pages/club_council_common/club_&_council_widgets.dart';
+import 'package:iit_app/pages/club_council_common/description.dart';
 import 'package:iit_app/pages/create.dart';
 import 'package:iit_app/ui/separator.dart';
 import 'package:iit_app/ui/text_style.dart';
@@ -155,7 +156,6 @@ class _ClubPageState extends State<ClubPage>
   }
 
   Container _getClubCardAndDescription() {
-    final _overviewTitle = "Description".toUpperCase();
     return new Container(
       height: MediaQuery.of(context).size.height * 3 / 4,
       child: new ListView(
@@ -169,27 +169,7 @@ class _ClubPageState extends State<ClubPage>
               isCouncil: false,
               context: context),
           SizedBox(height: 8.0),
-          clubMap == null
-              ? Container(
-                  height: MediaQuery.of(context).size.height * 3 / 4,
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                )
-              : Container(
-                  padding: new EdgeInsets.symmetric(horizontal: 32.0),
-                  child: new Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      new Text(
-                        _overviewTitle,
-                        style: Style.headerTextStyle,
-                      ),
-                      Separator(),
-                      Text(clubMap.description, style: Style.commonTextStyle),
-                    ],
-                  ),
-                ),
+          Description(map: clubMap),
         ],
       ),
     );
@@ -202,18 +182,20 @@ class _ClubPageState extends State<ClubPage>
         controller: sc,
         children: [
           space,
-          clubMap == null
-              ? Container()
-              : RaisedButton(
-                  child: Text('Create workshop'),
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => CreateScreen(
-                            club: widget.club, clubName: clubMap.name),
-                      ),
-                    );
-                  }),
+          clubMap != null
+              ? clubMap.is_por_holder == true
+                  ? RaisedButton(
+                      child: Text('Create workshop'),
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => CreateScreen(
+                                club: widget.club, clubName: clubMap.name),
+                          ),
+                        );
+                      })
+                  : Container()
+              : Container(),
           WorkshopTabs.getActiveAndPastTabBarForClub(
               clubWorkshops: clubWorkshops, tabController: _tabController),
           space,

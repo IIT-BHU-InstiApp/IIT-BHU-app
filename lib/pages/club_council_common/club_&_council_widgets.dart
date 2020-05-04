@@ -6,7 +6,7 @@ import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/ui/separator.dart';
 import 'package:iit_app/ui/text_style.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'club/club.dart';
+import '../club/club.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ClubAndCouncilWidgets {
