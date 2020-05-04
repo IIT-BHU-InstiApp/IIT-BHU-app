@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:iit_app/model/appConstants.dart';
+import 'package:iit_app/model/built_post.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
@@ -67,21 +68,19 @@ Future<FirebaseUser> signInWithGoogle() async {
   return currentUser;
 }
 
-verifyToken(String token) async {
-  var url = "https://workshops-app-backend.herokuapp.com/login/";
-  var client = http.Client();
-  var request = http.Request('POST', Uri.parse(url));
-  var body = {'id_token': token};
-  request.bodyFields = body;
-  var response = await client.send(request);
-  try {
-    var value = await response.stream.bytesToString();
-    responseIdToken = json.decode(value)['token'];
-    AppConstants.djangoToken = responseIdToken;
-    print('DjangoToken from backend: $responseIdToken');
-  } catch (e) {
-    print('django auth token error: ${e.toString()}');
-  }
+verifyToken(String idToken) async {
+  final LoginPost logInCredentials = LoginPost(
+    (b) => b..id_token = idToken,
+  );
+  await AppConstants.service.logInPost(logInCredentials).catchError((onError) {
+    print('Error in requesting requesting token: $onError');
+  }).then((response) {
+    if (response.isSuccessful) {
+      print('successfully verified token with backend');
+      AppConstants.djangoToken = response.body.token;
+      print('DjangoToken from backend: ${AppConstants.djangoToken}');
+    }
+  });
 }
 
 Future<void> signOutGoogle() async {
