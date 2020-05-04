@@ -110,27 +110,30 @@ class _AllWorkshopsScreenState extends State<AllWorkshopsScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: Text("All Workshops"),
-        actions: <Widget>[
-          Expanded(child: searchBarWidget.getSearchTextFeild(context)),
-        ],
-        // bottom: TabBar(
-        //   unselectedLabelColor: Colors.grey,
-        //   labelColor: Colors.black,
-        //   tabs: [
-        //     new Tab(
-        //       text: 'Active',
-        //     ),
-        //     new Tab(text: 'Past'),
-        //   ],
-        //   controller: _tabController,
-        // ),
+    return SafeArea(
+      minimum: const EdgeInsets.all(2.0),
+      child: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          title: Text("All Workshops"),
+          actions: <Widget>[
+            Expanded(child: searchBarWidget.getSearchTextFeild(context)),
+          ],
+          // bottom: TabBar(
+          //   unselectedLabelColor: Colors.grey,
+          //   labelColor: Colors.black,
+          //   tabs: [
+          //     new Tab(
+          //       text: 'Active',
+          //     ),
+          //     new Tab(text: 'Past'),
+          //   ],
+          //   controller: _tabController,
+          // ),
+        ),
+        drawer: SideBar(context: context),
+        body: _buildAllWorkshopsBody(context),
       ),
-      drawer: SideBar(context: context),
-      body: _buildAllWorkshopsBody(context),
     );
   }
 }

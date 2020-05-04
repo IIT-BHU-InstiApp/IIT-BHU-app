@@ -7,17 +7,20 @@ import 'package:iit_app/screens/drawer.dart';
 class MapScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Google Maps (under dev)'),
-        centerTitle: true,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
+    return SafeArea(
+      minimum: const EdgeInsets.all(2.0),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Google Maps (under dev)'),
+          centerTitle: true,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () => Navigator.pop(context),
+          ),
         ),
+        drawer: SideBar(context: context),
+        body: LocationScreen(),
       ),
-      drawer: SideBar(context: context),
-      body: LocationScreen(),
     );
   }
 }

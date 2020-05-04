@@ -70,121 +70,124 @@ class _AboutPageState extends State<AboutPage> {
   final divide = Divider(height: 8.0, thickness: 2.0, color: Colors.blue);
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color(0xFF736AB7),
-      drawer: SideBar(context: context),
-      body: teamData == null
-          ? Container(
-              height: MediaQuery.of(context).size.height / 4,
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
-            )
-          : ListView.builder(
-              shrinkWrap: true,
-              // physics: const NeverScrollableScrollPhysics(),
-              itemCount: teamData.length,
-              itemBuilder: (context, index) {
-                return Container(
-                  padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    //scrollDirection: Axis.vertical,
-                    children: <Widget>[
-                      Container(
-                        color: Colors.white,
-                        //margin: EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Container(
-                              color: Colors.white,
-                              padding: EdgeInsets.all(5.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    teamData[index].role,
-                                    style: headingStyle,
-                                    textAlign: TextAlign.left,
-                                  ),
-                                  divide,
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        color: Colors.white,
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: teamData[index].team_members.length,
-                          itemBuilder: (context, index2) {
-                            return ListTile(
-                              leading: Container(
-                                height: 50.0,
-                                width: 50.0,
-                                decoration: BoxDecoration(
-                                    //color: Colors.black,
-                                    image: DecorationImage(
-                                      image: teamData[index]
-                                                  .team_members[index2]
-                                                  .github_image_url ==
-                                              null
-                                          ? AssetImage('assets/AMC.png')
-                                          : NetworkImage(teamData[index]
-                                              .team_members[index2]
-                                              .github_image_url),
-                                      fit: BoxFit.fill,
+    return SafeArea(
+      minimum: const EdgeInsets.all(2.0),
+      child: Scaffold(
+        backgroundColor: Color(0xFF736AB7),
+        drawer: SideBar(context: context),
+        body: teamData == null
+            ? Container(
+                height: MediaQuery.of(context).size.height / 4,
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              )
+            : ListView.builder(
+                shrinkWrap: true,
+                // physics: const NeverScrollableScrollPhysics(),
+                itemCount: teamData.length,
+                itemBuilder: (context, index) {
+                  return Container(
+                    padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      //scrollDirection: Axis.vertical,
+                      children: <Widget>[
+                        Container(
+                          color: Colors.white,
+                          //margin: EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Container(
+                                color: Colors.white,
+                                padding: EdgeInsets.all(5.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                      teamData[index].role,
+                                      style: headingStyle,
+                                      textAlign: TextAlign.left,
                                     ),
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(30.0)),
-                                    border: Border.all(
-                                        color: Colors.blue, width: 2.0)),
+                                    divide,
+                                  ],
+                                ),
                               ),
-                              title: Container(
-                                child: Card(
-                                  shape: RoundedRectangleBorder(
-                                    side: BorderSide(
-                                        color: Colors.blue, width: 2.0),
-                                    borderRadius: BorderRadius.circular(15.0),
-                                  ),
-                                  color: Colors.black,
-                                  child: Container(
-                                    height: 50.0,
-                                    child: Center(
-                                      child: Text(
-                                          teamData[index]
-                                              .team_members[index2]
-                                              .github_username,
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 25.0)),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          color: Colors.white,
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: teamData[index].team_members.length,
+                            itemBuilder: (context, index2) {
+                              return ListTile(
+                                leading: Container(
+                                  height: 50.0,
+                                  width: 50.0,
+                                  decoration: BoxDecoration(
+                                      //color: Colors.black,
+                                      image: DecorationImage(
+                                        image: teamData[index]
+                                                    .team_members[index2]
+                                                    .github_image_url ==
+                                                null
+                                            ? AssetImage('assets/AMC.png')
+                                            : NetworkImage(teamData[index]
+                                                .team_members[index2]
+                                                .github_image_url),
+                                        fit: BoxFit.fill,
+                                      ),
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(30.0)),
+                                      border: Border.all(
+                                          color: Colors.blue, width: 2.0)),
+                                ),
+                                title: Container(
+                                  child: Card(
+                                    shape: RoundedRectangleBorder(
+                                      side: BorderSide(
+                                          color: Colors.blue, width: 2.0),
+                                      borderRadius: BorderRadius.circular(15.0),
+                                    ),
+                                    color: Colors.black,
+                                    child: Container(
+                                      height: 50.0,
+                                      child: Center(
+                                        child: Text(
+                                            teamData[index]
+                                                .team_members[index2]
+                                                .github_username,
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 25.0)),
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            );
-                          },
+                              );
+                            },
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
-      bottomNavigationBar: BottomAppBar(
-        elevation: 0.0,
-        child: Container(
-          color: Colors.grey[300],
-          height: 50.0,
-          child: Center(
-            child: Text(
-              'Made with ❤️ by COPS',
-              style: TextStyle(
-                fontSize: 16.0,
+                      ],
+                    ),
+                  );
+                },
+              ),
+        bottomNavigationBar: BottomAppBar(
+          elevation: 0.0,
+          child: Container(
+            color: Colors.grey[300],
+            height: 50.0,
+            child: Center(
+              child: Text(
+                'Made with ❤️ by COPS',
+                style: TextStyle(
+                  fontSize: 16.0,
+                ),
               ),
             ),
           ),

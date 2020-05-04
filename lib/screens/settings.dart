@@ -27,22 +27,25 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Settings"),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
+    return SafeArea(
+      minimum: const EdgeInsets.all(2.0),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text("Settings"),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () => Navigator.pop(context),
+          ),
         ),
+        drawer: SideBar(context: context),
+        body: Container(
+            child: Center(
+          child: this._refreshing
+              ? CircularProgressIndicator()
+              : RaisedButton(
+                  onPressed: onResetDatabase, child: Text("Reset Data")),
+        )),
       ),
-      drawer: SideBar(context: context),
-      body: Container(
-          child: Center(
-        child: this._refreshing
-            ? CircularProgressIndicator()
-            : RaisedButton(
-                onPressed: onResetDatabase, child: Text("Reset Data")),
-      )),
     );
   }
 }
