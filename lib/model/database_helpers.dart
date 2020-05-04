@@ -28,7 +28,13 @@ String gensecIdString = 'gensecId';
 String jointGensecId1String = 'jointGensecId1';
 String jointGensecId2String = 'jointGensecId2';
 
-// String parentIdString = 'parentId';
+String isPORHolderString = 'isPORHolder';
+String websiteUrlString = 'websiteUrl';
+String facebookUrlString = 'facebookUrl';
+String twitterUrlString = 'twitterUrl';
+String instagramUrlString = 'instagramUrl';
+String linkedinUrlString = 'linkedinUrl';
+String youtubeUrlString = 'youtubeUrl';
 
 String porHoldersString = 'porHolders'; //*table name
 
@@ -48,6 +54,19 @@ String jointSecyId1String = 'jointSecyId1';
 String jointSecyId2String = 'jointSecyId2';
 String isSubscribedString = 'isSubscribed';
 String subscribedUsersString = 'subscribedUsers';
+
+// TODO: store tags in database
+
+//! String tagDetailString = 'tagDetail'; //*table name
+
+// String tagNameString = 'tagName';
+// String tagIdString = 'tagId';
+
+// ?---------------------------------------------------------------------------------------------------------
+// ?---------------------------------------------------------------------------------------------------------
+// ?---------------------------------------------------------------------------------------------------------
+// ?---------------------------------------------------------------------------------------------------------
+// ?---------------------------------------------------------------------------------------------------------
 
 Map<String, dynamic> workshopInfoToMap(BuiltWorkshopSummaryPost workshop) {
   Map<String, dynamic> map = {
@@ -100,6 +119,21 @@ Map<String, dynamic> councilDetailToMap(BuiltCouncilPost councilPost) {
         councilPost.small_image_url == null ? '' : councilPost.small_image_url,
     largeImageUrlString:
         councilPost.large_image_url == null ? '' : councilPost.large_image_url,
+    isPORHolderString: councilPost.is_por_holder == null
+        ? 0
+        : (councilPost.is_por_holder == true ? 1 : 0),
+    websiteUrlString:
+        councilPost.website_url == null ? '' : councilPost.website_url,
+    facebookUrlString:
+        councilPost.facebook_url == null ? '' : councilPost.facebook_url,
+    twitterUrlString:
+        councilPost.twitter_url == null ? '' : councilPost.twitter_url,
+    instagramUrlString:
+        councilPost.instagram_url == null ? '' : councilPost.instagram_url,
+    linkedinUrlString:
+        councilPost.linkedin_url == null ? '' : councilPost.linkedin_url,
+    youtubeUrlString:
+        councilPost.youtube_url == null ? '' : councilPost.youtube_url,
   };
   return map;
 }
@@ -154,6 +188,18 @@ Map<String, dynamic> clubDetailToMap(BuiltClubPost clubPost) {
         clubPost.large_image_url == null ? '' : clubPost.large_image_url,
     isSubscribedString: clubPost.is_subscribed == true ? 1 : 0,
     subscribedUsersString: clubPost.subscribed_users,
+    isPORHolderString: clubPost.is_por_holder == null
+        ? 0
+        : (clubPost.is_por_holder == true ? 1 : 0),
+    websiteUrlString: clubPost.website_url == null ? '' : clubPost.website_url,
+    facebookUrlString:
+        clubPost.facebook_url == null ? '' : clubPost.facebook_url,
+    twitterUrlString: clubPost.twitter_url == null ? '' : clubPost.twitter_url,
+    instagramUrlString:
+        clubPost.instagram_url == null ? '' : clubPost.instagram_url,
+    linkedinUrlString:
+        clubPost.linkedin_url == null ? '' : clubPost.linkedin_url,
+    youtubeUrlString: clubPost.youtube_url == null ? '' : clubPost.youtube_url,
   };
   return map;
 }
@@ -288,7 +334,14 @@ class DatabaseHelper {
         '        $jointGensecId1String INTEGER,'
         '        $jointGensecId2String INTEGER,'
         '        $smallImageUrlString DEFAULT "",'
-        '        $largeImageUrlString DEFAULT "")');
+        '        $largeImageUrlString DEFAULT "",'
+        '        $isPORHolderString INTEGER,'
+        '        $websiteUrlString DEFAULT "",'
+        '        $facebookUrlString DEFAULT "",'
+        '        $twitterUrlString DEFAULT "",'
+        '        $instagramUrlString DEFAULT "",'
+        '        $linkedinUrlString DEFAULT "",'
+        '        $youtubeUrlString DEFAULT "")');
 
     await db.execute('      CREATE TABLE $porHoldersString ('
         '        $idString INTEGER NOT NULL,'
@@ -327,7 +380,14 @@ class DatabaseHelper {
         '        $smallImageUrlString DEFAULT "",'
         '        $largeImageUrlString DEFAULT "",'
         '        $isSubscribedString INTEGER,'
-        '        $subscribedUsersString INTEGER)');
+        '        $subscribedUsersString INTEGER,'
+        '        $isPORHolderString INTEGER,'
+        '        $websiteUrlString DEFAULT "",'
+        '        $facebookUrlString DEFAULT "",'
+        '        $twitterUrlString DEFAULT "",'
+        '        $instagramUrlString DEFAULT "",'
+        '        $linkedinUrlString DEFAULT "",'
+        '        $youtubeUrlString DEFAULT "")');
   }
 
   // Database helper methods:
@@ -509,6 +569,13 @@ class DatabaseHelper {
         jointGensecId2String,
         smallImageUrlString,
         largeImageUrlString,
+        isPORHolderString,
+        websiteUrlString,
+        facebookUrlString,
+        twitterUrlString,
+        instagramUrlString,
+        linkedinUrlString,
+        youtubeUrlString,
       ],
       where: '$idString  = $councilId',
     );
@@ -552,7 +619,15 @@ class DatabaseHelper {
       ..joint_gensec = jointGensec == null ? null : (jointGensec.toBuilder())
       ..clubs = clubs == null ? null : (clubs.toBuilder())
       ..small_image_url = map[smallImageUrlString]
-      ..large_image_url = map[largeImageUrlString]);
+      ..large_image_url = map[largeImageUrlString]
+      ..is_por_holder = map[isPORHolderString] == 1 ? true : false
+      ..website_url = map[websiteUrlString]
+      ..facebook_url = map[facebookUrlString]
+      ..twitter_url = map[twitterUrlString]
+      ..instagram_url = map[instagramUrlString]
+      ..linkedin_url = map[linkedinUrlString]
+      ..youtube_url = map[youtubeUrlString]);
+
     return councilDetails;
   }
 
@@ -631,7 +706,14 @@ class DatabaseHelper {
         smallImageUrlString,
         largeImageUrlString,
         isSubscribedString,
-        subscribedUsersString
+        subscribedUsersString,
+        isPORHolderString,
+        websiteUrlString,
+        facebookUrlString,
+        twitterUrlString,
+        instagramUrlString,
+        linkedinUrlString,
+        youtubeUrlString,
       ],
       where: '$idString  = $clubId',
     );
@@ -679,7 +761,14 @@ class DatabaseHelper {
       ..small_image_url = map[smallImageUrlString]
       ..large_image_url = map[largeImageUrlString]
       ..is_subscribed = map[isSubscribedString] == 1 ? true : false
-      ..subscribed_users = map[subscribedUsersString]);
+      ..subscribed_users = map[subscribedUsersString]
+      ..is_por_holder = map[isPORHolderString] == 1 ? true : false
+      ..website_url = map[websiteUrlString]
+      ..facebook_url = map[facebookUrlString]
+      ..twitter_url = map[twitterUrlString]
+      ..instagram_url = map[instagramUrlString]
+      ..linkedin_url = map[linkedinUrlString]
+      ..youtube_url = map[youtubeUrlString]);
 
     return clubDetails;
   }

@@ -7,6 +7,9 @@ import 'built_post.dart';
 part 'serializers.g.dart';
 
 @SerializersFor(const [
+  TagCreate,
+  TagSearch,
+  TagDetail,
   BuiltAllWorkshopsPost,
   BuiltWorkshopSummaryPost,
   BuiltWorkshopDetailPost,
@@ -23,7 +26,11 @@ part 'serializers.g.dart';
   BuiltProfilePost,
   BuiltProfileSearchPost,
   BuiltTeamMemberPost,
+  TeamMember,
   BuiltContacts,
+  BuiltTags,
+  LoginPost,
+  Token,
 ])
 final Serializers serializers =
     (_$serializers.toBuilder()..addPlugin(StandardJsonPlugin())).build();

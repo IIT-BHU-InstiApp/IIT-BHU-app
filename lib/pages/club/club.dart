@@ -23,7 +23,7 @@ class _ClubPageState extends State<ClubPage>
     with SingleTickerProviderStateMixin {
   TextStyle tempStyle = TextStyle(fontSize: 50.0, fontWeight: FontWeight.bold);
   BuiltClubPost clubMap;
-  bool _loadingWorkshops = true;
+  BuiltAllWorkshopsPost clubWorkshops;
   bool _toggling = false;
   TabController _tabController;
 
@@ -59,18 +59,16 @@ class _ClubPageState extends State<ClubPage>
     }
     setState(() {});
 
-    Response<BuiltClubPost> snapshots = await AppConstants.service
-        .getClub(widget.club.id, "token ${AppConstants.djangoToken}")
+    Response<BuiltAllWorkshopsPost> snapshots = await AppConstants.service
+        .getClubWorkshops(widget.club.id, "token ${AppConstants.djangoToken}")
         .catchError((onError) {
-      print("Error in fetching clubs: ${onError.toString()}");
+      print("Error in fetching workshops: ${onError.toString()}");
     });
-    clubMap = snapshots.body;
+    clubWorkshops = snapshots.body;
     if (!this.mounted) {
       return;
     }
-    setState(() {
-      this._loadingWorkshops = false;
-    });
+    setState(() {});
   }
 
   @override
@@ -97,15 +95,15 @@ class _ClubPageState extends State<ClubPage>
             isSubscribed: !clubMap.is_subscribed,
             currentSubscribedUsers: clubMap.subscribed_users);
 
-        var activeWorkshops = clubMap.active_workshops;
-        var pastWorkshops = clubMap.past_workshops;
+        // var activeWorkshops = clubMap.active_workshops;
+        // var pastWorkshops = clubMap.past_workshops;
 
         clubMap = await AppConstants.getClubDetailsFromDatabase(
             clubId: widget.club.id);
 
-        clubMap = clubMap.rebuild((b) => b
-          ..active_workshops = activeWorkshops.toBuilder()
-          ..past_workshops = pastWorkshops.toBuilder());
+        // clubMap = clubMap.rebuild((b) => b
+        //   ..active_workshops = activeWorkshops.toBuilder()
+        //   ..past_workshops = pastWorkshops.toBuilder());
       }
     }).catchError((onError) {
       print("Error in toggleing: ${onError.toString()}");
@@ -214,10 +212,10 @@ class _ClubPageState extends State<ClubPage>
                       ),
                     );
                   }),
-          WorkshopTabs.getActiveAndPastTabBar(
-              club: clubMap, tabController: _tabController),
+          WorkshopTabs.getActiveAndPastTabBarForClub(
+              clubWorkshops: clubWorkshops, tabController: _tabController),
           space,
-          clubMap == null
+          clubWorkshops == null
               ? Container(
                   height: MediaQuery.of(context).size.height / 4,
                   child: Center(child: CircularProgressIndicator()))

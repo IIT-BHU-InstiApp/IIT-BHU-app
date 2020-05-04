@@ -17,7 +17,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
-  Stream workshops;
   TabController _tabController;
   SearchBarWidget searchBarWidget = SearchBarWidget();
 
@@ -64,7 +63,9 @@ class _HomeScreenState extends State<HomeScreen>
       return false;
     }
     if (_scaffoldKey.currentState.isDrawerOpen) {
+      print('drawer is open');
       Navigator.of(context).pop();
+
       return false;
     }
     return showDialog(

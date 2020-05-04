@@ -5,7 +5,7 @@ import 'package:iit_app/pages/login.dart';
 
 // TODO: when user click on list tile, navigation stack keeps filling,
 
-class SideBar extends StatelessWidget {
+class SideBar extends Drawer {
   final BuildContext context;
   SideBar({@required this.context});
   @override
