@@ -46,6 +46,10 @@ class ClubAndCouncilWidgets {
                   : SizedBox(width: 1),
             ],
           ),
+          Container(
+            color: Colors.grey[300],
+            height: 25.0,
+          )
         ],
       ),
     );
@@ -361,9 +365,9 @@ class ClubAndCouncilWidgets {
             borderRadius: BorderRadius.circular(2.0),
           ),
           margin: EdgeInsets.fromLTRB(
-              MediaQuery.of(context).size.width / 2 - 9.0, 10.0, 0.0, 0.0),
+              MediaQuery.of(context).size.width / 2 - 12.0, 10.0, 0.0, 0.0),
           height: 4.0,
-          width: 18.0,
+          width: 24.0,
           //color: new Color(0xff00c6ff)
         ),
       ],

@@ -152,13 +152,12 @@ class _CouncilPageState extends State<CouncilPage> {
           );
   }
 
-  Widget _getPanel() {
+  Widget _getPanel({ScrollController sc}) {
     return Container(
       //padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
-      /*decoration: BoxDecoration(
-        borderRadius: radius,
-      ),*/
+      padding: EdgeInsets.only(top: 20.0),
       child: ListView(
+        controller: sc,
         //crossAxisAlignment: CrossAxisAlignment.stretch,
         //scrollDirection: Axis.vertical,
         children: <Widget>[
@@ -187,7 +186,7 @@ class _CouncilPageState extends State<CouncilPage> {
           _getClubs(),
           councilData == null
               ? Container(
-                  height: MediaQuery.of(context).size.height / 4,
+                  height: MediaQuery.of(context).size.height / 4 - 20.0,
                   child: Center(child: CircularProgressIndicator()))
               : ClubAndCouncilWidgets.getSecies(context,
                   secy: councilData.gensec,
@@ -201,6 +200,7 @@ class _CouncilPageState extends State<CouncilPage> {
     topLeft: Radius.circular(24.0),
     topRight: Radius.circular(24.0),
   );
+
   PanelController _pc = PanelController();
   @override
   Widget build(BuildContext context) {
@@ -208,29 +208,27 @@ class _CouncilPageState extends State<CouncilPage> {
       minimum: const EdgeInsets.all(2.0),
       child: Scaffold(
         backgroundColor: Color(0xFF736AB7),
-        body: Stack(
-          children: [
-            _getBackground(context),
-            SlidingUpPanel(
-              controller: _pc,
+        body: SlidingUpPanel(
+          parallaxEnabled: true,
+          body: _getBackground(context),
+          controller: _pc,
+          borderRadius: radius,
+          collapsed: Container(
+            decoration: BoxDecoration(
               borderRadius: radius,
-              collapsed: Container(
-                decoration: BoxDecoration(
-                  borderRadius: radius,
-                ),
-              ),
-              backdropEnabled: true,
-              panel: Dismissible(
+            ),
+          ),
+          backdropEnabled: true,
+          panelBuilder: (ScrollController sc) => _getPanel(sc: sc),
+          /*panel: Dismissible(
                 key: Key('clubs'),
                 direction: DismissDirection.down,
                 onDismissed: (_) => _pc.close(),
                 child: _getPanel(),
-              ),
-              minHeight: MediaQuery.of(context).size.height / 4,
-              maxHeight: MediaQuery.of(context).size.height - 10.0,
-              header: ClubAndCouncilWidgets.getHeader(context),
-            ),
-          ],
+              ),*/
+          minHeight: MediaQuery.of(context).size.height / 4 - 20.0,
+          maxHeight: MediaQuery.of(context).size.height - 20.0,
+          header: ClubAndCouncilWidgets.getHeader(context),
         ),
       ),
     );

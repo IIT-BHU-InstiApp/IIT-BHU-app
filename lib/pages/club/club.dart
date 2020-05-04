@@ -195,9 +195,11 @@ class _ClubPageState extends State<ClubPage>
     );
   }
 
-  Widget _getPanel() {
+  Widget _getPanel({ScrollController sc}) {
     return Container(
+      padding: EdgeInsets.only(top: 20.0),
       child: ListView(
+        controller: sc,
         children: [
           space,
           clubMap == null
@@ -251,29 +253,27 @@ class _ClubPageState extends State<ClubPage>
                   color: clubMap.is_subscribed ? Colors.red : Colors.black26,
                 ),
         ),
-        body: Stack(
-          children: [
-            _getBackground(context),
-            SlidingUpPanel(
-              controller: _pc,
+        body: SlidingUpPanel(
+          body: _getBackground(context),
+          parallaxEnabled: true,
+          controller: _pc,
+          borderRadius: radius,
+          collapsed: Container(
+            decoration: BoxDecoration(
               borderRadius: radius,
-              collapsed: Container(
-                decoration: BoxDecoration(
-                  borderRadius: radius,
-                ),
-              ),
-              backdropEnabled: true,
-              panel: Dismissible(
+            ),
+          ),
+          backdropEnabled: true,
+          /*panel: Dismissible(
                 key: Key('clubs'),
                 direction: DismissDirection.down,
                 onDismissed: (_) => _pc.close(),
                 child: _getPanel(),
-              ),
-              minHeight: MediaQuery.of(context).size.height / 4,
-              maxHeight: MediaQuery.of(context).size.height - 10.0,
-              header: ClubAndCouncilWidgets.getHeader(context),
-            ),
-          ],
+              ),*/
+          panelBuilder: (ScrollController sc) => _getPanel(sc: sc),
+          minHeight: MediaQuery.of(context).size.height / 4 - 20.0,
+          maxHeight: MediaQuery.of(context).size.height - 20.0,
+          header: ClubAndCouncilWidgets.getHeader(context),
         ),
       ),
     );
