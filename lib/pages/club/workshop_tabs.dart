@@ -22,8 +22,9 @@ class WorkshopTabs {
               );
   }
 
-  static Container getActiveAndPastTabBar(
-      {BuiltClubPost club, @required TabController tabController}) {
+  static Container getActiveAndPastTabBarForClub(
+      {BuiltAllWorkshopsPost clubWorkshops,
+      @required TabController tabController}) {
     return Container(
       margin: EdgeInsets.fromLTRB(12, 10, 12, 0),
       decoration: new BoxDecoration(
@@ -47,14 +48,14 @@ class WorkshopTabs {
             child: TabBarView(
               controller: tabController,
               children: <Widget>[
-                club == null
+                clubWorkshops == null
                     ? Container(
                         child: Center(child: CircularProgressIndicator()))
-                    : _getWorkshops(club.active_workshops),
-                club == null
+                    : _getWorkshops(clubWorkshops.active_workshops),
+                clubWorkshops == null
                     ? Container(
                         child: Center(child: CircularProgressIndicator()))
-                    : _getWorkshops(club.past_workshops),
+                    : _getWorkshops(clubWorkshops.past_workshops),
               ],
             ),
           ),

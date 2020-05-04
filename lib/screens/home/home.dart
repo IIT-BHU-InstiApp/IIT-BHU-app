@@ -17,7 +17,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
-  Stream workshops;
   TabController _tabController;
   SearchBarWidget searchBarWidget = SearchBarWidget();
 
