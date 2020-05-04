@@ -5,9 +5,77 @@ import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/ui/separator.dart';
 import 'package:iit_app/ui/text_style.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'club/club.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ClubAndCouncilWidgets {
+  static Container getSocialLinks(map) {
+    _launchURL(String url) {
+      print('URL: ${url}');
+      launch(url);
+    }
+
+    Column _buildButtonColumn(IconData icon, String label, String url,
+        {Color color = Colors.white}) {
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          IconButton(
+              icon: Icon(icon, color: color), onPressed: () => _launchURL(url)),
+          Container(
+            margin: const EdgeInsets.only(top: 8),
+            child: Text(
+              label,
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w400,
+                color: color,
+              ),
+            ),
+          ),
+        ],
+      );
+    }
+
+    return Container(
+      height: 100,
+      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      decoration: BoxDecoration(
+          color: Color(0xFF736AB7),
+          borderRadius: BorderRadius.all(Radius.circular(10))),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          map.youtube_url == null || map.youtube_url.length == 0
+              ? Container()
+              : _buildButtonColumn(
+                  FontAwesomeIcons.youtube, 'YouTube', map.youtube_url),
+          map.website_url == null || map.website_url.length == 0
+              ? Container()
+              : _buildButtonColumn(Icons.web, 'Website', map.website_url),
+          map.linkedin_url == null || map.linkedin_url.length == 0
+              ? Container()
+              : _buildButtonColumn(
+                  FontAwesomeIcons.linkedin, 'LinkedIn', map.linkedin_url),
+          map.instagram_url == null || map.instagram_url.length == 0
+              ? Container()
+              : _buildButtonColumn(
+                  FontAwesomeIcons.instagram, 'Instagram', map.instagram_url),
+          map.facebook_url == null || map.facebook_url.length == 0
+              ? Container()
+              : _buildButtonColumn(
+                  FontAwesomeIcons.facebook, 'Facebook', map.facebook_url),
+          map.twitter_url == null || map.twitter_url.length == 0
+              ? Container()
+              : _buildButtonColumn(
+                  FontAwesomeIcons.twitter, 'Twitter', map.twitter_url),
+        ],
+      ),
+    );
+  }
+
   static Container getSecies(BuildContext context, {secy, joint_secy}) {
     return Container(
       color: Colors.grey[300],

@@ -191,6 +191,9 @@ class _CouncilPageState extends State<CouncilPage> {
               : ClubAndCouncilWidgets.getSecies(context,
                   secy: councilData.gensec,
                   joint_secy: councilData.joint_gensec),
+          councilData == null
+              ? Container()
+              : ClubAndCouncilWidgets.getSocialLinks(councilData),
         ],
       ),
     );

@@ -223,6 +223,9 @@ class _ClubPageState extends State<ClubPage>
                   child: Center(child: CircularProgressIndicator()))
               : ClubAndCouncilWidgets.getSecies(context,
                   secy: clubMap.secy, joint_secy: clubMap.joint_secy),
+          clubMap == null
+              ? Container()
+              : ClubAndCouncilWidgets.getSocialLinks(clubMap),
         ],
       ),
     );
