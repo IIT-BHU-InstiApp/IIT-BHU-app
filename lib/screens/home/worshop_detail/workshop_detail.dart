@@ -5,10 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/pages/club/club.dart';
+import 'package:iit_app/pages/club_&_council_widgets.dart';
 import 'package:iit_app/pages/create.dart';
 import 'package:iit_app/screens/home/home_widgets.dart';
 import 'package:iit_app/ui/separator.dart';
 import 'package:iit_app/ui/text_style.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'workshop_detail_widgets.dart';
 
 class WorkshopDetailPage extends StatefulWidget {
   final BuiltWorkshopSummaryPost workshop;
@@ -154,13 +157,6 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
     setState(() {});
   }
 
-  Container _getToolbar(BuildContext context) {
-    return new Container(
-      margin: new EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-      child: new BackButton(color: Colors.lightGreen),
-    );
-  }
-
   Container _getBackground() {
     final File clubLogoFile = AppConstants.getImageFile(
         isSmall: true, id: widget.workshop.club.id, isClub: true);
@@ -269,21 +265,6 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
     );
   }
 
-  Container _getGradient() {
-    return new Container(
-      margin: new EdgeInsets.only(top: 190.0),
-      height: 110.0,
-      decoration: new BoxDecoration(
-        gradient: new LinearGradient(
-          colors: <Color>[new Color(0x00736AB7), new Color(0xFF736AB7)],
-          stops: [0.0, 0.9],
-          begin: const FractionalOffset(0.0, 0.0),
-          end: const FractionalOffset(0.0, 1.0),
-        ),
-      ),
-    );
-  }
-
   Widget editWorkshopOptions() {
     return Positioned(
       right: 20,
@@ -337,52 +318,129 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
     );
   }
 
+  Stack _getBody(context) {
+    return Stack(
+      children: [
+        Container(
+          height: MediaQuery.of(context).size.height * 0.75,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(35.0),
+                  bottomRight: Radius.circular(35.0)),
+              color: Color(0xFF736AB7)),
+        ),
+        _getBackground(),
+        WorkshopDetailWidgets.getGradient(),
+        _getContent(), //_workshop == null
+        WorkshopDetailWidgets.getToolbar(context),
+        _workshop == null
+            ? Container()
+            : _workshop.is_por_holder == false
+                ? Container()
+                : editWorkshopOptions()
+      ],
+    );
+  }
+
+  Container _getPanel({ScrollController sc}) {
+    return Container(
+      padding: EdgeInsets.fromLTRB(10.0, 25.0, 10.0, 10.0),
+      child: ListView(
+        controller: sc,
+        children: [
+          WorkshopDetailWidgets.getHeading(
+              icon: Icons.location_on, title: 'Location'),
+          SizedBox(height: 5.0),
+          Text(
+            //_workshop.location,
+            'Not Specified yet',
+            //style: baseTextStyle,
+          ),
+          SizedBox(height: 5.0),
+          Text(
+            //_workshop.location,
+            '(Lattitude,Longitude)',
+            //style: baseTextStyle,
+          ),
+          SizedBox(height: 15.0),
+          WorkshopDetailWidgets.getHeading(
+              icon: Icons.library_books, title: 'Resouces'),
+          SizedBox(height: 5.0),
+          Text(
+              //_workshop.resources
+              'No Resources'),
+          SizedBox(height: 15.0),
+          WorkshopDetailWidgets.getHeading(
+              icon: Icons.people, title: 'Audience'),
+          SizedBox(height: 5.0),
+          Text(
+            //_workshop.audience
+            'No Audience',
+          ),
+          SizedBox(height: 15.0),
+          WorkshopDetailWidgets.getHeading(
+              icon: Icons.contacts, title: 'Contacts'),
+          SizedBox(height: 5.0),
+          /*Container(
+            //height:,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: _workshop.contacts.length,
+              itemBuilder: (context, index) {
+                return ClubAndCouncilWidgets.getPosHolder(
+                  imageUrl: _workshop.contacts[index].photo_url,
+                  name: _workshop.contacts[index].name,
+                  email: _workshop.contacts[index].email,
+                );
+              },
+            ),
+          ),*/
+          SizedBox(height: 15.0),
+          WorkshopDetailWidgets.getHeading(icon: Icons.bookmark, title: 'Tags'),
+          SizedBox(height: 5.0),
+          /*Container(
+            //height: ,
+            child: ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              scrollDirection: Axis.vertical,
+              itemCount: _workshop.tags.length,
+              itemBuilder: (context, index) {
+                return Text(_workshop.tags[index].tag_name);
+              },
+            ),
+          ),*/
+        ],
+      ),
+    );
+  }
+
+  BorderRadiusGeometry radius = BorderRadius.only(
+    topLeft: Radius.circular(24.0),
+    topRight: Radius.circular(24.0),
+  );
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       minimum: const EdgeInsets.all(2.0),
       child: Scaffold(
-        body: CustomScrollView(
-          slivers: [
-            SliverAppBar(
-              leading: Container(),
-              backgroundColor: Colors.white,
-              expandedHeight: MediaQuery.of(context).size.height * 0.75,
-              floating: false,
-              flexibleSpace: FlexibleSpaceBar(
-                background: Stack(
-                  children: [
-                    Container(
-                      height: MediaQuery.of(context).size.height * 0.75,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(35.0),
-                              bottomRight: Radius.circular(35.0)),
-                          color: Color(0xFF736AB7)),
-                    ),
-                    _getBackground(),
-                    _getGradient(),
-                    _getContent(), //_workshop == null
-                    _getToolbar(context),
-                    _workshop == null
-                        ? Container()
-                        : _workshop.is_por_holder == false
-                            ? Container()
-                            : editWorkshopOptions()
-                  ],
-                ),
+          backgroundColor: Color(0xFF736AB7),
+          body: SlidingUpPanel(
+            body: _getBody(context),
+            borderRadius: radius,
+            backdropEnabled: true,
+            parallaxEnabled: true,
+            collapsed: Container(
+              decoration: BoxDecoration(
+                borderRadius: radius,
               ),
             ),
-            SliverList(
-              delegate: SliverChildListDelegate(
-                [
-                  Container(),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
+            minHeight: MediaQuery.of(context).size.height / 4 - 20.0,
+            maxHeight: MediaQuery.of(context).size.height - 20.0,
+            header: WorkshopDetailWidgets.getPanelHeader(context),
+            panelBuilder: (ScrollController sc) => _getPanel(sc: sc),
+          )),
     );
   }
 }
