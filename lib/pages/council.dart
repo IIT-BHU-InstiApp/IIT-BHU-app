@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/pages/club_council_common/club_&_council_widgets.dart';
+import 'package:iit_app/pages/club_council_common/description.dart';
 import 'package:iit_app/ui/separator.dart';
 import 'package:iit_app/ui/text_style.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -90,7 +91,6 @@ class _CouncilPageState extends State<CouncilPage> {
   }
 
   Container _getDescription() {
-    final _overviewTitle = "Description".toUpperCase();
     return new Container(
       height: MediaQuery.of(context).size.height * 3 / 4,
       child: new ListView(
@@ -103,20 +103,7 @@ class _CouncilPageState extends State<CouncilPage> {
               isCouncil: true,
               context: context),
           SizedBox(height: 8.0),
-          Container(
-            padding: new EdgeInsets.symmetric(horizontal: 32.0),
-            child: new Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                new Text(
-                  _overviewTitle,
-                  style: Style.headerTextStyle,
-                ),
-                new Separator(),
-                Text(councilData.description, style: Style.commonTextStyle),
-              ],
-            ),
-          ),
+          Description(map: councilData)
         ],
       ),
     );
