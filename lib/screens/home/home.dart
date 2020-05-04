@@ -64,7 +64,9 @@ class _HomeScreenState extends State<HomeScreen>
       return false;
     }
     if (_scaffoldKey.currentState.isDrawerOpen) {
+      print('drawer is open');
       Navigator.of(context).pop();
+
       return false;
     }
     return showDialog(

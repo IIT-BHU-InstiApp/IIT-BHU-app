@@ -4,6 +4,45 @@ import 'package:built_value/serializer.dart';
 
 part 'built_post.g.dart';
 
+abstract class TagCreate implements Built<TagCreate, TagCreateBuilder> {
+  @nullable
+  int get id;
+  @nullable
+  String get tag_name;
+  @nullable
+  int get club;
+
+  TagCreate._();
+  factory TagCreate([updates(TagCreateBuilder b)]) = _$TagCreate;
+  static Serializer<TagCreate> get serializer => _$tagCreateSerializer;
+}
+
+abstract class TagSearch implements Built<TagSearch, TagSearchBuilder> {
+  @nullable
+  int get id;
+  @nullable
+  String get tag_name;
+  @nullable
+  int get club;
+
+  TagSearch._();
+  factory TagSearch([updates(TagSearchBuilder b)]) = _$TagSearch;
+  static Serializer<TagSearch> get serializer => _$tagSearchSerializer;
+}
+
+abstract class TagDetail implements Built<TagDetail, TagDetailBuilder> {
+  @nullable
+  int get id;
+  @nullable
+  String get tag_name;
+  @nullable
+  ClubListPost get club;
+
+  TagDetail._();
+  factory TagDetail([updates(TagDetailBuilder b)]) = _$TagDetail;
+  static Serializer<TagDetail> get serializer => _$tagDetailSerializer;
+}
+
 // !--------------------------------------------------------------------------------------------------------------------
 abstract class BuiltAllWorkshopsPost
     implements Built<BuiltAllWorkshopsPost, BuiltAllWorkshopsPostBuilder> {
@@ -21,6 +60,7 @@ abstract class BuiltAllWorkshopsPost
       _$builtAllWorkshopsPostSerializer;
 }
 
+///* In backend - this model is named Active workshops
 abstract class BuiltWorkshopSummaryPost
     implements
         Built<BuiltWorkshopSummaryPost, BuiltWorkshopSummaryPostBuilder> {
@@ -34,6 +74,8 @@ abstract class BuiltWorkshopSummaryPost
   String get date;
   @nullable
   String get time;
+  @nullable
+  BuiltList<TagDetail> get tags;
 
   BuiltWorkshopSummaryPost._();
 
@@ -61,6 +103,12 @@ abstract class BuiltWorkshopDetailPost
   String get time;
   @nullable
   String get location;
+
+  @nullable
+  String get latitude;
+  @nullable
+  String get longitude;
+
   @nullable
   String get audience;
   @nullable
@@ -77,6 +125,9 @@ abstract class BuiltWorkshopDetailPost
   bool get is_workshop_contact;
   @nullable
   bool get is_por_holder;
+
+  @nullable
+  BuiltList<TagDetail> get tags;
 
   BuiltWorkshopDetailPost._();
 
@@ -182,6 +233,20 @@ abstract class BuiltCouncilPost
   String get small_image_url;
   @nullable
   String get large_image_url;
+  @nullable
+  bool get is_por_holder;
+  @nullable
+  String get website_url;
+  @nullable
+  String get facebook_url;
+  @nullable
+  String get twitter_url;
+  @nullable
+  String get instagram_url;
+  @nullable
+  String get linkedin_url;
+  @nullable
+  String get youtube_url;
 
   BuiltCouncilPost._();
 
@@ -245,10 +310,6 @@ abstract class BuiltClubPost
   @nullable
   BuiltList<SecyPost> get joint_secy;
   @nullable
-  BuiltList<BuiltWorkshopSummaryPost> get active_workshops;
-  @nullable
-  BuiltList<BuiltWorkshopSummaryPost> get past_workshops;
-  @nullable
   String get small_image_url;
   @nullable
   String get large_image_url;
@@ -256,6 +317,21 @@ abstract class BuiltClubPost
   bool get is_subscribed;
   @nullable
   int get subscribed_users;
+
+  @nullable
+  bool get is_por_holder;
+  @nullable
+  String get website_url;
+  @nullable
+  String get facebook_url;
+  @nullable
+  String get twitter_url;
+  @nullable
+  String get instagram_url;
+  @nullable
+  String get linkedin_url;
+  @nullable
+  String get youtube_url;
 
   BuiltClubPost._();
 
@@ -279,6 +355,12 @@ abstract class BuiltWorkshopCreatePost
   String get time;
   @nullable
   String get location;
+
+  @nullable
+  String get latitude;
+  @nullable
+  String get longitude;
+
   @nullable
   String get audience;
   @nullable
@@ -287,6 +369,8 @@ abstract class BuiltWorkshopCreatePost
   BuiltList<int> get contacts;
   @nullable
   String get image_url;
+  @nullable
+  BuiltList<int> get tags;
 
   BuiltWorkshopCreatePost._();
   factory BuiltWorkshopCreatePost([updates(BuiltWorkshopCreatePostBuilder b)]) =
@@ -344,20 +428,7 @@ abstract class BuiltProfileSearchPost
 }
 
 // !--------------------------------------------------------------------------------------------------------------------
-abstract class TeamMember implements Built<TeamMember, TeamMemberBuilder> {
-  @nullable
-  String get name;
-  @nullable
-  String get github_username;
-  @nullable
-  String get github_image_url;
-
-  TeamMember._();
-  factory TeamMember([updates(TeamMemberBuilder b)]) = _$TeamMember;
-  static Serializer<TeamMember> get serializer => _$teamMemberSerializer;
-}
-
-// !--------------------------------------------------------------------------------------------------------------------
+/// * In Backend - this model is named as Role
 abstract class BuiltTeamMemberPost
     implements Built<BuiltTeamMemberPost, BuiltTeamMemberPostBuilder> {
   @nullable
@@ -372,6 +443,19 @@ abstract class BuiltTeamMemberPost
       _$builtTeamMemberPostSerializer;
 }
 
+abstract class TeamMember implements Built<TeamMember, TeamMemberBuilder> {
+  @nullable
+  String get name;
+  @nullable
+  String get github_username;
+  @nullable
+  String get github_image_url;
+
+  TeamMember._();
+  factory TeamMember([updates(TeamMemberBuilder b)]) = _$TeamMember;
+  static Serializer<TeamMember> get serializer => _$teamMemberSerializer;
+}
+
 // !--------------------------------------------------------------------------------------------------------------------
 abstract class BuiltContacts
     implements Built<BuiltContacts, BuiltContactsBuilder> {
@@ -381,4 +465,13 @@ abstract class BuiltContacts
   BuiltContacts._();
   factory BuiltContacts([updates(BuiltContactsBuilder b)]) = _$BuiltContacts;
   static Serializer<BuiltContacts> get serializer => _$builtContactsSerializer;
+}
+
+abstract class BuiltTags implements Built<BuiltTags, BuiltTagsBuilder> {
+  @nullable
+  BuiltList<int> get tags;
+
+  BuiltTags._();
+  factory BuiltTags([updates(BuiltTagsBuilder b)]) = _$BuiltTags;
+  static Serializer<BuiltTags> get serializer => _$builtTagsSerializer;
 }

@@ -14,6 +14,7 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..add(BuiltCouncilPost.serializer)
       ..add(BuiltProfilePost.serializer)
       ..add(BuiltProfileSearchPost.serializer)
+      ..add(BuiltTags.serializer)
       ..add(BuiltTeamMemberPost.serializer)
       ..add(BuiltWorkshopCreatePost.serializer)
       ..add(BuiltWorkshopDetailPost.serializer)
@@ -22,6 +23,9 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..add(ClubListPost.serializer)
       ..add(ContactPost.serializer)
       ..add(SecyPost.serializer)
+      ..add(TagCreate.serializer)
+      ..add(TagDetail.serializer)
+      ..add(TagSearch.serializer)
       ..add(TeamMember.serializer)
       ..addBuilderFactory(
           const FullType(
@@ -41,16 +45,11 @@ Serializers _$serializers = (new Serializers().toBuilder()
           const FullType(BuiltList, const [const FullType(ContactPost)]),
           () => new ListBuilder<ContactPost>())
       ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(TagDetail)]),
+          () => new ListBuilder<TagDetail>())
+      ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(SecyPost)]),
           () => new ListBuilder<SecyPost>())
-      ..addBuilderFactory(
-          const FullType(
-              BuiltList, const [const FullType(BuiltWorkshopSummaryPost)]),
-          () => new ListBuilder<BuiltWorkshopSummaryPost>())
-      ..addBuilderFactory(
-          const FullType(
-              BuiltList, const [const FullType(BuiltWorkshopSummaryPost)]),
-          () => new ListBuilder<BuiltWorkshopSummaryPost>())
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(SecyPost)]),
           () => new ListBuilder<SecyPost>())
@@ -58,8 +57,17 @@ Serializers _$serializers = (new Serializers().toBuilder()
           const FullType(BuiltList, const [const FullType(ClubListPost)]),
           () => new ListBuilder<ClubListPost>())
       ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(TagDetail)]),
+          () => new ListBuilder<TagDetail>())
+      ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(TeamMember)]),
           () => new ListBuilder<TeamMember>())
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(int)]),
+          () => new ListBuilder<int>())
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(int)]),
+          () => new ListBuilder<int>())
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(int)]),
           () => new ListBuilder<int>())
