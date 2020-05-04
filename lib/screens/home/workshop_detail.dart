@@ -188,17 +188,19 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
             ? loadingAnimation()
             : Container(
                 padding: EdgeInsets.only(left: 5.0),
-                height: widget.isPast ? 40 : 50.0,
-                width: widget.isPast ? 50.0 : 100.0,
+                height: widget.isPast ? 40 : 60.0,
+                width: widget.isPast ? 50.0 : 130.0,
                 decoration: BoxDecoration(
                     color: Color(0xFF333366),
-                    borderRadius: BorderRadius.circular(25.0)),
+                    borderRadius: BorderRadius.circular(30.0)),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    SizedBox(height: 7.0),
-                    Text('${_workshop.interested_users}',
-                        style: TextStyle(fontSize: 14.0, color: Colors.white)),
+                    SizedBox(width: 7.0),
+                    Text(
+                      '${_workshop.interested_users}',
+                      style: TextStyle(fontSize: 14.0, color: Colors.white),
+                    ),
                     widget.isPast
                         ? Container()
                         : is_interested == 0
@@ -206,15 +208,30 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
                                 child: loadingAnimation(),
                                 height: 20,
                                 width: 20)
-                            : InkWell(
-                                child: Icon(Icons.people,
-                                    color: is_interested == 1
-                                        ? Colors.blue[400]
-                                        : Colors.blue[100],
-                                    size: 25.0),
-                                onTap: () => updateButton(),
+                            : Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  InkWell(
+                                    child: Icon(Icons.star,
+                                        color: is_interested == 1
+                                            ? Colors.blue[400]
+                                            : Colors.blue[100],
+                                        size: 25.0),
+                                    onTap: () => updateButton(),
+                                  ),
+                                  Text(
+                                    'Interested',
+                                    style: TextStyle(
+                                      color: is_interested == 1
+                                          ? Colors.blue[400]
+                                          : Colors.blue[100],
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
                               ),
-                    SizedBox(height: 7.0)
+                    SizedBox(width: 7.0),
                   ],
                 ),
               ),
