@@ -204,31 +204,34 @@ class _CouncilPageState extends State<CouncilPage> {
   PanelController _pc = PanelController();
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color(0xFF736AB7),
-      body: Stack(
-        children: [
-          _getBackground(context),
-          SlidingUpPanel(
-            controller: _pc,
-            borderRadius: radius,
-            collapsed: Container(
-              decoration: BoxDecoration(
-                borderRadius: radius,
+    return SafeArea(
+      minimum: const EdgeInsets.all(2.0),
+      child: Scaffold(
+        backgroundColor: Color(0xFF736AB7),
+        body: Stack(
+          children: [
+            _getBackground(context),
+            SlidingUpPanel(
+              controller: _pc,
+              borderRadius: radius,
+              collapsed: Container(
+                decoration: BoxDecoration(
+                  borderRadius: radius,
+                ),
               ),
+              backdropEnabled: true,
+              panel: Dismissible(
+                key: Key('clubs'),
+                direction: DismissDirection.down,
+                onDismissed: (_) => _pc.close(),
+                child: _getPanel(),
+              ),
+              minHeight: MediaQuery.of(context).size.height / 4,
+              maxHeight: MediaQuery.of(context).size.height - 10.0,
+              header: ClubAndCouncilWidgets.getHeader(context),
             ),
-            backdropEnabled: true,
-            panel: Dismissible(
-              key: Key('clubs'),
-              direction: DismissDirection.down,
-              onDismissed: (_) => _pc.close(),
-              child: _getPanel(),
-            ),
-            minHeight: MediaQuery.of(context).size.height / 4,
-            maxHeight: MediaQuery.of(context).size.height - 10.0,
-            header: ClubAndCouncilWidgets.getHeader(context),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

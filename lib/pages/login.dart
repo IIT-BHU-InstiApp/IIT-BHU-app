@@ -131,101 +131,105 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-        resizeToAvoidBottomPadding: false,
-        body: _loading
-            ? Center(
-                child: CircularProgressIndicator(backgroundColor: Colors.black))
-            : ListView(
-                children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.fromLTRB(15.0, 110.0, 0.0, 0.0),
-                    child: Text('Welcome to IIT(BHU)\'s Workshops App.',
-                        style: TextStyle(
-                            fontSize: 40.0, fontWeight: FontWeight.bold)),
-                  ),
-                  SizedBox(height: 15),
-                  OutlineButton(
-                    splashColor: Colors.grey,
-                    onPressed: AppConstants.logInButtonEnabled == false
-                        ? null
-                        : () async {
-                            if (AppConstants.logInButtonEnabled == true) {
-                              print(
-                                  'appConstants.logInButtonEnabled : ${AppConstants.logInButtonEnabled}');
-                              AppConstants.logInButtonEnabled = false;
+    return SafeArea(
+      minimum: const EdgeInsets.all(2.0),
+      child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          body: _loading
+              ? Center(
+                  child:
+                      CircularProgressIndicator(backgroundColor: Colors.black))
+              : ListView(
+                  children: <Widget>[
+                    Container(
+                      padding: EdgeInsets.fromLTRB(15.0, 110.0, 0.0, 0.0),
+                      child: Text('Welcome to IIT(BHU)\'s Workshops App.',
+                          style: TextStyle(
+                              fontSize: 40.0, fontWeight: FontWeight.bold)),
+                    ),
+                    SizedBox(height: 15),
+                    OutlineButton(
+                      splashColor: Colors.grey,
+                      onPressed: AppConstants.logInButtonEnabled == false
+                          ? null
+                          : () async {
+                              if (AppConstants.logInButtonEnabled == true) {
+                                print(
+                                    'appConstants.logInButtonEnabled : ${AppConstants.logInButtonEnabled}');
+                                AppConstants.logInButtonEnabled = false;
 
-                              setState(() {
-                                this._loading = true;
-                              });
-
-                              AppConstants.currentUser =
-                                  await signInWithGoogle();
-
-                              AppConstants.logInButtonEnabled = true;
-
-                              if (AppConstants.currentUser == null ||
-                                  AppConstants.djangoToken == null) {
                                 setState(() {
-                                  this._loading = false;
+                                  this._loading = true;
                                 });
 
-                                await signOutGoogle();
+                                AppConstants.currentUser =
+                                    await signInWithGoogle();
 
-                                return errorDialog(context);
-                              } else {
-                                // logged in successfully :)
+                                AppConstants.logInButtonEnabled = true;
 
-                                SharedPreferences prefs =
-                                    await SharedPreferences.getInstance();
-                                await prefs.setString(
-                                    'djangoToken', AppConstants.djangoToken);
+                                if (AppConstants.currentUser == null ||
+                                    AppConstants.djangoToken == null) {
+                                  setState(() {
+                                    this._loading = false;
+                                  });
 
-                                Navigator.of(context).pushNamedAndRemoveUntil(
-                                    '/home', (r) => false);
+                                  await signOutGoogle();
+
+                                  return errorDialog(context);
+                                } else {
+                                  // logged in successfully :)
+
+                                  SharedPreferences prefs =
+                                      await SharedPreferences.getInstance();
+                                  await prefs.setString(
+                                      'djangoToken', AppConstants.djangoToken);
+
+                                  Navigator.of(context).pushNamedAndRemoveUntil(
+                                      '/home', (r) => false);
+                                }
                               }
-                            }
 
-                            setState(() {});
-                          },
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(40)),
-                    highlightElevation: 0,
-                    borderSide: BorderSide(color: Colors.grey),
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Image(
-                              image: AssetImage("assets/google_logo.png"),
-                              height: 25.0),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 10),
-                            child: Text(
-                              'Sign in with Google',
-                              style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.grey,
+                              setState(() {});
+                            },
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(40)),
+                      highlightElevation: 0,
+                      borderSide: BorderSide(color: Colors.grey),
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Image(
+                                image: AssetImage("assets/google_logo.png"),
+                                height: 25.0),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 10),
+                              child: Text(
+                                'Sign in with Google',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.grey,
+                                ),
                               ),
-                            ),
-                          )
-                        ],
+                            )
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(height: 15.0),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        'Login Using Institute ID.',
-                        style: TextStyle(fontFamily: 'Montserrat'),
-                      ),
-                    ],
-                  )
-                ],
-              ));
+                    SizedBox(height: 15.0),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          'Login Using Institute ID.',
+                          style: TextStyle(fontFamily: 'Montserrat'),
+                        ),
+                      ],
+                    )
+                  ],
+                )),
+    );
   }
 }

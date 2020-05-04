@@ -339,46 +339,49 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            leading: Container(),
-            backgroundColor: Colors.white,
-            expandedHeight: MediaQuery.of(context).size.height * 0.75,
-            floating: false,
-            flexibleSpace: FlexibleSpaceBar(
-              background: Stack(
-                children: [
-                  Container(
-                    height: MediaQuery.of(context).size.height * 0.75,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(35.0),
-                            bottomRight: Radius.circular(35.0)),
-                        color: Color(0xFF736AB7)),
-                  ),
-                  _getBackground(),
-                  _getGradient(),
-                  _getContent(), //_workshop == null
-                  _getToolbar(context),
-                  _workshop == null
-                      ? Container()
-                      : _workshop.is_por_holder == false
-                          ? Container()
-                          : editWorkshopOptions()
+    return SafeArea(
+      minimum: const EdgeInsets.all(2.0),
+      child: Scaffold(
+        body: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              leading: Container(),
+              backgroundColor: Colors.white,
+              expandedHeight: MediaQuery.of(context).size.height * 0.75,
+              floating: false,
+              flexibleSpace: FlexibleSpaceBar(
+                background: Stack(
+                  children: [
+                    Container(
+                      height: MediaQuery.of(context).size.height * 0.75,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(35.0),
+                              bottomRight: Radius.circular(35.0)),
+                          color: Color(0xFF736AB7)),
+                    ),
+                    _getBackground(),
+                    _getGradient(),
+                    _getContent(), //_workshop == null
+                    _getToolbar(context),
+                    _workshop == null
+                        ? Container()
+                        : _workshop.is_por_holder == false
+                            ? Container()
+                            : editWorkshopOptions()
+                  ],
+                ),
+              ),
+            ),
+            SliverList(
+              delegate: SliverChildListDelegate(
+                [
+                  Container(),
                 ],
               ),
             ),
-          ),
-          SliverList(
-            delegate: SliverChildListDelegate(
-              [
-                Container(),
-              ],
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

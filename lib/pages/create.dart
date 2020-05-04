@@ -103,256 +103,261 @@ class _CreateScreenState extends State<CreateScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          title: widget.workshopData == null
-              ? Text('Create Workshop')
-              : Text('Edit Workshop')),
-      body: Container(
-        padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
-        child: Builder(
-          builder: (context) => Form(
-            key: _formKey,
-            child: ListView(
-              children: [
-                Text(widget.clubName),
-                TextFormField(
-                  autovalidate: true,
-                  decoration:
-                      InputDecoration(labelText: 'Title of the Workshop'),
-                  controller: this._titleController,
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return 'Please enter the title';
-                    }
-                    return null;
-                  },
-                  onSaved: (val) => setState(() => _workshop.title = val),
-                ),
-                TextFormField(
+    return SafeArea(
+      minimum: const EdgeInsets.all(2.0),
+      child: Scaffold(
+        appBar: AppBar(
+            title: widget.workshopData == null
+                ? Text('Create Workshop')
+                : Text('Edit Workshop')),
+        body: Container(
+          padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
+          child: Builder(
+            builder: (context) => Form(
+              key: _formKey,
+              child: ListView(
+                children: [
+                  Text(widget.clubName),
+                  TextFormField(
                     autovalidate: true,
-                    decoration: InputDecoration(labelText: 'Description'),
-                    controller: this._descriptionController,
+                    decoration:
+                        InputDecoration(labelText: 'Title of the Workshop'),
+                    controller: this._titleController,
                     validator: (value) {
                       if (value.isEmpty) {
-                        return 'Please describe the workshop in detail.';
+                        return 'Please enter the title';
                       }
                       return null;
                     },
-                    onSaved: (val) =>
-                        setState(() => _workshop.description = val)),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 40, 0),
-                      child: Text("Select Date:"),
-                    ),
-                    RaisedButton(
-                      onPressed: () => _selectDate(context),
-                      child: Text('${_workshop.date}'),
-                    ),
-                    // TODO: make time selection optional
-                    RaisedButton(
-                      onPressed: () => _selectTime(context),
-                      child: Text('${_workshop.time}'),
-                    ),
-                  ],
-                ),
-                TextFormField(
+                    onSaved: (val) => setState(() => _workshop.title = val),
+                  ),
+                  TextFormField(
+                      autovalidate: true,
+                      decoration: InputDecoration(labelText: 'Description'),
+                      controller: this._descriptionController,
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return 'Please describe the workshop in detail.';
+                        }
+                        return null;
+                      },
+                      onSaved: (val) =>
+                          setState(() => _workshop.description = val)),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(0, 0, 40, 0),
+                        child: Text("Select Date:"),
+                      ),
+                      RaisedButton(
+                        onPressed: () => _selectDate(context),
+                        child: Text('${_workshop.date}'),
+                      ),
+                      // TODO: make time selection optional
+                      RaisedButton(
+                        onPressed: () => _selectTime(context),
+                        child: Text('${_workshop.time}'),
+                      ),
+                    ],
+                  ),
+                  TextFormField(
+                      autovalidate: true,
+                      decoration: InputDecoration(labelText: 'Location'),
+                      controller: this._locationController,
+                      validator: (value) {
+                        return null;
+                      },
+                      onSaved: (val) =>
+                          setState(() => _workshop.location = val)),
+                  TextFormField(
                     autovalidate: true,
-                    decoration: InputDecoration(labelText: 'Location'),
-                    controller: this._locationController,
+                    decoration: InputDecoration(labelText: 'Audience'),
+                    controller: this._audienceController,
                     validator: (value) {
                       return null;
                     },
-                    onSaved: (val) => setState(() => _workshop.location = val)),
-                TextFormField(
-                  autovalidate: true,
-                  decoration: InputDecoration(labelText: 'Audience'),
-                  controller: this._audienceController,
-                  validator: (value) {
-                    return null;
-                  },
-                  onSaved: (val) => setState(() => _workshop.audience = val),
-                ),
-                TextFormField(
-                  autovalidate: true,
-                  decoration: InputDecoration(labelText: 'Resources'),
-                  controller: this._resourcesController,
-                  validator: (value) {
-                    return null;
-                  },
-                  onSaved: (val) => setState(() => _workshop.resources = val),
-                ),
-                Form(
-                  key: this._searchContactFormKey,
-                  child: Row(
-                    children: <Widget>[
-                      _searchCategoryDropDown(),
-                      Expanded(
-                        child: TextFormField(
-                          autovalidate: true,
-                          decoration: InputDecoration(
-                              labelText:
-                                  'Search contacts by ${this._searchByValue}'),
-                          onFieldSubmitted: (value) async {
-                            if (value.isEmpty) return;
-
-                            if (!this
-                                ._searchContactFormKey
-                                .currentState
-                                .validate()) return;
-
-                            this._searchPost = BuiltProfileSearchPost((b) => b
-                              ..search_by = this._searchByValue
-                              ..search_string =
-                                  this._searchContactsController.text);
-
-                            if (!this.mounted) return;
-                            setState(() {
-                              this._isSearchingContacts = true;
-                              this._searchedDataFetched = false;
-
-                              this._searchedProfileresult = null;
-                            });
-                            await AppConstants.service
-                                .searchProfile(
-                                    "token ${AppConstants.djangoToken}",
-                                    this._searchPost)
-                                .catchError((onError) {
-                              print(
-                                  'Error whlie fetching search results: $onError');
-                            }).then((result) {
-                              if (result != null)
-                                this._searchedProfileresult = result.body;
-                            });
-
-                            if (!this.mounted) return;
-                            setState(() {
-                              this._searchedDataFetched = true;
-                            });
-                          },
-                          controller: this._searchContactsController,
-                          validator: (value) {
-                            if (value.isNotEmpty && value.length < 3)
-                              return '${this._searchByValue} must contain atleast 3 characters';
-                          },
-                        ),
-                      ),
-                      this._isSearchingContacts
-                          ? RaisedButton(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(50)),
-                              onPressed: () {
-                                this._searchContactsController.text = '';
-                                this._isSearchingContacts = false;
-                                if (!this.mounted) return;
-                                setState(() {});
-                              },
-                              child: Text('X Clear'),
-                            )
-                          : Container()
-                    ],
+                    onSaved: (val) => setState(() => _workshop.audience = val),
                   ),
-                ),
-                this._isSearchingContacts
-                    ? Column(
-                        children: <Widget>[
-                          Divider(
-                            height: 2,
-                            thickness: 2,
-                          ),
-                          Container(
-                            height: MediaQuery.of(context).size.height / 6,
-                            child: _buildContactsFromSearchPosts(context),
-                          ),
-                          Divider(
-                            height: 2,
-                            thickness: 2,
-                          ),
-                        ],
-                      )
-                    : Container(),
-                this._workshop.contactIds.length > 0
-                    ? Container(
-                        height: 50,
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          scrollDirection: Axis.horizontal,
-                          itemCount: this._workshop.contactIds.length,
-                          itemBuilder: (context, index) {
-                            int _id = this._workshop.contactIds[index];
-                            return Container(
-                              padding: EdgeInsets.all(2),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: <Widget>[
-                                  Text(this._workshop.contactNameofId[_id]),
-                                  InkWell(
-                                    splashColor: Colors.red,
-                                    onTap: () {
-                                      setState(() {
-                                        this._workshop.contactIds.remove(_id);
-                                        this
-                                            ._workshop
-                                            .contactNameofId
-                                            .remove(_id);
-                                      });
-                                    },
-                                    child: Icon(Icons.cancel),
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                        ),
-                      )
-                    : Container(),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 16.0, horizontal: 16.0),
-                  child: RaisedButton(
-                    onPressed: () async {
-                      final form = _formKey.currentState;
-                      if (form.validate()) {
-                        form.save();
-                        Scaffold.of(context).showSnackBar(
-                          SnackBar(
-                            content: widget.workshopData == null
-                                ? Text('Creating Workshop...')
-                                : Text('Editing Workshop...'),
-                          ),
-                        );
-
-                        bool isconfirmed =
-                            await CreatePageDialogBoxes.confirmDialog(
-                                context: context,
-                                isEditing:
-                                    widget.workshopData == null ? false : true);
-
-                        if (isconfirmed == false) return;
-
-                        if (widget.workshopData == null) {
-                          await WorkshopCreater.create(
-                              context: context,
-                              workshop: _workshop,
-                              club: widget.club);
-                        } else {
-                          WorkshopCreater.edit(
-                              context: context,
-                              workshop: _workshop,
-                              club: widget.club,
-                              widgetWorkshopData: widget.workshopData);
-                        }
-                      }
+                  TextFormField(
+                    autovalidate: true,
+                    decoration: InputDecoration(labelText: 'Resources'),
+                    controller: this._resourcesController,
+                    validator: (value) {
+                      return null;
                     },
-                    child: widget.workshopData == null
-                        ? Text('Create')
-                        : Text('Edit'),
+                    onSaved: (val) => setState(() => _workshop.resources = val),
                   ),
-                ),
-              ],
+                  Form(
+                    key: this._searchContactFormKey,
+                    child: Row(
+                      children: <Widget>[
+                        _searchCategoryDropDown(),
+                        Expanded(
+                          child: TextFormField(
+                            autovalidate: true,
+                            decoration: InputDecoration(
+                                labelText:
+                                    'Search contacts by ${this._searchByValue}'),
+                            onFieldSubmitted: (value) async {
+                              if (value.isEmpty) return;
+
+                              if (!this
+                                  ._searchContactFormKey
+                                  .currentState
+                                  .validate()) return;
+
+                              this._searchPost = BuiltProfileSearchPost((b) => b
+                                ..search_by = this._searchByValue
+                                ..search_string =
+                                    this._searchContactsController.text);
+
+                              if (!this.mounted) return;
+                              setState(() {
+                                this._isSearchingContacts = true;
+                                this._searchedDataFetched = false;
+
+                                this._searchedProfileresult = null;
+                              });
+                              await AppConstants.service
+                                  .searchProfile(
+                                      "token ${AppConstants.djangoToken}",
+                                      this._searchPost)
+                                  .catchError((onError) {
+                                print(
+                                    'Error whlie fetching search results: $onError');
+                              }).then((result) {
+                                if (result != null)
+                                  this._searchedProfileresult = result.body;
+                              });
+
+                              if (!this.mounted) return;
+                              setState(() {
+                                this._searchedDataFetched = true;
+                              });
+                            },
+                            controller: this._searchContactsController,
+                            validator: (value) {
+                              if (value.isNotEmpty && value.length < 3)
+                                return '${this._searchByValue} must contain atleast 3 characters';
+                            },
+                          ),
+                        ),
+                        this._isSearchingContacts
+                            ? RaisedButton(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(50)),
+                                onPressed: () {
+                                  this._searchContactsController.text = '';
+                                  this._isSearchingContacts = false;
+                                  if (!this.mounted) return;
+                                  setState(() {});
+                                },
+                                child: Text('X Clear'),
+                              )
+                            : Container()
+                      ],
+                    ),
+                  ),
+                  this._isSearchingContacts
+                      ? Column(
+                          children: <Widget>[
+                            Divider(
+                              height: 2,
+                              thickness: 2,
+                            ),
+                            Container(
+                              height: MediaQuery.of(context).size.height / 6,
+                              child: _buildContactsFromSearchPosts(context),
+                            ),
+                            Divider(
+                              height: 2,
+                              thickness: 2,
+                            ),
+                          ],
+                        )
+                      : Container(),
+                  this._workshop.contactIds.length > 0
+                      ? Container(
+                          height: 50,
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemCount: this._workshop.contactIds.length,
+                            itemBuilder: (context, index) {
+                              int _id = this._workshop.contactIds[index];
+                              return Container(
+                                padding: EdgeInsets.all(2),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    Text(this._workshop.contactNameofId[_id]),
+                                    InkWell(
+                                      splashColor: Colors.red,
+                                      onTap: () {
+                                        setState(() {
+                                          this._workshop.contactIds.remove(_id);
+                                          this
+                                              ._workshop
+                                              .contactNameofId
+                                              .remove(_id);
+                                        });
+                                      },
+                                      child: Icon(Icons.cancel),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                        )
+                      : Container(),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 16.0, horizontal: 16.0),
+                    child: RaisedButton(
+                      onPressed: () async {
+                        final form = _formKey.currentState;
+                        if (form.validate()) {
+                          form.save();
+                          Scaffold.of(context).showSnackBar(
+                            SnackBar(
+                              content: widget.workshopData == null
+                                  ? Text('Creating Workshop...')
+                                  : Text('Editing Workshop...'),
+                            ),
+                          );
+
+                          bool isconfirmed =
+                              await CreatePageDialogBoxes.confirmDialog(
+                                  context: context,
+                                  isEditing: widget.workshopData == null
+                                      ? false
+                                      : true);
+
+                          if (isconfirmed == false) return;
+
+                          if (widget.workshopData == null) {
+                            await WorkshopCreater.create(
+                                context: context,
+                                workshop: _workshop,
+                                club: widget.club);
+                          } else {
+                            WorkshopCreater.edit(
+                                context: context,
+                                workshop: _workshop,
+                                club: widget.club,
+                                widgetWorkshopData: widget.workshopData);
+                          }
+                        }
+                      },
+                      child: widget.workshopData == null
+                          ? Text('Create')
+                          : Text('Edit'),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

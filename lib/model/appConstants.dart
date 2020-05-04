@@ -11,6 +11,8 @@ import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 
 class AppConstants {
+// TODO: define minimum padding for safe area here so that it can be constant over whole app
+
   //  connectivity variables ------------------------------------------
 
   static ConnectionStatusSingleton connectionStatus;

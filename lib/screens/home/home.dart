@@ -148,60 +148,63 @@ class _HomeScreenState extends State<HomeScreen>
   Widget build(BuildContext context) {
     return WillPopScope(
         onWillPop: _onPopHome,
-        child: Scaffold(
-          key: _scaffoldKey,
-          backgroundColor: Colors.blue[200],
-          drawer: SideBar(context: context),
-          floatingActionButton: homeFAB(context, fabKey: fabKey),
-          appBar: homeAppBar(context, searchBarWidget: searchBarWidget),
-          body: Container(
-            margin: EdgeInsets.fromLTRB(12, 10, 12, 0),
-            decoration: new BoxDecoration(
-                color: Color(0xFF736AB7),
-                borderRadius: new BorderRadius.only(
-                    topLeft: const Radius.circular(40.0),
-                    topRight: const Radius.circular(40.0))),
-            child: searchBarWidget.isSearching
-                ? searchBarWidget.buildWorkshopsFromSearch(context)
-                : Column(
-                    children: [
-                      TabBar(
-                        indicatorSize: TabBarIndicatorSize.tab,
-                        indicatorColor: Colors.deepPurple,
-                        unselectedLabelColor: Colors.white70,
-                        labelColor: Colors.black,
-                        tabs: [
-                          new Tab(text: 'Latest'),
-                          new Tab(text: 'Interested'),
-                        ],
-                        controller: _tabController,
-                      ),
-                      Expanded(
-                        child: TabBarView(
-                          controller: _tabController,
-                          children: <Widget>[
-                            Container(
-                              child: AppConstants.firstTimeFetching
-                                  ? Center(child: CircularProgressIndicator())
-                                  : RefreshIndicator(
-                                      displacement: 60,
-                                      onRefresh: refreshHome,
-                                      // () async {
-                                      //   print('refreshed 111');
-                                      //   await Future.delayed(
-                                      //       Duration(seconds: 1));
-                                      // },
-                                      child:
-                                          _buildCurrentWorkshopPosts(context)),
-                            ),
-                            Container(
-                              child: _buildInterestedWorkshopsBody(context),
-                            )
+        child: SafeArea(
+          minimum: const EdgeInsets.all(2.0),
+          child: Scaffold(
+            key: _scaffoldKey,
+            backgroundColor: Colors.blue[200],
+            drawer: SideBar(context: context),
+            floatingActionButton: homeFAB(context, fabKey: fabKey),
+            appBar: homeAppBar(context, searchBarWidget: searchBarWidget),
+            body: Container(
+              margin: EdgeInsets.fromLTRB(12, 10, 12, 0),
+              decoration: new BoxDecoration(
+                  color: Color(0xFF736AB7),
+                  borderRadius: new BorderRadius.only(
+                      topLeft: const Radius.circular(40.0),
+                      topRight: const Radius.circular(40.0))),
+              child: searchBarWidget.isSearching
+                  ? searchBarWidget.buildWorkshopsFromSearch(context)
+                  : Column(
+                      children: [
+                        TabBar(
+                          indicatorSize: TabBarIndicatorSize.tab,
+                          indicatorColor: Colors.deepPurple,
+                          unselectedLabelColor: Colors.white70,
+                          labelColor: Colors.black,
+                          tabs: [
+                            new Tab(text: 'Latest'),
+                            new Tab(text: 'Interested'),
                           ],
+                          controller: _tabController,
                         ),
-                      ),
-                    ],
-                  ),
+                        Expanded(
+                          child: TabBarView(
+                            controller: _tabController,
+                            children: <Widget>[
+                              Container(
+                                child: AppConstants.firstTimeFetching
+                                    ? Center(child: CircularProgressIndicator())
+                                    : RefreshIndicator(
+                                        displacement: 60,
+                                        onRefresh: refreshHome,
+                                        // () async {
+                                        //   print('refreshed 111');
+                                        //   await Future.delayed(
+                                        //       Duration(seconds: 1));
+                                        // },
+                                        child: _buildCurrentWorkshopPosts(
+                                            context)),
+                              ),
+                              Container(
+                                child: _buildInterestedWorkshopsBody(context),
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+            ),
           ),
         ));
   }
