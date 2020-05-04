@@ -1,11 +1,11 @@
 on: 
   pull_request:
     branches:
-      - master
-name: Build apk
+      - release
+name: Build release apk
 jobs:
   build:
-    name: Build APK
+    name: Build release APK
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -16,8 +16,15 @@ jobs:
       with:
         channel: 'stable'
     - name: Building apk
+      env:
+        KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
       run: |
         flutter pub get
-        flutter build apk --debug
+        flutter build apk --release
     # Tests would be added later
     # - run: flutter test
+    - name: Upload APK
+      uses: actions/upload-artifact@v1
+      with:
+        name: app
+        path: build/app/outputs/apk/release/app-release.apk
