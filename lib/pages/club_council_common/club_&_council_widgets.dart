@@ -10,6 +10,14 @@ import '../club/club.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ClubAndCouncilWidgets {
+  static double getMinPanelHeight(context) {
+    return MediaQuery.of(context).size.height / 10;
+  }
+
+  static double getMaxPanelHeight(context) {
+    return MediaQuery.of(context).size.height / 1.1;
+  }
+
   static Container getSocialLinks(map) {
     _launchURL(String url) {
       print('URL: ${url}');

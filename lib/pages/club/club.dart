@@ -201,7 +201,7 @@ class _ClubPageState extends State<ClubPage>
           space,
           clubWorkshops == null
               ? Container(
-                  height: MediaQuery.of(context).size.height / 4,
+                  height: ClubAndCouncilWidgets.getMinPanelHeight(context),
                   child: Center(child: CircularProgressIndicator()))
               : ClubAndCouncilWidgets.getSecies(context,
                   secy: clubMap.secy, joint_secy: clubMap.joint_secy),
@@ -256,8 +256,8 @@ class _ClubPageState extends State<ClubPage>
                 child: _getPanel(),
               ),*/
           panelBuilder: (ScrollController sc) => _getPanel(sc: sc),
-          minHeight: MediaQuery.of(context).size.height / 4 - 20.0,
-          maxHeight: MediaQuery.of(context).size.height - 20.0,
+          minHeight: ClubAndCouncilWidgets.getMinPanelHeight(context),
+          maxHeight: ClubAndCouncilWidgets.getMaxPanelHeight(context),
           header: ClubAndCouncilWidgets.getHeader(context),
         ),
       ),
