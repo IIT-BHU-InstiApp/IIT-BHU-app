@@ -92,7 +92,7 @@ class _CouncilPageState extends State<CouncilPage> {
 
   Container _getDescription() {
     return new Container(
-      height: MediaQuery.of(context).size.height * 3 / 4,
+      height: ClubAndCouncilWidgets.getMaxPanelHeight(context) * 0.97,
       child: new ListView(
         padding: new EdgeInsets.fromLTRB(0.0, 72.0, 0.0, 32.0),
         children: <Widget>[
@@ -197,6 +197,7 @@ class _CouncilPageState extends State<CouncilPage> {
     return SafeArea(
       minimum: const EdgeInsets.all(2.0),
       child: Scaffold(
+        resizeToAvoidBottomPadding: false,
         backgroundColor: Color(0xFF736AB7),
         body: SlidingUpPanel(
           parallaxEnabled: true,
