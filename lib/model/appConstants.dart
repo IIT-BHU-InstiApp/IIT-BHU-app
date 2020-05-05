@@ -231,8 +231,9 @@ class AppConstants {
         await helper.getCouncilDetail(db: database, councilId: councilId);
 
     if (councilPost == null) {
-      Response<BuiltCouncilPost> councilSnapshots =
-          await AppConstants.service.getCouncil(AppConstants.currentCouncilId);
+      Response<BuiltCouncilPost> councilSnapshots = await AppConstants.service
+          .getCouncil('token ${AppConstants.djangoToken}',
+              AppConstants.currentCouncilId);
 
       councilPost = councilSnapshots.body;
 

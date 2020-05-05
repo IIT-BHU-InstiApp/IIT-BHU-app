@@ -163,9 +163,10 @@ class _$PostApiService extends PostApiService {
         .send<BuiltList<BuiltAllCouncilsPost>, BuiltAllCouncilsPost>($request);
   }
 
-  Future<Response<BuiltCouncilPost>> getCouncil(int id) {
+  Future<Response<BuiltCouncilPost>> getCouncil(String token, int id) {
     final $url = '/councils/${id}/';
-    final $request = Request('GET', $url, client.baseUrl);
+    final $headers = {'Authorization': token};
+    final $request = Request('GET', $url, client.baseUrl, headers: $headers);
     return client.send<BuiltCouncilPost, BuiltCouncilPost>($request);
   }
 
