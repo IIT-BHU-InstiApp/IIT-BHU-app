@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/screens/drawer.dart';
 import 'package:iit_app/screens/home/home.dart';
+import 'package:iit_app/ui/colorPicker.dart';
 
 class SettingsScreen extends StatefulWidget {
   @override
@@ -38,13 +39,26 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
         ),
         drawer: SideBar(context: context),
-        body: Container(
-            child: Center(
-          child: this._refreshing
-              ? CircularProgressIndicator()
-              : RaisedButton(
-                  onPressed: onResetDatabase, child: Text("Reset Data")),
-        )),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Container(
+              child: Center(
+                child: this._refreshing
+                    ? CircularProgressIndicator()
+                    : RaisedButton(
+                        onPressed: onResetDatabase, child: Text("Reset Data")),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.all(20),
+              child: RaisedButton(
+                  onPressed: () => Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => ColorPicker())),
+                  child: Text('Pick Color for theme')),
+            ),
+          ],
+        ),
       ),
     );
   }
