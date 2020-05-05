@@ -12,7 +12,6 @@ class WorkshopCreater {
   String time;
   String location;
   String audience;
-  String resources;
   List<int> contactIds = [];
   Map<int, String> contactNameofId = {};
   // TODO: add image_url
@@ -55,7 +54,6 @@ class WorkshopCreater {
       ..time = workshop.time
       ..location = workshop.location
       ..audience = workshop.audience
-      ..resources = workshop.resources
       ..contacts = workshop.contactIds.build().toBuilder());
 
     await AppConstants.service
@@ -84,8 +82,7 @@ class WorkshopCreater {
       ..date = workshop.date
       ..time = workshop.time
       ..location = workshop.location
-      ..audience = workshop.audience
-      ..resources = workshop.resources);
+      ..audience = workshop.audience);
 
     await AppConstants.service
         .updateWorkshopByPatch(widgetWorkshopData.id,

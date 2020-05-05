@@ -123,6 +123,39 @@ class _$PostApiService extends PostApiService {
     return client.send<dynamic, dynamic>($request);
   }
 
+  Future<Response<WorkshopResources>> getWorkshopResources(int id) {
+    final $url = '/resources/${id}/';
+    final $request = Request('GET', $url, client.baseUrl);
+    return client.send<WorkshopResources, WorkshopResources>($request);
+  }
+
+  Future<Response> updateWorkshopResourcesByPut(
+      int id, String token, WorkshopResources body) {
+    final $url = '/resources/${id}/';
+    final $headers = {'Authorization': token};
+    final $body = body;
+    final $request =
+        Request('PUT', $url, client.baseUrl, body: $body, headers: $headers);
+    return client.send<dynamic, dynamic>($request);
+  }
+
+  Future<Response> updateWorkshopResourcesByPatch(
+      int id, String token, WorkshopResources body) {
+    final $url = '/resources/${id}/';
+    final $headers = {'Authorization': token};
+    final $body = body;
+    final $request =
+        Request('PATCH', $url, client.baseUrl, body: $body, headers: $headers);
+    return client.send<dynamic, dynamic>($request);
+  }
+
+  Future<Response> deleteWorkshopResources(int id, String token) {
+    final $url = '/resources/${id}/';
+    final $headers = {'Authorization': token};
+    final $request = Request('DELETE', $url, client.baseUrl, headers: $headers);
+    return client.send<dynamic, dynamic>($request);
+  }
+
   Future<Response<BuiltList<BuiltAllCouncilsPost>>> getAllCouncils() {
     final $url = '/councils/';
     final $request = Request('GET', $url, client.baseUrl);

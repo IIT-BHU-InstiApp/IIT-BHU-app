@@ -9,6 +9,8 @@ part of 'built_post.dart';
 Serializer<TagCreate> _$tagCreateSerializer = new _$TagCreateSerializer();
 Serializer<TagSearch> _$tagSearchSerializer = new _$TagSearchSerializer();
 Serializer<TagDetail> _$tagDetailSerializer = new _$TagDetailSerializer();
+Serializer<WorkshopResources> _$workshopResourcesSerializer =
+    new _$WorkshopResourcesSerializer();
 Serializer<BuiltAllWorkshopsPost> _$builtAllWorkshopsPostSerializer =
     new _$BuiltAllWorkshopsPostSerializer();
 Serializer<BuiltWorkshopSummaryPost> _$builtWorkshopSummaryPostSerializer =
@@ -218,6 +220,79 @@ class _$TagDetailSerializer implements StructuredSerializer<TagDetail> {
         case 'club':
           result.club.replace(serializers.deserialize(value,
               specifiedType: const FullType(ClubListPost)) as ClubListPost);
+          break;
+      }
+    }
+
+    return result.build();
+  }
+}
+
+class _$WorkshopResourcesSerializer
+    implements StructuredSerializer<WorkshopResources> {
+  @override
+  final Iterable<Type> types = const [WorkshopResources, _$WorkshopResources];
+  @override
+  final String wireName = 'WorkshopResources';
+
+  @override
+  Iterable<Object> serialize(Serializers serializers, WorkshopResources object,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = <Object>[];
+    if (object.id != null) {
+      result
+        ..add('id')
+        ..add(serializers.serialize(object.id,
+            specifiedType: const FullType(int)));
+    }
+    if (object.name != null) {
+      result
+        ..add('name')
+        ..add(serializers.serialize(object.name,
+            specifiedType: const FullType(String)));
+    }
+    if (object.link != null) {
+      result
+        ..add('link')
+        ..add(serializers.serialize(object.link,
+            specifiedType: const FullType(String)));
+    }
+    if (object.resource_type != null) {
+      result
+        ..add('resource_type')
+        ..add(serializers.serialize(object.resource_type,
+            specifiedType: const FullType(String)));
+    }
+    return result;
+  }
+
+  @override
+  WorkshopResources deserialize(
+      Serializers serializers, Iterable<Object> serialized,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = new WorkshopResourcesBuilder();
+
+    final iterator = serialized.iterator;
+    while (iterator.moveNext()) {
+      final key = iterator.current as String;
+      iterator.moveNext();
+      final dynamic value = iterator.current;
+      switch (key) {
+        case 'id':
+          result.id = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+        case 'name':
+          result.name = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'link':
+          result.link = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'resource_type':
+          result.resource_type = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
           break;
       }
     }
@@ -468,7 +543,8 @@ class _$BuiltWorkshopDetailPostSerializer
       result
         ..add('resources')
         ..add(serializers.serialize(object.resources,
-            specifiedType: const FullType(String)));
+            specifiedType: const FullType(
+                BuiltList, const [const FullType(WorkshopResources)])));
     }
     if (object.contacts != null) {
       result
@@ -513,6 +589,12 @@ class _$BuiltWorkshopDetailPostSerializer
         ..add(serializers.serialize(object.tags,
             specifiedType:
                 const FullType(BuiltList, const [const FullType(TagDetail)])));
+    }
+    if (object.link != null) {
+      result
+        ..add('link')
+        ..add(serializers.serialize(object.link,
+            specifiedType: const FullType(String)));
     }
     return result;
   }
@@ -570,8 +652,10 @@ class _$BuiltWorkshopDetailPostSerializer
               specifiedType: const FullType(String)) as String;
           break;
         case 'resources':
-          result.resources = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+          result.resources.replace(serializers.deserialize(value,
+                  specifiedType: const FullType(
+                      BuiltList, const [const FullType(WorkshopResources)]))
+              as BuiltList<dynamic>);
           break;
         case 'contacts':
           result.contacts.replace(serializers.deserialize(value,
@@ -604,6 +688,10 @@ class _$BuiltWorkshopDetailPostSerializer
                   specifiedType: const FullType(
                       BuiltList, const [const FullType(TagDetail)]))
               as BuiltList<dynamic>);
+          break;
+        case 'link':
+          result.link = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
           break;
       }
     }
@@ -1454,7 +1542,8 @@ class _$BuiltWorkshopCreatePostSerializer
       result
         ..add('resources')
         ..add(serializers.serialize(object.resources,
-            specifiedType: const FullType(String)));
+            specifiedType:
+                const FullType(BuiltList, const [const FullType(int)])));
     }
     if (object.contacts != null) {
       result
@@ -1475,6 +1564,12 @@ class _$BuiltWorkshopCreatePostSerializer
         ..add(serializers.serialize(object.tags,
             specifiedType:
                 const FullType(BuiltList, const [const FullType(int)])));
+    }
+    if (object.link != null) {
+      result
+        ..add('link')
+        ..add(serializers.serialize(object.link,
+            specifiedType: const FullType(String)));
     }
     return result;
   }
@@ -1532,8 +1627,10 @@ class _$BuiltWorkshopCreatePostSerializer
               specifiedType: const FullType(String)) as String;
           break;
         case 'resources':
-          result.resources = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+          result.resources.replace(serializers.deserialize(value,
+                  specifiedType:
+                      const FullType(BuiltList, const [const FullType(int)]))
+              as BuiltList<dynamic>);
           break;
         case 'contacts':
           result.contacts.replace(serializers.deserialize(value,
@@ -1550,6 +1647,10 @@ class _$BuiltWorkshopCreatePostSerializer
                   specifiedType:
                       const FullType(BuiltList, const [const FullType(int)]))
               as BuiltList<dynamic>);
+          break;
+        case 'link':
+          result.link = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
           break;
       }
     }
@@ -2326,6 +2427,115 @@ class TagDetailBuilder implements Builder<TagDetail, TagDetailBuilder> {
   }
 }
 
+class _$WorkshopResources extends WorkshopResources {
+  @override
+  final int id;
+  @override
+  final String name;
+  @override
+  final String link;
+  @override
+  final String resource_type;
+
+  factory _$WorkshopResources(
+          [void Function(WorkshopResourcesBuilder) updates]) =>
+      (new WorkshopResourcesBuilder()..update(updates)).build();
+
+  _$WorkshopResources._({this.id, this.name, this.link, this.resource_type})
+      : super._();
+
+  @override
+  WorkshopResources rebuild(void Function(WorkshopResourcesBuilder) updates) =>
+      (toBuilder()..update(updates)).build();
+
+  @override
+  WorkshopResourcesBuilder toBuilder() =>
+      new WorkshopResourcesBuilder()..replace(this);
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(other, this)) return true;
+    return other is WorkshopResources &&
+        id == other.id &&
+        name == other.name &&
+        link == other.link &&
+        resource_type == other.resource_type;
+  }
+
+  @override
+  int get hashCode {
+    return $jf($jc($jc($jc($jc(0, id.hashCode), name.hashCode), link.hashCode),
+        resource_type.hashCode));
+  }
+
+  @override
+  String toString() {
+    return (newBuiltValueToStringHelper('WorkshopResources')
+          ..add('id', id)
+          ..add('name', name)
+          ..add('link', link)
+          ..add('resource_type', resource_type))
+        .toString();
+  }
+}
+
+class WorkshopResourcesBuilder
+    implements Builder<WorkshopResources, WorkshopResourcesBuilder> {
+  _$WorkshopResources _$v;
+
+  int _id;
+  int get id => _$this._id;
+  set id(int id) => _$this._id = id;
+
+  String _name;
+  String get name => _$this._name;
+  set name(String name) => _$this._name = name;
+
+  String _link;
+  String get link => _$this._link;
+  set link(String link) => _$this._link = link;
+
+  String _resource_type;
+  String get resource_type => _$this._resource_type;
+  set resource_type(String resource_type) =>
+      _$this._resource_type = resource_type;
+
+  WorkshopResourcesBuilder();
+
+  WorkshopResourcesBuilder get _$this {
+    if (_$v != null) {
+      _id = _$v.id;
+      _name = _$v.name;
+      _link = _$v.link;
+      _resource_type = _$v.resource_type;
+      _$v = null;
+    }
+    return this;
+  }
+
+  @override
+  void replace(WorkshopResources other) {
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
+    _$v = other as _$WorkshopResources;
+  }
+
+  @override
+  void update(void Function(WorkshopResourcesBuilder) updates) {
+    if (updates != null) updates(this);
+  }
+
+  @override
+  _$WorkshopResources build() {
+    final _$result = _$v ??
+        new _$WorkshopResources._(
+            id: id, name: name, link: link, resource_type: resource_type);
+    replace(_$result);
+    return _$result;
+  }
+}
+
 class _$BuiltAllWorkshopsPost extends BuiltAllWorkshopsPost {
   @override
   final BuiltList<BuiltWorkshopSummaryPost> active_workshops;
@@ -2614,7 +2824,7 @@ class _$BuiltWorkshopDetailPost extends BuiltWorkshopDetailPost {
   @override
   final String audience;
   @override
-  final String resources;
+  final BuiltList<WorkshopResources> resources;
   @override
   final BuiltList<ContactPost> contacts;
   @override
@@ -2629,6 +2839,8 @@ class _$BuiltWorkshopDetailPost extends BuiltWorkshopDetailPost {
   final bool is_por_holder;
   @override
   final BuiltList<TagDetail> tags;
+  @override
+  final String link;
 
   factory _$BuiltWorkshopDetailPost(
           [void Function(BuiltWorkshopDetailPostBuilder) updates]) =>
@@ -2652,7 +2864,8 @@ class _$BuiltWorkshopDetailPost extends BuiltWorkshopDetailPost {
       this.interested_users,
       this.is_workshop_contact,
       this.is_por_holder,
-      this.tags})
+      this.tags,
+      this.link})
       : super._();
 
   @override
@@ -2685,7 +2898,8 @@ class _$BuiltWorkshopDetailPost extends BuiltWorkshopDetailPost {
         interested_users == other.interested_users &&
         is_workshop_contact == other.is_workshop_contact &&
         is_por_holder == other.is_por_holder &&
-        tags == other.tags;
+        tags == other.tags &&
+        link == other.link;
   }
 
   @override
@@ -2708,28 +2922,26 @@ class _$BuiltWorkshopDetailPost extends BuiltWorkshopDetailPost {
                                                                 $jc(
                                                                     $jc(
                                                                         $jc(
-                                                                            0,
-                                                                            id
-                                                                                .hashCode),
-                                                                        title
-                                                                            .hashCode),
-                                                                    description
-                                                                        .hashCode),
-                                                                club.hashCode),
-                                                            date.hashCode),
-                                                        time.hashCode),
-                                                    location.hashCode),
-                                                latitude.hashCode),
-                                            longitude.hashCode),
-                                        audience.hashCode),
-                                    resources.hashCode),
-                                contacts.hashCode),
-                            image_url.hashCode),
-                        is_interested.hashCode),
-                    interested_users.hashCode),
-                is_workshop_contact.hashCode),
-            is_por_holder.hashCode),
-        tags.hashCode));
+                                                                            $jc(0,
+                                                                                id.hashCode),
+                                                                            title.hashCode),
+                                                                        description.hashCode),
+                                                                    club.hashCode),
+                                                                date.hashCode),
+                                                            time.hashCode),
+                                                        location.hashCode),
+                                                    latitude.hashCode),
+                                                longitude.hashCode),
+                                            audience.hashCode),
+                                        resources.hashCode),
+                                    contacts.hashCode),
+                                image_url.hashCode),
+                            is_interested.hashCode),
+                        interested_users.hashCode),
+                    is_workshop_contact.hashCode),
+                is_por_holder.hashCode),
+            tags.hashCode),
+        link.hashCode));
   }
 
   @override
@@ -2752,7 +2964,8 @@ class _$BuiltWorkshopDetailPost extends BuiltWorkshopDetailPost {
           ..add('interested_users', interested_users)
           ..add('is_workshop_contact', is_workshop_contact)
           ..add('is_por_holder', is_por_holder)
-          ..add('tags', tags))
+          ..add('tags', tags)
+          ..add('link', link))
         .toString();
   }
 }
@@ -2802,9 +3015,11 @@ class BuiltWorkshopDetailPostBuilder
   String get audience => _$this._audience;
   set audience(String audience) => _$this._audience = audience;
 
-  String _resources;
-  String get resources => _$this._resources;
-  set resources(String resources) => _$this._resources = resources;
+  ListBuilder<WorkshopResources> _resources;
+  ListBuilder<WorkshopResources> get resources =>
+      _$this._resources ??= new ListBuilder<WorkshopResources>();
+  set resources(ListBuilder<WorkshopResources> resources) =>
+      _$this._resources = resources;
 
   ListBuilder<ContactPost> _contacts;
   ListBuilder<ContactPost> get contacts =>
@@ -2841,6 +3056,10 @@ class BuiltWorkshopDetailPostBuilder
       _$this._tags ??= new ListBuilder<TagDetail>();
   set tags(ListBuilder<TagDetail> tags) => _$this._tags = tags;
 
+  String _link;
+  String get link => _$this._link;
+  set link(String link) => _$this._link = link;
+
   BuiltWorkshopDetailPostBuilder();
 
   BuiltWorkshopDetailPostBuilder get _$this {
@@ -2855,7 +3074,7 @@ class BuiltWorkshopDetailPostBuilder
       _latitude = _$v.latitude;
       _longitude = _$v.longitude;
       _audience = _$v.audience;
-      _resources = _$v.resources;
+      _resources = _$v.resources?.toBuilder();
       _contacts = _$v.contacts?.toBuilder();
       _image_url = _$v.image_url;
       _is_interested = _$v.is_interested;
@@ -2863,6 +3082,7 @@ class BuiltWorkshopDetailPostBuilder
       _is_workshop_contact = _$v.is_workshop_contact;
       _is_por_holder = _$v.is_por_holder;
       _tags = _$v.tags?.toBuilder();
+      _link = _$v.link;
       _$v = null;
     }
     return this;
@@ -2897,20 +3117,23 @@ class BuiltWorkshopDetailPostBuilder
               latitude: latitude,
               longitude: longitude,
               audience: audience,
-              resources: resources,
+              resources: _resources?.build(),
               contacts: _contacts?.build(),
               image_url: image_url,
               is_interested: is_interested,
               interested_users: interested_users,
               is_workshop_contact: is_workshop_contact,
               is_por_holder: is_por_holder,
-              tags: _tags?.build());
+              tags: _tags?.build(),
+              link: link);
     } catch (_) {
       String _$failedField;
       try {
         _$failedField = 'club';
         _club?.build();
 
+        _$failedField = 'resources';
+        _resources?.build();
         _$failedField = 'contacts';
         _contacts?.build();
 
@@ -4147,13 +4370,15 @@ class _$BuiltWorkshopCreatePost extends BuiltWorkshopCreatePost {
   @override
   final String audience;
   @override
-  final String resources;
+  final BuiltList<int> resources;
   @override
   final BuiltList<int> contacts;
   @override
   final String image_url;
   @override
   final BuiltList<int> tags;
+  @override
+  final String link;
 
   factory _$BuiltWorkshopCreatePost(
           [void Function(BuiltWorkshopCreatePostBuilder) updates]) =>
@@ -4173,7 +4398,8 @@ class _$BuiltWorkshopCreatePost extends BuiltWorkshopCreatePost {
       this.resources,
       this.contacts,
       this.image_url,
-      this.tags})
+      this.tags,
+      this.link})
       : super._() {
     if (title == null) {
       throw new BuiltValueNullFieldError('BuiltWorkshopCreatePost', 'title');
@@ -4212,7 +4438,8 @@ class _$BuiltWorkshopCreatePost extends BuiltWorkshopCreatePost {
         resources == other.resources &&
         contacts == other.contacts &&
         image_url == other.image_url &&
-        tags == other.tags;
+        tags == other.tags &&
+        link == other.link;
   }
 
   @override
@@ -4229,20 +4456,24 @@ class _$BuiltWorkshopCreatePost extends BuiltWorkshopCreatePost {
                                         $jc(
                                             $jc(
                                                 $jc(
-                                                    $jc($jc(0, title.hashCode),
-                                                        club.hashCode),
-                                                    date.hashCode),
-                                                id.hashCode),
-                                            description.hashCode),
-                                        time.hashCode),
-                                    location.hashCode),
-                                latitude.hashCode),
-                            longitude.hashCode),
-                        audience.hashCode),
-                    resources.hashCode),
-                contacts.hashCode),
-            image_url.hashCode),
-        tags.hashCode));
+                                                    $jc(
+                                                        $jc(
+                                                            $jc(0,
+                                                                title.hashCode),
+                                                            club.hashCode),
+                                                        date.hashCode),
+                                                    id.hashCode),
+                                                description.hashCode),
+                                            time.hashCode),
+                                        location.hashCode),
+                                    latitude.hashCode),
+                                longitude.hashCode),
+                            audience.hashCode),
+                        resources.hashCode),
+                    contacts.hashCode),
+                image_url.hashCode),
+            tags.hashCode),
+        link.hashCode));
   }
 
   @override
@@ -4261,7 +4492,8 @@ class _$BuiltWorkshopCreatePost extends BuiltWorkshopCreatePost {
           ..add('resources', resources)
           ..add('contacts', contacts)
           ..add('image_url', image_url)
-          ..add('tags', tags))
+          ..add('tags', tags)
+          ..add('link', link))
         .toString();
   }
 }
@@ -4311,9 +4543,10 @@ class BuiltWorkshopCreatePostBuilder
   String get audience => _$this._audience;
   set audience(String audience) => _$this._audience = audience;
 
-  String _resources;
-  String get resources => _$this._resources;
-  set resources(String resources) => _$this._resources = resources;
+  ListBuilder<int> _resources;
+  ListBuilder<int> get resources =>
+      _$this._resources ??= new ListBuilder<int>();
+  set resources(ListBuilder<int> resources) => _$this._resources = resources;
 
   ListBuilder<int> _contacts;
   ListBuilder<int> get contacts => _$this._contacts ??= new ListBuilder<int>();
@@ -4326,6 +4559,10 @@ class BuiltWorkshopCreatePostBuilder
   ListBuilder<int> _tags;
   ListBuilder<int> get tags => _$this._tags ??= new ListBuilder<int>();
   set tags(ListBuilder<int> tags) => _$this._tags = tags;
+
+  String _link;
+  String get link => _$this._link;
+  set link(String link) => _$this._link = link;
 
   BuiltWorkshopCreatePostBuilder();
 
@@ -4341,10 +4578,11 @@ class BuiltWorkshopCreatePostBuilder
       _latitude = _$v.latitude;
       _longitude = _$v.longitude;
       _audience = _$v.audience;
-      _resources = _$v.resources;
+      _resources = _$v.resources?.toBuilder();
       _contacts = _$v.contacts?.toBuilder();
       _image_url = _$v.image_url;
       _tags = _$v.tags?.toBuilder();
+      _link = _$v.link;
       _$v = null;
     }
     return this;
@@ -4379,13 +4617,16 @@ class BuiltWorkshopCreatePostBuilder
               latitude: latitude,
               longitude: longitude,
               audience: audience,
-              resources: resources,
+              resources: _resources?.build(),
               contacts: _contacts?.build(),
               image_url: image_url,
-              tags: _tags?.build());
+              tags: _tags?.build(),
+              link: link);
     } catch (_) {
       String _$failedField;
       try {
+        _$failedField = 'resources';
+        _resources?.build();
         _$failedField = 'contacts';
         _contacts?.build();
 
