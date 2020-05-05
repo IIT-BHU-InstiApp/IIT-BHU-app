@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/pages/login.dart';
+import 'package:iit_app/screens/home/worshop_detail/workshop_detail.dart';
 import 'package:iit_app/ui/separator.dart';
 import 'package:iit_app/ui/text_style.dart';
-import 'workshop_detail.dart';
 
 class HomeWidgets {
   static final Color textPaleColor = Color(0xFFAFAFAF);
