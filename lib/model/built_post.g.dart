@@ -525,13 +525,13 @@ class _$BuiltWorkshopDetailPostSerializer
       result
         ..add('latitude')
         ..add(serializers.serialize(object.latitude,
-            specifiedType: const FullType(double)));
+            specifiedType: const FullType(String)));
     }
     if (object.longitude != null) {
       result
         ..add('longitude')
         ..add(serializers.serialize(object.longitude,
-            specifiedType: const FullType(double)));
+            specifiedType: const FullType(String)));
     }
     if (object.audience != null) {
       result
@@ -641,11 +641,11 @@ class _$BuiltWorkshopDetailPostSerializer
           break;
         case 'latitude':
           result.latitude = serializers.deserialize(value,
-              specifiedType: const FullType(double)) as double;
+              specifiedType: const FullType(String)) as String;
           break;
         case 'longitude':
           result.longitude = serializers.deserialize(value,
-              specifiedType: const FullType(double)) as double;
+              specifiedType: const FullType(String)) as String;
           break;
         case 'audience':
           result.audience = serializers.deserialize(value,
@@ -1524,13 +1524,13 @@ class _$BuiltWorkshopCreatePostSerializer
       result
         ..add('latitude')
         ..add(serializers.serialize(object.latitude,
-            specifiedType: const FullType(double)));
+            specifiedType: const FullType(String)));
     }
     if (object.longitude != null) {
       result
         ..add('longitude')
         ..add(serializers.serialize(object.longitude,
-            specifiedType: const FullType(double)));
+            specifiedType: const FullType(String)));
     }
     if (object.audience != null) {
       result
@@ -1616,11 +1616,11 @@ class _$BuiltWorkshopCreatePostSerializer
           break;
         case 'latitude':
           result.latitude = serializers.deserialize(value,
-              specifiedType: const FullType(double)) as double;
+              specifiedType: const FullType(String)) as String;
           break;
         case 'longitude':
           result.longitude = serializers.deserialize(value,
-              specifiedType: const FullType(double)) as double;
+              specifiedType: const FullType(String)) as String;
           break;
         case 'audience':
           result.audience = serializers.deserialize(value,
@@ -2818,9 +2818,9 @@ class _$BuiltWorkshopDetailPost extends BuiltWorkshopDetailPost {
   @override
   final String location;
   @override
-  final double latitude;
+  final String latitude;
   @override
-  final double longitude;
+  final String longitude;
   @override
   final String audience;
   @override
@@ -3003,13 +3003,13 @@ class BuiltWorkshopDetailPostBuilder
   String get location => _$this._location;
   set location(String location) => _$this._location = location;
 
-  double _latitude;
-  double get latitude => _$this._latitude;
-  set latitude(double latitude) => _$this._latitude = latitude;
+  String _latitude;
+  String get latitude => _$this._latitude;
+  set latitude(String latitude) => _$this._latitude = latitude;
 
-  double _longitude;
-  double get longitude => _$this._longitude;
-  set longitude(double longitude) => _$this._longitude = longitude;
+  String _longitude;
+  String get longitude => _$this._longitude;
+  set longitude(String longitude) => _$this._longitude = longitude;
 
   String _audience;
   String get audience => _$this._audience;
@@ -4364,9 +4364,9 @@ class _$BuiltWorkshopCreatePost extends BuiltWorkshopCreatePost {
   @override
   final String location;
   @override
-  final double latitude;
+  final String latitude;
   @override
-  final double longitude;
+  final String longitude;
   @override
   final String audience;
   @override
@@ -4531,13 +4531,13 @@ class BuiltWorkshopCreatePostBuilder
   String get location => _$this._location;
   set location(String location) => _$this._location = location;
 
-  double _latitude;
-  double get latitude => _$this._latitude;
-  set latitude(double latitude) => _$this._latitude = latitude;
+  String _latitude;
+  String get latitude => _$this._latitude;
+  set latitude(String latitude) => _$this._latitude = latitude;
 
-  double _longitude;
-  double get longitude => _$this._longitude;
-  set longitude(double longitude) => _$this._longitude = longitude;
+  String _longitude;
+  String get longitude => _$this._longitude;
+  set longitude(String longitude) => _$this._longitude = longitude;
 
   String _audience;
   String get audience => _$this._audience;
