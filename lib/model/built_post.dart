@@ -123,9 +123,9 @@ abstract class BuiltWorkshopDetailPost
   String get location;
 
   @nullable
-  double get latitude;
+  String get latitude;
   @nullable
-  double get longitude;
+  String get longitude;
 
   @nullable
   String get audience;
@@ -378,9 +378,9 @@ abstract class BuiltWorkshopCreatePost
   String get location;
 
   @nullable
-  double get latitude;
+  String get latitude;
   @nullable
-  double get longitude;
+  String get longitude;
 
   @nullable
   String get audience;
