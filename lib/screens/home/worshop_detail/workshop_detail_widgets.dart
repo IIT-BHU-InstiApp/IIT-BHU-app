@@ -42,8 +42,6 @@ class WorkshopDetailWidgets {
     );
   }
 
-  
-
   static Container getGradient() {
     return Container(
       margin: new EdgeInsets.only(top: 190.0),

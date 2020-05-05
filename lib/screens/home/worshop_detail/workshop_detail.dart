@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/pages/club/club.dart';
-import 'package:iit_app/pages/club_&_council_widgets.dart';
+import 'package:iit_app/pages/club_council_common/club_&_council_widgets.dart';
 import 'package:iit_app/pages/create.dart';
 import 'package:iit_app/screens/home/home_widgets.dart';
 import 'package:iit_app/ui/separator.dart';
@@ -351,14 +351,19 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
           WorkshopDetailWidgets.getHeading(
               icon: Icons.location_on, title: 'Location'),
           SizedBox(height: 5.0),
-          Text(
-            //_workshop.location,
-            'Not Specified yet',
-            //style: baseTextStyle,
-          ),
+          _workshop == null
+              ? Container(
+                  height: 35.0,
+                  child: Center(child: CircularProgressIndicator()),
+                )
+              : Text(
+                  _workshop.location,
+                  //'Not Specified yet',
+                  //style: baseTextStyle,
+                ),
           SizedBox(height: 5.0),
           Text(
-            //_workshop.location,
+            //'${_workshop.longitude}',
             '(Lattitude,Longitude)',
             //style: baseTextStyle,
           ),
@@ -366,50 +371,71 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
           WorkshopDetailWidgets.getHeading(
               icon: Icons.library_books, title: 'Resouces'),
           SizedBox(height: 5.0),
-          Text(
-              //_workshop.resources
-              'No Resources'),
+          _workshop == null
+              ? Container(
+                  height: 35.0,
+                  child: Center(child: CircularProgressIndicator()),
+                )
+              : Text(
+                  //_workshop.resources,
+                  'No Resources',
+                ),
           SizedBox(height: 15.0),
           WorkshopDetailWidgets.getHeading(
               icon: Icons.people, title: 'Audience'),
           SizedBox(height: 5.0),
-          Text(
-            //_workshop.audience
-            'No Audience',
-          ),
+          _workshop == null
+              ? Container(
+                  height: 35.0,
+                  child: Center(child: CircularProgressIndicator()),
+                )
+              : Text(
+                  _workshop.audience,
+                  //'No Audience',
+                ),
           SizedBox(height: 15.0),
           WorkshopDetailWidgets.getHeading(
               icon: Icons.contacts, title: 'Contacts'),
           SizedBox(height: 5.0),
-          /*Container(
-            //height:,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: _workshop.contacts.length,
-              itemBuilder: (context, index) {
-                return ClubAndCouncilWidgets.getPosHolder(
-                  imageUrl: _workshop.contacts[index].photo_url,
-                  name: _workshop.contacts[index].name,
-                  email: _workshop.contacts[index].email,
-                );
-              },
-            ),
-          ),*/
+          _workshop == null
+              ? Container(
+                  height: 35.0,
+                  child: Center(child: CircularProgressIndicator()),
+                )
+              : Container(
+                  //height:,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: _workshop.contacts.length,
+                    itemBuilder: (context, index) {
+                      return ClubAndCouncilWidgets.getPosHolder(
+                        imageUrl: _workshop.contacts[index].photo_url,
+                        name: _workshop.contacts[index].name,
+                        email: _workshop.contacts[index].email,
+                      );
+                    },
+                  ),
+                ),
           SizedBox(height: 15.0),
           WorkshopDetailWidgets.getHeading(icon: Icons.bookmark, title: 'Tags'),
           SizedBox(height: 5.0),
-          /*Container(
-            //height: ,
-            child: ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              scrollDirection: Axis.vertical,
-              itemCount: _workshop.tags.length,
-              itemBuilder: (context, index) {
-                return Text(_workshop.tags[index].tag_name);
-              },
-            ),
-          ),*/
+          _workshop == null
+              ? Container(
+                  height: 35.0,
+                  child: Center(child: CircularProgressIndicator()),
+                )
+              : Container(
+                  //height: ,
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    scrollDirection: Axis.vertical,
+                    itemCount: _workshop.tags.length,
+                    itemBuilder: (context, index) {
+                      return Text(_workshop.tags[index].tag_name);
+                    },
+                  ),
+                ),
         ],
       ),
     );
