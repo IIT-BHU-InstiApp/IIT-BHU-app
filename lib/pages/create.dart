@@ -28,7 +28,6 @@ class _CreateScreenState extends State<CreateScreen> {
   TextEditingController _descriptionController;
   TextEditingController _locationController;
   TextEditingController _audienceController;
-  TextEditingController _resourcesController;
   String _editingDate;
   String _editingTime;
 
@@ -75,7 +74,6 @@ class _CreateScreenState extends State<CreateScreen> {
     this._descriptionController = TextEditingController();
     this._locationController = TextEditingController();
     this._audienceController = TextEditingController();
-    this._resourcesController = TextEditingController();
 
     this._searchContactsController = TextEditingController();
 
@@ -86,7 +84,6 @@ class _CreateScreenState extends State<CreateScreen> {
       this._editingTime = widget.workshopData.time;
       this._locationController.text = widget.workshopData.location;
       this._audienceController.text = widget.workshopData.audience;
-      this._resourcesController.text = widget.workshopData.resources;
       _workshop = WorkshopCreater(
           editingDate: this._editingDate, editingTime: this._editingTime);
       widget.workshopData.contacts.forEach((contact) {
@@ -178,15 +175,6 @@ class _CreateScreenState extends State<CreateScreen> {
                       return null;
                     },
                     onSaved: (val) => setState(() => _workshop.audience = val),
-                  ),
-                  TextFormField(
-                    autovalidate: true,
-                    decoration: InputDecoration(labelText: 'Resources'),
-                    controller: this._resourcesController,
-                    validator: (value) {
-                      return null;
-                    },
-                    onSaved: (val) => setState(() => _workshop.resources = val),
                   ),
                   Form(
                     key: this._searchContactFormKey,

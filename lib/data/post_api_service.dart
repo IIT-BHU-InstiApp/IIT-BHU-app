@@ -78,6 +78,34 @@ abstract class PostApiService extends ChopperService {
 //? --------------------------------------------------------------------------------------------------------------------
 //? --------------------------------------------------------------------------------------------------------------------
 
+//! ------------------------------------------ Resources end point APIs --------------------------------------------------------------
+
+  //? ----------------------------------- Get -------------------------------
+
+  @Get(path: '/resources/{id}/')
+  Future<Response<WorkshopResources>> getWorkshopResources(@Path('id') int id);
+
+  //? ----------------------------------- Put -------------------------------
+  @Put(path: '/resources/{id}/')
+  Future<Response> updateWorkshopResourcesByPut(@Path('id') int id,
+      @Header('Authorization') String token, @Body() WorkshopResources body);
+
+  //? ----------------------------------- Patch -------------------------------
+
+  @Patch(path: '/resources/{id}/')
+  Future<Response> updateWorkshopResourcesByPatch(@Path('id') int id,
+      @Header('Authorization') String token, @Body() WorkshopResources body);
+
+  //? ----------------------------------- Delete -------------------------------
+
+  @Delete(path: '/resources/{id}/')
+  Future<Response> deleteWorkshopResources(
+      @Path('id') int id, @Header('Authorization') String token);
+//! ------------------------------------------ Resources end point APIs --------------------------------------------------------------
+
+//? --------------------------------------------------------------------------------------------------------------------
+//? --------------------------------------------------------------------------------------------------------------------
+
 //! ------------------------------------------ Council end point APIs --------------------------------------------------------------
 
   //? ----------------------------------- Get -------------------------------

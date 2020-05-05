@@ -173,7 +173,7 @@ class _CouncilPageState extends State<CouncilPage> {
           _getClubs(),
           councilData == null
               ? Container(
-                  height: MediaQuery.of(context).size.height / 4 - 20.0,
+                  height: ClubAndCouncilWidgets.getMinPanelHeight(context),
                   child: Center(child: CircularProgressIndicator()))
               : ClubAndCouncilWidgets.getSecies(context,
                   secy: councilData.gensec,
@@ -216,8 +216,8 @@ class _CouncilPageState extends State<CouncilPage> {
                 onDismissed: (_) => _pc.close(),
                 child: _getPanel(),
               ),*/
-          minHeight: MediaQuery.of(context).size.height / 4 - 20.0,
-          maxHeight: MediaQuery.of(context).size.height - 20.0,
+          minHeight: ClubAndCouncilWidgets.getMinPanelHeight(context),
+          maxHeight: ClubAndCouncilWidgets.getMaxPanelHeight(context),
           header: ClubAndCouncilWidgets.getHeader(context),
         ),
       ),

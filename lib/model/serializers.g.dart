@@ -29,6 +29,7 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..add(TagSearch.serializer)
       ..add(TeamMember.serializer)
       ..add(Token.serializer)
+      ..add(WorkshopResources.serializer)
       ..addBuilderFactory(
           const FullType(
               BuiltList, const [const FullType(BuiltWorkshopSummaryPost)]),
@@ -43,12 +44,6 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(ClubListPost)]),
           () => new ListBuilder<ClubListPost>())
-      ..addBuilderFactory(
-          const FullType(BuiltList, const [const FullType(ContactPost)]),
-          () => new ListBuilder<ContactPost>())
-      ..addBuilderFactory(
-          const FullType(BuiltList, const [const FullType(TagDetail)]),
-          () => new ListBuilder<TagDetail>())
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(SecyPost)]),
           () => new ListBuilder<SecyPost>())
@@ -64,6 +59,18 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(TeamMember)]),
           () => new ListBuilder<TeamMember>())
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(WorkshopResources)]),
+          () => new ListBuilder<WorkshopResources>())
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(ContactPost)]),
+          () => new ListBuilder<ContactPost>())
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(TagDetail)]),
+          () => new ListBuilder<TagDetail>())
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(int)]),
+          () => new ListBuilder<int>())
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(int)]),
           () => new ListBuilder<int>())
