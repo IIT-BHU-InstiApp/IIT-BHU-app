@@ -43,6 +43,24 @@ abstract class TagDetail implements Built<TagDetail, TagDetailBuilder> {
   static Serializer<TagDetail> get serializer => _$tagDetailSerializer;
 }
 
+abstract class WorkshopResources
+    implements Built<WorkshopResources, WorkshopResourcesBuilder> {
+  @nullable
+  int get id;
+  @nullable
+  String get name;
+  @nullable
+  String get link;
+  @nullable
+  String get resource_type;
+
+  WorkshopResources._();
+  factory WorkshopResources([updates(WorkshopResourcesBuilder b)]) =
+      _$WorkshopResources;
+  static Serializer<WorkshopResources> get serializer =>
+      _$workshopResourcesSerializer;
+}
+
 // !--------------------------------------------------------------------------------------------------------------------
 abstract class BuiltAllWorkshopsPost
     implements Built<BuiltAllWorkshopsPost, BuiltAllWorkshopsPostBuilder> {
@@ -112,7 +130,7 @@ abstract class BuiltWorkshopDetailPost
   @nullable
   String get audience;
   @nullable
-  String get resources;
+  BuiltList<WorkshopResources> get resources;
   @nullable
   BuiltList<ContactPost> get contacts;
   @nullable
@@ -128,6 +146,9 @@ abstract class BuiltWorkshopDetailPost
 
   @nullable
   BuiltList<TagDetail> get tags;
+
+  @nullable
+  String get link;
 
   BuiltWorkshopDetailPost._();
 
@@ -364,13 +385,15 @@ abstract class BuiltWorkshopCreatePost
   @nullable
   String get audience;
   @nullable
-  String get resources;
+  BuiltList<int> get resources;
   @nullable
   BuiltList<int> get contacts;
   @nullable
   String get image_url;
   @nullable
   BuiltList<int> get tags;
+  @nullable
+  String get link;
 
   BuiltWorkshopCreatePost._();
   factory BuiltWorkshopCreatePost([updates(BuiltWorkshopCreatePostBuilder b)]) =
