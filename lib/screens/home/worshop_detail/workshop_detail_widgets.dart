@@ -63,4 +63,32 @@ class WorkshopDetailWidgets {
       child: new BackButton(color: Colors.lightGreen),
     );
   }
+
+  static Padding getTag({String tag, int index}) {
+    List<Color> colors = [
+      Colors.red,
+      Colors.blue,
+      Colors.yellow,
+      Colors.grey,
+    ];
+    return Padding(
+      padding: EdgeInsets.all(3.0),
+      child: Flex(
+        direction: Axis.horizontal,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(10.0),
+            decoration: BoxDecoration(
+              color: colors[index % colors.length],
+              borderRadius: BorderRadius.circular(30.0),
+            ),
+            child: Text(
+              tag,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
