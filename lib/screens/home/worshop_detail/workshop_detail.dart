@@ -204,28 +204,28 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
                                 child: loadingAnimation(),
                                 height: 20,
                                 width: 20)
-                            : Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  InkWell(
-                                    child: Icon(Icons.star,
+                            : InkWell(
+                                onTap: () => updateButton(),
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Icon(Icons.star,
                                         color: is_interested == 1
                                             ? Colors.blue[400]
                                             : Colors.blue[100],
                                         size: 25.0),
-                                    onTap: () => updateButton(),
-                                  ),
-                                  Text(
-                                    'Interested',
-                                    style: TextStyle(
-                                      color: is_interested == 1
-                                          ? Colors.blue[400]
-                                          : Colors.blue[100],
-                                      fontWeight: FontWeight.bold,
+                                    Text(
+                                      'Interested',
+                                      style: TextStyle(
+                                        color: is_interested == 1
+                                            ? Colors.blue[400]
+                                            : Colors.blue[100],
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                     SizedBox(width: 7.0),
                   ],
@@ -403,7 +403,7 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
                   child: Center(child: CircularProgressIndicator()),
                 )
               : Container(
-                  //height:,
+                  height: 200.0,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemCount: _workshop.contacts.length,
@@ -412,6 +412,7 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
                         imageUrl: _workshop.contacts[index].photo_url,
                         name: _workshop.contacts[index].name,
                         email: _workshop.contacts[index].email,
+                        desg: 'No phone',
                       );
                     },
                   ),
@@ -432,7 +433,8 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
                     scrollDirection: Axis.vertical,
                     itemCount: _workshop.tags.length,
                     itemBuilder: (context, index) {
-                      return Text(_workshop.tags[index].tag_name);
+                      return WorkshopDetailWidgets.getTag(
+                          tag: _workshop.tags[index].tag_name, index: index);
                     },
                   ),
                 ),
