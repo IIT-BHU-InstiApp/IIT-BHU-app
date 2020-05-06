@@ -150,13 +150,13 @@ abstract class PostApiService extends ChopperService {
       @Path('id') int id, @Header('Authorization') String token);
 
   //? ----------------------------------- Put -------------------------------
-  @Put(path: '/club/{id}/')
+  @Put(path: '/clubs/{id}/')
   Future<Response> updateClubByPut(@Path('id') int id,
       @Header('Authorization') String token, @Body() BuiltClubPost body);
 
   //? ----------------------------------- Patch -------------------------------
 
-  @Patch(path: '/club/{id}/')
+  @Patch(path: '/clubs/{id}/')
   Future<Response> updateClubByPatch(@Path('id') int id,
       @Header('Authorization') String token, @Body() BuiltClubPost body);
 

@@ -213,7 +213,7 @@ class _$PostApiService extends PostApiService {
   }
 
   Future<Response> updateClubByPut(int id, String token, BuiltClubPost body) {
-    final $url = '/club/${id}/';
+    final $url = '/clubs/${id}/';
     final $headers = {'Authorization': token};
     final $body = body;
     final $request =
@@ -222,7 +222,7 @@ class _$PostApiService extends PostApiService {
   }
 
   Future<Response> updateClubByPatch(int id, String token, BuiltClubPost body) {
-    final $url = '/club/${id}/';
+    final $url = '/clubs/${id}/';
     final $headers = {'Authorization': token};
     final $body = body;
     final $request =
