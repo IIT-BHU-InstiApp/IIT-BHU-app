@@ -1,14 +1,9 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/pages/dialogBoxes.dart';
 import 'package:iit_app/ui/separator.dart';
 import 'package:iit_app/ui/text_style.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import '../club/club.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class Description extends StatefulWidget {
   final dynamic map;
@@ -58,6 +53,8 @@ class _DescriptionState extends State<Description> {
             FlatButton(
               child: new Text("yay"),
               onPressed: () {
+                Navigator.pop(context);
+
                 setState(() {});
               },
             ),
@@ -67,11 +64,10 @@ class _DescriptionState extends State<Description> {
     );
   }
 
-  Future editClubDescription({
-    @required BuildContext context,
-    @required BuiltClubPost club,
-    @required String description
-  }) async {
+  Future editClubDescription(
+      {@required BuildContext context,
+      @required BuiltClubPost club,
+      @required String description}) async {
     final editedClub = BuiltClubPost((b) => b..description = description);
 
     await AppConstants.service
@@ -140,7 +136,10 @@ class _DescriptionState extends State<Description> {
 
                                       if (isconfirmed == false) return;
                                       await this.editClubDescription(
-                                          context: context, club: widget.map, description: descriptionController.text);
+                                          context: context,
+                                          club: widget.map,
+                                          description:
+                                              descriptionController.text);
                                       // if (widget.workshopData == null) {
                                       //   await WorkshopCreater.create(
                                       //       context: context,
