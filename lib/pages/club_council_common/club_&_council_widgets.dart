@@ -154,7 +154,7 @@ class ClubAndCouncilWidgets {
   }
 
   static Widget getPosHolder(
-      {String desg,
+      {String desg='',
       BuildContext context,
       String name,
       String imageUrl,
@@ -185,7 +185,9 @@ class ClubAndCouncilWidgets {
             child: Text(name, textAlign: TextAlign.center),
             width: 100,
           ),
-          Text(desg, textAlign: TextAlign.center),
+          desg == ''
+              ? SizedBox(height: 1.0)
+              : Text(desg, textAlign: TextAlign.center),
           SizedBox(height: 4.0),
         ],
       ),
