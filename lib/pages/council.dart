@@ -83,14 +83,15 @@ class _CouncilPageState extends State<CouncilPage> {
                   constraints: new BoxConstraints.expand(height: 295.0),
                 ),
                 ClubAndCouncilWidgets.getGradient(),
-                _getDescription(),
+                _getDescription(context),
                 ClubAndCouncilWidgets.getToolbar(context),
               ],
             ),
     );
   }
 
-  Container _getDescription() {
+  Container _getDescription(context) {
+     final bottom=MediaQuery.of(context).viewInsets.bottom;
     return new Container(
       height: ClubAndCouncilWidgets.getMaxPanelHeight(context) * 0.97,
       child: new ListView(
@@ -103,7 +104,10 @@ class _CouncilPageState extends State<CouncilPage> {
               isCouncil: true,
               context: context),
           SizedBox(height: 8.0),
-          Description(map: councilData)
+          Padding(
+            padding: EdgeInsets.only(bottom: bottom),
+            child: Description(map: councilData),
+          )
         ],
       ),
     );
@@ -197,6 +201,7 @@ class _CouncilPageState extends State<CouncilPage> {
     return SafeArea(
       minimum: const EdgeInsets.all(2.0),
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         resizeToAvoidBottomPadding: false,
         backgroundColor: Color(0xFF736AB7),
         body: SlidingUpPanel(
