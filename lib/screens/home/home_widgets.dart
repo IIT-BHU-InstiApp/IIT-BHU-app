@@ -6,6 +6,7 @@ import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/pages/login.dart';
 import 'package:iit_app/screens/home/worshop_detail/workshop_detail.dart';
 import 'package:iit_app/ui/separator.dart';
+import 'package:iit_app/ui/skeleton_text.dart';
 import 'package:iit_app/ui/text_style.dart';
 
 class HomeWidgets {
@@ -226,5 +227,37 @@ class HomeWidgets {
             ],
           ),
         ));
+  }
+
+  static Container getWorkshopLoading(
+      {double height = 120.0, double width = 350.0}) {
+    return Container(
+      constraints: BoxConstraints.expand(),
+      height: height,
+      width: width,
+      padding: EdgeInsets.all(5.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Skeleton(
+            height: height - 10.0,
+            width: height - 10.0,
+          ),
+          SizedBox(width: 20.0),
+          Container(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Skeleton(height: height / 6, width: width - height - 20.0),
+                SizedBox(height: height / 6),
+                Skeleton(height: height / 6, width: width - height - 60.0),
+                SizedBox(height: height / 6),
+                Skeleton(height: height / 6, width: width - height - 100.0),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
