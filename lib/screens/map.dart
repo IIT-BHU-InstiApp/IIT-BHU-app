@@ -68,11 +68,14 @@ class _MyAppState extends State<TheMap> {
         initialCameraPosition: CameraPosition(
           target: const LatLng(25.267878, 82.990494),
           zoom: 15,
+          bearing: 0.0,
+          tilt: 45.0,
         ),
         mapType: MapType.terrain,
         // MapType.hybrid,
-        myLocationEnabled: true,
+        // myLocationEnabled: true,
         indoorViewEnabled: true,
+        mapToolbarEnabled: true,
         cameraTargetBounds: CameraTargetBounds(LatLngBounds(
             southwest: LatLng(25.259598295586617, 82.98727926886082),
             northeast: LatLng(25.269851359020624, 82.99818585552365))),
