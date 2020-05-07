@@ -149,16 +149,18 @@ class _ClubPageState extends State<ClubPage>
                 constraints: new BoxConstraints.expand(height: 295.0),
               ),
         ClubAndCouncilWidgets.getGradient(),
-        _getClubCardAndDescription(),
+        _getClubCardAndDescription(context),
         ClubAndCouncilWidgets.getToolbar(context),
       ],
     );
   }
 
-  Container _getClubCardAndDescription() {
+  Container _getClubCardAndDescription(context) {
+    final bottom=MediaQuery.of(context).viewInsets.bottom;
     return new Container(
       height: ClubAndCouncilWidgets.getMaxPanelHeight(context) * 0.97,
       child: new ListView(
+        //reverse: true,
         padding: new EdgeInsets.fromLTRB(0.0, 72.0, 0.0, 32.0),
         children: <Widget>[
           ClubAndCouncilWidgets.getClubCard(
@@ -169,7 +171,12 @@ class _ClubPageState extends State<ClubPage>
               isCouncil: false,
               context: context),
           SizedBox(height: 8.0),
-          Description(map: clubMap),
+          Padding(
+            padding: EdgeInsets.only(
+              bottom: bottom,
+            ),
+            child: Description(map: clubMap),
+          ),
         ],
       ),
     );
@@ -223,6 +230,7 @@ class _ClubPageState extends State<ClubPage>
     return SafeArea(
       minimum: const EdgeInsets.all(2.0),
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         resizeToAvoidBottomPadding: false,
         backgroundColor: Color(0xFF736AB7),
         floatingActionButton: FloatingActionButton(
