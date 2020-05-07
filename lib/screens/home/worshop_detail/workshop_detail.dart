@@ -403,8 +403,16 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
                   child: Center(child: CircularProgressIndicator()),
                 )
               : Container(
-                  height: 200.0,
-                  child: ListView.builder(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10.0),
+                    color: Colors.grey[300],
+                  ),
+                  //color:Colors.grey[300],
+                  padding: EdgeInsets.only(
+                    top: 20.0,
+                  ),
+                  height: 180.0,
+                  child: ListView.separated(
                     scrollDirection: Axis.horizontal,
                     itemCount: _workshop.contacts.length,
                     itemBuilder: (context, index) {
@@ -412,8 +420,11 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
                         imageUrl: _workshop.contacts[index].photo_url,
                         name: _workshop.contacts[index].name,
                         email: _workshop.contacts[index].email,
-                        desg: 'No phone',
+                        context: context,
                       );
+                    },
+                    separatorBuilder: (context, index) {
+                      return SizedBox(width: 15.0);
                     },
                   ),
                 ),
