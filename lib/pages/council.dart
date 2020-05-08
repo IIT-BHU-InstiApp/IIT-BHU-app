@@ -105,7 +105,7 @@ class _CouncilPageState extends State<CouncilPage> {
           SizedBox(height: 8.0),
           Padding(
             padding: EdgeInsets.only(bottom: bottom),
-            child: Description(map: councilData),
+            child: Description(map: councilData, isCouncil: true),
           )
         ],
       ),
