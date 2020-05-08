@@ -106,9 +106,7 @@ class _HomeScreenState extends State<HomeScreen>
           final posts = snapshot.data.body;
           return _buildInterestedWorkshopPosts(context, posts);
         } else {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
+          return HomeWidgets.getPlaceholder();
         }
       },
     );
@@ -184,7 +182,7 @@ class _HomeScreenState extends State<HomeScreen>
                             children: <Widget>[
                               Container(
                                 child: AppConstants.firstTimeFetching
-                                    ? Center(child: CircularProgressIndicator())
+                                    ? HomeWidgets.getPlaceholder()
                                     : RefreshIndicator(
                                         displacement: 60,
                                         onRefresh: refreshHome,
