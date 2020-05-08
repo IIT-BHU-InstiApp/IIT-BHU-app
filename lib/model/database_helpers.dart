@@ -807,7 +807,7 @@ class DatabaseHelper {
     await db.delete(porHoldersString, where: '$clubIdString = $clubId');
   }
 
-  Future deleteWorkshopsSummary({@required Database db}) async {
+  Future deleteAllWorkshopsSummary({@required Database db}) async {
     await db.delete(workshopSummaryString);
   }
 
@@ -815,29 +815,29 @@ class DatabaseHelper {
     await db.delete(allCouncislSummaryString);
   }
 
-  Future deleteCouncilDetails({@required Database db}) async {
+  Future deleteAllCouncilDetails({@required Database db}) async {
     await db.delete(councilDetailString);
   }
 
-  Future deletePORHolders({@required Database db}) async {
+  Future deleteAllPORHolders({@required Database db}) async {
     await db.delete(porHoldersString);
   }
 
-  Future deleteClubSummary({@required Database db}) async {
+  Future deleteAllClubSummary({@required Database db}) async {
     await db.delete(clubSummaryString);
   }
 
-  Future deleteClubDetails({@required Database db}) async {
+  Future deleteAllClubDetails({@required Database db}) async {
     await db.delete(clubDetailsString);
   }
 
   Future deleteWholeDatabase({@required Database db}) async {
-    await deleteWorkshopsSummary(db: db);
+    await deleteAllWorkshopsSummary(db: db);
     await deleteAllCouncilsSummary(db: db);
-    await deleteCouncilDetails(db: db);
-    await deletePORHolders(db: db);
-    await deleteClubSummary(db: db);
-    await deleteClubDetails(db: db);
+    await deleteAllCouncilDetails(db: db);
+    await deleteAllPORHolders(db: db);
+    await deleteAllClubSummary(db: db);
+    await deleteAllClubDetails(db: db);
   }
 
   Future closeDatabase({@required Database db}) async => db.close();
