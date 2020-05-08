@@ -38,6 +38,7 @@ dependencies:
   google_maps_flutter: 
   sliding_up_panel: ^1.0.2
   font_awesome_flutter:
+  skeleton_text: ^1.0.0
 
 
 dev_dependencies:
