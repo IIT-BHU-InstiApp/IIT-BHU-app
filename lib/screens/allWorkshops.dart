@@ -13,12 +13,17 @@ class AllWorkshopsScreen extends StatefulWidget {
 
 class _AllWorkshopsScreenState extends State<AllWorkshopsScreen>
     with SingleTickerProviderStateMixin {
-  SearchBarWidget searchBarWidget = SearchBarWidget();
+  SearchBarWidget searchBarWidget;
   TabController _tabController;
+  ValueNotifier<bool> searchListener;
 
   @override
   void initState() {
     _tabController = new TabController(length: 2, vsync: this);
+
+    searchListener = ValueNotifier(false);
+    searchBarWidget = SearchBarWidget(searchListener);
+
     super.initState();
   }
 
@@ -117,7 +122,7 @@ class _AllWorkshopsScreenState extends State<AllWorkshopsScreen>
           automaticallyImplyLeading: false,
           title: Text("All Workshops"),
           actions: <Widget>[
-            Expanded(child: searchBarWidget.getSearchTextFeild(context)),
+            Expanded(child: searchBarWidget.getSearchTextField(context)),
           ],
           // bottom: TabBar(
           //   unselectedLabelColor: Colors.grey,

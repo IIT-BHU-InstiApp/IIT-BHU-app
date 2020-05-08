@@ -33,7 +33,7 @@ AppBar homeAppBar(context, {SearchBarWidget searchBarWidget}) => AppBar(
                             fit: BoxFit.cover),
                         borderRadius: BorderRadius.circular(50.0)),
                   ),
-                  Expanded(child: searchBarWidget.getSearchTextFeild(context)),
+                  Expanded(child: searchBarWidget.getSearchTextField(context)),
                   Padding(
                     padding: const EdgeInsets.only(right: 8.0, left: 8),
                     child: Container(
