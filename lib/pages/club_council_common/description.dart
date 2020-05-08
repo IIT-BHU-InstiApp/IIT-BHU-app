@@ -5,9 +5,18 @@ import 'package:iit_app/pages/dialogBoxes.dart';
 import 'package:iit_app/ui/separator.dart';
 import 'package:iit_app/ui/text_style.dart';
 
+// TODO: we need only isPorHolder and description rather the whole model
+
 class Description extends StatefulWidget {
   final dynamic map;
-  const Description({Key key, @required this.map}) : super(key: key);
+  final bool isClub;
+  final bool isCouncil;
+  const Description(
+      {Key key,
+      @required this.map,
+      this.isClub = false,
+      this.isCouncil = false})
+      : super(key: key);
   @override
   _DescriptionState createState() => _DescriptionState();
 }
@@ -39,22 +48,18 @@ class _DescriptionState extends State<Description> {
 
   showSuccesfulDialog({
     @required BuildContext context,
-    bool isEditing = false,
   }) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text("Successful!"),
-          content: isEditing
-              ? Text("Workshop edited succesfully!")
-              : Text("Workshop succesfully created!"),
+          content: Text("Description edited succesfully!"),
           actions: <Widget>[
             FlatButton(
               child: new Text("yay"),
               onPressed: () {
                 Navigator.pop(context);
-
                 setState(() {});
               },
             ),
@@ -79,10 +84,32 @@ class _DescriptionState extends State<Description> {
     }).then((value) {
       if (value.isSuccessful) {
         print('Edited!');
-        this.showSuccesfulDialog(context: context, isEditing: true);
+        this.showSuccesfulDialog(context: context);
       }
     }).catchError((onError) {
       print('Error printing EDITED club: ${onError.toString()}');
+    });
+  }
+
+  Future editCouncilDescription(
+      {@required BuildContext context,
+      @required BuiltCouncilPost council,
+      @required String description}) async {
+    final editedCouncil = BuiltCouncilPost((b) => b..description = description);
+
+    await AppConstants.service
+        .updateCouncilByPatch(
+            council.id, "token ${AppConstants.djangoToken}", editedCouncil)
+        .catchError((onError) {
+      print('Error editing council description: ${onError.toString()}');
+      this.showUnSuccessfulDialog(context: context);
+    }).then((value) {
+      if (value.isSuccessful) {
+        print('Edited!');
+        this.showSuccesfulDialog(context: context);
+      }
+    }).catchError((onError) {
+      print('Error printing EDITED council: ${onError.toString()}');
     });
   }
 
@@ -116,49 +143,41 @@ class _DescriptionState extends State<Description> {
                               });
                             })
                         : Container(),
-                    widget.map.is_por_holder
-                        ? this.editing
-                            ? Row(
-                                children: [
-                                  IconButton(
-                                    icon: Icon(Icons.cancel),
-                                    onPressed: () =>
-                                        setState(() => this.editing = false),
-                                  ),
-                                  IconButton(
-                                    icon: Icon(Icons.done),
-                                    onPressed: () async {
-                                      bool isconfirmed =
-                                          await CreatePageDialogBoxes
-                                              .confirmDialog(
-                                                  context: context,
-                                                  isEditing: true);
+                    this.editing
+                        ? Row(
+                            children: [
+                              IconButton(
+                                icon: Icon(Icons.cancel),
+                                onPressed: () =>
+                                    setState(() => this.editing = false),
+                              ),
+                              IconButton(
+                                icon: Icon(Icons.done),
+                                onPressed: () async {
+                                  bool isconfirmed =
+                                      await CreatePageDialogBoxes.confirmDialog(
+                                          context: context, isEditing: true);
 
-                                      if (isconfirmed == false) return;
-                                      await this.editClubDescription(
-                                          context: context,
-                                          club: widget.map,
-                                          description:
-                                              descriptionController.text);
-                                      // if (widget.workshopData == null) {
-                                      //   await WorkshopCreater.create(
-                                      //       context: context,
-                                      //       club: _workshop,
-                                      //       club: widget.club);
-                                      // } else {
-                                      //   WorkshopCreater.edit(
-                                      //       context: context,
-                                      //       club: _workshop,
-                                      //       club: widget.club,
-                                      //       widgetWorkshopData:
-                                      //           widget.workshopData);
-                                      // }
-                                      setState(() => this.editing = false);
-                                    },
-                                  ),
-                                ],
-                              )
-                            : Container()
+                                  if (isconfirmed == false) return;
+                                  if (widget.isClub) {
+                                    await this.editClubDescription(
+                                        context: context,
+                                        club: widget.map,
+                                        description:
+                                            descriptionController.text);
+                                  } else if (widget.isCouncil) {
+                                    await this.editCouncilDescription(
+                                        context: context,
+                                        council: widget.map,
+                                        description:
+                                            descriptionController.text);
+                                  }
+
+                                  setState(() => this.editing = false);
+                                },
+                              ),
+                            ],
+                          )
                         : Container(),
                   ],
                 ),

@@ -173,7 +173,7 @@ class _ClubPageState extends State<ClubPage>
             padding: EdgeInsets.only(
               bottom: bottom,
             ),
-            child: Description(map: clubMap),
+            child: Description(map: clubMap, isClub: true),
           ),
         ],
       ),
