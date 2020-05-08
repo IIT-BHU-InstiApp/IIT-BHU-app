@@ -42,7 +42,7 @@ FutureBuilder<Response> buildInterestedWorkshopsBody(BuildContext context) {
         return _buildInterestedWorkshopPosts(context, posts);
       } else {
         return Center(
-          child: CircularProgressIndicator(),
+          child: HomeWidgets.getPlaceholder(),
         );
       }
     },
@@ -94,7 +94,7 @@ FutureBuilder<Response> buildWorkshopsFromSearch({context, searchPost}) {
       } else {
         // Show a loading indicator while waiting for the posts
         return Center(
-          child: CircularProgressIndicator(),
+          child: HomeWidgets.getPlaceholder(),
         );
       }
     },
