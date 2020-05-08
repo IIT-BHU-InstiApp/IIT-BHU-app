@@ -8,6 +8,8 @@ import 'package:iit_app/screens/home/search_workshop.dart';
 import 'package:iit_app/screens/home/worshop_detail/workshop_detail.dart';
 import 'package:iit_app/ui/separator.dart';
 import 'package:iit_app/ui/text_style.dart';
+
+import 'package:skeleton_text/skeleton_text.dart';
 import 'buildWorkshops.dart' as buildWorkhops;
 
 class HomeWidgets {
@@ -229,6 +231,90 @@ class HomeWidgets {
           ),
         ));
   }
+
+  static ListView getPlaceholder() {
+    return ListView.builder(
+        scrollDirection: Axis.vertical,
+        physics: BouncingScrollPhysics(),
+        itemCount: 10,
+        itemBuilder: (BuildContext context, int index) {
+          return Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                  color: Colors.transparent),
+              child: Container(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    SkeletonAnimation(
+                      child: Container(
+                        width: 110.0,
+                        height: 110.0,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0),
+                          color: Colors.grey[300],
+                        ),
+                      ),
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.max,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            left: 15.0,
+                            bottom: 15.0,
+                          ),
+                          child: SkeletonAnimation(
+                            child: Container(
+                              height: 20.0,
+                              width: MediaQuery.of(context).size.width * 0.5,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  color: Colors.grey[300]),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 15.0, right: 5.0, bottom: 15.0),
+                          child: SkeletonAnimation(
+                            child: Container(
+                              width: MediaQuery.of(context).size.width * 0.4,
+                              height: 20.0,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  color: Colors.grey[300]),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 15.0, right: 5.0, bottom: 15.0),
+                          child: SkeletonAnimation(
+                            child: Container(
+                              width: MediaQuery.of(context).size.width * 0.3,
+                              height: 20.0,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  color: Colors.grey[300]),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
+  }
 }
 
 class HomeChild extends StatelessWidget {
@@ -269,7 +355,7 @@ class HomeChild extends StatelessWidget {
                     children: <Widget>[
                       Container(
                         child: AppConstants.firstTimeFetching
-                            ? Center(child: CircularProgressIndicator())
+                            ? HomeWidgets.getPlaceholder()
                             : RefreshIndicator(
                                 displacement: 60,
                                 onRefresh: () async {
