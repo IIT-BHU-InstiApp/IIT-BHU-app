@@ -61,7 +61,7 @@ class AppConstants {
 
     if (workshopFromDatabase == null) {
       // insert all workshop information for the first time
-      await helper.deleteWorkshopsSummary(db: database);
+      await helper.deleteAllWorkshopsSummary(db: database);
       await helper.deleteAllCouncilsSummary(db: database);
 
       print('fetching workshops and all councils summary from json');
@@ -206,7 +206,7 @@ class AppConstants {
     DatabaseHelper helper = DatabaseHelper.instance;
     var database = await helper.database;
 
-    await helper.deleteWorkshopsSummary(db: database);
+    await helper.deleteAllWorkshopsSummary(db: database);
 
     print('fetching workshops infos from json for updation');
 
@@ -232,8 +232,7 @@ class AppConstants {
 
     if (councilPost == null) {
       Response<BuiltCouncilPost> councilSnapshots = await AppConstants.service
-          .getCouncil('token ${AppConstants.djangoToken}',
-              AppConstants.currentCouncilId);
+          .getCouncil('token ${AppConstants.djangoToken}', councilId);
 
       councilPost = councilSnapshots.body;
 
@@ -243,25 +242,13 @@ class AppConstants {
     return councilPost;
   }
 
-  /// To update any particular council data
-  // static Future getAndUpdateCouncilDetailsInDatabase(
-  //     {@required int councilId}) async {
-  //   DatabaseHelper helper = DatabaseHelper.instance;
-  //   var database = await helper.database;
-
-  //   print('deleting council entries ---------------------------');
-  //   await helper.deleteEntryOfCouncilDetail(db: database, councilId: councilId);
-  //   print('deleted ---------------------------');
-
-  //   Response<BuiltCouncilPost> councilSnapshots =
-  //       await AppConstants.service.getCouncil(councilId);
-
-  //   var councilPost = councilSnapshots.body;
-
-  //   await helper.insertCouncilDetailsIntoDatabase(councilPost: councilPost);
-
-  //   return councilPost;
-  // }
+  static Future refreshCouncilInDatabase({@required int councilId}) async {
+    print('refreshing council data ');
+    DatabaseHelper helper = DatabaseHelper.instance;
+    var database = await helper.database;
+    await helper.deleteEntryOfCouncilDetail(db: database, councilId: councilId);
+    return await getCouncilDetailsFromDatabase(councilId: councilId);
+  }
 
   static Future getClubDetailsFromDatabase({@required int clubId}) async {
     DatabaseHelper helper = DatabaseHelper.instance;
@@ -284,20 +271,13 @@ class AppConstants {
     return clubPost;
   }
 
-  /// To update any particular club data
-//   static Future updateClubDetailsInDatabase(
-//       {@required BuiltClubPost clubPost}) async {
-//     DatabaseHelper helper = DatabaseHelper.instance;
-//     var database = await helper.database;
-
-// // here, we are not doing exactly like we did for council. because everytime we have to fetch workshops
-// // so  API request will be sent anyway. Therefore to ensure minimum requests, we will fetch all data altogether.
-// // Keep in mind: Use of local database is done to achieve quick fetching of club data except workshops
-
-//     await helper.deleteEntryOfClubDetail(db: database, clubId: clubPost.id);
-
-//     await helper.insertClubDetailsIntoDatabase(clubPost: clubPost);
-//   }
+  static Future refreshClubInDatabase({@required int clubId}) async {
+    print('refreshing club data ');
+    DatabaseHelper helper = DatabaseHelper.instance;
+    var database = await helper.database;
+    await helper.deleteEntryOfClubDetail(db: database, clubId: clubId);
+    return await getClubDetailsFromDatabase(clubId: clubId);
+  }
 
   static Future updateClubSubscriptionInDatabase(
       {@required int clubId,
