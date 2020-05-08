@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/pages/login.dart';
+import 'package:iit_app/screens/home/search_workshop.dart';
 import 'package:iit_app/screens/home/worshop_detail/workshop_detail.dart';
 import 'package:iit_app/ui/separator.dart';
 import 'package:iit_app/ui/text_style.dart';
+import 'buildWorkshops.dart' as buildWorkhops;
 
 class HomeWidgets {
   static final Color textPaleColor = Color(0xFFAFAFAF);
@@ -226,5 +228,67 @@ class HomeWidgets {
             ],
           ),
         ));
+  }
+}
+
+class HomeChild extends StatelessWidget {
+  final BuildContext context;
+  final SearchBarWidget searchBarWidget;
+  final TabController tabController;
+  final bool isSearching;
+
+  const HomeChild(
+      {Key key,
+      this.context,
+      this.searchBarWidget,
+      this.tabController,
+      this.isSearching})
+      : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return StatefulBuilder(
+      builder: (context, setState) => isSearching
+          ? buildWorkhops.buildWorkshopsFromSearch(
+              context: context, searchPost: searchBarWidget.searchPost)
+          : Column(
+              children: [
+                TabBar(
+                  indicatorSize: TabBarIndicatorSize.tab,
+                  indicatorColor: Colors.deepPurple,
+                  unselectedLabelColor: Colors.white70,
+                  labelColor: Colors.black,
+                  tabs: [
+                    new Tab(text: 'Latest'),
+                    new Tab(text: 'Interested'),
+                  ],
+                  controller: tabController,
+                ),
+                Expanded(
+                  child: TabBarView(
+                    controller: tabController,
+                    children: <Widget>[
+                      Container(
+                        child: AppConstants.firstTimeFetching
+                            ? Center(child: CircularProgressIndicator())
+                            : RefreshIndicator(
+                                displacement: 60,
+                                onRefresh: () async {
+                                  await AppConstants
+                                      .updateAndPopulateWorkshops();
+                                  setState(() {});
+                                },
+                                child: buildWorkhops
+                                    .buildCurrentWorkshopPosts(context)),
+                      ),
+                      Container(
+                        child:
+                            buildWorkhops.buildInterestedWorkshopsBody(context),
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+    );
   }
 }
