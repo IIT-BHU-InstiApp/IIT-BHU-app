@@ -4,7 +4,6 @@ import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/pages/club_council_common/club_&_council_widgets.dart';
 import 'package:iit_app/pages/club_council_common/description.dart';
-import 'package:iit_app/ui/separator.dart';
 import 'package:iit_app/ui/text_style.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
@@ -91,7 +90,7 @@ class _CouncilPageState extends State<CouncilPage> {
   }
 
   Container _getDescription(context) {
-     final bottom=MediaQuery.of(context).viewInsets.bottom;
+    final bottom = MediaQuery.of(context).viewInsets.bottom;
     return new Container(
       height: ClubAndCouncilWidgets.getMaxPanelHeight(context) * 0.97,
       child: new ListView(
@@ -204,27 +203,36 @@ class _CouncilPageState extends State<CouncilPage> {
         resizeToAvoidBottomInset: false,
         resizeToAvoidBottomPadding: false,
         backgroundColor: Color(0xFF736AB7),
-        body: SlidingUpPanel(
-          parallaxEnabled: true,
-          body: _getBackground(context),
-          controller: _pc,
-          borderRadius: radius,
-          collapsed: Container(
-            decoration: BoxDecoration(
-              borderRadius: radius,
+        body: RefreshIndicator(
+          onRefresh: () async {
+            if (councilData != null) {
+              councilData = await AppConstants.refreshCouncilInDatabase(
+                  councilId: councilData.id);
+            }
+            setState(() {});
+          },
+          child: SlidingUpPanel(
+            parallaxEnabled: true,
+            body: _getBackground(context),
+            controller: _pc,
+            borderRadius: radius,
+            collapsed: Container(
+              decoration: BoxDecoration(
+                borderRadius: radius,
+              ),
             ),
+            backdropEnabled: true,
+            panelBuilder: (ScrollController sc) => _getPanel(sc: sc),
+            /*panel: Dismissible(
+                  key: Key('clubs'),
+                  direction: DismissDirection.down,
+                  onDismissed: (_) => _pc.close(),
+                  child: _getPanel(),
+                ),*/
+            minHeight: ClubAndCouncilWidgets.getMinPanelHeight(context),
+            maxHeight: ClubAndCouncilWidgets.getMaxPanelHeight(context),
+            header: ClubAndCouncilWidgets.getHeader(context),
           ),
-          backdropEnabled: true,
-          panelBuilder: (ScrollController sc) => _getPanel(sc: sc),
-          /*panel: Dismissible(
-                key: Key('clubs'),
-                direction: DismissDirection.down,
-                onDismissed: (_) => _pc.close(),
-                child: _getPanel(),
-              ),*/
-          minHeight: ClubAndCouncilWidgets.getMinPanelHeight(context),
-          maxHeight: ClubAndCouncilWidgets.getMaxPanelHeight(context),
-          header: ClubAndCouncilWidgets.getHeader(context),
         ),
       ),
     );
