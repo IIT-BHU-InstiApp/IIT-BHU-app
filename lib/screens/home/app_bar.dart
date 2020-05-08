@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/screens/home/search_workshop.dart';
+import 'notification.dart';
 
 AppBar homeAppBar(context, {SearchBarWidget searchBarWidget}) => AppBar(
       backgroundColor: Colors.blue[200],
@@ -40,7 +41,13 @@ AppBar homeAppBar(context, {SearchBarWidget searchBarWidget}) => AppBar(
                       child: InkWell(
                         child: Icon(Icons.notifications_active,
                             color: Colors.black),
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => NotificationScreen()
+                            ),
+                          );
+                        },
                       ),
                     ),
                   )
