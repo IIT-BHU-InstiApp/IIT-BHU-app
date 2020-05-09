@@ -49,7 +49,34 @@ class TheMap extends StatefulWidget {
 class _MyAppState extends State<TheMap> {
   Color color = Colors.green;
   GoogleMapController mapController;
-  List<Marker> _markers = <Marker>[];
+  List<Marker> _hostelMarkers = <Marker>[];
+  List<Marker> _departmentMarkers = <Marker>[];
+  List<Marker> _lectureHallMarkers = <Marker>[];
+  List<Marker> _otherMarkers = <Marker>[];
+  List<Marker> _displayMarkers = <Marker>[];
+
+  Marker _getMarker({String category, var coord, int i, double hue}) {
+    return Marker(
+      icon: BitmapDescriptor.defaultMarkerWithHue(hue),
+      markerId: MarkerId('category ${i.toString()}'),
+      position: coord['LatLng'],
+      infoWindow: InfoWindow(
+        title: coord['title'],
+      ),
+      onTap: () {
+        mapController.animateCamera(
+          CameraUpdate.newCameraPosition(
+            CameraPosition(
+              target: coords['LatLng'],
+              zoom: 18,
+              tilt: 75,
+              bearing: 45,
+            ),
+          ),
+        );
+      },
+    );
+  }
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
@@ -57,25 +84,44 @@ class _MyAppState extends State<TheMap> {
     int i = 0;
     for (var coord in coords['Hostels']) {
       i += 1;
-      this._markers.add(Marker(
-          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
-          markerId: MarkerId('Hostels ${i.toString()}'),
-          position: coord['LatLng'],
-          infoWindow: InfoWindow(
-            title: coord['title'],
-          ),
-          onTap: () {
-            mapController
-                .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
-              target: coords['LatLng'],
-              zoom: 18,
-              tilt: 75,
-              bearing: 45,
-            )));
-          }));
+      this._hostelMarkers.add(_getMarker(
+          category: 'Hostel',
+          coord: coord,
+          i: i,
+          hue: BitmapDescriptor.hueRed));
+    }
+    i = 0;
+    for (var coord in coords['Departments']) {
+      i += 1;
+      this._departmentMarkers.add(_getMarker(
+          category: 'Department',
+          coord: coord,
+          i: i,
+          hue: BitmapDescriptor.hueGreen));
+    }
+    i = 0;
+
+    for (var coord in coords['Lecture Halls']) {
+      i += 1;
+      this._lectureHallMarkers.add(_getMarker(
+          category: 'LT', coord: coord, i: i, hue: BitmapDescriptor.hueOrange));
     }
 
-    debugPrint(this._markers.toString());
+    i = 0;
+    for (var coord in coords['Others']) {
+      i += 1;
+      this._otherMarkers.add(_getMarker(
+          category: 'Other',
+          coord: coord,
+          i: i,
+          hue: BitmapDescriptor.hueViolet));
+    }
+
+    _displayMarkers.addAll(_hostelMarkers);
+    _displayMarkers.addAll(_departmentMarkers);
+    _displayMarkers.addAll(_lectureHallMarkers);
+    _displayMarkers.addAll(_otherMarkers);
+
     setState(() {});
   }
 
@@ -97,7 +143,7 @@ class _MyAppState extends State<TheMap> {
         indoorViewEnabled: true,
         mapToolbarEnabled: true,
         // minMaxZoomPreference: MinMaxZoomPreference(10, 25),
-        markers: Set.from(_markers),
+        markers: Set.from(_displayMarkers),
         onTap: (tappedPosition) {
           print(
               'lattitude : ${tappedPosition.latitude}      longitude: ${tappedPosition.longitude}');
