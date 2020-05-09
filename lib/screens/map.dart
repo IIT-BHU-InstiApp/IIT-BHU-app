@@ -12,14 +12,6 @@ class MapScreen extends StatelessWidget {
     return SafeArea(
       minimum: const EdgeInsets.all(2.0),
       child: Scaffold(
-        appBar: AppBar(
-          title: Text('Google Maps (under dev)'),
-          centerTitle: true,
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Colors.white),
-            onPressed: () => Navigator.pop(context),
-          ),
-        ),
         drawer: SideBar(context: context),
         body: LocationScreen(),
       ),
@@ -59,7 +51,9 @@ class _MyAppState extends State<TheMap> {
   List<Marker> _allMarkers = <Marker>[];
   List<Marker> _displayMarkers = <Marker>[];
 
-  CameraPosition _cameraPosition = CameraPosition(
+  bool _selectedList = false;
+
+  final CameraPosition _initialCameraPosition = CameraPosition(
     target: LatLng(25.267878, 82.990494),
     zoom: 15,
     bearing: 0.0,
@@ -68,14 +62,14 @@ class _MyAppState extends State<TheMap> {
 
   moveCameraToMarker(Map coord) async {
     final GoogleMapController controller = await mapController.future;
-    _cameraPosition = CameraPosition(
+    final _camera = CameraPosition(
       target: LatLng(coord['LatLng'].latitude, coord['LatLng'].longitude),
       zoom: 18,
       tilt: 75,
       bearing: 45,
     );
     controller.animateCamera(
-      CameraUpdate.newCameraPosition(_cameraPosition),
+      CameraUpdate.newCameraPosition(_camera),
     );
   }
 
@@ -145,31 +139,172 @@ class _MyAppState extends State<TheMap> {
     });
   }
 
+  void _settingModalBottomSheet(context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext bc) {
+        return Container(
+          color: Colors.black26,
+          height: 60,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.all(3),
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.blue,
+                ),
+                child: InkWell(
+                  splashColor: Colors.brown,
+                  onTap: () {
+                    setState(() {
+                      _selectedList = true;
+
+                      _displayMarkers = _hostelMarkers;
+                    });
+                  },
+                  child: Text(
+                    'Hostels',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.all(3),
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.blue,
+                ),
+                child: InkWell(
+                  onTap: () {
+                    setState(() {
+                      _selectedList = true;
+
+                      _displayMarkers = _departmentMarkers;
+                    });
+                  },
+                  child: Text(
+                    'Departments',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  setState(() {
+                    _selectedList = true;
+
+                    _displayMarkers = _lectureHallMarkers;
+                  });
+                },
+                child: Container(
+                  margin: EdgeInsets.all(3),
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.blue,
+                  ),
+                  child: Text(
+                    'LTs',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  setState(() {
+                    _displayMarkers = _otherMarkers;
+                    _selectedList = true;
+                  });
+                },
+                child: Container(
+                  margin: EdgeInsets.all(3),
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.blue,
+                  ),
+                  child: Text(
+                    'Others',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   void dispose() {
     super.dispose();
   }
 
   @override
-  Widget build(BuildContext context) => Stack(
-        children: [
-          GoogleMap(
-            onMapCreated: _onMapCreated,
-            initialCameraPosition: CameraPosition(
-              target: const LatLng(25.267878, 82.990494),
-              zoom: 15,
-              bearing: 0.0,
-              tilt: 0.0,
-            ),
-            mapType: MapType.terrain,
-            mapToolbarEnabled: true,
-            markers: Set.from(_displayMarkers),
-            onTap: (tappedPosition) {
-              print(
-                  'lattitude : ${tappedPosition.latitude}      longitude: ${tappedPosition.longitude}');
-            },
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(
+          title: Text('Google Maps (under dev)'),
+          centerTitle: true,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () => Navigator.pop(context),
           ),
-        ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            _settingModalBottomSheet(context);
+          },
+          child: new Icon(Icons.add),
+        ),
+        body: Stack(
+          children: [
+            GoogleMap(
+              onMapCreated: _onMapCreated,
+              initialCameraPosition: _initialCameraPosition,
+              mapType: MapType.terrain,
+              mapToolbarEnabled: true,
+              markers: Set.from(_displayMarkers),
+              onTap: (tappedPosition) {
+                print(
+                    'lattitude : ${tappedPosition.latitude}      longitude: ${tappedPosition.longitude}');
+              },
+            ),
+            _selectedList
+                ? Positioned(
+                    right: 40,
+                    top: 25,
+                    child: InkWell(
+                      onTap: () async {
+                        setState(() {
+                          _selectedList = false;
+                          _displayMarkers = _allMarkers;
+                        });
+
+                        final GoogleMapController controller =
+                            await mapController.future;
+                        controller.animateCamera(CameraUpdate.newCameraPosition(
+                            _initialCameraPosition));
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            color: Colors.black),
+                        child: Text(
+                          'Clear X',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(),
+          ],
+        ),
       );
 }
 
