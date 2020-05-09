@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:math';
 
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:iit_app/screens/drawer.dart';
@@ -66,7 +68,7 @@ class _MyAppState extends State<TheMap> {
       target: LatLng(coord['LatLng'].latitude, coord['LatLng'].longitude),
       zoom: 18,
       tilt: 75,
-      bearing: 45,
+      bearing: Random().nextDouble() * 90,
     );
     controller.animateCamera(
       CameraUpdate.newCameraPosition(_camera),
@@ -259,8 +261,9 @@ class _MyAppState extends State<TheMap> {
           onPressed: () {
             _settingModalBottomSheet(context);
           },
-          child: new Icon(Icons.add),
+          child: Icon(Icons.add),
         ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         body: Stack(
           children: [
             GoogleMap(
@@ -276,8 +279,8 @@ class _MyAppState extends State<TheMap> {
             ),
             _selectedList
                 ? Positioned(
-                    right: 40,
-                    top: 25,
+                    right: 5,
+                    top: 5,
                     child: InkWell(
                       onTap: () async {
                         setState(() {
@@ -291,7 +294,7 @@ class _MyAppState extends State<TheMap> {
                             _initialCameraPosition));
                       },
                       child: Container(
-                        padding: EdgeInsets.all(20),
+                        padding: EdgeInsets.all(10),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(50),
                             color: Colors.black),
@@ -299,6 +302,60 @@ class _MyAppState extends State<TheMap> {
                           'Clear X',
                           style: TextStyle(color: Colors.white),
                         ),
+                      ),
+                    ),
+                  )
+                : Container(),
+            _selectedList
+                ? Positioned(
+                    top: 50,
+                    left: 25,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.black12,
+                        boxShadow: <BoxShadow>[
+                          BoxShadow(
+                            color: Colors.black54,
+                            blurRadius: 3,
+                            spreadRadius: 5,
+                          ),
+                        ],
+                      ),
+                      height: 50,
+                      width: MediaQuery.of(context).size.width - 50,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: _displayMarkers.length,
+                        itemBuilder: (context, index) {
+                          Marker _tappableMarker = _displayMarkers[index];
+                          return InkWell(
+                            onTap: () async {
+                              final GoogleMapController controller =
+                                  await mapController.future;
+                              controller.animateCamera(
+                                CameraUpdate.newCameraPosition(
+                                  CameraPosition(
+                                    target: _tappableMarker.position,
+                                    zoom: 18,
+                                    tilt: 75.0,
+                                    bearing: Random().nextDouble() * 90,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Container(
+                              margin: EdgeInsets.all(5),
+                              padding: EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: Colors.blue,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Text(_tappableMarker.infoWindow.title,
+                                  style: TextStyle(color: Colors.white)),
+                            ),
+                          );
+                        },
                       ),
                     ),
                   )
