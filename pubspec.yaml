@@ -35,10 +35,13 @@ dependencies:
   shared_preferences: ^0.5.6+3
   fab_circular_menu: ^1.0.0
   http: ^0.12.1
-  google_maps_flutter: 
   sliding_up_panel: ^1.0.2
   font_awesome_flutter:
   skeleton_text: ^1.0.0
+  carousel_slider: ^2.1.0
+
+  google_maps_flutter: 
+
 
 
 dev_dependencies:
