@@ -120,54 +120,44 @@ class _ClubPageState extends State<ClubPage>
   final space = SizedBox(height: 8.0);
 
   Widget _getBackground(context) {
-    return Stack(
-      children: [
-        Container(
-          color: Color(0xFF736AB7),
-          height: MediaQuery.of(context).size.height * 3 / 4,
-          /*decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(35.0),
-                      bottomRight: Radius.circular(35.0)),
-                  color: Color(0xFF736AB7)),*/
-        ),
-        clubMap == null
-            ? Container(
-                height: MediaQuery.of(context).size.height * 3 / 4,
-                child: Center(
-                  child: CircularProgressIndicator(),
-                ),
-              )
-            : Container(
-                child: _clubLargeLogoFile == null
-                    ? Image.network(clubMap.large_image_url,
-                        fit: BoxFit.cover, height: 300.0)
-                    : Image.file(_clubLargeLogoFile,
-                        fit: BoxFit.cover, height: 300.0),
-                constraints: new BoxConstraints.expand(height: 295.0),
-              ),
-        ClubAndCouncilWidgets.getGradient(),
-        _getClubCardAndDescription(context),
-        ClubAndCouncilWidgets.getToolbar(context),
-      ],
-    );
-  }
-
-  Container _getClubCardAndDescription(context) {
     final bottom = MediaQuery.of(context).viewInsets.bottom;
-    return new Container(
-      height: ClubAndCouncilWidgets.getMaxPanelHeight(context) * 0.97,
-      child: new ListView(
-        //reverse: true,
-        padding: new EdgeInsets.fromLTRB(0.0, 72.0, 0.0, 32.0),
-        children: <Widget>[
-          ClubAndCouncilWidgets.getClubCard(
-              title: widget.club.name,
-              subtitle: widget.club.council.name,
-              id: widget.club.id,
-              imageUrl: widget.club.large_image_url,
-              isCouncil: false,
-              context: context),
+    return Container(
+      color: Color(0xFF736AB7),
+      //height:MediaQuery.of(context).size.height * 0.90,
+      child: ListView(
+        shrinkWrap: true,
+        children: [
+          clubMap == null
+              ? Container(
+                  height: MediaQuery.of(context).size.height * 3 / 4,
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                )
+              : Stack(
+                  children: [
+                    Container(
+                      child: _clubLargeLogoFile == null
+                          ? Image.network(clubMap.large_image_url,
+                              fit: BoxFit.cover, height: 300.0)
+                          : Image.file(_clubLargeLogoFile,
+                              fit: BoxFit.cover, height: 300.0),
+                      constraints: new BoxConstraints.expand(height: 295.0),
+                    ),
+                    ClubAndCouncilWidgets.getGradient(),
+                    Container(
+                      padding: EdgeInsets.fromLTRB(0.0, 72.0, 0.0, 0.0),
+                      child: ClubAndCouncilWidgets.getClubCard(
+                          title: widget.club.name,
+                          subtitle: widget.club.council.name,
+                          id: widget.club.id,
+                          imageUrl: widget.club.large_image_url,
+                          isCouncil: false,
+                          context: context),
+                    ),
+                    ClubAndCouncilWidgets.getToolbar(context),
+                  ],
+                ),
           SizedBox(height: 8.0),
           Padding(
             padding: EdgeInsets.only(
@@ -175,6 +165,18 @@ class _ClubPageState extends State<ClubPage>
             ),
             child: Description(map: clubMap, isClub: true),
           ),
+          SizedBox(height: 15.0),
+          clubWorkshops == null
+              ? Container(
+                  height: ClubAndCouncilWidgets.getMinPanelHeight(context),
+                  child: Center(child: CircularProgressIndicator()))
+              : ClubAndCouncilWidgets.getSecies(context,
+                  secy: clubMap.secy, joint_secy: clubMap.joint_secy),
+          clubMap == null
+              ? Container()
+              : ClubAndCouncilWidgets.getSocialLinks(clubMap),
+          SizedBox(
+              height: 1.5 * ClubAndCouncilWidgets.getMinPanelHeight(context)),
         ],
       ),
     );
@@ -204,15 +206,6 @@ class _ClubPageState extends State<ClubPage>
           WorkshopTabs.getActiveAndPastTabBarForClub(
               clubWorkshops: clubWorkshops, tabController: _tabController),
           space,
-          clubWorkshops == null
-              ? Container(
-                  height: ClubAndCouncilWidgets.getMinPanelHeight(context),
-                  child: Center(child: CircularProgressIndicator()))
-              : ClubAndCouncilWidgets.getSecies(context,
-                  secy: clubMap.secy, joint_secy: clubMap.joint_secy),
-          clubMap == null
-              ? Container()
-              : ClubAndCouncilWidgets.getSocialLinks(clubMap),
         ],
       ),
     );

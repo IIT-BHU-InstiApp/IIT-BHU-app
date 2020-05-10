@@ -53,7 +53,10 @@ class _CouncilPageState extends State<CouncilPage> {
   final divide = Divider(height: 8.0, thickness: 2.0, color: Colors.blue);
 
   Widget _getBackground(context) {
+    final bottom = MediaQuery.of(context).viewInsets.bottom;
     return Container(
+      color: Color(0xFF736AB7),
+      height: MediaQuery.of(context).size.height * 0.90,
       child: councilData == null
           ? Container(
               height: MediaQuery.of(context).size.height * 3 / 4,
@@ -61,54 +64,50 @@ class _CouncilPageState extends State<CouncilPage> {
                 child: CircularProgressIndicator(),
               ),
             )
-          : Stack(
+          : ListView(
+              //physics: BouncingScrollPhysics(),
               children: [
-                Container(
-                  color: Color(0xFF736AB7),
-                  //height: MediaQuery.of(context).size.height,
-                  height: MediaQuery.of(context).size.height * 3 / 4,
-                  /*decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(35.0),
-                          bottomRight: Radius.circular(35.0)),
-                      color: Color(0xFF736AB7)),*/
+                Stack(
+                  children: [
+                    Container(
+                      child: _councilLargeLogoFile == null
+                          ? Image.network(councilData.large_image_url,
+                              fit: BoxFit.cover, height: 300.0)
+                          : Image.file(_councilLargeLogoFile,
+                              fit: BoxFit.cover, height: 300.0),
+                      constraints: new BoxConstraints.expand(height: 295.0),
+                    ),
+                    ClubAndCouncilWidgets.getGradient(),
+                    Container(
+                      padding: new EdgeInsets.fromLTRB(0.0, 72.0, 0.0, 0.0),
+                      child: ClubAndCouncilWidgets.getClubCard(
+                          title: councilData.name,
+                          id: councilData.id,
+                          imageUrl: councilData.large_image_url,
+                          isCouncil: true,
+                          context: context),
+                    ),
+                    ClubAndCouncilWidgets.getToolbar(context),
+                  ],
                 ),
-                Container(
-                  child: _councilLargeLogoFile == null
-                      ? Image.network(councilData.large_image_url,
-                          fit: BoxFit.cover, height: 300.0)
-                      : Image.file(_councilLargeLogoFile,
-                          fit: BoxFit.cover, height: 300.0),
-                  constraints: new BoxConstraints.expand(height: 295.0),
+                SizedBox(height: 8.0),
+                Padding(
+                  padding: EdgeInsets.only(bottom: bottom),
+                  child: Description(map: councilData, isCouncil: true),
                 ),
-                ClubAndCouncilWidgets.getGradient(),
-                _getDescription(context),
-                ClubAndCouncilWidgets.getToolbar(context),
+                SizedBox(height: 15.0),
+                ClubAndCouncilWidgets.getSecies(context,
+                    secy: councilData.gensec,
+                    joint_secy: councilData.joint_gensec),
+                //SizedBox(height: 15.0),
+                councilData == null
+                    ? Container()
+                    : ClubAndCouncilWidgets.getSocialLinks(councilData),
+                SizedBox(
+                    height:
+                        1.5 * ClubAndCouncilWidgets.getMinPanelHeight(context)),
               ],
             ),
-    );
-  }
-
-  Container _getDescription(context) {
-    final bottom = MediaQuery.of(context).viewInsets.bottom;
-    return new Container(
-      height: ClubAndCouncilWidgets.getMaxPanelHeight(context) * 0.97,
-      child: new ListView(
-        padding: new EdgeInsets.fromLTRB(0.0, 72.0, 0.0, 32.0),
-        children: <Widget>[
-          ClubAndCouncilWidgets.getClubCard(
-              title: councilData.name,
-              id: councilData.id,
-              imageUrl: councilData.large_image_url,
-              isCouncil: true,
-              context: context),
-          SizedBox(height: 8.0),
-          Padding(
-            padding: EdgeInsets.only(bottom: bottom),
-            child: Description(map: councilData, isCouncil: true),
-          )
-        ],
-      ),
     );
   }
 
@@ -174,16 +173,6 @@ class _CouncilPageState extends State<CouncilPage> {
             ),
           ),
           _getClubs(),
-          councilData == null
-              ? Container(
-                  height: ClubAndCouncilWidgets.getMinPanelHeight(context),
-                  child: Center(child: CircularProgressIndicator()))
-              : ClubAndCouncilWidgets.getSecies(context,
-                  secy: councilData.gensec,
-                  joint_secy: councilData.joint_gensec),
-          councilData == null
-              ? Container()
-              : ClubAndCouncilWidgets.getSocialLinks(councilData),
         ],
       ),
     );
@@ -200,8 +189,8 @@ class _CouncilPageState extends State<CouncilPage> {
     return SafeArea(
       minimum: const EdgeInsets.all(2.0),
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        resizeToAvoidBottomPadding: false,
+        //resizeToAvoidBottomInset: false,
+        //resizeToAvoidBottomPadding: false,
         backgroundColor: Color(0xFF736AB7),
         body: RefreshIndicator(
           onRefresh: () async {
