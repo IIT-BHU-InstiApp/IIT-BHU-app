@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
+import 'package:iit_app/model/colorConstants.dart';
 import 'package:iit_app/screens/drawer.dart';
 import 'package:iit_app/screens/home/home.dart';
 import 'package:iit_app/ui/colorPicker.dart';
@@ -13,6 +14,10 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   bool _refreshing = false;
+
+  ValueNotifier<Color> _colorListener;
+  ColorPicker _colorPicker;
+
 // TODO: Display a pop up to ask user for confirmation
   onResetDatabase() async {
     setState(() {
@@ -26,39 +31,84 @@ class _SettingsScreenState extends State<SettingsScreen> {
     // });
   }
 
+  setColor(color) {
+    ColorConstants.settingBackground = color;
+  }
+
+  @override
+  void initState() {
+    this._colorListener = ValueNotifier(ColorConstants.settingBackground);
+    this._colorPicker = ColorPicker(_colorListener);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       minimum: const EdgeInsets.all(2.0),
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text("Settings"),
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Colors.white),
-            onPressed: () => Navigator.pop(context),
-          ),
-        ),
-        drawer: SideBar(context: context),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Container(
-              child: Center(
-                child: this._refreshing
-                    ? CircularProgressIndicator()
-                    : RaisedButton(
-                        onPressed: onResetDatabase, child: Text("Reset Data")),
+      child: ValueListenableBuilder(
+        valueListenable: _colorListener,
+        builder: (bc, currentColor, child) {
+          setColor(currentColor);
+          return Scaffold(
+            backgroundColor: ColorConstants.settingBackground,
+            appBar: AppBar(
+              backgroundColor: _colorListener.value,
+              title: Text("Settings"),
+              leading: IconButton(
+                icon: Icon(Icons.arrow_back, color: Colors.black),
+                onPressed: () => Navigator.pop(context),
               ),
             ),
-            Container(
-              margin: EdgeInsets.all(20),
-              child: RaisedButton(
-                  onPressed: () => Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => ColorPicker())),
-                  child: Text('Pick Color for theme')),
+            drawer: SideBar(context: context),
+            body: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  child: Center(
+                    child: this._refreshing
+                        ? CircularProgressIndicator()
+                        : RaisedButton(
+                            onPressed: onResetDatabase,
+                            child: Text("Reset Saved Data")),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.all(20),
+                  child: RaisedButton(
+                      onPressed: () =>
+                          _colorPicker.getColorPickerDialogBox(context),
+                      child: Text('Pick Color for theme')),
+                ),
+                Container(
+                  child: Center(
+                    child: RaisedButton(
+                        onPressed: () {
+                          setState(() {
+                            AppConstants.chooseColorPaletEnabled = true;
+                          });
+                        },
+                        child: AppConstants.chooseColorPaletEnabled == true
+                            ? Text("Disable Color Customization")
+                            : Text("Enable Color Customization")),
+                  ),
+                ),
+                Container(
+                  child: Center(
+                    child: RaisedButton(
+                        onPressed: () {
+                          setState(() {
+                            AppConstants.chooseColorPaletEnabled = false;
+                            ColorConstants.resetToDefault();
+                          });
+                        },
+                        child: Text("Reset Colors to Default")),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

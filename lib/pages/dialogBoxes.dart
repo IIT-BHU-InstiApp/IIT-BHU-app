@@ -18,7 +18,7 @@ class CreatePageDialogBoxes {
               : Text("Workshop succesfully created!"),
           actions: <Widget>[
             FlatButton(
-              child: new Text("yay"),
+              child: Text("yay"),
               onPressed: () {
                 Navigator.pop(context);
                 Navigator.pop(context);
@@ -45,10 +45,10 @@ class CreatePageDialogBoxes {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text("UnSuccessful :("),
-          content: new Text("Please try again"),
+          content: Text("Please try again"),
           actions: <Widget>[
             FlatButton(
-              child: new Text("Ok"),
+              child: Text("Ok"),
               onPressed: () {
                 Navigator.pop(context);
               },
@@ -70,16 +70,16 @@ class CreatePageDialogBoxes {
           title: isEditing ? Text("Edit workshop") : Text("Create workshop"),
           content: isEditing
               ? Text("Are you sure to edit this workshop?")
-              : Text("Are you sure to create this new workshop?"),
+              : Text("Are you sure to create this  workshop?"),
           actions: <Widget>[
             FlatButton(
-              child: new Text("Yup!"),
+              child: Text("Yup!"),
               onPressed: () {
                 Navigator.of(context).pop(true);
               },
             ),
             FlatButton(
-              child: new Text("nope, let me rethink.."),
+              child: Text("nope, let me rethink.."),
               onPressed: () {
                 Navigator.of(context).pop(false);
                 return false;

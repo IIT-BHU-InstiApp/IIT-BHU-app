@@ -24,7 +24,8 @@ class AppConstants {
 
   static bool logInButtonEnabled = true;
   static bool firstTimeFetching = true;
-  static bool refreshingHomePage = false;
+
+  static bool chooseColorPaletEnabled = false;
 
   static String deviceDirectoryPathImages;
 
