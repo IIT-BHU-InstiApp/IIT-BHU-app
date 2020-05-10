@@ -88,7 +88,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             AppConstants.chooseColorPaletEnabled = true;
                           });
                         },
-                        child: Text("Enable Color Customization")),
+                        child: AppConstants.chooseColorPaletEnabled == true
+                            ? Text("Disable Color Customization")
+                            : Text("Enable Color Customization")),
                   ),
                 ),
                 Container(
