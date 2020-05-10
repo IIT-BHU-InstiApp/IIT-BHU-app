@@ -92,12 +92,10 @@ class ClubAndCouncilWidgets {
 
   static Container getSecies(BuildContext context, {secy, joint_secy}) {
     return Container(
-      //color: Colors.grey[300],
       margin: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10.0),
-        color: Colors.grey[300],
-        //color:Color(0xFF333366),
+        color: ColorConstants.porHolderBackground,
       ),
       child: Column(
         children: [

@@ -256,7 +256,7 @@ class HomeWidgets {
                         height: 110.0,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10.0),
-                          color: Colors.grey[300],
+                          color: ColorConstants.shimmerSkeletonColor,
                         ),
                       ),
                     ),
@@ -276,7 +276,7 @@ class HomeWidgets {
                               width: MediaQuery.of(context).size.width * 0.5,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10.0),
-                                  color: Colors.grey[300]),
+                                  color: ColorConstants.shimmerSkeletonColor),
                             ),
                           ),
                         ),
@@ -289,7 +289,7 @@ class HomeWidgets {
                               height: 20.0,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10.0),
-                                  color: Colors.grey[300]),
+                                  color: ColorConstants.shimmerSkeletonColor),
                             ),
                           ),
                         ),
@@ -302,7 +302,7 @@ class HomeWidgets {
                               height: 20.0,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10.0),
-                                  color: Colors.grey[300]),
+                                  color: ColorConstants.shimmerSkeletonColor),
                             ),
                           ),
                         ),

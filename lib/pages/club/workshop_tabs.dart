@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/built_post.dart';
+import 'package:iit_app/model/colorConstants.dart';
 import 'package:iit_app/screens/home/home_widgets.dart';
 
 class WorkshopTabs {
@@ -27,9 +28,9 @@ class WorkshopTabs {
       @required TabController tabController}) {
     return Container(
       margin: EdgeInsets.fromLTRB(12, 10, 12, 0),
-      decoration: new BoxDecoration(
-          color: Color(0xFF736AB7),
-          borderRadius: new BorderRadius.all(Radius.circular(20.0))),
+      decoration: BoxDecoration(
+          color: ColorConstants.workshopContainerBackground,
+          borderRadius: BorderRadius.all(Radius.circular(20.0))),
       height: 300,
       child: Column(
         children: [
@@ -39,8 +40,8 @@ class WorkshopTabs {
             unselectedLabelColor: Colors.white70,
             labelColor: Colors.black,
             tabs: [
-              new Tab(text: 'Active Workshops'),
-              new Tab(text: 'Past Workshops'),
+              Tab(text: 'Active Workshops'),
+              Tab(text: 'Past Workshops'),
             ],
             controller: tabController,
           ),

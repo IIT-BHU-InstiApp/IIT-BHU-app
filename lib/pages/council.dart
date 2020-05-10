@@ -56,7 +56,7 @@ class _CouncilPageState extends State<CouncilPage> {
   Widget _getBackground(context) {
     final bottom = MediaQuery.of(context).viewInsets.bottom;
     return Container(
-      color: Color(0xFF736AB7),
+      color: ColorConstants.workshopContainerBackground,
       height: MediaQuery.of(context).size.height * 0.90,
       child: councilData == null
           ? Container(
@@ -76,11 +76,11 @@ class _CouncilPageState extends State<CouncilPage> {
                               fit: BoxFit.cover, height: 300.0)
                           : Image.file(_councilLargeLogoFile,
                               fit: BoxFit.cover, height: 300.0),
-                      constraints: new BoxConstraints.expand(height: 295.0),
+                      constraints: BoxConstraints.expand(height: 295.0),
                     ),
                     ClubAndCouncilWidgets.getGradient(),
                     Container(
-                      padding: new EdgeInsets.fromLTRB(0.0, 72.0, 0.0, 0.0),
+                      padding: EdgeInsets.fromLTRB(0.0, 72.0, 0.0, 0.0),
                       child: ClubAndCouncilWidgets.getClubCard(
                           title: councilData.name,
                           id: councilData.id,
@@ -121,7 +121,6 @@ class _CouncilPageState extends State<CouncilPage> {
             ),
           )
         : Container(
-            color: Colors.white,
             child: ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -144,7 +143,10 @@ class _CouncilPageState extends State<CouncilPage> {
 
   Widget _getPanel({ScrollController sc}) {
     return Container(
-      //padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
+      decoration: BoxDecoration(
+        borderRadius: radius,
+        color: ColorConstants.panelColor,
+      ),
       padding: EdgeInsets.only(top: 20.0),
       child: ListView(
         controller: sc,
@@ -153,13 +155,11 @@ class _CouncilPageState extends State<CouncilPage> {
         children: <Widget>[
           space,
           Container(
-            color: Colors.white,
             //margin: EdgeInsets.all(8.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Container(
-                  color: Colors.white,
                   padding: EdgeInsets.all(5.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

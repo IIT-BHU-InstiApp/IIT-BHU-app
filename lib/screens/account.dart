@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
+import 'package:iit_app/model/colorConstants.dart';
 import 'package:iit_app/pages/club_council_common/club_&_council_widgets.dart';
 import 'package:iit_app/screens/drawer.dart';
 
@@ -117,6 +118,7 @@ class _AccountScreenState extends State<AccountScreen> {
       child: SafeArea(
         minimum: const EdgeInsets.all(2.0),
         child: Scaffold(
+          backgroundColor: ColorConstants.accountScreenBackground,
           appBar: AppBar(
             backgroundColor: Colors.transparent,
             elevation: 0.0,
@@ -261,7 +263,6 @@ class _AccountScreenState extends State<AccountScreen> {
                                 ? Text(
                                     'You haven\'t subscribed to any channels yet!')
                                 : Container(
-                                    // color: Color(0xFF736AB7),
                                     child: ListView.builder(
                                       shrinkWrap: true,
                                       physics:
@@ -305,7 +306,6 @@ class _AccountScreenState extends State<AccountScreen> {
                                     fontWeight: FontWeight.w600),
                               ),
                         Container(
-                          // color: Color(0xFF736AB7),
                           child: ListView.builder(
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
