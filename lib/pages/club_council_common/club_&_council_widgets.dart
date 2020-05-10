@@ -182,6 +182,7 @@ class ClubAndCouncilWidgets {
           name: name,
           imageUrl: imageUrl,
           email: email,
+          phone: phone,
         );
       },
       child: Column(
@@ -342,7 +343,7 @@ class ClubAndCouncilWidgets {
           String name,
           String imageUrl,
           String email,
-          String phone = 'No Phone'}) =>
+          String phone}) =>
       showDialog(
         context: context,
         barrierDismissible: true,
@@ -381,6 +382,9 @@ class ClubAndCouncilWidgets {
                       ),
                       SizedBox(height: 10.0),
                       ListTile(
+                        onTap: () {
+                          launch("mailto:$email");
+                        },
                         leading: Icon(
                           Icons.email,
                           color: dialogColor,
@@ -393,12 +397,15 @@ class ClubAndCouncilWidgets {
                         ),
                       ),
                       ListTile(
+                        onTap: () {
+                          if (phone != '') launch("tel:$phone");
+                        },
                         leading: Icon(
                           Icons.phone,
                           color: dialogColor,
                         ),
                         title: Text(
-                          phone,
+                          phone == '' ? 'No Phone' : phone,
                           style: TextStyle(
                             color: dialogColor,
                           ),
