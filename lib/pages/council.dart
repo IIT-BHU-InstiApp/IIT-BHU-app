@@ -5,6 +5,7 @@ import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/colorConstants.dart';
 import 'package:iit_app/pages/club_council_common/club_&_council_widgets.dart';
 import 'package:iit_app/pages/club_council_common/description.dart';
+import 'package:iit_app/ui/colorPicker.dart';
 import 'package:iit_app/ui/text_style.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
@@ -16,8 +17,139 @@ class CouncilPage extends StatefulWidget {
 class _CouncilPageState extends State<CouncilPage> {
   BuiltCouncilPost councilData;
   File _councilLargeLogoFile;
+
+  ValueNotifier<Color> _colorListener;
+  ColorPicker _colorPicker;
+
+  bool _mainBg = false,
+      _cardBg = false,
+      _bodyBg = false,
+      _panelBg = false,
+      _porBg = false;
+
+  setColorPalleteOff() {
+    _mainBg = false;
+    _cardBg = false;
+    _bodyBg = false;
+    _panelBg = false;
+    _porBg = false;
+  }
+
+  Widget _colorSelectOptionRow(context) {
+    return Container(
+      height: 45,
+      color: Colors.white,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        children: [
+          Container(
+            color: Colors.blue[100],
+            padding: EdgeInsets.all(5),
+            margin: EdgeInsets.all(5),
+            child: InkWell(
+              onTap: () {
+                setColorPalleteOff();
+                _mainBg = true;
+                _colorListener.value = ColorConstants.backgroundThemeColor;
+                return _colorPicker.getColorPickerDialogBox(context);
+              },
+              child: Text('main bg'),
+            ),
+          ),
+          Container(
+            color: Colors.blue[100],
+            padding: EdgeInsets.all(5),
+            margin: EdgeInsets.all(5),
+            child: InkWell(
+              onTap: () {
+                setColorPalleteOff();
+                _cardBg = true;
+                _colorListener.value = ColorConstants.workshopCardContainer;
+                return _colorPicker.getColorPickerDialogBox(context);
+              },
+              child: Text('card bg'),
+            ),
+          ),
+          Container(
+            color: Colors.blue[100],
+            padding: EdgeInsets.all(5),
+            margin: EdgeInsets.all(5),
+            child: InkWell(
+              onTap: () {
+                setColorPalleteOff();
+                _bodyBg = true;
+                _colorListener.value =
+                    ColorConstants.workshopContainerBackground;
+                return _colorPicker.getColorPickerDialogBox(context);
+              },
+              child: Text('body bg'),
+            ),
+          ),
+          Container(
+            color: Colors.blue[100],
+            padding: EdgeInsets.all(5),
+            margin: EdgeInsets.all(5),
+            child: InkWell(
+              onTap: () {
+                setColorPalleteOff();
+                _panelBg = true;
+                _colorListener.value = ColorConstants.panelColor;
+                return _colorPicker.getColorPickerDialogBox(context);
+              },
+              child: Text('panel bg'),
+            ),
+          ),
+          Container(
+            color: Colors.blue[100],
+            padding: EdgeInsets.all(5),
+            margin: EdgeInsets.all(5),
+            child: InkWell(
+              onTap: () {
+                setColorPalleteOff();
+                _porBg = true;
+                _colorListener.value = ColorConstants.porHolderBackground;
+                return _colorPicker.getColorPickerDialogBox(context);
+              },
+              child: Text('por bg'),
+            ),
+          ),
+          Container(
+            color: Colors.red[100],
+            padding: EdgeInsets.all(5),
+            margin: EdgeInsets.all(5),
+            child: InkWell(
+              onTap: () {
+                setColorPalleteOff();
+                AppConstants.chooseColorPaletEnabled = false;
+                _colorListener.value = Colors.white;
+              },
+              child: Text('Clear  X'),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  setColor() {
+    if (_mainBg) {
+      ColorConstants.backgroundThemeColor = _colorListener.value;
+    } else if (_cardBg) {
+      ColorConstants.workshopCardContainer = _colorListener.value;
+    } else if (_bodyBg) {
+      ColorConstants.workshopContainerBackground = _colorListener.value;
+    } else if (_panelBg) {
+      ColorConstants.panelColor = _colorListener.value;
+    } else if (_porBg) {
+      ColorConstants.porHolderBackground = _colorListener.value;
+    }
+  }
+
   @override
   void initState() {
+    this._colorListener = ValueNotifier(Colors.white);
+    this._colorPicker = ColorPicker(this._colorListener);
+
     fetchCouncilById();
     super.initState();
   }
@@ -189,42 +321,57 @@ class _CouncilPageState extends State<CouncilPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       minimum: const EdgeInsets.all(2.0),
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        resizeToAvoidBottomPadding: false,
-        backgroundColor: ColorConstants.backgroundThemeColor,
-        body: RefreshIndicator(
-          onRefresh: () async {
-            if (councilData != null) {
-              councilData = await AppConstants.refreshCouncilInDatabase(
-                  councilId: councilData.id);
-            }
-            setState(() {});
-          },
-          child: SlidingUpPanel(
-            parallaxEnabled: true,
-            body: _getBackground(context),
-            controller: _pc,
-            borderRadius: radius,
-            collapsed: Container(
-              decoration: BoxDecoration(
-                borderRadius: radius,
+      child: ValueListenableBuilder(
+          valueListenable: _colorListener,
+          builder: (context, color, child) {
+            setColor();
+
+            return Scaffold(
+              resizeToAvoidBottomInset: false,
+              resizeToAvoidBottomPadding: false,
+              backgroundColor: ColorConstants.backgroundThemeColor,
+              body: RefreshIndicator(
+                onRefresh: () async {
+                  if (councilData != null) {
+                    councilData = await AppConstants.refreshCouncilInDatabase(
+                        councilId: councilData.id);
+                  }
+                  setState(() {});
+                },
+                child: Stack(
+                  children: [
+                    SlidingUpPanel(
+                      parallaxEnabled: true,
+                      body: _getBackground(context),
+                      controller: _pc,
+                      borderRadius: radius,
+                      collapsed: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: radius,
+                        ),
+                      ),
+                      backdropEnabled: true,
+                      panelBuilder: (ScrollController sc) => _getPanel(sc: sc),
+                      /*panel: Dismissible(
+                      key: Key('clubs'),
+                      direction: DismissDirection.down,
+                      onDismissed: (_) => _pc.close(),
+                      child: _getPanel(),
+                    ),*/
+                      minHeight:
+                          ClubAndCouncilWidgets.getMinPanelHeight(context),
+                      maxHeight:
+                          ClubAndCouncilWidgets.getMaxPanelHeight(context),
+                      header: ClubAndCouncilWidgets.getHeader(context),
+                    ),
+                    AppConstants.chooseColorPaletEnabled
+                        ? _colorSelectOptionRow(context)
+                        : Container()
+                  ],
+                ),
               ),
-            ),
-            backdropEnabled: true,
-            panelBuilder: (ScrollController sc) => _getPanel(sc: sc),
-            /*panel: Dismissible(
-                  key: Key('clubs'),
-                  direction: DismissDirection.down,
-                  onDismissed: (_) => _pc.close(),
-                  child: _getPanel(),
-                ),*/
-            minHeight: ClubAndCouncilWidgets.getMinPanelHeight(context),
-            maxHeight: ClubAndCouncilWidgets.getMaxPanelHeight(context),
-            header: ClubAndCouncilWidgets.getHeader(context),
-          ),
-        ),
-      ),
+            );
+          }),
     );
   }
 }

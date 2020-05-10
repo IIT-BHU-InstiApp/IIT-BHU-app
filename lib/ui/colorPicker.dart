@@ -1,31 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:iit_app/external_libraries/circle_color_picker.dart';
 
-class ColorPicker extends StatefulWidget {
-  @override
-  _ColorPickerState createState() => _ColorPickerState();
-}
+class ColorPicker {
+  final ValueNotifier<Color> colorListener;
 
-// TODO: USE this class to set colors for background and text
+  ColorPicker(this.colorListener);
 
-class _ColorPickerState extends State<ColorPicker> {
-  Color _currentColor = Colors.blue;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: _currentColor,
-        title: const Text('Circle color picker sample'),
-      ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: CircleColorPicker(
-            initialColor: _currentColor,
-            onChanged: _onColorChanged,
+  getColorPickerDialogBox(context) {
+    return showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) => AlertDialog(
+        actions: <Widget>[
+          CircleColorPicker(
+            initialColor: colorListener.value,
+            onChanged: (color) {
+              colorListener.value = color;
+            },
             colorCodeBuilder: (context, color) {
               return Text(
-                'rgb(${color.red}, ${color.green}, ${color.blue})',
+                color.toString(),
                 style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
@@ -34,12 +28,8 @@ class _ColorPickerState extends State<ColorPicker> {
               );
             },
           ),
-        ),
+        ],
       ),
     );
-  }
-
-  void _onColorChanged(Color color) {
-    setState(() => _currentColor = color);
   }
 }
