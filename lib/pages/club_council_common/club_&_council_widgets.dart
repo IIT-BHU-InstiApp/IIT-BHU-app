@@ -32,8 +32,13 @@ class ClubAndCouncilWidgets {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           IconButton(
-              icon: Icon(icon, color: color), onPressed: () => _launchURL(url)),
-          Container(
+              icon: Icon(
+                icon,
+                color: color,
+                size: 25.0,
+              ),
+              onPressed: () => _launchURL(url)),
+          /*Container(
             margin: const EdgeInsets.only(top: 8),
             child: Text(
               label,
@@ -43,17 +48,17 @@ class ClubAndCouncilWidgets {
                 color: color,
               ),
             ),
-          ),
+          ),*/
         ],
       );
     }
 
     return Container(
       height: 100,
-      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-      decoration: BoxDecoration(
+      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      /*decoration: BoxDecoration(
           color: Color(0xFF736AB7),
-          borderRadius: BorderRadius.all(Radius.circular(10))),
+          borderRadius: BorderRadius.all(Radius.circular(10))),*/
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
@@ -87,7 +92,13 @@ class ClubAndCouncilWidgets {
 
   static Container getSecies(BuildContext context, {secy, joint_secy}) {
     return Container(
-      color: Colors.grey[300],
+      //color: Colors.grey[300],
+      margin: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10.0),
+        color: Colors.grey[300],
+        //color:Color(0xFF333366),
+      ),
       child: Column(
         children: [
           Center(child: Text('Secys:', style: Style.headingStyle)),
@@ -101,6 +112,7 @@ class ClubAndCouncilWidgets {
                       desg: 'Joint-Secy',
                       name: joint_secy[0].name,
                       email: joint_secy[0].email,
+                      phone: joint_secy[0].phone_number,
                     )
                   : SizedBox(width: 1),
               secy == null
@@ -111,6 +123,7 @@ class ClubAndCouncilWidgets {
                       desg: 'Secy',
                       name: secy.name,
                       email: secy.email,
+                      phone: secy.phone_number,
                     ),
               joint_secy.length > 1
                   ? ClubAndCouncilWidgets.getPosHolder(
@@ -119,14 +132,12 @@ class ClubAndCouncilWidgets {
                       desg: 'Joint Secy',
                       name: joint_secy[1].name,
                       email: joint_secy[1].email,
+                      phone: joint_secy[1].phone_number,
                     )
                   : SizedBox(width: 1),
             ],
           ),
-          Container(
-            color: Colors.grey[300],
-            height: 25.0,
-          )
+          SizedBox(height: 15.0),
         ],
       ),
     );
@@ -331,7 +342,7 @@ class ClubAndCouncilWidgets {
           String name,
           String imageUrl,
           String email,
-          String phone}) =>
+          String phone = 'No Phone'}) =>
       showDialog(
         context: context,
         barrierDismissible: true,
@@ -387,8 +398,7 @@ class ClubAndCouncilWidgets {
                           color: dialogColor,
                         ),
                         title: Text(
-                          //phone,
-                          'No Phone',
+                          phone,
                           style: TextStyle(
                             color: dialogColor,
                           ),
