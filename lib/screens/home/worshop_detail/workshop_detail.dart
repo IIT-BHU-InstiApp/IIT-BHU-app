@@ -9,6 +9,7 @@ import 'package:iit_app/pages/club/club.dart';
 import 'package:iit_app/pages/club_council_common/club_&_council_widgets.dart';
 import 'package:iit_app/pages/create.dart';
 import 'package:iit_app/screens/home/home_widgets.dart';
+import 'package:iit_app/ui/colorPicker.dart';
 import 'package:iit_app/ui/separator.dart';
 import 'package:iit_app/ui/text_style.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -26,8 +27,157 @@ class WorkshopDetailPage extends StatefulWidget {
 class _WorkshopDetailPage extends State<WorkshopDetailPage> {
   BuiltWorkshopDetailPost _workshop;
   int is_interested;
+
+  ValueNotifier<Color> _colorListener;
+  ColorPicker _colorPicker;
+
+  bool _mainBg = false,
+      _cardBg = false,
+      _bodyBg = false,
+      _panelBg = false,
+      _porBg = false,
+      _headingColor = false;
+
+  setColorPalleteOff() {
+    _mainBg = false;
+    _cardBg = false;
+    _bodyBg = false;
+    _panelBg = false;
+    _porBg = false;
+    _headingColor = false;
+  }
+
+  Widget _colorSelectOptionRow(context) {
+    return Container(
+      height: 45,
+      color: Colors.white,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        children: [
+          Container(
+            color: Colors.blue[100],
+            padding: EdgeInsets.all(5),
+            margin: EdgeInsets.all(5),
+            child: InkWell(
+              onTap: () {
+                setColorPalleteOff();
+                _mainBg = true;
+                _colorListener.value = ColorConstants.backgroundThemeColor;
+                return _colorPicker.getColorPickerDialogBox(context);
+              },
+              child: Text('main bg'),
+            ),
+          ),
+          Container(
+            color: Colors.blue[100],
+            padding: EdgeInsets.all(5),
+            margin: EdgeInsets.all(5),
+            child: InkWell(
+              onTap: () {
+                setColorPalleteOff();
+                _cardBg = true;
+                _colorListener.value = ColorConstants.workshopCardContainer;
+                return _colorPicker.getColorPickerDialogBox(context);
+              },
+              child: Text('card bg'),
+            ),
+          ),
+          Container(
+            color: Colors.blue[100],
+            padding: EdgeInsets.all(5),
+            margin: EdgeInsets.all(5),
+            child: InkWell(
+              onTap: () {
+                setColorPalleteOff();
+                _bodyBg = true;
+                _colorListener.value =
+                    ColorConstants.workshopContainerBackground;
+                return _colorPicker.getColorPickerDialogBox(context);
+              },
+              child: Text('body bg'),
+            ),
+          ),
+          Container(
+            color: Colors.blue[100],
+            padding: EdgeInsets.all(5),
+            margin: EdgeInsets.all(5),
+            child: InkWell(
+              onTap: () {
+                setColorPalleteOff();
+                _panelBg = true;
+                _colorListener.value = ColorConstants.panelColor;
+                return _colorPicker.getColorPickerDialogBox(context);
+              },
+              child: Text('panel bg'),
+            ),
+          ),
+          Container(
+            color: Colors.blue[100],
+            padding: EdgeInsets.all(5),
+            margin: EdgeInsets.all(5),
+            child: InkWell(
+              onTap: () {
+                setColorPalleteOff();
+                _porBg = true;
+                _colorListener.value = ColorConstants.porHolderBackground;
+                return _colorPicker.getColorPickerDialogBox(context);
+              },
+              child: Text('por bg'),
+            ),
+          ),
+          Container(
+            color: Colors.blue[100],
+            padding: EdgeInsets.all(5),
+            margin: EdgeInsets.all(5),
+            child: InkWell(
+              onTap: () {
+                setColorPalleteOff();
+                _headingColor = true;
+                _colorListener.value = ColorConstants.headingColor;
+                return _colorPicker.getColorPickerDialogBox(context);
+              },
+              child: Text('panel headings'),
+            ),
+          ),
+          Container(
+            color: Colors.red[100],
+            padding: EdgeInsets.all(5),
+            margin: EdgeInsets.all(5),
+            child: InkWell(
+              onTap: () {
+                setColorPalleteOff();
+                AppConstants.chooseColorPaletEnabled = false;
+                _colorListener.value = Colors.white;
+              },
+              child: Text('Clear  X'),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  setColor() {
+    if (_mainBg) {
+      ColorConstants.backgroundThemeColor = _colorListener.value;
+    } else if (_cardBg) {
+      ColorConstants.workshopCardContainer = _colorListener.value;
+    } else if (_bodyBg) {
+      ColorConstants.workshopContainerBackground = _colorListener.value;
+    } else if (_panelBg) {
+      ColorConstants.panelColor = _colorListener.value;
+    } else if (_porBg) {
+      ColorConstants.porHolderBackground = _colorListener.value;
+    } else if (_headingColor) {
+      ColorConstants.headingColor = _colorListener.value;
+    }
+  }
+
   @override
   void initState() {
+    this._colorListener = ValueNotifier(Colors.white);
+    this._colorPicker = ColorPicker(this._colorListener);
+
     fetchWorkshopDetails();
     super.initState();
   }
@@ -414,7 +564,7 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
               : Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10.0),
-                    color: Colors.grey[300],
+                    color: ColorConstants.porHolderBackground,
                   ),
                   //color:Colors.grey[300],
                   padding: EdgeInsets.only(
@@ -472,23 +622,37 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       minimum: const EdgeInsets.all(2.0),
-      child: Scaffold(
-          backgroundColor: ColorConstants.backgroundThemeColor,
-          body: SlidingUpPanel(
-            body: _getBody(context),
-            borderRadius: radius,
-            backdropEnabled: true,
-            parallaxEnabled: true,
-            collapsed: Container(
-              decoration: BoxDecoration(
-                borderRadius: radius,
+      child: ValueListenableBuilder(
+          valueListenable: _colorListener,
+          builder: (context, color, child) {
+            setColor();
+
+            return Scaffold(
+              backgroundColor: ColorConstants.backgroundThemeColor,
+              body: Stack(
+                children: [
+                  SlidingUpPanel(
+                    body: _getBody(context),
+                    borderRadius: radius,
+                    backdropEnabled: true,
+                    parallaxEnabled: true,
+                    collapsed: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: radius,
+                      ),
+                    ),
+                    minHeight: MediaQuery.of(context).size.height / 4 - 20.0,
+                    maxHeight: MediaQuery.of(context).size.height - 20.0,
+                    header: WorkshopDetailWidgets.getPanelHeader(context),
+                    panelBuilder: (ScrollController sc) => _getPanel(sc: sc),
+                  ),
+                  AppConstants.chooseColorPaletEnabled
+                      ? _colorSelectOptionRow(context)
+                      : Container()
+                ],
               ),
-            ),
-            minHeight: MediaQuery.of(context).size.height / 4 - 20.0,
-            maxHeight: MediaQuery.of(context).size.height - 20.0,
-            header: WorkshopDetailWidgets.getPanelHeader(context),
-            panelBuilder: (ScrollController sc) => _getPanel(sc: sc),
-          )),
+            );
+          }),
     );
   }
 }
