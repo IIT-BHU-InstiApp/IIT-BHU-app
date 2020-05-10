@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
+import 'package:iit_app/model/colorConstants.dart';
 import 'package:iit_app/pages/club_council_common/club_&_council_widgets.dart';
 import 'package:iit_app/pages/club_council_common/description.dart';
 import 'package:iit_app/ui/text_style.dart';
@@ -191,7 +192,7 @@ class _CouncilPageState extends State<CouncilPage> {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         resizeToAvoidBottomPadding: false,
-        backgroundColor: Color(0xFF736AB7),
+        backgroundColor: ColorConstants.backgroundThemeColor,
         body: RefreshIndicator(
           onRefresh: () async {
             if (councilData != null) {

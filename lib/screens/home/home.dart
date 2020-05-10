@@ -1,6 +1,7 @@
 import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
+import 'package:iit_app/model/colorConstants.dart';
 import 'package:iit_app/screens/home/app_bar.dart';
 import 'package:iit_app/screens/home/floating_action_button.dart';
 import 'package:iit_app/screens/home/home_widgets.dart';
@@ -49,16 +50,6 @@ class _HomeScreenState extends State<HomeScreen>
     setState(() {});
   }
 
-  Future<void> refreshHome() async {
-    setState(() {
-      AppConstants.firstTimeFetching = true;
-    });
-    await AppConstants.updateAndPopulateWorkshops();
-    setState(() {
-      AppConstants.firstTimeFetching = false;
-    });
-  }
-
   Future<bool> _onPopHome() async {
     if (fabKey.currentState.isOpen) {
       print('fab is open');
@@ -89,6 +80,7 @@ class _HomeScreenState extends State<HomeScreen>
               ],
             ));
   }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -97,15 +89,15 @@ class _HomeScreenState extends State<HomeScreen>
         minimum: const EdgeInsets.all(2.0),
         child: Scaffold(
           key: _scaffoldKey,
-          backgroundColor: Colors.blue[200],
+          backgroundColor: ColorConstants.homeBackground,
           drawer: SideBar(context: context),
           floatingActionButton: homeFAB(context, fabKey: fabKey),
           appBar: homeAppBar(context, searchBarWidget: searchBarWidget),
           body: Container(
             margin: EdgeInsets.fromLTRB(12, 10, 12, 0),
-            decoration: new BoxDecoration(
-                color: Color(0xFF736AB7),
-                borderRadius: new BorderRadius.only(
+            decoration: BoxDecoration(
+                color: ColorConstants.workshopContainerBackground,
+                borderRadius: BorderRadius.only(
                     topLeft: const Radius.circular(40.0),
                     topRight: const Radius.circular(40.0))),
             child: ValueListenableBuilder(
