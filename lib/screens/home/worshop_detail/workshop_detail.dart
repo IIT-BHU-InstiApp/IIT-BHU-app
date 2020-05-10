@@ -4,6 +4,7 @@ import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/appConstants.dart';
+import 'package:iit_app/model/colorConstants.dart';
 import 'package:iit_app/pages/club/club.dart';
 import 'package:iit_app/pages/club_council_common/club_&_council_widgets.dart';
 import 'package:iit_app/pages/create.dart';
@@ -149,24 +150,27 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
       print("status of toggle workshop: ${snapshot.statusCode}");
       if (snapshot.isSuccessful) {
         is_interested = (_workshop.is_interested ? 1 : -1) * -1;
+        int _newInterestedUser = is_interested == 1 ? 1 : -1;
+        _workshop.rebuild((b) => b
+          ..interested_users = _workshop.interested_users + _newInterestedUser);
       }
     }).catchError((onError) {
       print("Error in toggleing: ${onError.toString()}");
     });
-    fetchWorkshopDetails();
     setState(() {});
+    fetchWorkshopDetails();
   }
 
   Container _getBackground() {
     final File clubLogoFile = AppConstants.getImageFile(
         isSmall: true, id: widget.workshop.club.id, isClub: true);
 
-    return new Container(
+    return Container(
       child: clubLogoFile == null
           ? Image.network(widget.workshop.club.small_image_url,
               fit: BoxFit.cover, height: 300.0)
           : Image.file(clubLogoFile, fit: BoxFit.cover, height: 300),
-      constraints: new BoxConstraints.expand(height: 295.0),
+      constraints: BoxConstraints.expand(height: 295.0),
     );
   }
 
@@ -187,7 +191,7 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
                 height: widget.isPast ? 40 : 60.0,
                 width: widget.isPast ? 50.0 : 130.0,
                 decoration: BoxDecoration(
-                    color: Color(0xFF333366),
+                    color: ColorConstants.workshopCardContainer,
                     borderRadius: BorderRadius.circular(30.0)),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -237,22 +241,22 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
 
   Container _getContent() {
     final _overviewTitle = "Description".toUpperCase();
-    return new Container(
-      child: new ListView(
-        padding: new EdgeInsets.fromLTRB(0.0, 72.0, 0.0, 32.0),
+    return Container(
+      child: ListView(
+        padding: EdgeInsets.fromLTRB(0.0, 72.0, 0.0, 32.0),
         children: <Widget>[
           HomeWidgets.getWorkshopCard(context,
               w: widget.workshop, editMode: false, horizontal: false),
           Container(
-            padding: new EdgeInsets.symmetric(horizontal: 32.0),
-            child: new Column(
+            padding: EdgeInsets.symmetric(horizontal: 32.0),
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                new Text(
+                Text(
                   _overviewTitle,
                   style: Style.headerTextStyle,
                 ),
-                new Separator(),
+                Separator(),
                 _workshop == null
                     ? loadingAnimation()
                     : Text(_workshop.description, style: Style.commonTextStyle),
@@ -324,10 +328,11 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
         Container(
           height: MediaQuery.of(context).size.height * 0.75,
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(35.0),
-                  bottomRight: Radius.circular(35.0)),
-              color: Color(0xFF736AB7)),
+            borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(35.0),
+                bottomRight: Radius.circular(35.0)),
+            color: ColorConstants.workshopContainerBackground,
+          ),
         ),
         _getBackground(),
         WorkshopDetailWidgets.getGradient(),
@@ -344,6 +349,10 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
 
   Container _getPanel({ScrollController sc}) {
     return Container(
+      decoration: BoxDecoration(
+        borderRadius: radius,
+        color: ColorConstants.panelColor,
+      ),
       padding: EdgeInsets.fromLTRB(10.0, 25.0, 10.0, 10.0),
       child: ListView(
         controller: sc,
@@ -464,7 +473,7 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
     return SafeArea(
       minimum: const EdgeInsets.all(2.0),
       child: Scaffold(
-          backgroundColor: Color(0xFF736AB7),
+          backgroundColor: ColorConstants.backgroundThemeColor,
           body: SlidingUpPanel(
             body: _getBody(context),
             borderRadius: radius,

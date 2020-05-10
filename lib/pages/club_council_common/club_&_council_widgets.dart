@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
+import 'package:iit_app/model/colorConstants.dart';
 import 'package:iit_app/ui/separator.dart';
 import 'package:iit_app/ui/text_style.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -132,19 +133,22 @@ class ClubAndCouncilWidgets {
   }
 
   static Container getToolbar(BuildContext context) {
-    return new Container(
-      margin: new EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-      child: new BackButton(color: Colors.lightGreen),
+    return Container(
+      margin: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+      child: BackButton(color: Colors.lightGreen),
     );
   }
 
   static Container getGradient() {
     return Container(
-      margin: new EdgeInsets.only(top: 190.0),
+      margin: EdgeInsets.only(top: 190.0),
       height: 110.0,
-      decoration: new BoxDecoration(
-        gradient: new LinearGradient(
-          colors: <Color>[new Color(0x00736AB7), new Color(0xFF736AB7)],
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: <Color>[
+            ColorConstants.workshopContainerBackground.withAlpha(0),
+            ColorConstants.workshopContainerBackground
+          ],
           stops: [0.0, 0.9],
           begin: const FractionalOffset(0.0, 0.0),
           end: const FractionalOffset(0.0, 1.0),
@@ -154,7 +158,7 @@ class ClubAndCouncilWidgets {
   }
 
   static Widget getPosHolder(
-      {String desg='',
+      {String desg = '',
       BuildContext context,
       String name,
       String imageUrl,
@@ -215,7 +219,7 @@ class ClubAndCouncilWidgets {
         isCouncil: isCouncil, isClub: !isCouncil, isSmall: false, id: id);
 
     final clubThumbnail = Container(
-      margin: new EdgeInsets.symmetric(vertical: 16.0),
+      margin: EdgeInsets.symmetric(vertical: 16.0),
       alignment:
           horizontal ? FractionalOffset.centerLeft : FractionalOffset.center,
       child: Hero(
@@ -239,7 +243,7 @@ class ClubAndCouncilWidgets {
     );
 
     final councilThumbnail = Container(
-      margin: new EdgeInsets.symmetric(vertical: 16.0),
+      margin: EdgeInsets.symmetric(vertical: 16.0),
       alignment: FractionalOffset.center,
       child: Container(
         child: ClipRRect(
@@ -259,9 +263,9 @@ class ClubAndCouncilWidgets {
     );
 
     final clubCardContent = Container(
-      margin: new EdgeInsets.only(left: horizontal ? 40.0 : 10.0, right: 10.0),
-      constraints: new BoxConstraints.expand(),
-      child: new Column(
+      margin: EdgeInsets.only(left: horizontal ? 40.0 : 10.0, right: 10.0),
+      constraints: BoxConstraints.expand(),
+      child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment:
             horizontal ? CrossAxisAlignment.start : CrossAxisAlignment.center,
@@ -280,18 +284,17 @@ class ClubAndCouncilWidgets {
     final clubCard = Container(
       child: clubCardContent,
       height: horizontal ? 75.0 : 154.0,
-      margin: horizontal
-          ? new EdgeInsets.only(left: 30.0)
-          : new EdgeInsets.only(top: 72.0),
-      decoration: new BoxDecoration(
-        color: new Color(0xFF333366),
+      margin:
+          horizontal ? EdgeInsets.only(left: 30.0) : EdgeInsets.only(top: 72.0),
+      decoration: BoxDecoration(
+        color: ColorConstants.workshopCardContainer,
         shape: BoxShape.rectangle,
-        borderRadius: new BorderRadius.circular(8.0),
+        borderRadius: BorderRadius.circular(8.0),
         boxShadow: <BoxShadow>[
-          new BoxShadow(
+          BoxShadow(
             color: Colors.black12,
             blurRadius: 10.0,
-            offset: new Offset(0.0, 10.0),
+            offset: Offset(0.0, 10.0),
           ),
         ],
       ),
@@ -300,21 +303,21 @@ class ClubAndCouncilWidgets {
     return GestureDetector(
         onTap: horizontal
             ? () => Navigator.of(context).push(
-                  new PageRouteBuilder(
+                  PageRouteBuilder(
                     pageBuilder: (_, __, ___) =>
-                        new ClubPage(club: club, editMode: true),
-                    transitionsBuilder: (context, animation, secondaryAnimation,
-                            child) =>
-                        new FadeTransition(opacity: animation, child: child),
+                        ClubPage(club: club, editMode: true),
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) =>
+                            FadeTransition(opacity: animation, child: child),
                   ),
                 )
             : null,
-        child: new Container(
+        child: Container(
           margin: const EdgeInsets.symmetric(
             vertical: 1.0,
             horizontal: 15.0,
           ),
-          child: new Stack(
+          child: Stack(
             children: <Widget>[
               clubCard,
               isCouncil == true ? councilThumbnail : clubThumbnail,
@@ -338,18 +341,18 @@ class ClubAndCouncilWidgets {
             child: Stack(
               children: [
                 Container(
-                  constraints: new BoxConstraints.expand(),
+                  constraints: BoxConstraints.expand(),
                   margin: EdgeInsets.fromLTRB(0.0, 50.0, 0.0, 0.0),
                   padding: EdgeInsets.fromLTRB(0.0, 50.0, 0.0, 0.0),
-                  decoration: new BoxDecoration(
+                  decoration: BoxDecoration(
                     color: Color(0xFF004681),
                     shape: BoxShape.rectangle,
-                    borderRadius: new BorderRadius.circular(8.0),
+                    borderRadius: BorderRadius.circular(8.0),
                     boxShadow: <BoxShadow>[
-                      new BoxShadow(
+                      BoxShadow(
                         color: Colors.black12,
                         blurRadius: 10.0,
-                        offset: new Offset(0.0, 10.0),
+                        offset: Offset(0.0, 10.0),
                       ),
                     ],
                   ),
@@ -401,7 +404,7 @@ class ClubAndCouncilWidgets {
                       BoxShadow(
                         color: Colors.black12,
                         blurRadius: 20.0,
-                        offset: new Offset(0.0, -10.0),
+                        offset:   Offset(0.0, -10.0),
                       ),
                     ],
                   ),*/
@@ -446,7 +449,7 @@ class ClubAndCouncilWidgets {
               MediaQuery.of(context).size.width / 2 - 12.0, 10.0, 0.0, 0.0),
           height: 4.0,
           width: 24.0,
-          //color: new Color(0xff00c6ff)
+          //color:   Color(0xff00c6ff)
         ),
       ],
     );

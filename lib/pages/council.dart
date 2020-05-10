@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
+import 'package:iit_app/model/colorConstants.dart';
 import 'package:iit_app/pages/club_council_common/club_&_council_widgets.dart';
 import 'package:iit_app/pages/club_council_common/description.dart';
 import 'package:iit_app/ui/text_style.dart';
@@ -64,14 +65,8 @@ class _CouncilPageState extends State<CouncilPage> {
           : Stack(
               children: [
                 Container(
-                  color: Color(0xFF736AB7),
-                  //height: MediaQuery.of(context).size.height,
+                  color: ColorConstants.workshopContainerBackground,
                   height: MediaQuery.of(context).size.height * 3 / 4,
-                  /*decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(35.0),
-                          bottomRight: Radius.circular(35.0)),
-                      color: Color(0xFF736AB7)),*/
                 ),
                 Container(
                   child: _councilLargeLogoFile == null
@@ -79,7 +74,7 @@ class _CouncilPageState extends State<CouncilPage> {
                           fit: BoxFit.cover, height: 300.0)
                       : Image.file(_councilLargeLogoFile,
                           fit: BoxFit.cover, height: 300.0),
-                  constraints: new BoxConstraints.expand(height: 295.0),
+                  constraints: BoxConstraints.expand(height: 295.0),
                 ),
                 ClubAndCouncilWidgets.getGradient(),
                 _getDescription(context),
@@ -91,10 +86,10 @@ class _CouncilPageState extends State<CouncilPage> {
 
   Container _getDescription(context) {
     final bottom = MediaQuery.of(context).viewInsets.bottom;
-    return new Container(
+    return Container(
       height: ClubAndCouncilWidgets.getMaxPanelHeight(context) * 0.97,
-      child: new ListView(
-        padding: new EdgeInsets.fromLTRB(0.0, 72.0, 0.0, 32.0),
+      child: ListView(
+        padding: EdgeInsets.fromLTRB(0.0, 72.0, 0.0, 32.0),
         children: <Widget>[
           ClubAndCouncilWidgets.getClubCard(
               title: councilData.name,
@@ -202,7 +197,7 @@ class _CouncilPageState extends State<CouncilPage> {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         resizeToAvoidBottomPadding: false,
-        backgroundColor: Color(0xFF736AB7),
+        backgroundColor: ColorConstants.backgroundThemeColor,
         body: RefreshIndicator(
           onRefresh: () async {
             if (councilData != null) {

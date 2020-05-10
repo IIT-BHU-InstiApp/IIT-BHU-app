@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
+import 'package:iit_app/model/colorConstants.dart';
 import 'package:iit_app/pages/login.dart';
 import 'package:iit_app/screens/home/search_workshop.dart';
 import 'package:iit_app/screens/home/worshop_detail/workshop_detail.dart';
@@ -116,11 +117,11 @@ class HomeWidgets {
     final File clubLogoFile =
         AppConstants.getImageFile(isSmall: true, id: w.club.id, isClub: true);
 
-    final workshopThumbnail = new Container(
-      margin: new EdgeInsets.symmetric(vertical: 16.0),
+    final workshopThumbnail = Container(
+      margin: EdgeInsets.symmetric(vertical: 16.0),
       alignment:
           horizontal ? FractionalOffset.centerLeft : FractionalOffset.center,
-      child: new Hero(
+      child: Hero(
         tag: "w-hero-${w.id}",
         child: Container(
           child: ClipRRect(
@@ -141,19 +142,19 @@ class HomeWidgets {
     );
 
     Widget _workshopValue({String value, IconData icon}) {
-      return new Container(
-        child: new Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
+      return Container(
+        child: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
           Icon(icon, color: Colors.white, size: 12.0),
-          new Container(width: 8.0),
-          new Text(value, style: Style.smallTextStyle),
+          Container(width: 8.0),
+          Text(value, style: Style.smallTextStyle),
         ]),
       );
     }
 
-    final workshopCardContent = new Container(
-      margin: new EdgeInsets.only(left: horizontal ? 60.0 : 16.0, right: 16.0),
-      constraints: new BoxConstraints.expand(),
-      child: new Column(
+    final workshopCardContent = Container(
+      margin: EdgeInsets.only(left: horizontal ? 60.0 : 16.0, right: 16.0),
+      constraints: BoxConstraints.expand(),
+      child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment:
             horizontal ? CrossAxisAlignment.start : CrossAxisAlignment.center,
@@ -161,18 +162,18 @@ class HomeWidgets {
           editMode
               ? Text("CLICK TO EDIT", style: TextStyle(color: Colors.green))
               : SizedBox(height: 1),
-          new Container(height: 4.0),
-          new Text(w.title, style: Style.titleTextStyle),
-          new Container(height: 10.0),
-          new Text('${w.club.name}', style: Style.commonTextStyle),
-          new Separator(),
-          new Row(
+          Container(height: 4.0),
+          Text(w.title, style: Style.titleTextStyle),
+          Container(height: 10.0),
+          Text('${w.club.name}', style: Style.commonTextStyle),
+          Separator(),
+          Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              new Expanded(
+              Expanded(
                   flex: horizontal ? 1 : 0,
                   child: _workshopValue(value: w.date, icon: Icons.date_range)),
-              new Container(
+              Container(
                 width: 15.0,
               ),
               w.time == null
@@ -186,44 +187,43 @@ class HomeWidgets {
       ),
     );
 
-    final workshopCard = new Container(
+    final workshopCard = Container(
       child: workshopCardContent,
       height: horizontal ? 140.0 : 154.0,
-      margin: horizontal
-          ? new EdgeInsets.only(left: 46.0)
-          : new EdgeInsets.only(top: 72.0),
-      decoration: new BoxDecoration(
-        color: new Color(0xFF333366),
+      margin:
+          horizontal ? EdgeInsets.only(left: 46.0) : EdgeInsets.only(top: 72.0),
+      decoration: BoxDecoration(
+        color: ColorConstants.workshopCardContainer,
         shape: BoxShape.rectangle,
-        borderRadius: new BorderRadius.circular(8.0),
+        borderRadius: BorderRadius.circular(8.0),
         boxShadow: <BoxShadow>[
-          new BoxShadow(
+          BoxShadow(
             color: Colors.black26,
             blurRadius: 10.0,
-            offset: new Offset(0.0, 10.0),
+            offset: Offset(0.0, 10.0),
           ),
         ],
       ),
     );
 
-    return new GestureDetector(
+    return GestureDetector(
         onTap: horizontal
             ? () => Navigator.of(context).push(
-                  new PageRouteBuilder(
+                  PageRouteBuilder(
                     pageBuilder: (_, __, ___) =>
-                        new WorkshopDetailPage(workshop: w, isPast: isPast),
-                    transitionsBuilder: (context, animation, secondaryAnimation,
-                            child) =>
-                        new FadeTransition(opacity: animation, child: child),
+                        WorkshopDetailPage(workshop: w, isPast: isPast),
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) =>
+                            FadeTransition(opacity: animation, child: child),
                   ),
                 )
             : null,
-        child: new Container(
+        child: Container(
           margin: const EdgeInsets.symmetric(
             vertical: 10.0,
             horizontal: 10.0,
           ),
-          child: new Stack(
+          child: Stack(
             children: <Widget>[
               workshopCard,
               workshopThumbnail,
@@ -344,8 +344,8 @@ class HomeChild extends StatelessWidget {
                   unselectedLabelColor: Colors.white70,
                   labelColor: Colors.black,
                   tabs: [
-                    new Tab(text: 'Latest'),
-                    new Tab(text: 'Interested'),
+                    Tab(text: 'Latest'),
+                    Tab(text: 'Interested'),
                   ],
                   controller: tabController,
                 ),
