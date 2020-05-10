@@ -189,8 +189,8 @@ class _CouncilPageState extends State<CouncilPage> {
     return SafeArea(
       minimum: const EdgeInsets.all(2.0),
       child: Scaffold(
-        //resizeToAvoidBottomInset: false,
-        //resizeToAvoidBottomPadding: false,
+        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomPadding: false,
         backgroundColor: Color(0xFF736AB7),
         body: RefreshIndicator(
           onRefresh: () async {
