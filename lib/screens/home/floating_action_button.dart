@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
+import 'package:iit_app/model/colorConstants.dart';
 import 'package:iit_app/pages/council.dart';
 import 'package:fab_circular_menu/fab_circular_menu.dart';
 
@@ -10,7 +11,7 @@ Widget homeFAB(context, {fabKey}) =>
         ? FloatingActionButton(onPressed: null, child: Icon(Icons.menu))
         : FabCircularMenu(
             key: fabKey,
-            ringColor: Colors.blue.withOpacity(0.8),
+            ringColor: ColorConstants.circularRingBackground,
             ringDiameter: 400,
             ringWidth: 90,
             fabSize: 65,

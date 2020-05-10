@@ -2,6 +2,7 @@ import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
+import 'package:iit_app/model/colorConstants.dart';
 import 'package:iit_app/screens/drawer.dart';
 import 'package:iit_app/screens/home/home_widgets.dart';
 import 'package:iit_app/screens/home/search_workshop.dart';
@@ -118,23 +119,13 @@ class _AllWorkshopsScreenState extends State<AllWorkshopsScreen>
     return SafeArea(
       minimum: const EdgeInsets.all(2.0),
       child: Scaffold(
+        backgroundColor: ColorConstants.allWorkshopsBackground,
         appBar: AppBar(
           automaticallyImplyLeading: false,
           title: Text("All Workshops"),
           actions: <Widget>[
             Expanded(child: searchBarWidget.getSearchTextField(context)),
           ],
-          // bottom: TabBar(
-          //   unselectedLabelColor: Colors.grey,
-          //   labelColor: Colors.black,
-          //   tabs: [
-          //     new Tab(
-          //       text: 'Active',
-          //     ),
-          //     new Tab(text: 'Past'),
-          //   ],
-          //   controller: _tabController,
-          // ),
         ),
         drawer: SideBar(context: context),
         body: _buildAllWorkshopsBody(context),

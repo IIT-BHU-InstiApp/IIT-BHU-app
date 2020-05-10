@@ -26,7 +26,7 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   void initState() {
-    _tabController = new TabController(length: 2, vsync: this);
+    _tabController = TabController(length: 2, vsync: this);
     fetchWorkshopsAndCouncilButtons();
 
     searchListener = ValueNotifier(false);

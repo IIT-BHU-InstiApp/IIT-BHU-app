@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
+import 'package:iit_app/model/colorConstants.dart';
 import 'package:iit_app/screens/home/search_workshop.dart';
 import 'notification.dart';
 
 AppBar homeAppBar(context, {SearchBarWidget searchBarWidget}) => AppBar(
-      backgroundColor: Colors.blue[200],
+      backgroundColor: ColorConstants.homeBackground,
       automaticallyImplyLeading: false,
       elevation: 0,
       actions: <Widget>[
@@ -13,7 +14,7 @@ AppBar homeAppBar(context, {SearchBarWidget searchBarWidget}) => AppBar(
             padding: EdgeInsets.fromLTRB(15, 8, 15, 0),
             child: Card(
               elevation: 5.0,
-              color: Colors.blue[200],
+              color: ColorConstants.homeBackground,
               child: Row(
                 mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
@@ -44,8 +45,7 @@ AppBar homeAppBar(context, {SearchBarWidget searchBarWidget}) => AppBar(
                         onTap: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) => NotificationScreen()
-                            ),
+                                builder: (context) => NotificationScreen()),
                           );
                         },
                       ),

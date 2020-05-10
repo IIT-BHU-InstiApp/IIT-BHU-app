@@ -3,6 +3,7 @@ import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
+import 'package:iit_app/model/colorConstants.dart';
 import 'package:iit_app/pages/club_council_common/club_&_council_widgets.dart';
 import 'package:iit_app/pages/club_council_common/description.dart';
 import 'package:iit_app/pages/create.dart';
@@ -31,7 +32,7 @@ class _ClubPageState extends State<ClubPage>
   @override
   void initState() {
     print("Club opened in edit mode:${widget.editMode}");
-    _tabController = new TabController(length: 2, vsync: this);
+    _tabController = TabController(length: 2, vsync: this);
     fetchClubDataById();
     super.initState();
   }
@@ -122,7 +123,7 @@ class _ClubPageState extends State<ClubPage>
   Widget _getBackground(context) {
     final bottom = MediaQuery.of(context).viewInsets.bottom;
     return Container(
-      color: Color(0xFF736AB7),
+      color: ColorConstants.workshopContainerBackground,
       //height:MediaQuery.of(context).size.height * 0.90,
       child: ListView(
         shrinkWrap: true,
@@ -142,7 +143,7 @@ class _ClubPageState extends State<ClubPage>
                               fit: BoxFit.cover, height: 300.0)
                           : Image.file(_clubLargeLogoFile,
                               fit: BoxFit.cover, height: 300.0),
-                      constraints: new BoxConstraints.expand(height: 295.0),
+                      constraints: BoxConstraints.expand(height: 295.0),
                     ),
                     ClubAndCouncilWidgets.getGradient(),
                     Container(
@@ -185,6 +186,10 @@ class _ClubPageState extends State<ClubPage>
   Widget _getPanel({ScrollController sc}) {
     return Container(
       padding: EdgeInsets.only(top: 20.0),
+      decoration: BoxDecoration(
+        borderRadius: radius,
+        color: ColorConstants.panelColor,
+      ),
       child: ListView(
         controller: sc,
         children: [
@@ -223,7 +228,7 @@ class _ClubPageState extends State<ClubPage>
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         resizeToAvoidBottomPadding: false,
-        backgroundColor: Color(0xFF736AB7),
+        backgroundColor: ColorConstants.backgroundThemeColor,
         floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.white,
           onPressed: () {
