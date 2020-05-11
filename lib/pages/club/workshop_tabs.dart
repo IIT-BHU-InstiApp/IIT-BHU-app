@@ -10,7 +10,8 @@ class WorkshopTabs {
         : workshops.length == 0
             ? Center(child: Text('No workshops here :('))
             : ListView.builder(
-                physics: BouncingScrollPhysics(),
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
                 scrollDirection: Axis.vertical,
                 itemCount: workshops.length,
                 padding: EdgeInsets.all(8),
@@ -23,15 +24,17 @@ class WorkshopTabs {
               );
   }
 
-  static Container getActiveAndPastTabBarForClub(
+  static Widget getActiveAndPastTabBarForClub(
       {BuiltAllWorkshopsPost clubWorkshops,
-      @required TabController tabController}) {
+      @required TabController tabController,
+      BuildContext context}) {
     return Container(
       margin: EdgeInsets.fromLTRB(12, 10, 12, 0),
       decoration: BoxDecoration(
           color: ColorConstants.workshopContainerBackground,
           borderRadius: BorderRadius.all(Radius.circular(20.0))),
-      height: 300,
+      //constraints: BoxConstraints(minHeight: 600.0),
+      height: MediaQuery.of(context).size.height * 0.7,
       child: Column(
         children: [
           TabBar(
