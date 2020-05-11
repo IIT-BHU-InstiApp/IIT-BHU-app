@@ -382,21 +382,24 @@ class _ClubPageState extends State<ClubPage>
               resizeToAvoidBottomInset: false,
               resizeToAvoidBottomPadding: false,
               backgroundColor: ColorConstants.backgroundThemeColor,
-              floatingActionButton: FloatingActionButton(
-                backgroundColor: Colors.white,
-                onPressed: () {
-                  if (this._toggling == false) {
-                    toggleSubscription();
-                  }
-                },
-                child: this._toggling || clubMap == null
-                    ? CircularProgressIndicator()
-                    : Icon(
-                        Icons.subscriptions,
-                        color:
-                            clubMap.is_subscribed ? Colors.red : Colors.black26,
-                      ),
-              ),
+              floatingActionButton: AppConstants.isGuest
+                  ? null
+                  : FloatingActionButton(
+                      backgroundColor: Colors.white,
+                      onPressed: () {
+                        if (this._toggling == false) {
+                          toggleSubscription();
+                        }
+                      },
+                      child: this._toggling || clubMap == null
+                          ? CircularProgressIndicator()
+                          : Icon(
+                              Icons.subscriptions,
+                              color: clubMap.is_subscribed
+                                  ? Colors.red
+                                  : Colors.black26,
+                            ),
+                    ),
               body: RefreshIndicator(
                 onRefresh: () async {
                   clubMap = await AppConstants.refreshClubInDatabase(
