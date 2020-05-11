@@ -210,7 +210,7 @@ class _ClubPageState extends State<ClubPage>
     setState(() {});
 
     Response<BuiltAllWorkshopsPost> snapshots = await AppConstants.service
-        .getClubWorkshops(widget.club.id, "token ${AppConstants.djangoToken}")
+        .getClubWorkshops(widget.club.id, AppConstants.djangoToken)
         .catchError((onError) {
       print("Error in fetching workshops: ${onError.toString()}");
     });
@@ -235,8 +235,7 @@ class _ClubPageState extends State<ClubPage>
     });
 
     await AppConstants.service
-        .toggleClubSubscription(
-            widget.club.id, "token ${AppConstants.djangoToken}")
+        .toggleClubSubscription(widget.club.id, AppConstants.djangoToken)
         .then((snapshot) async {
       print("status of club subscription: ${snapshot.statusCode}");
       if (snapshot.statusCode == 200) {
@@ -383,21 +382,24 @@ class _ClubPageState extends State<ClubPage>
               resizeToAvoidBottomInset: false,
               resizeToAvoidBottomPadding: false,
               backgroundColor: ColorConstants.backgroundThemeColor,
-              floatingActionButton: FloatingActionButton(
-                backgroundColor: Colors.white,
-                onPressed: () {
-                  if (this._toggling == false) {
-                    toggleSubscription();
-                  }
-                },
-                child: this._toggling || clubMap == null
-                    ? CircularProgressIndicator()
-                    : Icon(
-                        Icons.subscriptions,
-                        color:
-                            clubMap.is_subscribed ? Colors.red : Colors.black26,
-                      ),
-              ),
+              floatingActionButton: AppConstants.isGuest
+                  ? null
+                  : FloatingActionButton(
+                      backgroundColor: Colors.white,
+                      onPressed: () {
+                        if (this._toggling == false) {
+                          toggleSubscription();
+                        }
+                      },
+                      child: this._toggling || clubMap == null
+                          ? CircularProgressIndicator()
+                          : Icon(
+                              Icons.subscriptions,
+                              color: clubMap.is_subscribed
+                                  ? Colors.red
+                                  : Colors.black26,
+                            ),
+                    ),
               body: RefreshIndicator(
                 onRefresh: () async {
                   clubMap = await AppConstants.refreshClubInDatabase(

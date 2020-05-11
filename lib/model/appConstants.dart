@@ -11,9 +11,12 @@ import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 
 class AppConstants {
+  //for guest user
+  static bool isGuest = false;
+
 // TODO: define minimum padding for safe area here so that it can be constant over whole app
 
-  //  connectivity variables ------------------------------------------
+  // static EdgeInsets safeAreaMinPadding = EdgeInsets.fromLTRB(2, 2, 2, 2);
 
   static ConnectionStatusSingleton connectionStatus;
   static bool isLoggedIn = false;
@@ -233,7 +236,7 @@ class AppConstants {
 
     if (councilPost == null) {
       Response<BuiltCouncilPost> councilSnapshots = await AppConstants.service
-          .getCouncil('token ${AppConstants.djangoToken}', councilId);
+          .getCouncil(AppConstants.djangoToken, councilId);
 
       councilPost = councilSnapshots.body;
 
@@ -260,7 +263,7 @@ class AppConstants {
 
     if (clubPost == null) {
       Response<BuiltClubPost> clubSnapshots = await AppConstants.service
-          .getClub(clubId, "token ${AppConstants.djangoToken}")
+          .getClub(clubId, AppConstants.djangoToken)
           .catchError((onError) {
         print("Error in fetching clubs: ${onError.toString()}");
       });
@@ -296,8 +299,15 @@ class AppConstants {
         subscribedUsers: subscribedUsers);
   }
 
+  /// All locally stored data will be deleted ( only database not images).
+  static Future deleteLocalDatabaseOnly() async {
+    DatabaseHelper helper = DatabaseHelper.instance;
+    var database = await helper.database;
+    await helper.deleteWholeDatabase(db: database);
+  }
+
   /// All locally stored data will be deleted (database and images).
-  static Future deleteAllLocalData() async {
+  static Future deleteAllLocalDataWithImages() async {
     DatabaseHelper helper = DatabaseHelper.instance;
     var database = await helper.database;
     await helper.deleteWholeDatabase(db: database);

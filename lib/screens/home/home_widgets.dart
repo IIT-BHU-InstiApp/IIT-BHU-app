@@ -367,8 +367,18 @@ class HomeChild extends StatelessWidget {
                                     .buildCurrentWorkshopPosts(context)),
                       ),
                       Container(
-                        child:
-                            buildWorkhops.buildInterestedWorkshopsBody(context),
+                        child: AppConstants.isGuest
+                            ? Container(
+                                margin: EdgeInsets.only(top: 100),
+                                padding: EdgeInsets.all(10),
+                                child: Text(
+                                  'We value your interest, but first you have to trust us by logging in.   {Dear Guest, it can not be one sided.}',
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 25),
+                                ),
+                              )
+                            : buildWorkhops
+                                .buildInterestedWorkshopsBody(context),
                       )
                     ],
                   ),

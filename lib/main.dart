@@ -108,6 +108,8 @@ class _ConnectedMainState extends State<ConnectedMain> {
                   ),
                 ),
               )
-            : (AppConstants.isLoggedIn ? HomeScreen() : LoginPage()));
+            : ((AppConstants.isLoggedIn || AppConstants.isGuest)
+                ? HomeScreen()
+                : LoginPage()));
   }
 }

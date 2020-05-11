@@ -24,8 +24,8 @@ ListView buildCurrentWorkshopPosts(
 
 FutureBuilder<Response> buildInterestedWorkshopsBody(BuildContext context) {
   return FutureBuilder<Response<BuiltList<BuiltWorkshopSummaryPost>>>(
-    future: AppConstants.service
-        .getInterestedWorkshops("token ${AppConstants.djangoToken}"),
+    future:
+        AppConstants.service.getInterestedWorkshops(AppConstants.djangoToken),
     builder: (context, snapshot) {
       if (snapshot.connectionState == ConnectionState.done) {
         if (snapshot.hasError) {

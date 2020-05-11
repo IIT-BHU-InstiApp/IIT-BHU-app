@@ -57,7 +57,7 @@ class WorkshopCreater {
       ..contacts = workshop.contactIds.build().toBuilder());
 
     await AppConstants.service
-        .postNewWorkshop("token ${AppConstants.djangoToken}", newWorkshop)
+        .postNewWorkshop(AppConstants.djangoToken, newWorkshop)
         .catchError((onError) {
       print('Error creating workshop: ${onError.toString()}');
       CreatePageDialogBoxes.showUnSuccessfulDialog(context: context);
@@ -85,8 +85,8 @@ class WorkshopCreater {
       ..audience = workshop.audience);
 
     await AppConstants.service
-        .updateWorkshopByPatch(widgetWorkshopData.id,
-            "token ${AppConstants.djangoToken}", editedWorkshop)
+        .updateWorkshopByPatch(
+            widgetWorkshopData.id, AppConstants.djangoToken, editedWorkshop)
         .catchError((onError) {
       print('Error editing workshop: ${onError.toString()}');
       CreatePageDialogBoxes.showUnSuccessfulDialog(context: context);
@@ -103,7 +103,7 @@ class WorkshopCreater {
     await AppConstants.service
         .updateContacts(
       widgetWorkshopData.id,
-      "token ${AppConstants.djangoToken}",
+      AppConstants.djangoToken,
       BuiltContacts(
         (b) => b..contacts = workshop.contactIds.build().toBuilder(),
       ),

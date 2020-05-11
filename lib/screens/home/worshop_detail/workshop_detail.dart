@@ -263,8 +263,7 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
 
   void fetchWorkshopDetails() async {
     Response<BuiltWorkshopDetailPost> snapshots = await AppConstants.service
-        .getWorkshopDetailsPost(
-            widget.workshop.id, "token ${AppConstants.djangoToken}")
+        .getWorkshopDetailsPost(widget.workshop.id, AppConstants.djangoToken)
         .catchError((onError) {
       print("Error in fetching workshop: ${onError.toString()}");
     });
@@ -277,8 +276,7 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
   void deleteWorkshop() async {
     await confirmCreateDialog()
         ? await AppConstants.service
-            .removeWorkshop(
-                widget.workshop.id, "token ${AppConstants.djangoToken}")
+            .removeWorkshop(widget.workshop.id, AppConstants.djangoToken)
             .then((snapshot) {
             print("status of deleting workshop: ${snapshot.statusCode}");
             showSuccessfulDialog();
@@ -294,8 +292,7 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
     is_interested = 0;
     setState(() {});
     await AppConstants.service
-        .toggleInterestedWorkshop(
-            widget.workshop.id, "token ${AppConstants.djangoToken}")
+        .toggleInterestedWorkshop(widget.workshop.id, AppConstants.djangoToken)
         .then((snapshot) {
       print("status of toggle workshop: ${snapshot.statusCode}");
       if (snapshot.isSuccessful) {
@@ -359,7 +356,16 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
                                 height: 20,
                                 width: 20)
                             : InkWell(
-                                onTap: () => updateButton(),
+                                onTap: () {
+                                  if (AppConstants.isGuest) {
+                                    Scaffold.of(context).showSnackBar(SnackBar(
+                                      content: Text('Please Log In first'),
+                                      duration: Duration(seconds: 2),
+                                    ));
+                                  } else {
+                                    updateButton();
+                                  }
+                                },
                                 child: Column(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,
