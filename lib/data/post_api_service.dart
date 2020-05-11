@@ -214,7 +214,6 @@ abstract class PostApiService extends ChopperService {
   // Future<Response<(type of body)>> searchTag(
   //     @Header('Authorization') String token, @Body() TagSearch body);
 
-// TODO: Use this funciton to verify Token
   @Post(path: '/login/')
   Future<Response<Token>> logInPost(@Body() LoginPost body);
 

@@ -76,8 +76,7 @@ class _DescriptionState extends State<Description> {
     final editedClub = BuiltClubPost((b) => b..description = description);
 
     await AppConstants.service
-        .updateClubByPatch(
-            club.id, "token ${AppConstants.djangoToken}", editedClub)
+        .updateClubByPatch(club.id, AppConstants.djangoToken, editedClub)
         .catchError((onError) {
       print('Error editing club description: ${onError.toString()}');
       this.showUnSuccessfulDialog(context: context);
@@ -99,7 +98,7 @@ class _DescriptionState extends State<Description> {
 
     await AppConstants.service
         .updateCouncilByPatch(
-            council.id, "token ${AppConstants.djangoToken}", editedCouncil)
+            council.id, AppConstants.djangoToken, editedCouncil)
         .catchError((onError) {
       print('Error editing council description: ${onError.toString()}');
       this.showUnSuccessfulDialog(context: context);

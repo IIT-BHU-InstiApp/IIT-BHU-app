@@ -210,7 +210,7 @@ class _ClubPageState extends State<ClubPage>
     setState(() {});
 
     Response<BuiltAllWorkshopsPost> snapshots = await AppConstants.service
-        .getClubWorkshops(widget.club.id, "token ${AppConstants.djangoToken}")
+        .getClubWorkshops(widget.club.id, AppConstants.djangoToken)
         .catchError((onError) {
       print("Error in fetching workshops: ${onError.toString()}");
     });
@@ -235,8 +235,7 @@ class _ClubPageState extends State<ClubPage>
     });
 
     await AppConstants.service
-        .toggleClubSubscription(
-            widget.club.id, "token ${AppConstants.djangoToken}")
+        .toggleClubSubscription(widget.club.id, AppConstants.djangoToken)
         .then((snapshot) async {
       print("status of club subscription: ${snapshot.statusCode}");
       if (snapshot.statusCode == 200) {

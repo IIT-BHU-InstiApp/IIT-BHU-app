@@ -34,7 +34,7 @@ class SideBar extends Drawer {
             onTap: () async {
               await signOutGoogle();
               SharedPreferences prefs = await SharedPreferences.getInstance();
-              prefs.clear();
+              await prefs.clear();
               Navigator.of(context).pushReplacementNamed('/login');
             },
           ),

@@ -82,7 +82,7 @@ class _AccountScreenState extends State<AccountScreen> {
 
   void fetchProfileDetails() async {
     await AppConstants.service
-        .getProfile("token ${AppConstants.djangoToken}")
+        .getProfile(AppConstants.djangoToken)
         .catchError((onError) {
       print("Error in fetching profile: ${onError.toString()}");
     }).then((value) {
@@ -96,8 +96,7 @@ class _AccountScreenState extends State<AccountScreen> {
       ..name = name
       ..phone_number = phoneNumber);
     await AppConstants.service
-        .updateProfileByPatch(
-            "token ${AppConstants.djangoToken}", updatedProfile)
+        .updateProfileByPatch(AppConstants.djangoToken, updatedProfile)
         .then((value) {
       profileDetails = value.body;
       setState(() {});

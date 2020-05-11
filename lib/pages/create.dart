@@ -208,8 +208,7 @@ class _CreateScreenState extends State<CreateScreen> {
                                 this._searchedProfileresult = null;
                               });
                               await AppConstants.service
-                                  .searchProfile(
-                                      "token ${AppConstants.djangoToken}",
+                                  .searchProfile(AppConstants.djangoToken,
                                       this._searchPost)
                                   .catchError((onError) {
                                 print(

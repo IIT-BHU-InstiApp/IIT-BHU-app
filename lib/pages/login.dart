@@ -1,11 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
+import 'package:iit_app/model/sharedPreferenceKeys.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
@@ -77,8 +75,9 @@ verifyToken(String idToken) async {
   }).then((response) {
     if (response.isSuccessful) {
       print('successfully verified token with backend');
-      AppConstants.djangoToken = response.body.token;
-      print('DjangoToken from backend: ${AppConstants.djangoToken}');
+      AppConstants.djangoToken = "token ${response.body.token}";
+      print(
+          'DjangoToken from backend (with "token" added in beginning): ${AppConstants.djangoToken}');
     }
   });
 }
@@ -134,102 +133,122 @@ class _LoginPageState extends State<LoginPage> {
     return SafeArea(
       minimum: const EdgeInsets.all(2.0),
       child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          body: _loading
-              ? Center(
-                  child:
-                      CircularProgressIndicator(backgroundColor: Colors.black))
-              : ListView(
-                  children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.fromLTRB(15.0, 110.0, 0.0, 0.0),
-                      child: Text('Welcome to IIT(BHU)\'s Workshops App.',
-                          style: TextStyle(
-                              fontSize: 40.0, fontWeight: FontWeight.bold)),
-                    ),
-                    SizedBox(height: 15),
-                    OutlineButton(
-                      splashColor: Colors.grey,
-                      onPressed: AppConstants.logInButtonEnabled == false
-                          ? null
-                          : () async {
-                              if (AppConstants.logInButtonEnabled == true) {
-                                print(
-                                    'appConstants.logInButtonEnabled : ${AppConstants.logInButtonEnabled}');
-                                AppConstants.logInButtonEnabled = false;
+        resizeToAvoidBottomInset: false,
+        body: _loading
+            ? Center(
+                child: CircularProgressIndicator(backgroundColor: Colors.black))
+            : ListView(
+                children: <Widget>[
+                  Container(
+                    padding: EdgeInsets.fromLTRB(15.0, 110.0, 0.0, 0.0),
+                    child: Text('Welcome to IIT(BHU)\'s Workshops App.',
+                        style: TextStyle(
+                            fontSize: 40.0, fontWeight: FontWeight.bold)),
+                  ),
+                  SizedBox(height: 15),
+                  OutlineButton(
+                    splashColor: Colors.grey,
+                    onPressed: AppConstants.logInButtonEnabled == false
+                        ? null
+                        : () async {
+                            if (AppConstants.logInButtonEnabled == true) {
+                              print(
+                                  'appConstants.logInButtonEnabled : ${AppConstants.logInButtonEnabled}');
+                              AppConstants.logInButtonEnabled = false;
 
+                              setState(() {
+                                this._loading = true;
+                              });
+
+                              AppConstants.currentUser =
+                                  await signInWithGoogle();
+
+                              AppConstants.logInButtonEnabled = true;
+
+                              if (AppConstants.currentUser == null ||
+                                  AppConstants.djangoToken == null) {
                                 setState(() {
-                                  this._loading = true;
+                                  this._loading = false;
                                 });
 
-                                AppConstants.currentUser =
-                                    await signInWithGoogle();
+                                await signOutGoogle();
 
-                                AppConstants.logInButtonEnabled = true;
+                                return errorDialog(context);
+                              } else {
+                                // logged in successfully :)
 
-                                if (AppConstants.currentUser == null ||
-                                    AppConstants.djangoToken == null) {
-                                  setState(() {
-                                    this._loading = false;
-                                  });
+                                SharedPreferences prefs =
+                                    await SharedPreferences.getInstance();
+                                await prefs.setString(
+                                    SharedPreferenceKeys.djangoToken,
+                                    AppConstants.djangoToken);
 
-                                  await signOutGoogle();
-
-                                  return errorDialog(context);
-                                } else {
-                                  // logged in successfully :)
-
-                                  SharedPreferences prefs =
-                                      await SharedPreferences.getInstance();
-                                  await prefs.setString(
-                                      'djangoToken', AppConstants.djangoToken);
-
-                                  Navigator.of(context).pushNamedAndRemoveUntil(
-                                      '/home', (r) => false);
-                                }
+                                Navigator.of(context).pushNamedAndRemoveUntil(
+                                    '/home', (r) => false);
                               }
+                            }
 
-                              setState(() {});
-                            },
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(40)),
-                      highlightElevation: 0,
-                      borderSide: BorderSide(color: Colors.grey),
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Image(
-                                image: AssetImage("assets/google_logo.png"),
-                                height: 25.0),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 10),
-                              child: Text(
-                                'Sign in with Google',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.grey,
-                                ),
+                            setState(() {});
+                          },
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(40)),
+                    highlightElevation: 0,
+                    borderSide: BorderSide(color: Colors.grey),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Image(
+                              image: AssetImage("assets/google_logo.png"),
+                              height: 25.0),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10),
+                            child: Text(
+                              'Sign in with Google',
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.grey,
                               ),
-                            )
-                          ],
-                        ),
+                            ),
+                          )
+                        ],
                       ),
                     ),
-                    SizedBox(height: 15.0),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          'Login Using Institute ID.',
-                          style: TextStyle(fontFamily: 'Montserrat'),
-                        ),
-                      ],
-                    )
-                  ],
-                )),
+                  ),
+                  SizedBox(height: 15.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        'Login Using Institute ID.',
+                        style: TextStyle(fontFamily: 'Montserrat'),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 50.0),
+                  InkWell(
+                    child: RaisedButton(
+                      onPressed: () async {
+                        AppConstants.isGuest = true;
+                        AppConstants.djangoToken = null;
+                        //saving guest mode in shared preferences
+                        SharedPreferences prefs =
+                            await SharedPreferences.getInstance();
+                        prefs.clear();
+                        prefs = await SharedPreferences.getInstance();
+                        prefs.setBool(SharedPreferenceKeys.isGuest, true);
+
+                        Navigator.of(context)
+                            .pushNamedAndRemoveUntil('/home', (r) => false);
+                      },
+                      child: Text('Let be me Guest only'),
+                    ),
+                  ),
+                ],
+              ),
+      ),
     );
   }
 }
