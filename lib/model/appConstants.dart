@@ -299,8 +299,15 @@ class AppConstants {
         subscribedUsers: subscribedUsers);
   }
 
+  /// All locally stored data will be deleted ( only database not images).
+  static Future deleteLocalDatabaseOnly() async {
+    DatabaseHelper helper = DatabaseHelper.instance;
+    var database = await helper.database;
+    await helper.deleteWholeDatabase(db: database);
+  }
+
   /// All locally stored data will be deleted (database and images).
-  static Future deleteAllLocalData() async {
+  static Future deleteAllLocalDataWithImages() async {
     DatabaseHelper helper = DatabaseHelper.instance;
     var database = await helper.database;
     await helper.deleteWholeDatabase(db: database);

@@ -23,7 +23,7 @@ class SideBar extends Drawer {
             currentAccountPicture: Image(
                 image: (AppConstants.currentUser == null ||
                         AppConstants.isGuest == true)
-                    ? AssetImage('assets/guest.jpg')
+                    ? AssetImage('assets/guest.png')
                     : NetworkImage(AppConstants.currentUser.photoUrl),
                 fit: BoxFit.cover),
           ),
@@ -37,10 +37,14 @@ class SideBar extends Drawer {
                   leading: Icon(Icons.account_box),
                   // TODO: ask user to log in , may be in a dialog box
 
-                  onTap: () => Scaffold.of(context).showSnackBar(SnackBar(
-                    content: Text('You must be logged in'),
-                    duration: Duration(seconds: 2),
-                  )),
+                  onTap: () {
+                    Navigator.pop(context);
+                    return Scaffold.of(context).showSnackBar(SnackBar(
+                      elevation: 10,
+                      content: Text('You must be logged in'),
+                      duration: Duration(seconds: 2),
+                    ));
+                  },
                 )
               : getNavItem(Icons.account_box, "Account", '/account'),
           getNavItem(Icons.comment, "Complaints & Suggestions", '/complaints'),
@@ -50,6 +54,7 @@ class SideBar extends Drawer {
             title: AppConstants.isGuest ? Text('Log In') : Text('LogOut'),
             onTap: () async {
               await signOutGoogle();
+              await AppConstants.deleteLocalDatabaseOnly();
               SharedPreferences prefs = await SharedPreferences.getInstance();
               await prefs.clear();
               Navigator.of(context).pushReplacementNamed('/login');

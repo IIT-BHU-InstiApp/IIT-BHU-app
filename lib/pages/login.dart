@@ -227,24 +227,22 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 50.0),
-                  InkWell(
-                    child: RaisedButton(
-                      onPressed: () async {
-                        AppConstants.isGuest = true;
-                        AppConstants.djangoToken = null;
-                        //saving guest mode in shared preferences
-                        SharedPreferences prefs =
-                            await SharedPreferences.getInstance();
-                        prefs.clear();
-                        prefs = await SharedPreferences.getInstance();
-                        prefs.setBool(SharedPreferenceKeys.isGuest, true);
+                  SizedBox(height: 200.0),
+                  RaisedButton(
+                    onPressed: () async {
+                      AppConstants.isGuest = true;
+                      AppConstants.djangoToken = null;
+                      //saving guest mode in shared preferences
+                      SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      prefs.clear();
+                      prefs = await SharedPreferences.getInstance();
+                      prefs.setBool(SharedPreferenceKeys.isGuest, true);
 
-                        Navigator.of(context)
-                            .pushNamedAndRemoveUntil('/home', (r) => false);
-                      },
-                      child: Text('Let be me Guest only'),
-                    ),
+                      Navigator.of(context)
+                          .pushNamedAndRemoveUntil('/home', (r) => false);
+                    },
+                    child: Text('Let be me Guest only'),
                   ),
                 ],
               ),

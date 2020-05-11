@@ -23,7 +23,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     setState(() {
       _refreshing = true;
     });
-    await AppConstants.deleteAllLocalData();
+    await AppConstants.deleteAllLocalDataWithImages();
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (context) => HomeScreen()), (r) => false);
     // setState(() {
@@ -85,7 +85,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     child: RaisedButton(
                         onPressed: () {
                           setState(() {
-                            AppConstants.chooseColorPaletEnabled = true;
+                            AppConstants.chooseColorPaletEnabled =
+                                !AppConstants.chooseColorPaletEnabled;
                           });
                         },
                         child: AppConstants.chooseColorPaletEnabled == true
@@ -97,10 +98,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   child: Center(
                     child: RaisedButton(
                         onPressed: () {
-                          setState(() {
-                            AppConstants.chooseColorPaletEnabled = false;
-                            ColorConstants.resetToDefault();
-                          });
+                          AppConstants.chooseColorPaletEnabled = false;
+                          ColorConstants.resetToDefault();
+                          _colorListener.value =
+                              ColorConstants.settingBackgroundConstant;
                         },
                         child: Text("Reset Colors to Default")),
                   ),
