@@ -358,7 +358,9 @@ class _ClubPageState extends State<ClubPage>
                   : Container()
               : Container(),
           WorkshopTabs.getActiveAndPastTabBarForClub(
-              clubWorkshops: clubWorkshops, tabController: _tabController),
+              clubWorkshops: clubWorkshops,
+              tabController: _tabController,
+              context: context),
           space,
         ],
       ),
