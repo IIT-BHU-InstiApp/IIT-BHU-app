@@ -356,7 +356,16 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
                                 height: 20,
                                 width: 20)
                             : InkWell(
-                                onTap: () => updateButton(),
+                                onTap: () {
+                                  if (AppConstants.isGuest) {
+                                    Scaffold.of(context).showSnackBar(SnackBar(
+                                      content: Text('Please Log In first'),
+                                      duration: Duration(seconds: 2),
+                                    ));
+                                  } else {
+                                    updateButton();
+                                  }
+                                },
                                 child: Column(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,

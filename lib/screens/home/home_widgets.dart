@@ -367,8 +367,11 @@ class HomeChild extends StatelessWidget {
                                     .buildCurrentWorkshopPosts(context)),
                       ),
                       Container(
-                        child:
-                            buildWorkhops.buildInterestedWorkshopsBody(context),
+                        child: AppConstants.isGuest
+                            ? Text(
+                                'We value your interest, but first you have to trust us by logging in. Dear Guest, it can not be one sided.')
+                            : buildWorkhops
+                                .buildInterestedWorkshopsBody(context),
                       )
                     ],
                   ),
