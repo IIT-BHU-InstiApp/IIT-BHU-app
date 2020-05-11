@@ -13,6 +13,7 @@ import 'package:iit_app/ui/colorPicker.dart';
 import 'package:iit_app/ui/separator.dart';
 import 'package:iit_app/ui/text_style.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'workshop_detail_widgets.dart';
 
 class WorkshopDetailPage extends StatefulWidget {
@@ -268,7 +269,11 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
       print("Error in fetching workshop: ${onError.toString()}");
     });
     _workshop = snapshots.body;
-    is_interested = _workshop.is_interested ? 1 : -1;
+    if (_workshop.is_interested != null) {
+      is_interested = _workshop.is_interested ? 1 : -1;
+    } else {
+      is_interested = -1;
+    }
     if (!this.mounted) return;
     setState(() {});
   }
@@ -363,6 +368,14 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
                                       duration: Duration(seconds: 2),
                                     ));
                                   } else {
+                                    if (is_interested != 1) {
+                                      final String _calendarUrl =
+                                          AppConstants.addEventToCalendarLink(
+                                              workshop: _workshop);
+                                      print(
+                                          'add event to calendar URL: $_calendarUrl');
+                                      launch(_calendarUrl);
+                                    }
                                     updateButton();
                                   }
                                 },

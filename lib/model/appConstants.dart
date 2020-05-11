@@ -326,4 +326,51 @@ class AppConstants {
     AppConstants.workshopFromDatabase = null;
     AppConstants.councilsSummaryfromDatabase = null;
   }
+
+  static String addEventToCalendarLink(
+      {@required BuiltWorkshopDetailPost workshop}) {
+    final String initialUrlForCalendar =
+        "https://www.google.com/calendar/render?action=TEMPLATE";
+
+    final String title = "${workshop.title} - (${workshop.club.name})";
+
+    String date = workshop.date.substring(0, 4) +
+        workshop.date.substring(5, 7) +
+        workshop.date.substring(8, 10);
+    String startTime = convertTimeToUtc(workshop.time);
+    String endTime = convertTimeToUtc(workshop.time, true);
+    final String urlLink = initialUrlForCalendar +
+        '&text=' +
+        Uri.encodeFull(title) +
+        '&dates=' +
+        date +
+        'T' +
+        startTime +
+        'Z' +
+        '/' +
+        date +
+        'T' +
+        endTime +
+        'Z';
+    return urlLink;
+  }
+
+  static String convertTimeToUtc(String time, [bool addHour = false]) {
+    if (time == null) {
+      return addHour ? '190000' : '180000';
+    }
+    int hour = int.parse(time.substring(0, 2));
+    if (addHour) {
+      hour += 1;
+    }
+    int minute = int.parse(time.substring(3, 5));
+    if (minute >= 30) {
+      hour -= 5;
+      minute -= 30;
+    } else {
+      hour -= 6;
+      minute += 30;
+    }
+    return (hour.toString() + minute.toString() + '00');
+  }
 }
