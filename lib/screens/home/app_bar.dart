@@ -24,16 +24,23 @@ AppBar homeAppBar(context, {SearchBarWidget searchBarWidget}) => AppBar(
                     width: 35.0,
                     child: Builder(
                       builder: (context) => GestureDetector(
-                          onTap: () => Scaffold.of(context).openDrawer()),
+                        onTap: () => Scaffold.of(context).openDrawer(),
+                        child: AppConstants.isGuest
+                            ? Icon(Icons.menu)
+                            : Container(),
+                      ),
                     ),
                     decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: AppConstants.currentUser == null
-                                ? AssetImage('assets/profile_test.jpg')
-                                : NetworkImage(
-                                    AppConstants.currentUser.photoUrl),
-                            fit: BoxFit.cover),
-                        borderRadius: BorderRadius.circular(50.0)),
+                      image: AppConstants.isGuest
+                          ? BoxDecoration()
+                          : DecorationImage(
+                              image: AppConstants.currentUser == null
+                                  ? AssetImage('assets/profile_test.jpg')
+                                  : NetworkImage(
+                                      AppConstants.currentUser.photoUrl),
+                              fit: BoxFit.cover),
+                      borderRadius: BorderRadius.circular(50.0),
+                    ),
                   ),
                   Expanded(child: searchBarWidget.getSearchTextField(context)),
                   Padding(

@@ -14,23 +14,40 @@ class SideBar extends Drawer {
       child: ListView(
         children: <Widget>[
           UserAccountsDrawerHeader(
-              accountName: Text(AppConstants.currentUser.displayName),
-              accountEmail: Text(AppConstants.currentUser.email),
-              currentAccountPicture: Image(
-                  image: AppConstants.currentUser == null
-                      ? AssetImage('assets/profile_test.jpg')
-                      : NetworkImage(AppConstants.currentUser.photoUrl),
-                  fit: BoxFit.cover)),
+            accountName: AppConstants.isGuest
+                ? Text('Welcome')
+                : Text(AppConstants.currentUser.displayName),
+            accountEmail: AppConstants.isGuest
+                ? Text('Guest User')
+                : Text(AppConstants.currentUser.email),
+            currentAccountPicture: Image(
+                image: (AppConstants.currentUser == null ||
+                        AppConstants.isGuest == true)
+                    ? AssetImage('assets/guest.jpg')
+                    : NetworkImage(AppConstants.currentUser.photoUrl),
+                fit: BoxFit.cover),
+          ),
           getNavItem(Icons.home, "Home", '/home', replacement: true),
           getNavItem(Icons.map, "Map", '/mapScreen'),
           getNavItem(Icons.local_dining, "Mess management", '/mess'),
           getNavItem(Icons.group_work, "All Workshops", '/allWorkshops'),
-          getNavItem(Icons.account_box, "Account", '/account'),
+          AppConstants.isGuest
+              ? ListTile(
+                  title: Text("Account"),
+                  leading: Icon(Icons.account_box),
+                  // TODO: ask user to log in , may be in a dialog box
+
+                  onTap: () => Scaffold.of(context).showSnackBar(SnackBar(
+                    content: Text('You must be logged in'),
+                    duration: Duration(seconds: 2),
+                  )),
+                )
+              : getNavItem(Icons.account_box, "Account", '/account'),
           getNavItem(Icons.comment, "Complaints & Suggestions", '/complaints'),
           getNavItem(Icons.settings, "Settings", '/settings'),
           ListTile(
             leading: Icon(Icons.exit_to_app),
-            title: Text('LogOut'),
+            title: AppConstants.isGuest ? Text('Log In') : Text('LogOut'),
             onTap: () async {
               await signOutGoogle();
               SharedPreferences prefs = await SharedPreferences.getInstance();
