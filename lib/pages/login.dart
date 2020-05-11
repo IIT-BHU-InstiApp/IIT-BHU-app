@@ -242,7 +242,7 @@ class _LoginPageState extends State<LoginPage> {
                       Navigator.of(context)
                           .pushNamedAndRemoveUntil('/home', (r) => false);
                     },
-                    child: Text('Let be me Guest only'),
+                    child: Text('Let Me be Guest only'),
                   ),
                 ],
               ),

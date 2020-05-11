@@ -30,7 +30,7 @@ AppBar homeAppBar(context, {SearchBarWidget searchBarWidget}) => AppBar(
                                 Icons.menu,
                                 color: Colors.black,
                               )
-                            : Container(),
+                            : null,
                       ),
                     ),
                     decoration: AppConstants.isGuest

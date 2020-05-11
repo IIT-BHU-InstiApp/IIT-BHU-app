@@ -57,6 +57,7 @@ class SideBar extends Drawer {
               await AppConstants.deleteLocalDatabaseOnly();
               SharedPreferences prefs = await SharedPreferences.getInstance();
               await prefs.clear();
+              AppConstants.isGuest = false;
               Navigator.of(context).pushReplacementNamed('/login');
             },
           ),
