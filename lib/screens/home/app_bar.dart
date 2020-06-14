@@ -1,10 +1,14 @@
+import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/colorConstants.dart';
 import 'package:iit_app/screens/home/search_workshop.dart';
 import 'notification.dart';
 
-AppBar homeAppBar(context, {SearchBarWidget searchBarWidget}) => AppBar(
+AppBar homeAppBar(context,
+        {SearchBarWidget searchBarWidget,
+        GlobalKey<FabCircularMenuState> fabKey}) =>
+    AppBar(
       backgroundColor: ColorConstants.homeBackground,
       automaticallyImplyLeading: false,
       elevation: 0,
@@ -24,7 +28,12 @@ AppBar homeAppBar(context, {SearchBarWidget searchBarWidget}) => AppBar(
                     width: 35.0,
                     child: Builder(
                       builder: (context) => GestureDetector(
-                        onTap: () => Scaffold.of(context).openDrawer(),
+                        onTap: () {
+                          Scaffold.of(context).openDrawer();
+                          if (fabKey.currentState.isOpen) {
+                            fabKey.currentState.close();
+                          }
+                        },
                         child: AppConstants.isGuest
                             ? Icon(
                                 Icons.menu,
@@ -57,6 +66,9 @@ AppBar homeAppBar(context, {SearchBarWidget searchBarWidget}) => AppBar(
                             MaterialPageRoute(
                                 builder: (context) => NotificationScreen()),
                           );
+                          if (fabKey.currentState.isOpen) {
+                            fabKey.currentState.close();
+                          }
                         },
                       ),
                     ),

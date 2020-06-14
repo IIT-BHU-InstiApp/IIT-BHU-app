@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
@@ -113,6 +114,7 @@ class HomeWidgets {
     bool editMode = false,
     bool horizontal = true,
     bool isPast = false,
+    GlobalKey<FabCircularMenuState> fabKey,
   }) {
     final File clubLogoFile =
         AppConstants.getImageFile(isSmall: true, id: w.club.id, isClub: true);
@@ -208,7 +210,8 @@ class HomeWidgets {
 
     return GestureDetector(
         onTap: horizontal
-            ? () => Navigator.of(context).push(
+            ? () {
+                Navigator.of(context).push(
                   PageRouteBuilder(
                     pageBuilder: (_, __, ___) =>
                         WorkshopDetailPage(workshop: w, isPast: isPast),
@@ -216,7 +219,11 @@ class HomeWidgets {
                         (context, animation, secondaryAnimation, child) =>
                             FadeTransition(opacity: animation, child: child),
                   ),
-                )
+                );
+                if (fabKey.currentState.isOpen) {
+                  fabKey.currentState.close();
+                }
+              }
             : null,
         child: Container(
           margin: const EdgeInsets.symmetric(
