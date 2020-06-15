@@ -251,6 +251,7 @@ class _HomeScreenState extends State<HomeScreen>
                             searchBarWidget: searchBarWidget,
                             tabController: _tabController,
                             isSearching: isSearching,
+                            fabKey: fabKey,
                           );
                         },
                       ),

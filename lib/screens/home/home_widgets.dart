@@ -108,14 +108,12 @@ class HomeWidgets {
                 )));
       });
 
-  static Widget getWorkshopCard(
-    BuildContext context, {
-    BuiltWorkshopSummaryPost w,
-    bool editMode = false,
-    bool horizontal = true,
-    bool isPast = false,
-    GlobalKey<FabCircularMenuState> fabKey,
-  }) {
+  static Widget getWorkshopCard(BuildContext context,
+      {BuiltWorkshopSummaryPost w,
+      bool editMode = false,
+      bool horizontal = true,
+      bool isPast = false,
+      GlobalKey<FabCircularMenuState> fabKey}) {
     final File clubLogoFile =
         AppConstants.getImageFile(isSmall: true, id: w.club.id, isClub: true);
 
@@ -329,13 +327,15 @@ class HomeChild extends StatelessWidget {
   final SearchBarWidget searchBarWidget;
   final TabController tabController;
   final bool isSearching;
+  final GlobalKey<FabCircularMenuState> fabKey;
 
   const HomeChild(
       {Key key,
       this.context,
       this.searchBarWidget,
       this.tabController,
-      this.isSearching})
+      this.isSearching,
+      this.fabKey})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -350,6 +350,11 @@ class HomeChild extends StatelessWidget {
                   indicatorColor: Colors.deepPurple,
                   unselectedLabelColor: Colors.white70,
                   labelColor: Colors.black,
+                  onTap: (value) {
+                    if (fabKey.currentState.isOpen) {
+                      fabKey.currentState.close();
+                    }
+                  },
                   tabs: [
                     Tab(text: 'Latest'),
                     Tab(text: 'Interested'),
@@ -370,8 +375,8 @@ class HomeChild extends StatelessWidget {
                                       .updateAndPopulateWorkshops();
                                   setState(() {});
                                 },
-                                child: buildWorkhops
-                                    .buildCurrentWorkshopPosts(context)),
+                                child: buildWorkhops.buildCurrentWorkshopPosts(
+                                    context, fabKey)),
                       ),
                       Container(
                         child: AppConstants.isGuest
@@ -384,8 +389,8 @@ class HomeChild extends StatelessWidget {
                                       color: Colors.white, fontSize: 25),
                                 ),
                               )
-                            : buildWorkhops
-                                .buildInterestedWorkshopsBody(context),
+                            : buildWorkhops.buildInterestedWorkshopsBody(
+                                context, fabKey),
                       )
                     ],
                   ),

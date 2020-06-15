@@ -54,7 +54,9 @@ AppBar homeAppBar(context,
                             borderRadius: BorderRadius.circular(50.0),
                           ),
                   ),
-                  Expanded(child: searchBarWidget.getSearchTextField(context)),
+                  Expanded(
+                      child: searchBarWidget.getSearchTextField(context,
+                          fabKey: fabKey)),
                   Padding(
                     padding: const EdgeInsets.only(right: 8.0, left: 8),
                     child: Container(

@@ -1,4 +1,5 @@
 import 'package:chopper/chopper.dart';
+import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
@@ -6,8 +7,7 @@ import 'package:iit_app/screens/home/home_widgets.dart';
 import 'package:built_collection/built_collection.dart';
 
 ListView buildCurrentWorkshopPosts(
-  BuildContext context,
-) {
+    BuildContext context, GlobalKey<FabCircularMenuState> fabKey) {
   return ListView.builder(
     physics: BouncingScrollPhysics(),
     scrollDirection: Axis.vertical,
@@ -17,12 +17,14 @@ ListView buildCurrentWorkshopPosts(
       return HomeWidgets.getWorkshopCard(
         context,
         w: AppConstants.workshopFromDatabase[index],
+        fabKey: fabKey,
       );
     },
   );
 }
 
-FutureBuilder<Response> buildInterestedWorkshopsBody(BuildContext context) {
+FutureBuilder<Response> buildInterestedWorkshopsBody(
+    BuildContext context, GlobalKey<FabCircularMenuState> fabKey) {
   return FutureBuilder<Response<BuiltList<BuiltWorkshopSummaryPost>>>(
     future:
         AppConstants.service.getInterestedWorkshops(AppConstants.djangoToken),
@@ -39,7 +41,7 @@ FutureBuilder<Response> buildInterestedWorkshopsBody(BuildContext context) {
         }
 
         final posts = snapshot.data.body;
-        return _buildInterestedWorkshopPosts(context, posts);
+        return _buildInterestedWorkshopPosts(context, posts, fabKey);
       } else {
         return Center(
           child: HomeWidgets.getPlaceholder(),
@@ -50,14 +52,17 @@ FutureBuilder<Response> buildInterestedWorkshopsBody(BuildContext context) {
 }
 
 ListView _buildInterestedWorkshopPosts(
-    BuildContext context, BuiltList<BuiltWorkshopSummaryPost> posts) {
+    BuildContext context,
+    BuiltList<BuiltWorkshopSummaryPost> posts,
+    GlobalKey<FabCircularMenuState> fabKey) {
   return ListView.builder(
     physics: BouncingScrollPhysics(),
     scrollDirection: Axis.vertical,
     itemCount: posts.length,
     padding: EdgeInsets.all(8),
     itemBuilder: (context, index) {
-      return HomeWidgets.getWorkshopCard(context, w: posts[index]);
+      return HomeWidgets.getWorkshopCard(context,
+          w: posts[index], fabKey: fabKey);
     },
   );
 }
