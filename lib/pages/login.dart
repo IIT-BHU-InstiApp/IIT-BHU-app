@@ -16,9 +16,9 @@ final GoogleSignIn googleSignIn = GoogleSignIn(
   hostedDomain: 'itbhu.ac.in',
 );
 String responseIdToken;
-FirebaseUser currentUser;
+User currentUser;
 
-Future<FirebaseUser> signInWithGoogle() async {
+Future<User> signInWithGoogle() async {
   GoogleSignInAccount googleSignInAccount;
   try {
     googleSignInAccount = await googleSignIn.signIn();
@@ -35,14 +35,14 @@ Future<FirebaseUser> signInWithGoogle() async {
   final GoogleSignInAuthentication googleSignInAuthentication =
       await googleSignInAccount.authentication;
 
-  final AuthCredential credential = GoogleAuthProvider.getCredential(
+  final AuthCredential credential = GoogleAuthProvider.credential(
     accessToken: googleSignInAuthentication.accessToken,
     idToken: googleSignInAuthentication.idToken,
   );
-  // final FirebaseUser user =
+  // final User user =
   //     (await FirebaseAuth.instance.signInWithCredential(credential)).user;
 
-  FirebaseUser user;
+  User user;
   try {
     user = (await FirebaseAuth.instance.signInWithCredential(credential)).user;
   } catch (e) {
@@ -53,11 +53,11 @@ Future<FirebaseUser> signInWithGoogle() async {
 
   assert(!user.isAnonymous);
 
-  String idToken = (await user.getIdToken()).token;
+  String idToken = (await user.getIdToken());
 
   assert(await user.getIdToken() != null);
 
-  currentUser = await FirebaseAuth.instance.currentUser();
+  currentUser = FirebaseAuth.instance.currentUser;
 
   assert(user.uid == currentUser.uid);
 

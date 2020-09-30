@@ -34,7 +34,7 @@ class AppConstants {
 
   static String djangoToken;
 
-  static FirebaseUser currentUser;
+  static User currentUser;
   static PostApiService service;
 
   static BuiltList<BuiltWorkshopSummaryPost> workshopFromDatabase;

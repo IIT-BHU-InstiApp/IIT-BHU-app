@@ -15,14 +15,14 @@ class CrudMethods {
       return false;
     }
 
-    AppConstants.currentUser = await FirebaseAuth.instance.currentUser();
+    AppConstants.currentUser = FirebaseAuth.instance.currentUser;
 
     if (AppConstants.currentUser != null) {
       AppConstants.djangoToken =
           prefs.getString(SharedPreferenceKeys.djangoToken);
 
       if (AppConstants.djangoToken == null) {
-        String idToken = (await AppConstants.currentUser.getIdToken()).token;
+        String idToken = (await AppConstants.currentUser.getIdToken());
         await verifyToken(idToken);
         await prefs.setString(
             SharedPreferenceKeys.djangoToken, AppConstants.djangoToken);
