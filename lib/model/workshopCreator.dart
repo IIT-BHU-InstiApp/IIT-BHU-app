@@ -1,3 +1,4 @@
+import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/pages/dialogBoxes.dart';
@@ -54,12 +55,15 @@ class WorkshopCreater {
       ..time = workshop.time
       ..location = workshop.location
       ..audience = workshop.audience
+      ..resources = BuiltList<int>([1]).toBuilder()
       ..contacts = workshop.contactIds.build().toBuilder());
-
     await AppConstants.service
         .postNewWorkshop(AppConstants.djangoToken, newWorkshop)
         .catchError((onError) {
-      print('Error creating workshop: ${onError.toString()}');
+      final error = onError as Response<dynamic>;
+      print(error.body);
+      print(
+          'Error creating workshop: ${onError.toString()} ${onError.runtimeType}');
       CreatePageDialogBoxes.showUnSuccessfulDialog(context: context);
     }).then((value) {
       if (value.isSuccessful) {
