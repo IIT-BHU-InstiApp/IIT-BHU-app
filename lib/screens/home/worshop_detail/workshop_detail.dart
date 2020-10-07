@@ -262,14 +262,14 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
     );
   }
 
-  Future<bool> confirmCalenderOpenDialog() async {
+  Future<bool> confirmCalendarOpenDialog() async {
     return showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: new Text("Open Calender"),
+          title: new Text("Open Calendar"),
           content: new Text(
-              "You have expressed Interest!\nDo you want to save this event to your Google Calender?"),
+              "You have expressed Interest!\nDo you want to save this event to your Google Calendar?"),
           actions: <Widget>[
             FlatButton(
               child: new Text("Yup!"),
@@ -398,10 +398,10 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
                                     ));
                                   } else {
                                     if (is_interested != 1) {
-                                      bool shouldCalenderBeOpened =
-                                          await confirmCalenderOpenDialog();
-                                      print(shouldCalenderBeOpened);
-                                      if (shouldCalenderBeOpened == true) {
+                                      bool shouldCalendarBeOpened =
+                                          await confirmCalendarOpenDialog();
+                                      print(shouldCalendarBeOpened);
+                                      if (shouldCalendarBeOpened == true) {
                                         final String _calendarUrl =
                                             AppConstants.addEventToCalendarLink(
                                                 workshop: _workshop);
