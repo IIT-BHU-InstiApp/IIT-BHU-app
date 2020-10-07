@@ -206,9 +206,11 @@ class _AccountScreenState extends State<AccountScreen> {
                               backColor: Color(0xffFFECDD),
                               imgAssetPath: "assets/email.png",
                             ),
-                            Text(
-                              profileDetails.email,
-                              style: TextStyle(fontSize: 15),
+                            Expanded(
+                              child: Text(
+                                profileDetails.email,
+                                style: TextStyle(fontSize: 15),
+                              ),
                             ),
                           ],
                         ),
