@@ -262,6 +262,35 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
     );
   }
 
+  Future<bool> confirmCalenderOpenDialog() async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: new Text("Open Calender"),
+          content: new Text(
+              "You have expressed Interest!\nDo you want to save this event to your Google Calender?"),
+          actions: <Widget>[
+            FlatButton(
+              child: new Text("Yup!"),
+              onPressed: () {
+                Navigator.of(context).pop(true);
+                return true;
+              },
+            ),
+            FlatButton(
+              child: new Text("Nope"),
+              onPressed: () {
+                Navigator.of(context).pop(false);
+                return false;
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void fetchWorkshopDetails() async {
     Response<BuiltWorkshopDetailPost> snapshots = await AppConstants.service
         .getWorkshopDetailsPost(widget.workshop.id, AppConstants.djangoToken)
@@ -361,7 +390,7 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
                                 height: 20,
                                 width: 20)
                             : InkWell(
-                                onTap: () {
+                                onTap: () async {
                                   if (AppConstants.isGuest) {
                                     Scaffold.of(context).showSnackBar(SnackBar(
                                       content: Text('Please Log In first'),
@@ -369,12 +398,17 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
                                     ));
                                   } else {
                                     if (is_interested != 1) {
-                                      final String _calendarUrl =
-                                          AppConstants.addEventToCalendarLink(
-                                              workshop: _workshop);
-                                      print(
-                                          'add event to calendar URL: $_calendarUrl');
-                                      launch(_calendarUrl);
+                                      bool shouldCalenderBeOpened =
+                                          await confirmCalenderOpenDialog();
+                                      print(shouldCalenderBeOpened);
+                                      if (shouldCalenderBeOpened == true) {
+                                        final String _calendarUrl =
+                                            AppConstants.addEventToCalendarLink(
+                                                workshop: _workshop);
+                                        print(
+                                            'add event to calendar URL: $_calendarUrl');
+                                        launch(_calendarUrl);
+                                      }
                                     }
                                     updateButton();
                                   }
