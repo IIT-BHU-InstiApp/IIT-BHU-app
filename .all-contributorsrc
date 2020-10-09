@@ -45,11 +45,21 @@
         "code",
         "design"
       ]
+    },
+    {
+      "login": "Yashjain715",
+      "name": "Yashjain715",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/58399080?v=4",
+      "profile": "https://github.com/Yashjain715",
+      "contributions": [
+        "code",
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
   "projectName": "IIT-BHU-app",
-  "projectOwner": "nishantkr18",
+  "projectOwner": "IIT-BHU-InstiApp",
   "repoType": "github",
   "repoHost": "https://github.com",
   "skipCi": true
