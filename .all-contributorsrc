@@ -55,6 +55,16 @@
         "code",
         "bug"
       ]
+    },
+    {
+      "login": "Vikhyath08",
+      "name": "Vikhyath Venkatraman",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/55887656?v=4",
+      "profile": "https://github.com/Vikhyath08",
+      "contributions": [
+        "code",
+        "design"
+      ]
     }
   ],
   "contributorsPerLine": 7,
