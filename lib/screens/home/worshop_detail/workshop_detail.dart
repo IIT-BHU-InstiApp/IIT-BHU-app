@@ -26,6 +26,7 @@ class WorkshopDetailPage extends StatefulWidget {
 }
 
 class _WorkshopDetailPage extends State<WorkshopDetailPage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   BuiltWorkshopDetailPost _workshop;
   int is_interested;
 
@@ -363,7 +364,8 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
                             : InkWell(
                                 onTap: () {
                                   if (AppConstants.isGuest) {
-                                    Scaffold.of(context).showSnackBar(SnackBar(
+                                    _scaffoldKey.currentState
+                                        .showSnackBar(SnackBar(
                                       content: Text('Please Log In first'),
                                       duration: Duration(seconds: 2),
                                     ));
@@ -647,6 +649,7 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
             setColor();
 
             return Scaffold(
+              key: _scaffoldKey,
               backgroundColor: ColorConstants.backgroundThemeColor,
               body: Stack(
                 children: [
