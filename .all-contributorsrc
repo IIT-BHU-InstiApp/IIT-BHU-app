@@ -45,11 +45,21 @@
         "code",
         "design"
       ]
+    },
+    {
+      "login": "Vikhyath08",
+      "name": "Vikhyath Venkatraman",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/55887656?v=4",
+      "profile": "https://github.com/Vikhyath08",
+      "contributions": [
+        "code",
+        "design"
+      ]
     }
   ],
   "contributorsPerLine": 7,
   "projectName": "IIT-BHU-app",
-  "projectOwner": "nishantkr18",
+  "projectOwner": "IIT-BHU-InstiApp",
   "repoType": "github",
   "repoHost": "https://github.com",
   "skipCi": true
