@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/built_post.dart';
+import 'package:fab_circular_menu/fab_circular_menu.dart';
 
 class SearchBarWidget {
   TextEditingController searchController = TextEditingController();
@@ -9,10 +10,15 @@ class SearchBarWidget {
 
   SearchBarWidget(this.isSearching);
 
-  Widget getSearchTextField(context) {
+  Widget getSearchTextField(context, {GlobalKey<FabCircularMenuState> fabKey}) {
     return StatefulBuilder(
       builder: (context, setState) => TextFormField(
-        onTap: () => print('===================='),
+        onTap: () {
+          print('====================');
+          if (fabKey.currentState.isOpen) {
+            fabKey.currentState.close();
+          }
+        },
         controller: searchController,
         decoration: InputDecoration(
             hintText: 'Search Workshops ...',

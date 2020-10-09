@@ -226,32 +226,41 @@ class _HomeScreenState extends State<HomeScreen>
               backgroundColor: ColorConstants.homeBackground,
               drawer: SideBar(context: context),
               floatingActionButton: homeFAB(context, fabKey: fabKey),
-              appBar: homeAppBar(context, searchBarWidget: searchBarWidget),
-              body: Stack(
-                children: [
-                  Container(
-                    margin: EdgeInsets.fromLTRB(12, 10, 12, 0),
-                    decoration: BoxDecoration(
-                        color: ColorConstants.workshopContainerBackground,
-                        borderRadius: BorderRadius.only(
-                            topLeft: const Radius.circular(40.0),
-                            topRight: const Radius.circular(40.0))),
-                    child: ValueListenableBuilder(
-                      valueListenable: searchListener,
-                      builder: (context, isSearching, child) {
-                        return HomeChild(
-                          context: context,
-                          searchBarWidget: searchBarWidget,
-                          tabController: _tabController,
-                          isSearching: isSearching,
-                        );
-                      },
+              appBar: homeAppBar(context,
+                  searchBarWidget: searchBarWidget, fabKey: fabKey),
+              body: GestureDetector(
+                onTap: () {
+                  if (fabKey.currentState.isOpen) {
+                    fabKey.currentState.close();
+                  }
+                },
+                child: Stack(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.fromLTRB(12, 10, 12, 0),
+                      decoration: BoxDecoration(
+                          color: ColorConstants.workshopContainerBackground,
+                          borderRadius: BorderRadius.only(
+                              topLeft: const Radius.circular(40.0),
+                              topRight: const Radius.circular(40.0))),
+                      child: ValueListenableBuilder(
+                        valueListenable: searchListener,
+                        builder: (context, isSearching, child) {
+                          return HomeChild(
+                            context: context,
+                            searchBarWidget: searchBarWidget,
+                            tabController: _tabController,
+                            isSearching: isSearching,
+                            fabKey: fabKey,
+                          );
+                        },
+                      ),
                     ),
-                  ),
-                  AppConstants.chooseColorPaletEnabled
-                      ? _colorSelectOptionRow(context)
-                      : Container()
-                ],
+                    AppConstants.chooseColorPaletEnabled
+                        ? _colorSelectOptionRow(context)
+                        : Container()
+                  ],
+                ),
               ),
             );
           },
