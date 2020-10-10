@@ -1,5 +1,27 @@
 *(This README might contains various TODO comments like this one as this file is under development. So if you are helping with the development of the app, be sure to look for comments like this one. Also, feel free to make a PR if you find features integrated in the app, but not mentioned here. Once all work is done, we can remove this comment 😀)*
 
+Some clean code guidelines : -
+
+1. All the constructor of stateless or stateful widget will be const and therefore all the fields will be "final".
+   (so that they are always immutable within the class, for mutable objects use stateful classes)
+
+2. All variables in State<SomeClass> should be private. (append "_" to every variable name at start).
+
+3. Any function or custom widget will take parameterized arguments if no. of arguments are more than 1.
+   Add @required for necessary parameters.
+
+4. Don't be scared of big named classes and file names. Name each file/variable/class/enum/function/custom widget , whatever you define, crystal clear according to their abstract.
+
+5. Categorize your work in terms of independent features and then put their files in a folder so that code can be organized and transparent.
+
+6. Use "TODO:" as much as you can, if you're leaving a code incomplete or unfinished there must be a TODO: above it telling what is left to be done.
+
+7. Break large widget trees into chunks of small widget trees where each small widget tree behaves independently and is significant for custom purposes. (for eg. we won't separate padding widget but a custom purpose ListView.builder can be separated)
+
+8. For flutter, always use lowerCamelCase for naming. (not mandatory but lets just be standard so that code is readable to everybody)
+
+
+
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-5-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
