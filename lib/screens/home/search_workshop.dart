@@ -38,7 +38,7 @@ class SearchBarWidget {
             )),
         onFieldSubmitted: (value) {
           if (value.isEmpty) {
-            searchFocusNode.unfocus();
+            // searchFocusNode.unfocus();
             return;
           }
 

@@ -40,13 +40,13 @@ class _AllWorkshopsScreenState extends State<AllWorkshopsScreen>
     if (!searchBarWidget.isSearching.value &&
         searchBarWidget.searchController.text.isEmpty &&
         searchFocusNode.hasFocus) {
-      searchFocusNode.dispose();
+      searchFocusNode.unfocus();
       Navigator.pop(context);
       Navigator.pushNamed(context, '/allWorkshops');
       return false;
     }
     if (searchBarWidget.isSearching.value) {
-      searchFocusNode.dispose();
+      searchFocusNode.unfocus();
       Navigator.pop(context);
       Navigator.pushNamed(context, '/allWorkshops');
       return false;
