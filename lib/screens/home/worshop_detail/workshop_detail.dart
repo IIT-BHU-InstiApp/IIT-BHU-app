@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
+import 'package:iit_app/external_libraries/spin_kit.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/colorConstants.dart';
@@ -185,7 +186,7 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
   }
 
   Widget loadingAnimation() {
-    return CircularProgressIndicator();
+    return LoadingCircle;
   }
 
   showSuccessfulDialog() {
@@ -568,7 +569,7 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
           _workshop == null
               ? Container(
                   height: 35.0,
-                  child: Center(child: CircularProgressIndicator()),
+                  child: Center(child: LoadingCircle),
                 )
               : Text(
                   _workshop.location,
@@ -588,7 +589,7 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
           _workshop == null
               ? Container(
                   height: 35.0,
-                  child: Center(child: CircularProgressIndicator()),
+                  child: Center(child: LoadingCircle),
                 )
               : Text(
                   //_workshop.resources,
@@ -601,7 +602,7 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
           _workshop == null
               ? Container(
                   height: 35.0,
-                  child: Center(child: CircularProgressIndicator()),
+                  child: Center(child: LoadingCircle),
                 )
               : Text(
                   _workshop.audience,
@@ -614,7 +615,7 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
           _workshop == null
               ? Container(
                   height: 35.0,
-                  child: Center(child: CircularProgressIndicator()),
+                  child: Center(child: LoadingCircle),
                 )
               : Container(
                   decoration: BoxDecoration(
@@ -648,7 +649,7 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
           _workshop == null
               ? Container(
                   height: 35.0,
-                  child: Center(child: CircularProgressIndicator()),
+                  child: Center(child: LoadingCircle),
                 )
               : Container(
                   //height: ,

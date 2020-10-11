@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/material.dart';
+import 'package:iit_app/external_libraries/spin_kit.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/sharedPreferenceKeys.dart';
@@ -135,8 +136,7 @@ class _LoginPageState extends State<LoginPage> {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         body: _loading
-            ? Center(
-                child: CircularProgressIndicator(backgroundColor: Colors.black))
+            ? Center(child: LoadingCircle)
             : ListView(
                 children: <Widget>[
                   Container(

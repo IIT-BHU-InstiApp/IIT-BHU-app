@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:iit_app/external_libraries/spin_kit.dart';
 import 'package:iit_app/screens/map.dart';
 import 'package:iit_app/screens/account.dart';
 import 'package:iit_app/screens/allWorkshops.dart';
@@ -94,9 +95,7 @@ class _ConnectedMainState extends State<ConnectedMain> {
   Widget build(BuildContext context) {
     return this._isOnline == null
         ? Scaffold(
-            body: Center(
-              child: CircularProgressIndicator(),
-            ),
+            body: Center(child: LoadingCircle),
           )
         : (this._isOnline == false
             ? Scaffold(
