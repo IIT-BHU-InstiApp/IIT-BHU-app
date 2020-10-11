@@ -84,16 +84,15 @@ class _HomeScreenState extends State<HomeScreen>
 
       return false;
     }
+    // if on home screen but searchController is onFocus
     if (!searchBarWidget.isSearching.value &&
         searchBarWidget.searchController.text.isEmpty &&
         searchFocusNode.hasFocus) {
       searchFocusNode.unfocus();
-      Navigator.pop(context);
-      Navigator.pushNamed(context, '/home');
       return false;
     }
+    // to retrun on home route on popping from search result screen
     if (searchBarWidget.isSearching.value) {
-      searchFocusNode.unfocus();
       Navigator.pop(context);
       Navigator.pushNamed(context, '/home');
       return false;

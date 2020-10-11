@@ -37,16 +37,15 @@ class _AllWorkshopsScreenState extends State<AllWorkshopsScreen>
   }
 
   Future<bool> onPop() async {
+    // if on allWorkhops screen but searchController is onFocus
     if (!searchBarWidget.isSearching.value &&
         searchBarWidget.searchController.text.isEmpty &&
         searchFocusNode.hasFocus) {
       searchFocusNode.unfocus();
-      Navigator.pop(context);
-      Navigator.pushNamed(context, '/allWorkshops');
       return false;
     }
+    // to retrun on allWorkshops route on popping from search result screen
     if (searchBarWidget.isSearching.value) {
-      searchFocusNode.unfocus();
       Navigator.pop(context);
       Navigator.pushNamed(context, '/allWorkshops');
       return false;
