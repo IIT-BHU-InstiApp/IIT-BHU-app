@@ -84,8 +84,15 @@ class _HomeScreenState extends State<HomeScreen>
 
       return false;
     }
-    if (searchBarWidget.isSearching.value ||
-        searchBarWidget.searchController.text.isEmpty) {
+    if (!searchBarWidget.isSearching.value &&
+        searchBarWidget.searchController.text.isEmpty &&
+        searchFocusNode.hasFocus) {
+      searchFocusNode.dispose();
+      Navigator.pop(context);
+      Navigator.pushNamed(context, '/home');
+      return false;
+    }
+    if (searchBarWidget.isSearching.value) {
       searchFocusNode.dispose();
       Navigator.pop(context);
       Navigator.pushNamed(context, '/home');

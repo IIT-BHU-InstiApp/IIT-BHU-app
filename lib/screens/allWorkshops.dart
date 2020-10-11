@@ -37,13 +37,21 @@ class _AllWorkshopsScreenState extends State<AllWorkshopsScreen>
   }
 
   Future<bool> onPop() async {
-    if (searchBarWidget.isSearching.value ||
-        searchBarWidget.searchController.text.isEmpty) {
+    if (!searchBarWidget.isSearching.value &&
+        searchBarWidget.searchController.text.isEmpty &&
+        searchFocusNode.hasFocus) {
       searchFocusNode.dispose();
       Navigator.pop(context);
       Navigator.pushNamed(context, '/allWorkshops');
       return false;
     }
+    if (searchBarWidget.isSearching.value) {
+      searchFocusNode.dispose();
+      Navigator.pop(context);
+      Navigator.pushNamed(context, '/allWorkshops');
+      return false;
+    }
+    Navigator.pushNamed(context, '/home');
     return true;
   }
 
