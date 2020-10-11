@@ -10,9 +10,11 @@ class SearchBarWidget {
 
   SearchBarWidget(this.isSearching);
 
-  Widget getSearchTextField(context, {GlobalKey<FabCircularMenuState> fabKey}) {
+  Widget getSearchTextField(context,
+      {GlobalKey<FabCircularMenuState> fabKey, FocusNode searchFocusNode}) {
     return StatefulBuilder(
       builder: (context, setState) => TextFormField(
+        focusNode: searchFocusNode,
         onTap: () {
           print('====================');
           if (fabKey.currentState.isOpen) {
@@ -29,12 +31,17 @@ class SearchBarWidget {
                 setState(() {
                   searchController.clear();
                   isSearching.value = false;
+                  searchFocusNode.unfocus();
                 });
                 // FocusScope.of(context).unfocus();
               },
             )),
         onFieldSubmitted: (value) {
-          if (value.isEmpty) return;
+          if (value.isEmpty) {
+            isSearching.value = false;
+            searchFocusNode.unfocus();
+            return;
+          }
 
           setState(() {
             isSearching.value = true;

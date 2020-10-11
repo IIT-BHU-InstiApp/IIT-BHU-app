@@ -18,6 +18,7 @@ class _AllWorkshopsScreenState extends State<AllWorkshopsScreen>
   SearchBarWidget searchBarWidget;
   TabController _tabController;
   ValueNotifier<bool> searchListener;
+  FocusNode searchFocusNode;
 
   @override
   void initState() {
@@ -25,8 +26,25 @@ class _AllWorkshopsScreenState extends State<AllWorkshopsScreen>
 
     searchListener = ValueNotifier(false);
     searchBarWidget = SearchBarWidget(searchListener);
-
+    searchFocusNode = FocusNode();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    searchFocusNode.dispose();
+    super.dispose();
+  }
+
+  Future<bool> onPop() async {
+    if (searchBarWidget.isSearching.value ||
+        searchBarWidget.searchController.text.isEmpty) {
+      searchFocusNode.dispose();
+      Navigator.pop(context);
+      Navigator.pushNamed(context, '/allWorkshops');
+      return false;
+    }
+    return true;
   }
 
   FutureBuilder<Response> _buildAllWorkshopsBody(BuildContext context) {
@@ -117,25 +135,32 @@ class _AllWorkshopsScreenState extends State<AllWorkshopsScreen>
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      minimum: const EdgeInsets.all(2.0),
-      child: Scaffold(
-        backgroundColor: ColorConstants.allWorkshopsBackground,
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          title: Text("All Workshops"),
-          actions: <Widget>[
-            Expanded(child: searchBarWidget.getSearchTextField(context)),
-          ],
+    return WillPopScope(
+      onWillPop: onPop,
+      child: SafeArea(
+        minimum: const EdgeInsets.all(2.0),
+        child: Scaffold(
+          backgroundColor: ColorConstants.allWorkshopsBackground,
+          appBar: AppBar(
+            automaticallyImplyLeading: false,
+            title: Text("All Workshops"),
+            actions: <Widget>[
+              Expanded(
+                  child: searchBarWidget.getSearchTextField(context,
+                      searchFocusNode: searchFocusNode)),
+            ],
+          ),
+          drawer: SideBar(context: context),
+          body: ValueListenableBuilder(
+              valueListenable: searchListener,
+              builder: (context, isSearching, child) {
+                return (isSearching
+                    ? buildWorkshopsFromSearch(
+                        context: context,
+                        searchPost: searchBarWidget.searchPost)
+                    : _buildAllWorkshopsBody(context));
+              }),
         ),
-        drawer: SideBar(context: context),
-        body: ValueListenableBuilder(
-    valueListenable: searchListener,
-    builder: (context, isSearching, child) {
-    return (isSearching ?
-    buildWorkshopsFromSearch(context: context, searchPost: searchBarWidget.searchPost):_buildAllWorkshopsBody(context));
-    }
-      ),
       ),
     );
   }
