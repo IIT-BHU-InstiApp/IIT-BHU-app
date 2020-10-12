@@ -85,9 +85,8 @@ class _HomeScreenState extends State<HomeScreen>
       return false;
     }
     // if on home screen but searchController is onFocus
-    if (!searchBarWidget.isSearching.value &&
-        searchBarWidget.searchController.text.isEmpty &&
-        searchFocusNode.hasFocus) {
+    if (!searchBarWidget.isSearching.value && searchFocusNode.hasFocus) {
+      searchBarWidget.searchController.clear();
       searchFocusNode.unfocus();
       return false;
     }

@@ -38,9 +38,8 @@ class _AllWorkshopsScreenState extends State<AllWorkshopsScreen>
 
   Future<bool> onPop() async {
     // if on allWorkhops screen but searchController is onFocus
-    if (!searchBarWidget.isSearching.value &&
-        searchBarWidget.searchController.text.isEmpty &&
-        searchFocusNode.hasFocus) {
+    if (!searchBarWidget.isSearching.value && searchFocusNode.hasFocus) {
+      searchBarWidget.searchController.clear();
       searchFocusNode.unfocus();
       return false;
     }

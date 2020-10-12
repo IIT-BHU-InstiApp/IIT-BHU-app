@@ -5,6 +5,7 @@ import 'package:iit_app/model/built_post.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:iit_app/model/workshopCreator.dart';
 import 'package:iit_app/pages/dialogBoxes.dart';
+import 'package:iit_app/screens/home/worshop_detail/workshop_detail.dart';
 
 class CreateScreen extends StatefulWidget {
   final ClubListPost club;
@@ -330,7 +331,7 @@ class _CreateScreenState extends State<CreateScreen> {
                                 workshop: _workshop,
                                 club: widget.club);
                           } else {
-                            WorkshopCreater.edit(
+                            await WorkshopCreater.edit(
                                 context: context,
                                 workshop: _workshop,
                                 club: widget.club,
