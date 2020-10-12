@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iit_app/external_libraries/spin_kit.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/pages/dialogBoxes.dart';
@@ -117,7 +118,7 @@ class _DescriptionState extends State<Description> {
         ? Container(
             height: MediaQuery.of(context).size.height * 3 / 4,
             child: Center(
-              child: CircularProgressIndicator(),
+              child: LoadingCircle,
             ),
           )
         : Container(

@@ -1,5 +1,6 @@
 import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
+import 'package:iit_app/external_libraries/spin_kit.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/colorConstants.dart';
@@ -53,7 +54,7 @@ class _AllWorkshopsScreenState extends State<AllWorkshopsScreen>
         } else {
           // Show a loading indicator while waiting for the posts
           return Center(
-            child: CircularProgressIndicator(),
+            child: LoadingCircle,
           );
         }
       },
@@ -130,12 +131,13 @@ class _AllWorkshopsScreenState extends State<AllWorkshopsScreen>
         ),
         drawer: SideBar(context: context),
         body: ValueListenableBuilder(
-    valueListenable: searchListener,
-    builder: (context, isSearching, child) {
-    return (isSearching ?
-    buildWorkshopsFromSearch(context: context, searchPost: searchBarWidget.searchPost):_buildAllWorkshopsBody(context));
-    }
-      ),
+            valueListenable: searchListener,
+            builder: (context, isSearching, child) {
+              return (isSearching
+                  ? buildWorkshopsFromSearch(
+                      context: context, searchPost: searchBarWidget.searchPost)
+                  : _buildAllWorkshopsBody(context));
+            }),
       ),
     );
   }
