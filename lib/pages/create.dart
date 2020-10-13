@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'dart:async';
@@ -5,6 +7,7 @@ import 'package:iit_app/model/built_post.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:iit_app/model/workshopCreator.dart';
 import 'package:iit_app/pages/dialogBoxes.dart';
+import 'package:iit_app/screens/home/worshop_detail/workshop_detail_widgets.dart';
 
 class CreateScreen extends StatefulWidget {
   final ClubListPost club;
@@ -28,18 +31,34 @@ class _CreateScreenState extends State<CreateScreen> {
   TextEditingController _descriptionController;
   TextEditingController _locationController;
   TextEditingController _audienceController;
+  TextEditingController _tagController;
   String _editingDate;
   String _editingTime;
 
   TextEditingController _searchContactsController;
   BuiltProfileSearchPost _searchPost;
   bool _isSearchingContacts = false;
+  bool _isSearchingTags = false;
+  bool _tagDataFetched = false;
 
   final _searchContactFormKey = GlobalKey<FormState>();
 
+  //TODO: Define a similar list of TagPosts for Tags as _searchedTagResult as is done in the next line
   BuiltList<BuiltProfilePost> _searchedProfileresult;
   String _searchByValue = 'name';
   bool _searchedDataFetched = false;
+
+  List tags = [
+    'Tag14521',
+    'Tag2',
+    'Tag3',
+    'Tag1',
+    'Tag2',
+    'Tag3',
+    'Tag1',
+    'Tag2',
+    'Tag3',
+  ];
 
   final dropDownButtonTextStyle = TextStyle(fontSize: 12);
   DropdownButton _searchCategoryDropDown() => DropdownButton<String>(
@@ -74,6 +93,7 @@ class _CreateScreenState extends State<CreateScreen> {
     this._descriptionController = TextEditingController();
     this._locationController = TextEditingController();
     this._audienceController = TextEditingController();
+    this._tagController = TextEditingController();
 
     this._searchContactsController = TextEditingController();
 
@@ -90,6 +110,10 @@ class _CreateScreenState extends State<CreateScreen> {
         this._workshop.contactIds.add(contact.id);
         this._workshop.contactNameofId[contact.id] =
             WorkshopCreater.nameOfContact(contact.name);
+      });
+      widget.workshopData.tags.forEach((tag) {
+        this._workshop.tagIds.add(tag.id);
+        this._workshop.tagNameofId[tag.id] = tag.tag_name;
       });
     } else {
       _workshop = WorkshopCreater();
@@ -299,6 +323,129 @@ class _CreateScreenState extends State<CreateScreen> {
                           ),
                         )
                       : Container(),
+                  Row(children: [
+                    Expanded(
+                      child: TextFormField(
+                        decoration: InputDecoration(
+                          contentPadding:
+                              EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                          labelText: 'Tags',
+                          suffix: IconButton(
+                            icon: Icon(Icons.clear),
+                            onPressed: () {
+                              this._tagController.text = '';
+                              this._isSearchingTags = false;
+                              if (!this.mounted) return;
+                              setState(() {});
+                            },
+                          ),
+                        ),
+                        controller: this._tagController,
+                        onFieldSubmitted: (value) async {
+                          print("Submitted");
+                          if (value.isEmpty) return;
+
+                          // TODO: BuildTagPosts
+                          // this._searchPost = BuiltProfileSearchPost((b) => b
+                          //           ..search_by = this._searchByValue
+                          //           ..search_string =
+                          //               this._searchContactsController.text);
+
+                          if (!this.mounted) return;
+                          setState(() {
+                            this._isSearchingTags = true;
+                            this._tagDataFetched = false;
+                            // TODO: Uncomment This Line when ready
+                            // this._searchedTagResult = null;
+                          });
+                          // TODO: Do a tag search and store it in this._searchedTagResult
+                          // await AppConstants.service
+                          //             .searchProfile(AppConstants.djangoToken,
+                          //                 this._searchPost)
+                          //             .catchError((onError) {
+                          //           print(
+                          //               'Error whlie fetching search results: $onError');
+                          //         }).then((result) {
+                          //           if (result != null)
+                          //             this._searchedTagResult = result.body;
+                          //         });
+                          if (!this.mounted) return;
+                          setState(() {
+                            this._tagDataFetched = true;
+                          });
+                        },
+                      ),
+                    ),
+                    this._isSearchingTags
+                        ? RaisedButton(
+                            child: Text('X Clear'),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(50),
+                            ),
+                            onPressed: () {
+                              this._tagController.text = '';
+                              this._isSearchingTags = false;
+                              if (!this.mounted) return;
+                              setState(() {});
+                            },
+                          )
+                        : Container()
+                  ]),
+                  this._isSearchingTags
+                      ? Column(
+                          children: <Widget>[
+                            Divider(
+                              height: 2,
+                              thickness: 2,
+                            ),
+                            Container(
+                              height: MediaQuery.of(context).size.height / 6,
+                              child: _buildTagsFromSearchPosts(context),
+                            ),
+                            Divider(
+                              height: 2,
+                              thickness: 2,
+                            ),
+                          ],
+                        )
+                      : Container(),
+                  this._workshop.tagIds.length > 0
+                      ? Container(
+                          height: 50,
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemCount: this._workshop.tagIds.length,
+                            itemBuilder: (context, index) {
+                              int _id = this._workshop.tagIds[index];
+                              print(this._workshop.tagIds.length);
+                              return Container(
+                                padding: EdgeInsets.all(2),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Text(this._workshop.tagNameofId[_id]),
+                                    InkWell(
+                                      child: Icon(Icons.cancel),
+                                      splashColor: Colors.red,
+                                      onTap: () {
+                                        setState(() {
+                                          this._workshop.tagIds.remove(_id);
+                                          this
+                                              ._workshop
+                                              .tagNameofId
+                                              .remove(_id);
+                                        });
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                        )
+                      : Container(),
                   Container(
                     padding: const EdgeInsets.symmetric(
                         vertical: 16.0, horizontal: 16.0),
@@ -466,6 +613,65 @@ class _CreateScreenState extends State<CreateScreen> {
         : Center(
             child: CircularProgressIndicator(),
           );
+  }
+
+  Widget _buildTagsFromSearchPosts(
+    BuildContext context,
+  ) {
+    bool lol = false;
+    List<int> localTagIds = [1, 2, 3, 4];
+    Map<int, String> localTagNameofId = {
+      1: 'Tag1',
+      2: 'Tag2',
+      3: 'Tag3',
+      4: 'Tag4'
+    };
+    return this._tagDataFetched
+        ? ListView(shrinkWrap: true, children: <Widget>[
+            Container(
+              // child: (this._searchedProfileresult == null ||
+              //         this._searchedProfileresult.isEmpty)
+              child: lol
+                  ? Center(
+                      child: Text(
+                        'No such Tags',
+                        textAlign: TextAlign.center,
+                        textScaleFactor: 1.5,
+                      ),
+                    )
+                  : ListView.builder(
+                      physics: ScrollPhysics(),
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      // TODO: Replace all instances of localID with the actual searched tags
+                      itemCount: localTagIds.length,
+                      padding: EdgeInsets.all(8),
+                      itemBuilder: (context, index) {
+                        int _id = localTagIds[index];
+                        return Container(
+                          padding: EdgeInsets.all(2),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Text(localTagNameofId[_id]),
+                              InkWell(
+                                child: Icon(Icons.cancel),
+                                splashColor: Colors.red,
+                                onTap: () {
+                                  setState(() {
+                                    localTagIds.remove(_id);
+                                    localTagNameofId.remove(_id);
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+            )
+          ])
+        : Container();
   }
 
   Future<Null> _selectDate(BuildContext context) async {
