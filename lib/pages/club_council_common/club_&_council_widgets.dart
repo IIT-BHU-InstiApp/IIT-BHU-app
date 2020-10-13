@@ -195,11 +195,13 @@ class ClubAndCouncilWidgets {
               backgroundColor: Colors.transparent,
             ),
           ),
-          Flexible(
-            child: Container(
-              child: Text(name, textAlign: TextAlign.center),
-              width: 100,
+          Container(
+            child: Text(
+              name,
+              textAlign: TextAlign.center,
+              maxLines: 5,
             ),
+            width: 100,
           ),
           desg == ''
               ? SizedBox(height: 1.0)
