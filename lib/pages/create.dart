@@ -8,7 +8,6 @@ import 'package:iit_app/model/built_post.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:iit_app/model/workshopCreator.dart';
 import 'package:iit_app/pages/dialogBoxes.dart';
-import 'package:iit_app/screens/home/worshop_detail/workshop_detail_widgets.dart';
 
 class CreateScreen extends StatefulWidget {
   final ClubListPost club;
@@ -46,11 +45,12 @@ class _CreateScreenState extends State<CreateScreen> {
 
   //TODO: Define a similar list of TagPosts for Tags as _searchedTagResult as is done in the next line
   BuiltList<BuiltProfilePost> _searchedProfileresult;
-  BuiltList<TagDetail> _searchedTagResult;
   TagDetail _createdTagResult;
   String _searchByValue = 'name';
   bool _searchedDataFetched = false;
 
+  BuiltList<TagDetail> _searchedTagResult;
+  // This is a local substitute for _searchedTagResult, which is not implemented yet
   Map<int, String> localTagNameofId = {
     24: 'Tag1',
     37: 'Tag2',
@@ -323,6 +323,7 @@ class _CreateScreenState extends State<CreateScreen> {
                   Row(children: [
                     Expanded(
                       child: TextFormField(
+                        controller: this._tagController,
                         decoration: InputDecoration(
                           contentPadding:
                               EdgeInsets.symmetric(vertical: 0, horizontal: 10),
@@ -332,16 +333,14 @@ class _CreateScreenState extends State<CreateScreen> {
                             onPressed: () {
                               this._tagController.text = '';
                               if (!this.mounted) return;
-                              // setState(() {});
                             },
                           ),
                         ),
-                        controller: this._tagController,
                         onFieldSubmitted: (value) async {
                           print("Submitted");
                           if (value.isEmpty) return;
 
-                          // TODO: BuildTagPosts
+                          // TODO: Implement Searching of Tags
                           // this._searchPost = BuiltProfileSearchPost((b) => b
                           //           ..search_by = this._searchByValue
                           //           ..search_string =
@@ -375,12 +374,11 @@ class _CreateScreenState extends State<CreateScreen> {
                     ),
                     this._isSearchingTags
                         ? RaisedButton(
-                            child: Text('+ Add'),
+                            child: Text('+ Create'),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(50),
                             ),
                             onPressed: () async {
-                              bool tagCreationSuccessful;
                               final newTag = TagCreate((b) => b
                                 ..tag_name = this._tagController.text
                                 ..club = widget.club.id);

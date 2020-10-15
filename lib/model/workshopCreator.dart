@@ -106,9 +106,6 @@ class WorkshopCreater {
       print('Error printing EDITED workshop: ${onError.toString()}');
     });
 
-    print(BuiltContacts(
-      (b) => b..contacts = workshop.contactIds.build().toBuilder(),
-    ));
     await AppConstants.service
         .updateContacts(
       widgetWorkshopData.id,
@@ -119,21 +116,6 @@ class WorkshopCreater {
     )
         .catchError((onError) {
       print('Error editing contacts in edited workshop: ${onError.toString()}');
-      //  CreatePageDialogBoxes.showUnSuccessfulDialog(
-      //     context: context);
-    });
-
-    print('Updating Tags');
-    await AppConstants.service
-        .updateTags(
-      widgetWorkshopData.id,
-      AppConstants.djangoToken,
-      BuiltTags(
-        (b) => b..tags = workshop.tagIds.build().toBuilder(),
-      ),
-    )
-        .catchError((onError) {
-      print('Error editing Tags in edited workshop: ${onError.toString()}');
       //  CreatePageDialogBoxes.showUnSuccessfulDialog(
       //     context: context);
     });
