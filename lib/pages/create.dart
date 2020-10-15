@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'dart:async';
@@ -45,20 +46,17 @@ class _CreateScreenState extends State<CreateScreen> {
 
   //TODO: Define a similar list of TagPosts for Tags as _searchedTagResult as is done in the next line
   BuiltList<BuiltProfilePost> _searchedProfileresult;
+  BuiltList<TagDetail> _searchedTagResult;
+  TagDetail _createdTagResult;
   String _searchByValue = 'name';
   bool _searchedDataFetched = false;
 
-  List tags = [
-    'Tag14521',
-    'Tag2',
-    'Tag3',
-    'Tag1',
-    'Tag2',
-    'Tag3',
-    'Tag1',
-    'Tag2',
-    'Tag3',
-  ];
+  Map<int, String> localTagNameofId = {
+    24: 'Tag1',
+    37: 'Tag2',
+    74: 'Tag3',
+    125: 'Tag4'
+  };
 
   final dropDownButtonTextStyle = TextStyle(fontSize: 12);
   DropdownButton _searchCategoryDropDown() => DropdownButton<String>(
@@ -112,7 +110,6 @@ class _CreateScreenState extends State<CreateScreen> {
             WorkshopCreater.nameOfContact(contact.name);
       });
       widget.workshopData.tags.forEach((tag) {
-        this._workshop.tagIds.add(tag.id);
         this._workshop.tagNameofId[tag.id] = tag.tag_name;
       });
     } else {
@@ -329,14 +326,13 @@ class _CreateScreenState extends State<CreateScreen> {
                         decoration: InputDecoration(
                           contentPadding:
                               EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-                          labelText: 'Tags',
+                          labelText: 'Search tags by name',
                           suffix: IconButton(
                             icon: Icon(Icons.clear),
                             onPressed: () {
                               this._tagController.text = '';
-                              this._isSearchingTags = false;
                               if (!this.mounted) return;
-                              setState(() {});
+                              // setState(() {});
                             },
                           ),
                         ),
@@ -369,6 +365,7 @@ class _CreateScreenState extends State<CreateScreen> {
                           //           if (result != null)
                           //             this._searchedTagResult = result.body;
                           //         });
+                          // this._searchedTagResult =
                           if (!this.mounted) return;
                           setState(() {
                             this._tagDataFetched = true;
@@ -376,6 +373,39 @@ class _CreateScreenState extends State<CreateScreen> {
                         },
                       ),
                     ),
+                    this._isSearchingTags
+                        ? RaisedButton(
+                            child: Text('+ Add'),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(50),
+                            ),
+                            onPressed: () async {
+                              bool tagCreationSuccessful;
+                              final newTag = TagCreate((b) => b
+                                ..tag_name = this._tagController.text
+                                ..club = widget.club.id);
+
+                              await AppConstants.service
+                                  .createTag(AppConstants.djangoToken, newTag)
+                                  .catchError((onError) {
+                                //TODO : Add an error popup when user tries to create an already existing tag. Currently Silent
+                                final error = onError as Response<dynamic>;
+                                print(error.body);
+                                print(
+                                    'Error while creating Tag: ${onError.toString()} ${onError.runtimeType}');
+                              }).then((value) {
+                                if (value != null)
+                                  this._createdTagResult = value.body;
+                              });
+                              setState(() {
+                                if (this._createdTagResult != null)
+                                  this._workshop.tagNameofId[this
+                                      ._createdTagResult
+                                      .id] = this._createdTagResult.tag_name;
+                              });
+                            },
+                          )
+                        : Container(),
                     this._isSearchingTags
                         ? RaisedButton(
                             child: Text('X Clear'),
@@ -389,7 +419,7 @@ class _CreateScreenState extends State<CreateScreen> {
                               setState(() {});
                             },
                           )
-                        : Container()
+                        : Container(),
                   ]),
                   this._isSearchingTags
                       ? Column(
@@ -408,17 +438,24 @@ class _CreateScreenState extends State<CreateScreen> {
                             ),
                           ],
                         )
+                      // TODO: Instead of this being an empty container, make it fetch from clubs/{id}/tags to show all tags
                       : Container(),
-                  this._workshop.tagIds.length > 0
+                  this._workshop.tagNameofId.keys.length > 0
                       ? Container(
                           height: 50,
                           child: ListView.builder(
                             shrinkWrap: true,
                             scrollDirection: Axis.horizontal,
-                            itemCount: this._workshop.tagIds.length,
+                            itemCount: this._workshop.tagNameofId.keys.length,
                             itemBuilder: (context, index) {
-                              int _id = this._workshop.tagIds[index];
-                              print(this._workshop.tagIds.length);
+                              print(
+                                  "length ${this._workshop.tagNameofId.keys.length}");
+                              int _id = this
+                                  ._workshop
+                                  .tagNameofId
+                                  .keys
+                                  .toList()[index];
+                              print(this._workshop.tagNameofId[_id]);
                               return Container(
                                 padding: EdgeInsets.all(2),
                                 child: Row(
@@ -431,7 +468,6 @@ class _CreateScreenState extends State<CreateScreen> {
                                       splashColor: Colors.red,
                                       onTap: () {
                                         setState(() {
-                                          this._workshop.tagIds.remove(_id);
                                           this
                                               ._workshop
                                               .tagNameofId
@@ -619,58 +655,51 @@ class _CreateScreenState extends State<CreateScreen> {
     BuildContext context,
   ) {
     bool lol = false;
-    List<int> localTagIds = [1, 2, 3, 4];
-    Map<int, String> localTagNameofId = {
-      1: 'Tag1',
-      2: 'Tag2',
-      3: 'Tag3',
-      4: 'Tag4'
-    };
+    print(this._tagDataFetched);
     return this._tagDataFetched
-        ? ListView(shrinkWrap: true, children: <Widget>[
-            Container(
-              // child: (this._searchedProfileresult == null ||
-              //         this._searchedProfileresult.isEmpty)
-              child: lol
-                  ? Center(
-                      child: Text(
-                        'No such Tags',
-                        textAlign: TextAlign.center,
-                        textScaleFactor: 1.5,
-                      ),
-                    )
-                  : ListView.builder(
-                      physics: ScrollPhysics(),
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      // TODO: Replace all instances of localID with the actual searched tags
-                      itemCount: localTagIds.length,
-                      padding: EdgeInsets.all(8),
-                      itemBuilder: (context, index) {
-                        int _id = localTagIds[index];
-                        return Container(
-                          padding: EdgeInsets.all(2),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Text(localTagNameofId[_id]),
-                              InkWell(
-                                child: Icon(Icons.cancel),
-                                splashColor: Colors.red,
-                                onTap: () {
-                                  setState(() {
-                                    localTagIds.remove(_id);
-                                    localTagNameofId.remove(_id);
-                                  });
-                                },
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-            )
-          ])
+        ? Container(
+            child:
+                lol // Replace by (this._searchedtagResult == null || this._searchedProfileResult == null)
+                    ? Center(
+                        child: Text(
+                          'No such Tags',
+                          textAlign: TextAlign.center,
+                          textScaleFactor: 1.5,
+                        ),
+                      )
+                    : GridView.builder(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3, childAspectRatio: 4),
+                        physics: ScrollPhysics(),
+                        shrinkWrap: true,
+                        scrollDirection: Axis.vertical,
+                        // TODO: Replace all instances of localTag with the actual searched tags
+                        itemCount: localTagNameofId.length,
+                        padding: EdgeInsets.all(2),
+                        itemBuilder: (context, index) {
+                          int _id = localTagNameofId.keys.toList()[index];
+                          return Container(
+                            padding: EdgeInsets.all(2),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Text(localTagNameofId[_id]),
+                                InkWell(
+                                  child: Icon(Icons.add_box_rounded),
+                                  splashColor: Colors.green,
+                                  onTap: () {
+                                    setState(() {
+                                      this._workshop.tagNameofId[_id] =
+                                          localTagNameofId[_id];
+                                      localTagNameofId.remove(_id);
+                                    });
+                                  },
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ))
         : Container();
   }
 

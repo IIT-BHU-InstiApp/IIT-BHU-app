@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/colorConstants.dart';
-import 'package:iit_app/pages/club/tags.dart';
 import 'package:iit_app/pages/club_council_common/club_&_council_widgets.dart';
 import 'package:iit_app/pages/club_council_common/description.dart';
 import 'package:iit_app/pages/create.dart';
@@ -315,12 +314,6 @@ class _ClubPageState extends State<ClubPage>
               bottom: bottom,
             ),
             child: Description(map: clubMap, isClub: true),
-          ),
-          Padding(
-            padding: EdgeInsets.only(
-              bottom: bottom,
-            ),
-            child: Tag(map: clubMap),
           ),
           SizedBox(height: 15.0),
           clubWorkshops == null
