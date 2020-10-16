@@ -15,7 +15,6 @@ class WorkshopCreater {
   String audience;
   List<int> contactIds = [];
   Map<int, String> contactNameofId = {};
-  List<int> tagIds = [];
   Map<int, String> tagNameofId = {};
   // TODO: add image_url
 
@@ -118,6 +117,18 @@ class WorkshopCreater {
       print('Error editing contacts in edited workshop: ${onError.toString()}');
       //  CreatePageDialogBoxes.showUnSuccessfulDialog(
       //     context: context);
+    });
+
+    await AppConstants.service
+        .updateTags(
+            widgetWorkshopData.id,
+            AppConstants.djangoToken,
+            BuiltTags(
+              (b) => b
+                ..tags = workshop.tagNameofId.keys.toList().build().toBuilder(),
+            ))
+        .catchError((onError) {
+      print('Error editing contacts in edited workshop: ${onError.toString()}');
     });
   }
 }

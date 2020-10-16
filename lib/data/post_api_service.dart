@@ -45,11 +45,11 @@ abstract class PostApiService extends ChopperService {
 
   //? ----------------------------------- Put -------------------------------
 
-  @Put(path: '/workshops/{id}/update-tags/')
+  @Put(path: '/workshops/{id}/update-contacts/')
   Future<Response<BuiltList<ContactPost>>> updateContacts(@Path('id') int id,
       @Header('Authorization') String token, @Body() BuiltContacts body);
 
-  @Put(path: '/workshops/{id}/update-contacts/')
+  @Put(path: '/workshops/{id}/update-tags/')
   Future<Response<BuiltList<ContactPost>>> updateTags(@Path('id') int id,
       @Header('Authorization') String token, @Body() BuiltTags body);
 
@@ -206,13 +206,13 @@ abstract class PostApiService extends ChopperService {
   //? ----------------------------------- Post -------------------------------
 
   @Post(path: '/tags/create/')
-  Future<Response> createTag(
+  Future<Response<TagDetail>> createTag(
       @Header('Authorization') String token, @Body() TagCreate body);
 
 // TODO: what is the return response body of searchTag ?
-  // @Post(path: '/tags/search/')
-  // Future<Response<(type of body)>> searchTag(
-  //     @Header('Authorization') String token, @Body() TagSearch body);
+  @Post(path: '/tags/search/')
+  Future<Response<BuiltList<TagDetail>>> searchTag(
+      @Header('Authorization') String token, @Body() TagSearch body);
 
   @Post(path: '/login/')
   Future<Response<Token>> logInPost(@Body() LoginPost body);
