@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iit_app/external_libraries/spin_kit.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/colorConstants.dart';
 import 'package:iit_app/screens/drawer.dart';
@@ -73,7 +74,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 Container(
                   child: Center(
                     child: this._refreshing
-                        ? CircularProgressIndicator()
+                        ? LoadingCircle
                         : RaisedButton(
                             onPressed: onResetDatabase,
                             child: Text("Reset Saved Data")),
