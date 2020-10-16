@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iit_app/external_libraries/spin_kit.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'dart:async';
 import 'package:iit_app/model/built_post.dart';
@@ -464,7 +465,7 @@ class _CreateScreenState extends State<CreateScreen> {
             ],
           )
         : Center(
-            child: CircularProgressIndicator(),
+            child: LoadingCircle,
           );
   }
 
