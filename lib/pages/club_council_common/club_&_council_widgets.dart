@@ -199,7 +199,7 @@ class ClubAndCouncilWidgets {
             child: Text(
               name,
               textAlign: TextAlign.center,
-              maxLines: 5,
+              maxLines: 2,
             ),
             width: 100,
           ),
