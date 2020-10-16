@@ -8,6 +8,7 @@ import 'package:iit_app/model/colorConstants.dart';
 import 'package:iit_app/pages/club/club.dart';
 import 'package:iit_app/pages/club_council_common/club_&_council_widgets.dart';
 import 'package:iit_app/pages/create.dart';
+import 'package:iit_app/pages/resource_create.dart';
 import 'package:iit_app/screens/home/home_widgets.dart';
 import 'package:iit_app/ui/colorPicker.dart';
 import 'package:iit_app/ui/separator.dart';
@@ -193,7 +194,7 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: new Text("Successful!"),
-          content: new Text("Workshop succesfully deleted!"),
+          content: new Text("Succesfully deleted!"),
           actions: <Widget>[
             FlatButton(
               child: new Text("yay"),
@@ -262,6 +263,33 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
     );
   }
 
+  Future<bool> confirmDeleteDialog() async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: new Text("Delete resource"),
+          content: new Text("Are you sure to remove this resource?"),
+          actions: <Widget>[
+            FlatButton(
+              child: new Text("Yup!"),
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+            ),
+            FlatButton(
+              child: new Text("nope, let me rethink.."),
+              onPressed: () {
+                Navigator.of(context).pop(false);
+                return false;
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void fetchWorkshopDetails() async {
     Response<BuiltWorkshopDetailPost> snapshots = await AppConstants.service
         .getWorkshopDetailsPost(widget.workshop.id, AppConstants.djangoToken)
@@ -286,6 +314,38 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
             print("status of deleting workshop: ${snapshot.statusCode}");
             showSuccessfulDialog();
           }).catchError((onError) {
+            print("Error in deleting: ${onError.toString()}");
+            showUnSuccessfulDialog();
+          })
+        : null;
+    setState(() {});
+  }
+
+  void deleteResource(int id) async {
+    print(id);
+    await confirmDeleteDialog()
+        ? await AppConstants.service
+            .deleteWorkshopResources(id, AppConstants.djangoToken)
+            .then((snapshot) {
+            print("status of deleting resource ${snapshot.statusCode}");
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                      content: Text("Resource deleted"),
+                      actions: <Widget>[
+                        FlatButton(
+                          child: Text("yay"),
+                          onPressed: () {
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                          },
+                        )
+                      ]);
+                });
+          }).catchError((onError) {
+            final error = onError as Response<dynamic>;
+            print(error.body);
             print("Error in deleting: ${onError.toString()}");
             showUnSuccessfulDialog();
           })
@@ -438,9 +498,53 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
     );
   }
 
+  Widget editResources(int id) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Column(children: <Widget>[
+          /*Text(
+            'Edit',
+            style: TextStyle(color: Colors.yellow, fontWeight: FontWeight.bold),
+          ),*/
+          IconButton(
+            icon: Icon(
+              Icons.edit,
+              color: Colors.yellow,
+            ),
+            iconSize: 30,
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ResourceCreateScreen(_workshop, id),
+                ),
+              );
+            },
+          ),
+        ]),
+        Column(children: [
+          /*Text(
+            'Delete',
+            style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+          ),*/
+          IconButton(
+              icon: Icon(
+                Icons.delete_forever,
+                color: Colors.red,
+              ),
+              iconSize: 30,
+              onPressed: () {
+                deleteResource(id);
+              })
+        ])
+      ],
+    );
+  }
+
   Widget editWorkshopOptions() {
     return Positioned(
-      right: 20,
+      right: 50,
       top: 30,
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -554,10 +658,69 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
                   height: 35.0,
                   child: Center(child: CircularProgressIndicator()),
                 )
-              : Text(
-                  //_workshop.resources,
-                  'No Resources',
-                ),
+              : (_workshop.resources.length == 0)
+                  ? Text("No resources yet")
+                  : SizedBox(
+                      height: 100,
+                      width: 400,
+                      child: ListView.separated(
+                        //scrollDirection: Axis.horizontal,
+                        itemCount: _workshop.resources.length,
+                        itemBuilder: (context, index) {
+                          return Row(
+                            children: [
+                              SizedBox(
+                                width: 280,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                        "Name: ${_workshop.resources[index].name}"),
+                                    Text(
+                                        "Link: ${_workshop.resources[index].link}"),
+                                    Text(
+                                        "Resource Type: ${_workshop.resources[index].resource_type}"),
+                                    SizedBox(height: 7)
+                                  ],
+                                ),
+                              ),
+                              (_workshop.is_por_holder != null)
+                                  ? (_workshop.is_por_holder ||
+                                          _workshop.is_workshop_contact)
+                                      ? editResources(
+                                          _workshop.resources[index].id)
+                                      : Container()
+                                  : Container(),
+                            ],
+                          );
+                        },
+                        separatorBuilder: (context, index) {
+                          return SizedBox(width: 2.0);
+                        },
+                      ),
+                    ),
+
+          (_workshop.is_por_holder != null)
+              ? (_workshop.is_por_holder || _workshop.is_workshop_contact)
+                  ? RaisedButton(
+                      child: Text("Add resources"),
+                      onPressed: () => {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                ResourceCreateScreen(_workshop),
+                          ),
+                        )
+                      },
+                    )
+                  : Container()
+              : Container(),
+
+          //editResources(),
+
+          //_workshop.resources,
+
           SizedBox(height: 15.0),
           WorkshopDetailWidgets.getHeading(
               icon: Icons.people, title: 'Audience'),

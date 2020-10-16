@@ -14,6 +14,7 @@ class WorkshopCreater {
   String location;
   String audience;
   List<int> contactIds = [];
+  List<int> all_resources = [];
   Map<int, String> contactNameofId = {};
   // TODO: add image_url
 
@@ -55,7 +56,7 @@ class WorkshopCreater {
       ..time = workshop.time
       ..location = workshop.location
       ..audience = workshop.audience
-      ..resources = BuiltList<int>([1]).toBuilder()
+     // ..resources = workshop.all_resources.build().toBuilder();
       ..contacts = workshop.contactIds.build().toBuilder());
     await AppConstants.service
         .postNewWorkshop(AppConstants.djangoToken, newWorkshop)
@@ -111,7 +112,8 @@ class WorkshopCreater {
       BuiltContacts(
         (b) => b..contacts = workshop.contactIds.build().toBuilder(),
       ),
-    )
+      )
+
         .catchError((onError) {
       print('Error editing contacts in edited workshop: ${onError.toString()}');
       //  CreatePageDialogBoxes.showUnSuccessfulDialog(

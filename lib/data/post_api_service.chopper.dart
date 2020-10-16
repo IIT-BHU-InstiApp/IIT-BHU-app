@@ -68,6 +68,16 @@ class _$PostApiService extends PostApiService {
     return client.send<dynamic, dynamic>($request);
   }
 
+  Future<Response> postNewResource(
+      int id, String token, WorkshopResources resources) {
+    final $url = '/workshops/${id}/resources/';
+    final $headers = {'Authorization': token};
+    final $body = resources;
+    final $request =
+        Request('POST', $url, client.baseUrl, body: $body, headers: $headers);
+    return client.send<dynamic, dynamic>($request);
+  }
+
   Future<Response<BuiltAllWorkshopsPost>> searchWorkshop(
       BuiltWorkshopSearchByStringPost body) {
     final $url = '/workshops/search/';
