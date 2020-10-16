@@ -23,7 +23,7 @@ Some clean code guidelines : -
 
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-7-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-8-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ## Contributors ✨
@@ -42,6 +42,9 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/Yashjain715"><img src="https://avatars3.githubusercontent.com/u/58399080?v=4" width="100px;" alt=""/><br /><sub><b>Yashjain715</b></sub></a><br /><a href="https://github.com/IIT-BHU-InstiApp/IIT-BHU-app/commits?author=Yashjain715" title="Code">💻</a> <a href="https://github.com/IIT-BHU-InstiApp/IIT-BHU-app/issues?q=author%3AYashjain715" title="Bug reports">🐛</a></td>
     <td align="center"><a href="https://github.com/Vikhyath08"><img src="https://avatars2.githubusercontent.com/u/55887656?v=4" width="100px;" alt=""/><br /><sub><b>Vikhyath Venkatraman</b></sub></a><br /><a href="https://github.com/IIT-BHU-InstiApp/IIT-BHU-app/commits?author=Vikhyath08" title="Code">💻</a> <a href="#design-Vikhyath08" title="Design">🎨</a></td>
     <td align="center"><a href="https://github.com/chethana233"><img src="https://avatars0.githubusercontent.com/u/57175071?v=4" width="100px;" alt=""/><br /><sub><b>Chethana</b></sub></a><br /><a href="https://github.com/IIT-BHU-InstiApp/IIT-BHU-app/commits?author=chethana233" title="Code">💻</a> <a href="https://github.com/IIT-BHU-InstiApp/IIT-BHU-app/issues?q=author%3Achethana233" title="Bug reports">🐛</a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/ARJUPTA"><img src="https://avatars3.githubusercontent.com/u/64064110?v=4" width="100px;" alt=""/><br /><sub><b>Arjun Gupta</b></sub></a><br /><a href="https://github.com/IIT-BHU-InstiApp/IIT-BHU-app/commits?author=ARJUPTA" title="Code">💻</a> <a href="#design-ARJUPTA" title="Design">🎨</a></td>
   </tr>
 </table>
 

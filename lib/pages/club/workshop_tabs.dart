@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iit_app/external_libraries/spin_kit.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/colorConstants.dart';
 import 'package:iit_app/screens/home/home_widgets.dart';
@@ -6,7 +7,7 @@ import 'package:iit_app/screens/home/home_widgets.dart';
 class WorkshopTabs {
   static Widget _getWorkshops(workshops) {
     return workshops == null
-        ? Container(child: Center(child: CircularProgressIndicator()))
+        ? Container(child: Center(child: LoadingCircle))
         : workshops.length == 0
             ? Center(child: Text('No workshops here :('))
             : ListView.builder(
@@ -53,12 +54,10 @@ class WorkshopTabs {
               controller: tabController,
               children: <Widget>[
                 clubWorkshops == null
-                    ? Container(
-                        child: Center(child: CircularProgressIndicator()))
+                    ? Container(child: Center(child: LoadingCircle))
                     : _getWorkshops(clubWorkshops.active_workshops),
                 clubWorkshops == null
-                    ? Container(
-                        child: Center(child: CircularProgressIndicator()))
+                    ? Container(child: Center(child: LoadingCircle))
                     : _getWorkshops(clubWorkshops.past_workshops),
               ],
             ),
