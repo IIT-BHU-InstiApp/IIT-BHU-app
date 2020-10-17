@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/pages/club/club.dart';
+import 'package:iit_app/model/appConstants.dart';
 
 class CreatePageDialogBoxes {
   static showSuccesfulDialog({
@@ -19,18 +20,14 @@ class CreatePageDialogBoxes {
           actions: <Widget>[
             FlatButton(
               child: Text("yay"),
-              onPressed: () {
-                Navigator.pop(context);
-                Navigator.pop(context);
+              onPressed: () async {
+                await AppConstants.updateAndPopulateWorkshops();
                 Navigator.pop(context);
                 if (isEditing) {
                   Navigator.pop(context);
+                  return;
                 }
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            ClubPage(club: club, editMode: true)));
+                Navigator.pop(context);
               },
             ),
           ],

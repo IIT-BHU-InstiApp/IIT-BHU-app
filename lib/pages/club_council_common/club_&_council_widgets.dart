@@ -196,7 +196,11 @@ class ClubAndCouncilWidgets {
             ),
           ),
           Container(
-            child: Text(name, textAlign: TextAlign.center),
+            child: Text(
+              name,
+              textAlign: TextAlign.center,
+              maxLines: 2,
+            ),
             width: 100,
           ),
           desg == ''
@@ -370,7 +374,7 @@ class ClubAndCouncilWidgets {
                     //crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        name,
+                        name ?? 'No Name Available',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 25.0,
@@ -381,14 +385,14 @@ class ClubAndCouncilWidgets {
                       SizedBox(height: 10.0),
                       ListTile(
                         onTap: () {
-                          launch("mailto:$email");
+                          if (email != null) launch("mailto:$email");
                         },
                         leading: Icon(
                           Icons.email,
                           color: dialogColor,
                         ),
                         title: Text(
-                          email,
+                          email ?? 'No Email Available',
                           style: TextStyle(
                             color: dialogColor,
                           ),
@@ -396,14 +400,14 @@ class ClubAndCouncilWidgets {
                       ),
                       ListTile(
                         onTap: () {
-                          if (phone != '') launch("tel:$phone");
+                          if (phone != null) launch("tel:$phone");
                         },
                         leading: Icon(
                           Icons.phone,
                           color: dialogColor,
                         ),
                         title: Text(
-                          phone == '' ? 'No Phone' : phone,
+                          phone ?? 'No Phone Available',
                           style: TextStyle(
                             color: dialogColor,
                           ),
