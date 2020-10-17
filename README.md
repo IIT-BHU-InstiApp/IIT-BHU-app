@@ -23,7 +23,7 @@ Some clean code guidelines : -
 
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-9-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-10-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ## Contributors ✨
@@ -46,6 +46,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   <tr>
     <td align="center"><a href="https://github.com/ARJUPTA"><img src="https://avatars3.githubusercontent.com/u/64064110?v=4" width="100px;" alt=""/><br /><sub><b>Arjun Gupta</b></sub></a><br /><a href="https://github.com/IIT-BHU-InstiApp/IIT-BHU-app/commits?author=ARJUPTA" title="Code">💻</a> <a href="#design-ARJUPTA" title="Design">🎨</a></td>
     <td align="center"><a href="https://github.com/nb9960"><img src="https://avatars0.githubusercontent.com/u/63557873?v=4" width="100px;" alt=""/><br /><sub><b>Nishtha Bodani</b></sub></a><br /><a href="https://github.com/IIT-BHU-InstiApp/IIT-BHU-app/commits?author=nb9960" title="Code">💻</a> <a href="https://github.com/IIT-BHU-InstiApp/IIT-BHU-app/issues?q=author%3Anb9960" title="Bug reports">🐛</a></td>
+    <td align="center"><a href="https://github.com/Satendra124"><img src="https://avatars3.githubusercontent.com/u/60358771?v=4" width="100px;" alt=""/><br /><sub><b>Satendra Raj</b></sub></a><br /><a href="https://github.com/IIT-BHU-InstiApp/IIT-BHU-app/commits?author=Satendra124" title="Code">💻</a> <a href="https://github.com/IIT-BHU-InstiApp/IIT-BHU-app/issues?q=author%3ASatendra124" title="Bug reports">🐛</a></td>
   </tr>
 </table>
 
