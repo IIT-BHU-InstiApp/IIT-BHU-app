@@ -196,7 +196,11 @@ class ClubAndCouncilWidgets {
             ),
           ),
           Container(
-            child: Text(name, textAlign: TextAlign.center),
+            child: Text(
+              name,
+              textAlign: TextAlign.center,
+              maxLines: 2,
+            ),
             width: 100,
           ),
           desg == ''
