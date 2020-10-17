@@ -2,8 +2,6 @@ import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
-import 'package:iit_app/pages/dialogBoxes.dart';
-import 'package:iit_app/screens/home/worshop_detail/workshop_detail.dart';
 
 class ResourceCreateScreen extends StatefulWidget {
   @override
@@ -56,7 +54,7 @@ class _ResourceCreateScreenState extends State<ResourceCreateScreen> {
     @required BuildContext context,
     @required WorkshopResources resource,
   }) async {
-    String displayText;
+    bool done = false;
     print(resource.name);
     print(resource.link);
     print(resource.id);
@@ -69,11 +67,8 @@ class _ResourceCreateScreenState extends State<ResourceCreateScreen> {
       print(
           'Error creating resource: ${onError.toString()} ${onError.runtimeType}');
     }).then((value) {
-      if (value.isSuccessful) {
-        print('Created!');
-        displayText = "Resource Added";
-      } else {
-        displayText = "UnSuccessful. Please try again";
+      if(value.isSuccessful) {
+        done = true;
       }
     }).catchError((onError) {
       print('Error printing CREATED resource: ${onError.toString()}');
@@ -81,14 +76,22 @@ class _ResourceCreateScreenState extends State<ResourceCreateScreen> {
     showDialog(
         context: context,
         builder: (BuildContext context) {
-          return AlertDialog(content: Text(displayText), actions: <Widget>[
-            FlatButton(
-              child: Text("Okay"),
-              onPressed: () {
-                Navigator.pop(context);
-                Navigator.pop(context);
-                Navigator.pop(context);
-              },
+          return AlertDialog(content: done
+              ? Text("Succesfully added")
+              : Text("UnSuccessful. Please try again"),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text("Okay"),
+                  onPressed: () => {
+                    if (done)
+                      {
+                        Navigator.pop(context),
+                        Navigator.pop(context),
+                        Navigator.pop(context),
+                      }
+                    else
+                      {Navigator.pop(context)}
+                  },
             )
           ]);
         });
@@ -99,38 +102,43 @@ class _ResourceCreateScreenState extends State<ResourceCreateScreen> {
     @required WorkshopResources resource,
     @required int id,
   }) async {
-    String displayText;
+    bool done = false;
     await AppConstants.service
         .updateWorkshopResourcesByPatch(
             widget.id, AppConstants.djangoToken, resource)
         .catchError((onError) {
-      final error = onError as Response<dynamic>;
-      print(error.body);
-      print(
-          'Error editing resource: ${onError.toString()} ${onError.runtimeType}');
-    }).then((value) {
-      if (value.isSuccessful) {
-        print('Edited!');
-        displayText="Resouce Edited";
-      } else {
-        displayText = "UnSuccessful. Please try again";
+          final error = onError as Response<dynamic>;
+          print(error.body);
+          print(
+              'Error editing resource: ${onError.toString()} ${onError.runtimeType}');
+        })
+        .then((value) {
+      if(value.isSuccessful) {
+        done = true;
       }
-      ;
-    }).catchError((onError) {
-      print('Error printing edited resource: ${onError.toString()}');
-    });
+    })
+        .catchError((onError) {
+          print('Error printing edited resource: ${onError.toString()}');
+        });
     showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-              content: Text(displayText),
+              content: done
+                  ? Text("Succesfully edited")
+                  : Text("UnSuccessful! Please try again"),
               actions: <Widget>[
                 FlatButton(
                   child: Text("Okay"),
-                  onPressed: () {
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                    Navigator.pop(context);
+                  onPressed: () => {
+                    if (done)
+                      {
+                        Navigator.pop(context),
+                        Navigator.pop(context),
+                        Navigator.pop(context),
+                      }
+                    else
+                      {Navigator.pop(context)}
                   },
                 )
               ]);
