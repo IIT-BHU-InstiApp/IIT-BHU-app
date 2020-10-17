@@ -18,8 +18,7 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen>
-    with SingleTickerProviderStateMixin {
+class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin {
   TabController _tabController;
 
   SearchBarWidget searchBarWidget;
@@ -35,8 +34,7 @@ class _HomeScreenState extends State<HomeScreen>
       _workshopContainerBg = false,
       _cardBg = false;
 
-  final GlobalKey<FabCircularMenuState> fabKey =
-      GlobalKey<FabCircularMenuState>();
+  final GlobalKey<FabCircularMenuState> fabKey = GlobalKey<FabCircularMenuState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -56,11 +54,12 @@ class _HomeScreenState extends State<HomeScreen>
 
   _setTheme() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    //print(prefs.getString(SharedPreferenceKeys.usertheme));
-    if (prefs.getString(SharedPreferenceKeys.usertheme) == 'dark') {
-      AppTheme().dark();
+    // print(prefs.getString(SharedPreferenceKeys.usertheme));
+
+    if (prefs.getString(SharedPreferenceKeys.usertheme) == 'light') {
+      AppTheme.light();
     } else {
-      AppTheme().light();
+      AppTheme.dark();
     }
   }
 
@@ -74,8 +73,7 @@ class _HomeScreenState extends State<HomeScreen>
 
   void fetchUpdatedDetails() async {
     await AppConstants.updateAndPopulateWorkshops();
-    await AppConstants.writeCouncilLogosIntoDisk(
-        AppConstants.councilsSummaryfromDatabase);
+    await AppConstants.writeCouncilLogosIntoDisk(AppConstants.councilsSummaryfromDatabase);
     setState(() {});
   }
 
@@ -106,8 +104,7 @@ class _HomeScreenState extends State<HomeScreen>
     return showDialog(
         context: context,
         builder: (context) => AlertDialog(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
               title: Text('Do you really want to exit?'),
               actions: <Widget>[
                 FlatButton(
@@ -187,8 +184,7 @@ class _HomeScreenState extends State<HomeScreen>
               onTap: () {
                 setColorPalleteOff();
                 _workshopContainerBg = true;
-                _colorListener.value =
-                    ColorConstants.workshopContainerBackground;
+                _colorListener.value = ColorConstants.workshopContainerBackground;
                 return _colorPicker.getColorPickerDialogBox(context);
               },
               child: Text('container'),

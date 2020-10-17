@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../model/colorConstants.dart';
 
 class AppTheme {
-  dark() {
+ static dark() {
     ColorConstants.homeBackground = Colors.blue[200];
     ColorConstants.circularRingBackground = Colors.blue.withOpacity(0.8);
     ColorConstants.shimmerSkeletonColor = Colors.grey[300];
@@ -19,7 +19,7 @@ class AppTheme {
   }
 
   //TODO - Add relevent colors - variable according to theme
-  light() {
+static  light() {
     ColorConstants.homeBackground = Color(0xff95d8ea);
     ColorConstants.circularRingBackground = Colors.black.withOpacity(0.2);
     ColorConstants.shimmerSkeletonColor = Color(0xff95d8ea);
