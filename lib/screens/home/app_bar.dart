@@ -7,7 +7,8 @@ import 'notification.dart';
 
 AppBar homeAppBar(context,
         {SearchBarWidget searchBarWidget,
-        GlobalKey<FabCircularMenuState> fabKey}) =>
+        GlobalKey<FabCircularMenuState> fabKey,
+        FocusNode searchFocusNode}) =>
     AppBar(
       backgroundColor: ColorConstants.homeBackground,
       automaticallyImplyLeading: false,
@@ -56,7 +57,7 @@ AppBar homeAppBar(context,
                   ),
                   Expanded(
                       child: searchBarWidget.getSearchTextField(context,
-                          fabKey: fabKey)),
+                          fabKey: fabKey, searchFocusNode: searchFocusNode)),
                   Padding(
                     padding: const EdgeInsets.only(right: 8.0, left: 8),
                     child: Container(
