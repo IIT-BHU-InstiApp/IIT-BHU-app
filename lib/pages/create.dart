@@ -114,14 +114,13 @@ class _CreateScreenState extends State<CreateScreen> {
     super.initState();
   }
 
-  tagAlreadyExistsDialog() async {
+  tagAlertDialog(String title, String innerText) async {
     return showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Tag Exists'),
-            content: Text(
-                "This tag already exists. Search for it if you wish to add it to the workshop."),
+            title: Text(title ?? '(No Title)'),
+            content: Text(innerText ?? '(No Inner Text)'),
             actions: <Widget>[
               FlatButton(
                 child: Text('Ok'),
@@ -399,12 +398,15 @@ class _CreateScreenState extends State<CreateScreen> {
                                 print(error.body);
                                 if (error.body.toString().contains(
                                     'The tag already exists for this club'))
-                                  tagAlreadyExistsDialog();
+                                  tagAlertDialog('Tag Exists',
+                                      'This tag already exists. Search for it if you wish to add it to the workshop.');
                                 print(
                                     'Error while creating Tag: ${onError.toString()} ${onError.runtimeType}');
                               }).then((value) {
                                 if (value != null)
                                   this._createdTagResult = value.body;
+                                tagAlertDialog('Tag Created',
+                                    'The Tag has been created succesfully. Search for it again, and add it to the worshop if you wish.');
                               });
                               setState(() {
                                 if (this._createdTagResult != null)
