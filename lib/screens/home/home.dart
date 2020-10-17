@@ -23,6 +23,8 @@ class _HomeScreenState extends State<HomeScreen>
   ValueNotifier<Color> _colorListener;
   ColorPicker _colorPicker;
 
+  FocusNode searchFocusNode;
+
   bool _mainBg = false,
       _ringBg = false,
       _shimmerBg = false,
@@ -44,7 +46,15 @@ class _HomeScreenState extends State<HomeScreen>
     this._colorListener = ValueNotifier(Colors.white);
     this._colorPicker = ColorPicker(this._colorListener);
 
+    searchFocusNode = FocusNode();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    searchFocusNode.dispose();
+
+    super.dispose();
   }
 
   fetchWorkshopsAndCouncilButtons() async {
@@ -72,6 +82,18 @@ class _HomeScreenState extends State<HomeScreen>
       print('drawer is open');
       Navigator.of(context).pop();
 
+      return false;
+    }
+    // if on home screen but searchController is onFocus
+    if (!searchBarWidget.isSearching.value && searchFocusNode.hasFocus) {
+      searchBarWidget.searchController.clear();
+      searchFocusNode.unfocus();
+      return false;
+    }
+    // to retrun on home route on popping from search result screen
+    if (searchBarWidget.isSearching.value) {
+      Navigator.pop(context);
+      Navigator.pushNamed(context, '/home');
       return false;
     }
     return showDialog(
@@ -227,7 +249,9 @@ class _HomeScreenState extends State<HomeScreen>
               drawer: SideBar(context: context),
               floatingActionButton: homeFAB(context, fabKey: fabKey),
               appBar: homeAppBar(context,
-                  searchBarWidget: searchBarWidget, fabKey: fabKey),
+                  searchBarWidget: searchBarWidget,
+                  fabKey: fabKey,
+                  searchFocusNode: searchFocusNode),
               body: GestureDetector(
                 onTap: () {
                   if (fabKey.currentState.isOpen) {
