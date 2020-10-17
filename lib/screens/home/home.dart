@@ -8,6 +8,10 @@ import 'package:iit_app/screens/home/home_widgets.dart';
 import 'package:iit_app/screens/home/search_workshop.dart';
 import 'package:iit_app/screens/drawer.dart';
 import 'package:iit_app/ui/colorPicker.dart';
+import 'package:iit_app/ui/theme.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../model/sharedPreferenceKeys.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -39,7 +43,7 @@ class _HomeScreenState extends State<HomeScreen>
   void initState() {
     _tabController = TabController(length: 2, vsync: this);
     fetchWorkshopsAndCouncilButtons();
-
+    _setTheme();
     searchListener = ValueNotifier(false);
     searchBarWidget = SearchBarWidget(searchListener);
 
@@ -50,11 +54,14 @@ class _HomeScreenState extends State<HomeScreen>
     super.initState();
   }
 
-  @override
-  void dispose() {
-    searchFocusNode.dispose();
-
-    super.dispose();
+  _setTheme() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    //print(prefs.getString(SharedPreferenceKeys.usertheme));
+    if (prefs.getString(SharedPreferenceKeys.usertheme) == 'dark') {
+      AppTheme().dark();
+    } else {
+      AppTheme().light();
+    }
   }
 
   fetchWorkshopsAndCouncilButtons() async {

@@ -5,6 +5,11 @@ import 'package:iit_app/model/colorConstants.dart';
 import 'package:iit_app/screens/drawer.dart';
 import 'package:iit_app/screens/home/home.dart';
 import 'package:iit_app/ui/colorPicker.dart';
+import 'package:iit_app/ui/theme.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../model/colorConstants.dart';
+import '../model/sharedPreferenceKeys.dart';
 
 class SettingsScreen extends StatefulWidget {
   @override
@@ -49,6 +54,60 @@ class _SettingsScreenState extends State<SettingsScreen> {
     super.dispose();
   }
 
+  _chooseTheme() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Center(
+          child: Container(
+            width: MediaQuery.of(context).size.width - 50,
+            height: 200,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              color: Colors.white,
+            ),
+            child: Padding(
+              padding: EdgeInsets.all(20),
+              child: Row(
+                children: [
+                  Container(
+                    child: RaisedButton(
+                      onPressed: () async {
+                        AppTheme().dark();
+                        SharedPreferences prefs =
+                            await SharedPreferences.getInstance();
+                        await prefs.setString(
+                            SharedPreferenceKeys.usertheme, 'dark');
+                        Navigator.pop(context);
+                      },
+                      child: Text('dark'),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Container(
+                    child: RaisedButton(
+                      onPressed: () async {
+                        AppTheme().light();
+                        SharedPreferences prefs =
+                            await SharedPreferences.getInstance();
+                        await prefs.setString(
+                            SharedPreferenceKeys.usertheme, 'light');
+                        Navigator.pop(context);
+                      },
+                      child: Text('light'),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -84,10 +143,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   margin: EdgeInsets.all(20),
                   child: RaisedButton(
                       onPressed: () =>
-                          _colorPicker.getColorPickerDialogBox(context),
-                      child: Text('Pick Color for theme')),
+                          _chooseTheme(), //_colorPicker.getColorPickerDialogBox(context),
+                      child:
+                          Text('Pick theme')), //Text('Pick Color for theme'))
                 ),
-                Container(
+                /*Container(
                   child: Center(
                     child: RaisedButton(
                         onPressed: () {
@@ -112,7 +172,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         },
                         child: Text("Reset Colors to Default")),
                   ),
-                ),
+                ),*/
               ],
             ),
           );
