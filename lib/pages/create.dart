@@ -483,7 +483,6 @@ class _CreateScreenState extends State<CreateScreen> {
                           ],
                         )
                       : Container(),
-                  // TODO: Instead of this being an empty container, make it fetch from clubs/{id}/tags to show all tags
                   this._workshop.tagNameofId.keys.length > 0
                       ? Container(
                           height: 50,
