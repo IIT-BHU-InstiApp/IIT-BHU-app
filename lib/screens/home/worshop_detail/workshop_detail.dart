@@ -9,6 +9,7 @@ import 'package:iit_app/model/colorConstants.dart';
 import 'package:iit_app/pages/club/club.dart';
 import 'package:iit_app/pages/club_council_common/club_&_council_widgets.dart';
 import 'package:iit_app/pages/create.dart';
+import 'package:iit_app/pages/dialogBoxes.dart';
 import 'package:iit_app/screens/home/home_widgets.dart';
 import 'package:iit_app/ui/colorPicker.dart';
 import 'package:iit_app/ui/separator.dart';
@@ -189,103 +190,6 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
     return LoadingCircle;
   }
 
-  showSuccessfulDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: new Text("Successful!"),
-          content: new Text("Workshop succesfully deleted!"),
-          actions: <Widget>[
-            FlatButton(
-              child: new Text("yay"),
-              onPressed: () {
-                Navigator.pop(context);
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Future showUnSuccessfulDialog() async {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: new Text("UnSuccessful :("),
-          content: new Text("Please try again"),
-          actions: <Widget>[
-            FlatButton(
-              child: new Text("Ok"),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Future<bool> confirmCreateDialog() async {
-    return showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: new Text("Create workshop"),
-          content: new Text("Are you sure to create this new workshop?"),
-          actions: <Widget>[
-            FlatButton(
-              child: new Text("Yup!"),
-              onPressed: () {
-                Navigator.of(context).pop(true);
-              },
-            ),
-            FlatButton(
-              child: new Text("nope, let me rethink.."),
-              onPressed: () {
-                Navigator.of(context).pop(false);
-                return false;
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Future<bool> confirmCalendarOpenDialog() async {
-    return showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: new Text("Open Calendar"),
-          content: new Text(
-              "You have expressed Interest!\nDo you want to save this event to your Google Calendar?"),
-          actions: <Widget>[
-            FlatButton(
-              child: new Text("Yup!"),
-              onPressed: () {
-                Navigator.of(context).pop(true);
-                return true;
-              },
-            ),
-            FlatButton(
-              child: new Text("Nope"),
-              onPressed: () {
-                Navigator.of(context).pop(false);
-                return false;
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   void fetchWorkshopDetails() async {
     Response<BuiltWorkshopDetailPost> snapshots = await AppConstants.service
         .getWorkshopDetailsPost(widget.workshop.id, AppConstants.djangoToken)
@@ -314,17 +218,19 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
   }
 
   void deleteWorkshop() async {
-    await confirmCreateDialog()
-        ? await AppConstants.service
-            .removeWorkshop(widget.workshop.id, AppConstants.djangoToken)
-            .then((snapshot) {
-            print("status of deleting workshop: ${snapshot.statusCode}");
-            showSuccessfulDialog();
-          }).catchError((onError) {
-            print("Error in deleting: ${onError.toString()}");
-            showUnSuccessfulDialog();
-          })
-        : null;
+    bool isConfirmed = await CreatePageDialogBoxes.confirmDialog(
+        context: context, action: 'Delete');
+    if (isConfirmed == true) {
+      AppConstants.service
+          .removeWorkshop(widget.workshop.id, AppConstants.djangoToken)
+          .then((snapshot) {
+        print("status of deleting workshop: ${snapshot.statusCode}");
+        CreatePageDialogBoxes.showUnSuccessfulDialog(context: context);
+      }).catchError((onError) {
+        print("Error in deleting: ${onError.toString()}");
+        CreatePageDialogBoxes.showUnSuccessfulDialog(context: context);
+      });
+    }
     setState(() {});
   }
 
@@ -406,8 +312,9 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
                                   } else {
                                     if (is_interested != 1) {
                                       bool shouldCalendarBeOpened =
-                                          await confirmCalendarOpenDialog();
-                                      print(shouldCalendarBeOpened);
+                                          await CreatePageDialogBoxes
+                                              .confirmCalendarOpenDialog(
+                                                  context: context);
                                       if (shouldCalendarBeOpened == true) {
                                         final String _calendarUrl =
                                             AppConstants.addEventToCalendarLink(
