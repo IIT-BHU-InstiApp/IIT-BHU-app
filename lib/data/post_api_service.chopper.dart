@@ -211,6 +211,13 @@ class _$PostApiService extends PostApiService {
     return client.send<BuiltAllWorkshopsPost, BuiltAllWorkshopsPost>($request);
   }
 
+  Future<Response<ClubTags>> getClubTags(int id, String token) {
+    final $url = '/clubs/${id}/tags/';
+    final $headers = {'Authorization': token};
+    final $request = Request('GET', $url, client.baseUrl, headers: $headers);
+    return client.send<ClubTags, ClubTags>($request);
+  }
+
   Future<Response> updateClubByPut(int id, String token, BuiltClubPost body) {
     final $url = '/clubs/${id}/';
     final $headers = {'Authorization': token};
