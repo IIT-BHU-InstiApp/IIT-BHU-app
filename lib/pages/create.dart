@@ -502,6 +502,17 @@ class _CreateScreenState extends State<CreateScreen> {
                         final form = _formKey.currentState;
                         if (form.validate()) {
                           form.save();
+
+                          bool isconfirmed =
+                              await CreatePageDialogBoxes.confirmDialog(
+                                  context: context,
+                                  action: widget.workshopData == null
+                                      ? 'Create'
+                                      : 'Edit');
+
+                          if (isconfirmed == false || isconfirmed == null)
+                            return;
+
                           Scaffold.of(context).showSnackBar(
                             SnackBar(
                               content: widget.workshopData == null
@@ -509,15 +520,6 @@ class _CreateScreenState extends State<CreateScreen> {
                                   : Text('Editing Workshop...'),
                             ),
                           );
-
-                          bool isconfirmed =
-                              await CreatePageDialogBoxes.confirmDialog(
-                                  context: context,
-                                  isEditing: widget.workshopData == null
-                                      ? false
-                                      : true);
-
-                          if (isconfirmed == false) return;
 
                           if (widget.workshopData == null) {
                             await WorkshopCreater.create(
