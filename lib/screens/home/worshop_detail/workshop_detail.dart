@@ -230,13 +230,17 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
     );
   }
 
-  Future<bool> confirmCreateDialog() async {
+  Future<bool> confirmCreateDialog(String action) async {
     return showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: new Text("Create workshop"),
-          content: new Text("Are you sure to create this new workshop?"),
+          title: action == 'delete'
+              ? new Text("Delete workshop")
+              : new Text('Create Workshop'),
+          content: action == 'delete'
+              ? new Text("Are you sure to delete this workshop?")
+              : new Text("Are you sure to create this new workshop?"),
           actions: <Widget>[
             FlatButton(
               child: new Text("Yup!"),
@@ -314,7 +318,7 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
   }
 
   void deleteWorkshop() async {
-    await confirmCreateDialog()
+    await confirmCreateDialog('delete')
         ? await AppConstants.service
             .removeWorkshop(widget.workshop.id, AppConstants.djangoToken)
             .then((snapshot) {
