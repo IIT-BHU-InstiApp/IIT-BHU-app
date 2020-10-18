@@ -18,7 +18,8 @@ Some clean code guidelines : -
 
 7. Break large widget trees into chunks of small widget trees where each small widget tree behaves independently and is significant for custom purposes. (for eg. we won't separate padding widget but a custom purpose ListView.builder can be separated)
 
-8. For flutter, always use lowerCamelCase for naming. (not mandatory but lets just be standard so that code is readable to everybody)
+8. For flutter, always use lowerCamelCase for naming variables & functions and UpperCamelCase for naming classes. (not mandatory but lets just be standard so that code is readable to everybody)
+ 
 
 
 
