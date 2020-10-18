@@ -114,14 +114,13 @@ class _CreateScreenState extends State<CreateScreen> {
     super.initState();
   }
 
-  tagAlreadyExistsDialog() async {
+  tagAlertDialog(String title, String innerText) async {
     return showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Tag Exists'),
-            content: Text(
-                "This tag already exists. Search for it if you wish to add it to the workshop."),
+            title: Text(title ?? '(No Title)'),
+            content: Text(innerText ?? '(No Inner Text)'),
             actions: <Widget>[
               FlatButton(
                 child: Text('Ok'),
@@ -335,173 +334,165 @@ class _CreateScreenState extends State<CreateScreen> {
                           ),
                         )
                       : Container(),
-                  widget.workshopData != null
-                      ? Column(children: [
-                          Row(children: [
-                            Expanded(
-                              child: TextFormField(
-                                controller: this._tagController,
-                                decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.symmetric(
-                                      vertical: 0, horizontal: 10),
-                                  labelText: 'Search tags by name',
-                                  suffix: IconButton(
-                                    icon: Icon(Icons.clear),
-                                    onPressed: () {
-                                      this._tagController.text = '';
-                                      if (!this.mounted) return;
-                                    },
-                                  ),
-                                ),
-                                onFieldSubmitted: (value) async {
-                                  print("Submitted");
-                                  if (value.isEmpty) return;
+                  Row(children: [
+                    Expanded(
+                      child: TextFormField(
+                        controller: this._tagController,
+                        decoration: InputDecoration(
+                          contentPadding:
+                              EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                          labelText: 'Search tags by name',
+                          suffix: IconButton(
+                            icon: Icon(Icons.clear),
+                            onPressed: () {
+                              this._tagController.text = '';
+                              if (!this.mounted) return;
+                            },
+                          ),
+                        ),
+                        onFieldSubmitted: (value) async {
+                          print("Submitted");
+                          if (value.isEmpty) return;
 
-                                  this._tagSearchPost = TagSearch((b) => b
-                                    ..club = widget.club.id
-                                    ..tag_name = this._tagController.text);
+                          this._tagSearchPost = TagSearch((b) => b
+                            ..club = widget.club.id
+                            ..tag_name = this._tagController.text);
 
-                                  if (!this.mounted) return;
-                                  setState(() {
-                                    this._isSearchingTags = true;
-                                    this._tagDataFetched = false;
-                                    this._searchedTagResult = null;
-                                  });
-                                  await AppConstants.service
-                                      .searchTag(AppConstants.djangoToken,
-                                          this._tagSearchPost)
-                                      .catchError((onError) {
-                                    print('Error while fetching tags $onError');
-                                  }).then((result) {
-                                    if (result != null)
-                                      this._searchedTagResult = result.body;
-                                  });
-                                  if (!this.mounted) return;
-                                  setState(() {
-                                    this._tagDataFetched = true;
-                                  });
-                                },
-                              ),
+                          if (!this.mounted) return;
+                          setState(() {
+                            this._isSearchingTags = true;
+                            this._tagDataFetched = false;
+                            this._searchedTagResult = null;
+                          });
+                          await AppConstants.service
+                              .searchTag(
+                                  AppConstants.djangoToken, this._tagSearchPost)
+                              .catchError((onError) {
+                            print('Error while fetching tags $onError');
+                          }).then((result) {
+                            if (result != null)
+                              this._searchedTagResult = result.body;
+                          });
+                          if (!this.mounted) return;
+                          setState(() {
+                            this._tagDataFetched = true;
+                          });
+                        },
+                      ),
+                    ),
+                    this._isSearchingTags
+                        ? RaisedButton(
+                            child: Text('+ Create'),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(50),
                             ),
-                            this._isSearchingTags
-                                ? RaisedButton(
-                                    child: Text('+ Create'),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(50),
-                                    ),
-                                    onPressed: () async {
-                                      final newTag = TagCreate((b) => b
-                                        ..tag_name = this._tagController.text
-                                        ..club = widget.club.id);
+                            onPressed: () async {
+                              final newTag = TagCreate((b) => b
+                                ..tag_name = this._tagController.text
+                                ..club = widget.club.id);
 
-                                      await AppConstants.service
-                                          .createTag(
-                                              AppConstants.djangoToken, newTag)
-                                          .catchError((onError) {
-                                        final error =
-                                            onError as Response<dynamic>;
-                                        print(error.body);
-                                        if (error.body.toString().contains(
-                                            'The tag already exists for this club'))
-                                          tagAlreadyExistsDialog();
-                                        print(
-                                            'Error while creating Tag: ${onError.toString()} ${onError.runtimeType}');
-                                      }).then((value) {
-                                        if (value != null)
-                                          this._createdTagResult = value.body;
-                                      });
-                                      setState(() {
-                                        if (this._createdTagResult != null)
-                                          // Uncomment the below lines if the created tag should automatically be added to the worshop.
-                                          // this._workshop.tagNameofId[this
-                                          //     ._createdTagResult
-                                          //     .id] = this._createdTagResult.tag_name;
-                                          ;
-                                      });
-                                    },
-                                  )
-                                : Container(),
-                            this._isSearchingTags
-                                ? RaisedButton(
-                                    child: Text('X Clear'),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(50),
-                                    ),
-                                    onPressed: () {
-                                      this._tagController.text = '';
-                                      this._isSearchingTags = false;
-                                      if (!this.mounted) return;
-                                      setState(() {});
-                                    },
-                                  )
-                                : Container(),
-                          ]),
-                          this._isSearchingTags
-                              ? Column(
+                              await AppConstants.service
+                                  .createTag(AppConstants.djangoToken, newTag)
+                                  .catchError((onError) {
+                                final error = onError as Response<dynamic>;
+                                print(error.body);
+                                if (error.body.toString().contains(
+                                    'The tag already exists for this club'))
+                                  tagAlertDialog('Tag Exists',
+                                      'This tag already exists. Search for it if you wish to add it to the workshop.');
+                                print(
+                                    'Error while creating Tag: ${onError.toString()} ${onError.runtimeType}');
+                              }).then((value) {
+                                if (value != null)
+                                  this._createdTagResult = value.body;
+                                tagAlertDialog('Tag Created',
+                                    'The Tag has been created succesfully. Search for it again, and add it to the worshop if you wish.');
+                              });
+                              setState(() {
+                                if (this._createdTagResult != null)
+                                  // Uncomment the below lines if the created tag should automatically be added to the worshop.
+                                  // this._workshop.tagNameofId[this
+                                  //     ._createdTagResult
+                                  //     .id] = this._createdTagResult.tag_name;
+                                  ;
+                              });
+                            },
+                          )
+                        : Container(),
+                    this._isSearchingTags
+                        ? RaisedButton(
+                            child: Text('X Clear'),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(50),
+                            ),
+                            onPressed: () {
+                              this._tagController.text = '';
+                              this._isSearchingTags = false;
+                              if (!this.mounted) return;
+                              setState(() {});
+                            },
+                          )
+                        : Container(),
+                  ]),
+                  this._isSearchingTags
+                      ? Column(
+                          children: <Widget>[
+                            Divider(
+                              height: 2,
+                              thickness: 2,
+                            ),
+                            Container(
+                              height: MediaQuery.of(context).size.height / 6,
+                              child: _buildTagsFromSearchPosts(context),
+                            ),
+                            Divider(
+                              height: 2,
+                              thickness: 2,
+                            ),
+                          ],
+                        )
+                      // TODO: Instead of this being an empty container, make it fetch from clubs/{id}/tags to show all tags
+                      : Container(),
+                  this._workshop.tagNameofId.keys.length > 0
+                      ? Container(
+                          height: 50,
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemCount: this._workshop.tagNameofId.keys.length,
+                            itemBuilder: (context, index) {
+                              int _id = this
+                                  ._workshop
+                                  .tagNameofId
+                                  .keys
+                                  .toList()[index];
+                              print(
+                                  '$_id : ${this._workshop.tagNameofId[_id]}');
+                              return Container(
+                                padding: EdgeInsets.all(2),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
-                                    Divider(
-                                      height: 2,
-                                      thickness: 2,
-                                    ),
-                                    Container(
-                                      height:
-                                          MediaQuery.of(context).size.height /
-                                              6,
-                                      child: _buildTagsFromSearchPosts(context),
-                                    ),
-                                    Divider(
-                                      height: 2,
-                                      thickness: 2,
+                                    Text(this._workshop.tagNameofId[_id]),
+                                    InkWell(
+                                      child: Icon(Icons.cancel),
+                                      splashColor: Colors.red,
+                                      onTap: () {
+                                        setState(() {
+                                          this
+                                              ._workshop
+                                              .tagNameofId
+                                              .remove(_id);
+                                        });
+                                      },
                                     ),
                                   ],
-                                )
-                              // TODO: Instead of this being an empty container, make it fetch from clubs/{id}/tags to show all tags
-                              : Container(),
-                          this._workshop.tagNameofId.keys.length > 0
-                              ? Container(
-                                  height: 50,
-                                  child: ListView.builder(
-                                    shrinkWrap: true,
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount:
-                                        this._workshop.tagNameofId.keys.length,
-                                    itemBuilder: (context, index) {
-                                      int _id = this
-                                          ._workshop
-                                          .tagNameofId
-                                          .keys
-                                          .toList()[index];
-                                      print(
-                                          '$_id : ${this._workshop.tagNameofId[_id]}');
-                                      return Container(
-                                        padding: EdgeInsets.all(2),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: <Widget>[
-                                            Text(this
-                                                ._workshop
-                                                .tagNameofId[_id]),
-                                            InkWell(
-                                              child: Icon(Icons.cancel),
-                                              splashColor: Colors.red,
-                                              onTap: () {
-                                                setState(() {
-                                                  this
-                                                      ._workshop
-                                                      .tagNameofId
-                                                      .remove(_id);
-                                                });
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                )
-                              : Container(),
-                        ])
+                                ),
+                              );
+                            },
+                          ),
+                        )
                       : Container(),
                   Container(
                     padding: const EdgeInsets.symmetric(

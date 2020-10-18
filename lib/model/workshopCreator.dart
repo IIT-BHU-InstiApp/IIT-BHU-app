@@ -57,7 +57,8 @@ class WorkshopCreater {
       ..location = workshop.location
       ..audience = workshop.audience
       ..resources = BuiltList<int>([1]).toBuilder()
-      ..contacts = workshop.contactIds.build().toBuilder());
+      ..contacts = workshop.contactIds.build().toBuilder()
+      ..tags = workshop.tagNameofId.keys.toList().build().toBuilder());
     await AppConstants.service
         .postNewWorkshop(AppConstants.djangoToken, newWorkshop)
         .catchError((onError) {
