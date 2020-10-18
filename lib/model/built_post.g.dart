@@ -9,6 +9,7 @@ part of 'built_post.dart';
 Serializer<TagCreate> _$tagCreateSerializer = new _$TagCreateSerializer();
 Serializer<TagSearch> _$tagSearchSerializer = new _$TagSearchSerializer();
 Serializer<TagDetail> _$tagDetailSerializer = new _$TagDetailSerializer();
+Serializer<ClubTags> _$clubTagsSerializer = new _$ClubTagsSerializer();
 Serializer<WorkshopResources> _$workshopResourcesSerializer =
     new _$WorkshopResourcesSerializer();
 Serializer<BuiltAllWorkshopsPost> _$builtAllWorkshopsPostSerializer =
@@ -220,6 +221,50 @@ class _$TagDetailSerializer implements StructuredSerializer<TagDetail> {
         case 'club':
           result.club.replace(serializers.deserialize(value,
               specifiedType: const FullType(ClubListPost)) as ClubListPost);
+          break;
+      }
+    }
+
+    return result.build();
+  }
+}
+
+class _$ClubTagsSerializer implements StructuredSerializer<ClubTags> {
+  @override
+  final Iterable<Type> types = const [ClubTags, _$ClubTags];
+  @override
+  final String wireName = 'ClubTags';
+
+  @override
+  Iterable<Object> serialize(Serializers serializers, ClubTags object,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = <Object>[];
+    if (object.club_tags != null) {
+      result
+        ..add('club_tags')
+        ..add(serializers.serialize(object.club_tags,
+            specifiedType:
+                const FullType(BuiltList, const [const FullType(TagDetail)])));
+    }
+    return result;
+  }
+
+  @override
+  ClubTags deserialize(Serializers serializers, Iterable<Object> serialized,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = new ClubTagsBuilder();
+
+    final iterator = serialized.iterator;
+    while (iterator.moveNext()) {
+      final key = iterator.current as String;
+      iterator.moveNext();
+      final dynamic value = iterator.current;
+      switch (key) {
+        case 'club_tags':
+          result.club_tags.replace(serializers.deserialize(value,
+                  specifiedType: const FullType(
+                      BuiltList, const [const FullType(TagDetail)]))
+              as BuiltList<dynamic>);
           break;
       }
     }
@@ -2419,6 +2464,94 @@ class TagDetailBuilder implements Builder<TagDetail, TagDetailBuilder> {
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             'TagDetail', _$failedField, e.toString());
+      }
+      rethrow;
+    }
+    replace(_$result);
+    return _$result;
+  }
+}
+
+class _$ClubTags extends ClubTags {
+  @override
+  final BuiltList<TagDetail> club_tags;
+
+  factory _$ClubTags([void Function(ClubTagsBuilder) updates]) =>
+      (new ClubTagsBuilder()..update(updates)).build();
+
+  _$ClubTags._({this.club_tags}) : super._();
+
+  @override
+  ClubTags rebuild(void Function(ClubTagsBuilder) updates) =>
+      (toBuilder()..update(updates)).build();
+
+  @override
+  ClubTagsBuilder toBuilder() => new ClubTagsBuilder()..replace(this);
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(other, this)) return true;
+    return other is ClubTags && club_tags == other.club_tags;
+  }
+
+  @override
+  int get hashCode {
+    return $jf($jc(0, club_tags.hashCode));
+  }
+
+  @override
+  String toString() {
+    return (newBuiltValueToStringHelper('ClubTags')
+          ..add('club_tags', club_tags))
+        .toString();
+  }
+}
+
+class ClubTagsBuilder implements Builder<ClubTags, ClubTagsBuilder> {
+  _$ClubTags _$v;
+
+  ListBuilder<TagDetail> _club_tags;
+  ListBuilder<TagDetail> get club_tags =>
+      _$this._club_tags ??= new ListBuilder<TagDetail>();
+  set club_tags(ListBuilder<TagDetail> club_tags) =>
+      _$this._club_tags = club_tags;
+
+  ClubTagsBuilder();
+
+  ClubTagsBuilder get _$this {
+    if (_$v != null) {
+      _club_tags = _$v.club_tags?.toBuilder();
+      _$v = null;
+    }
+    return this;
+  }
+
+  @override
+  void replace(ClubTags other) {
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
+    _$v = other as _$ClubTags;
+  }
+
+  @override
+  void update(void Function(ClubTagsBuilder) updates) {
+    if (updates != null) updates(this);
+  }
+
+  @override
+  _$ClubTags build() {
+    _$ClubTags _$result;
+    try {
+      _$result = _$v ?? new _$ClubTags._(club_tags: _club_tags?.build());
+    } catch (_) {
+      String _$failedField;
+      try {
+        _$failedField = 'club_tags';
+        _club_tags?.build();
+      } catch (e) {
+        throw new BuiltValueNestedFieldError(
+            'ClubTags', _$failedField, e.toString());
       }
       rethrow;
     }

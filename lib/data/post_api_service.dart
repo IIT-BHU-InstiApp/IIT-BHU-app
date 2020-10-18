@@ -1,4 +1,5 @@
 import 'package:chopper/chopper.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:built_collection/built_collection.dart';
 import 'built_value_converter.dart';
@@ -147,6 +148,10 @@ abstract class PostApiService extends ChopperService {
 
   @Get(path: '/clubs/{id}/workshops/')
   Future<Response<BuiltAllWorkshopsPost>> getClubWorkshops(
+      @Path('id') int id, @Header('Authorization') String token);
+
+  @Get(path: '/clubs/{id}/tags/')
+  Future<Response<ClubTags>> getClubTags(
       @Path('id') int id, @Header('Authorization') String token);
 
   //? ----------------------------------- Put -------------------------------

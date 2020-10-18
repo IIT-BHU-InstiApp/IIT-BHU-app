@@ -21,6 +21,7 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..add(BuiltWorkshopSearchByStringPost.serializer)
       ..add(BuiltWorkshopSummaryPost.serializer)
       ..add(ClubListPost.serializer)
+      ..add(ClubTags.serializer)
       ..add(ContactPost.serializer)
       ..add(LoginPost.serializer)
       ..add(SecyPost.serializer)
@@ -53,6 +54,9 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(ClubListPost)]),
           () => new ListBuilder<ClubListPost>())
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(TagDetail)]),
+          () => new ListBuilder<TagDetail>())
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(TagDetail)]),
           () => new ListBuilder<TagDetail>())

@@ -10,6 +10,7 @@ part 'serializers.g.dart';
   TagCreate,
   TagSearch,
   TagDetail,
+  ClubTags,
   WorkshopResources,
   BuiltAllWorkshopsPost,
   BuiltWorkshopSummaryPost,

@@ -9,7 +9,6 @@ import 'package:iit_app/model/built_post.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:iit_app/model/workshopCreator.dart';
 import 'package:iit_app/pages/dialogBoxes.dart';
-import 'package:iit_app/screens/home/worshop_detail/workshop_detail.dart';
 
 class CreateScreen extends StatefulWidget {
   final ClubListPost club;
@@ -39,19 +38,25 @@ class _CreateScreenState extends State<CreateScreen> {
 
   TextEditingController _searchContactsController;
   BuiltProfileSearchPost _searchPost;
-  TagSearch _tagSearchPost;
   bool _isSearchingContacts = false;
-  bool _isSearchingTags = false;
-  bool _tagDataFetched = false;
 
   final _searchContactFormKey = GlobalKey<FormState>();
 
   BuiltList<BuiltProfilePost> _searchedProfileresult;
-  TagDetail _createdTagResult;
   String _searchByValue = 'name';
-  bool _searchedDataFetched = false;
+
+  TagSearch _tagSearchPost; // Tag to search for
+  TagDetail
+      _createdTagResult; // Response of a created tag(may be null if the tag already exists)
+  bool _tagDataFetched = false; // Has the created tag data been fetched?
+  bool _isSearchingTags = false; // Has the user searched for the tag?
+  bool _searchedDataFetched = false; // Have the searched tags been fetched?
+  bool _allTagDataFetched =
+      false; // Have all the tags of this club been fetched?
+  bool _allTagDataShow = false; // Should all the tags of the club be shown?
 
   BuiltList<TagDetail> _searchedTagResult;
+  BuiltList<TagDetail> _allTagsOfClub;
 
   final dropDownButtonTextStyle = TextStyle(fontSize: 12);
   DropdownButton _searchCategoryDropDown() => DropdownButton<String>(
@@ -363,6 +368,7 @@ class _CreateScreenState extends State<CreateScreen> {
                             this._isSearchingTags = true;
                             this._tagDataFetched = false;
                             this._searchedTagResult = null;
+                            this._allTagDataShow = false;
                           });
                           await AppConstants.service
                               .searchTag(
@@ -432,9 +438,30 @@ class _CreateScreenState extends State<CreateScreen> {
                               setState(() {});
                             },
                           )
-                        : Container(),
+                        : RaisedButton(
+                            child: Text('All Tags'),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(50),
+                            ),
+                            onPressed: () async {
+                              await AppConstants.service
+                                  .getClubTags(
+                                      widget.club.id, AppConstants.djangoToken)
+                                  .catchError((onError) {
+                                print('Error while fetching all tags $onError');
+                              }).then((result) {
+                                if (result != null) {
+                                  print(result.body.runtimeType);
+                                  this._allTagsOfClub = result.body.club_tags;
+                                  this._allTagDataShow = true;
+                                  this._allTagDataFetched = true;
+                                  setState(() {});
+                                }
+                              });
+                            },
+                          ),
                   ]),
-                  this._isSearchingTags
+                  this._isSearchingTags || this._allTagDataShow
                       ? Column(
                           children: <Widget>[
                             Divider(
@@ -443,7 +470,11 @@ class _CreateScreenState extends State<CreateScreen> {
                             ),
                             Container(
                               height: MediaQuery.of(context).size.height / 6,
-                              child: _buildTagsFromSearchPosts(context),
+                              child: this._isSearchingTags
+                                  ? _buildTagsFromSearchPosts(context)
+                                  : this._allTagDataShow
+                                      ? _buildAllTagsOfClub(context)
+                                      : Container(),
                             ),
                             Divider(
                               height: 2,
@@ -451,8 +482,8 @@ class _CreateScreenState extends State<CreateScreen> {
                             ),
                           ],
                         )
-                      // TODO: Instead of this being an empty container, make it fetch from clubs/{id}/tags to show all tags
                       : Container(),
+                  // TODO: Instead of this being an empty container, make it fetch from clubs/{id}/tags to show all tags
                   this._workshop.tagNameofId.keys.length > 0
                       ? Container(
                           height: 50,
@@ -713,6 +744,72 @@ class _CreateScreenState extends State<CreateScreen> {
                                   else
                                     this._workshop.tagNameofId[_id] =
                                         this._searchedTagResult[index].tag_name;
+                                });
+                              },
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ))
+        : Container();
+  }
+
+  Widget _buildAllTagsOfClub(
+    BuildContext context,
+  ) {
+    return this._allTagDataFetched
+        ? Container(
+            child: (this._allTagsOfClub == null || this._allTagsOfClub.isEmpty)
+                ? Center(
+                    child: Text(
+                      'No Tags of this club available',
+                      textAlign: TextAlign.center,
+                      textScaleFactor: 1.5,
+                    ),
+                  )
+                : GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3, childAspectRatio: 4),
+                    physics: ScrollPhysics(),
+                    shrinkWrap: true,
+                    scrollDirection: Axis.vertical,
+                    itemCount: this._allTagsOfClub.length,
+                    padding: EdgeInsets.all(2),
+                    itemBuilder: (context, index) {
+                      int _id = this._allTagsOfClub[index].id;
+                      return Container(
+                        padding: EdgeInsets.all(2),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text(this._allTagsOfClub[index].tag_name),
+                            InkWell(
+                              child: (this
+                                      ._workshop
+                                      .tagNameofId
+                                      .keys
+                                      .contains(_id))
+                                  ? Icon(Icons.highlight_remove_rounded)
+                                  : Icon(Icons.add_box_rounded),
+                              splashColor: (this
+                                      ._workshop
+                                      .tagNameofId
+                                      .keys
+                                      .contains(_id))
+                                  ? Colors.red
+                                  : Colors.green,
+                              onTap: () {
+                                setState(() {
+                                  if (this
+                                      ._workshop
+                                      .tagNameofId
+                                      .keys
+                                      .contains(_id))
+                                    this._workshop.tagNameofId.remove(_id);
+                                  else
+                                    this._workshop.tagNameofId[_id] =
+                                        this._allTagsOfClub[index].tag_name;
                                 });
                               },
                             ),
