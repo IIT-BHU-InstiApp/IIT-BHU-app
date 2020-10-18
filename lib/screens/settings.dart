@@ -30,8 +30,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
       _refreshing = true;
     });
     await AppConstants.deleteAllLocalDataWithImages();
-    Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => HomeScreen()), (r) => false);
+    Navigator.of(context)
+        .pushAndRemoveUntil(MaterialPageRoute(builder: (context) => HomeScreen()), (r) => false);
     // setState(() {
     //   _refreshing = false;
     // });
@@ -73,11 +73,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   Container(
                     child: RaisedButton(
                       onPressed: () async {
-                        AppTheme().dark();
-                        SharedPreferences prefs =
-                            await SharedPreferences.getInstance();
-                        await prefs.setString(
-                            SharedPreferenceKeys.usertheme, 'dark');
+                        AppTheme.dark();
+                        SharedPreferences prefs = await SharedPreferences.getInstance();
+                        await prefs.setString(SharedPreferenceKeys.usertheme, 'dark');
                         Navigator.pop(context);
                       },
                       child: Text('dark'),
@@ -89,11 +87,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   Container(
                     child: RaisedButton(
                       onPressed: () async {
-                        AppTheme().light();
-                        SharedPreferences prefs =
-                            await SharedPreferences.getInstance();
-                        await prefs.setString(
-                            SharedPreferenceKeys.usertheme, 'light');
+                        AppTheme.light();
+                        SharedPreferences prefs = await SharedPreferences.getInstance();
+                        await prefs.setString(SharedPreferenceKeys.usertheme, 'light');
                         Navigator.pop(context);
                       },
                       child: Text('light'),
@@ -134,9 +130,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   child: Center(
                     child: this._refreshing
                         ? LoadingCircle
-                        : RaisedButton(
-                            onPressed: onResetDatabase,
-                            child: Text("Reset Saved Data")),
+                        : RaisedButton(onPressed: onResetDatabase, child: Text("Reset Saved Data")),
                   ),
                 ),
                 Container(
@@ -144,8 +138,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   child: RaisedButton(
                       onPressed: () =>
                           _chooseTheme(), //_colorPicker.getColorPickerDialogBox(context),
-                      child:
-                          Text('Pick theme')), //Text('Pick Color for theme'))
+                      child: Text('Pick theme')), //Text('Pick Color for theme'))
                 ),
                 /*Container(
                   child: Center(

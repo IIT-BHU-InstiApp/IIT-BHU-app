@@ -14,6 +14,7 @@ import 'package:iit_app/screens/about.dart';
 import 'package:iit_app/screens/settings.dart';
 import 'package:iit_app/services/connectivityCheck.dart';
 import 'package:iit_app/services/crud.dart';
+import 'package:iit_app/ui/theme.dart';
 import 'data/post_api_service.dart';
 import 'model/appConstants.dart';
 
@@ -26,6 +27,10 @@ void main() async {
   AppConstants.service = PostApiService.create();
   AppConstants.connectionStatus = ConnectionStatusSingleton.getInstance();
   AppConstants.connectionStatus.initialize();
+
+// TODO: populating the ColorConstants. Use sharedPreference here to find out the correct theme.
+  AppTheme.dark();
+
   await AppConstants.setDeviceDirectoryForImages();
   // bool logStatus = await CrudMethods.isLoggedIn();
   // print('log status: $logStatus');
@@ -110,8 +115,6 @@ class _ConnectedMainState extends State<ConnectedMain> {
                   ),
                 ),
               )
-            : ((AppConstants.isLoggedIn || AppConstants.isGuest)
-                ? HomeScreen()
-                : LoginPage()));
+            : ((AppConstants.isLoggedIn || AppConstants.isGuest) ? HomeScreen() : LoginPage()));
   }
 }
