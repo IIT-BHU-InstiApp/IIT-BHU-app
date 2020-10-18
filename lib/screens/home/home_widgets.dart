@@ -113,7 +113,8 @@ class HomeWidgets {
       bool editMode = false,
       bool horizontal = true,
       bool isPast = false,
-      GlobalKey<FabCircularMenuState> fabKey}) {
+      GlobalKey<FabCircularMenuState> fabKey,
+      Function reload}) {
     final File clubLogoFile =
         AppConstants.getImageFile(isSmall: true, id: w.club.id, isClub: true);
 
@@ -209,15 +210,17 @@ class HomeWidgets {
     return GestureDetector(
         onTap: horizontal
             ? () {
-                Navigator.of(context).push(
-                  PageRouteBuilder(
-                    pageBuilder: (_, __, ___) =>
-                        WorkshopDetailPage(workshop: w, isPast: isPast),
-                    transitionsBuilder:
-                        (context, animation, secondaryAnimation, child) =>
+                Navigator.of(context)
+                    .push(
+                      PageRouteBuilder(
+                        pageBuilder: (_, __, ___) =>
+                            WorkshopDetailPage(workshop: w, isPast: isPast),
+                        transitionsBuilder: (context, animation,
+                                secondaryAnimation, child) =>
                             FadeTransition(opacity: animation, child: child),
-                  ),
-                );
+                      ),
+                    )
+                    .then((value) => reload());
                 if (fabKey.currentState.isOpen) {
                   fabKey.currentState.close();
                 }
@@ -328,6 +331,7 @@ class HomeChild extends StatelessWidget {
   final TabController tabController;
   final bool isSearching;
   final GlobalKey<FabCircularMenuState> fabKey;
+  final Function reload;
 
   const HomeChild(
       {Key key,
@@ -335,8 +339,15 @@ class HomeChild extends StatelessWidget {
       this.searchBarWidget,
       this.tabController,
       this.isSearching,
-      this.fabKey})
+      this.fabKey,
+      this.reload})
       : super(key: key);
+
+  void onRefresh() async {
+    await AppConstants.updateAndPopulateWorkshops();
+    this.reload();
+  }
+
   @override
   Widget build(BuildContext context) {
     return StatefulBuilder(
@@ -370,28 +381,27 @@ class HomeChild extends StatelessWidget {
                             ? HomeWidgets.getPlaceholder()
                             : RefreshIndicator(
                                 displacement: 60,
-                                onRefresh: () async {
-                                  await AppConstants
-                                      .updateAndPopulateWorkshops();
-                                  setState(() {});
-                                },
+                                onRefresh: () async => onRefresh(),
                                 child: buildWorkhops.buildCurrentWorkshopPosts(
-                                    context, fabKey)),
+                                    context, fabKey,
+                                    reload: onRefresh)),
                       ),
                       Container(
-                        child: AppConstants.isGuest
-                            ? Container(
-                                margin: EdgeInsets.only(top: 100),
-                                padding: EdgeInsets.all(10),
-                                child: Text(
-                                  'We value your interest, but first you have to trust us by logging in.   {Dear Guest, it can not be one sided.}',
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 25),
-                                ),
-                              )
-                            : buildWorkhops.buildInterestedWorkshopsBody(
-                                context, fabKey),
-                      )
+                          child: AppConstants.isGuest
+                              ? Container(
+                                  margin: EdgeInsets.only(top: 100),
+                                  padding: EdgeInsets.all(10),
+                                  child: Text(
+                                    'We value your interest, but first you have to trust us by logging in.   {Dear Guest, it can not be one sided.}',
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 25),
+                                  ),
+                                )
+                              : buildWorkhops.buildInterestedWorkshopsBody(
+                                  context,
+                                  fabKey,
+                                  reload: onRefresh,
+                                ))
                     ],
                   ),
                 ),

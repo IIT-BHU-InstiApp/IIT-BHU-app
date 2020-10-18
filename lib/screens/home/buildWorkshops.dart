@@ -7,24 +7,25 @@ import 'package:iit_app/screens/home/home_widgets.dart';
 import 'package:built_collection/built_collection.dart';
 
 ListView buildCurrentWorkshopPosts(
-    BuildContext context, GlobalKey<FabCircularMenuState> fabKey) {
+    BuildContext context, GlobalKey<FabCircularMenuState> fabKey,
+    {Function reload}) {
   return ListView.builder(
     physics: BouncingScrollPhysics(),
     scrollDirection: Axis.vertical,
     itemCount: AppConstants.workshopFromDatabase.length,
     padding: EdgeInsets.all(8),
     itemBuilder: (context, index) {
-      return HomeWidgets.getWorkshopCard(
-        context,
-        w: AppConstants.workshopFromDatabase[index],
-        fabKey: fabKey,
-      );
+      return HomeWidgets.getWorkshopCard(context,
+          w: AppConstants.workshopFromDatabase[index],
+          fabKey: fabKey,
+          reload: reload);
     },
   );
 }
 
 FutureBuilder<Response> buildInterestedWorkshopsBody(
-    BuildContext context, GlobalKey<FabCircularMenuState> fabKey) {
+    BuildContext context, GlobalKey<FabCircularMenuState> fabKey,
+    {Function reload}) {
   return FutureBuilder<Response<BuiltList<BuiltWorkshopSummaryPost>>>(
     future:
         AppConstants.service.getInterestedWorkshops(AppConstants.djangoToken),
@@ -41,7 +42,16 @@ FutureBuilder<Response> buildInterestedWorkshopsBody(
         }
 
         final posts = snapshot.data.body;
-        return _buildInterestedWorkshopPosts(context, posts, fabKey);
+        return ListView.builder(
+          physics: BouncingScrollPhysics(),
+          scrollDirection: Axis.vertical,
+          itemCount: posts.length,
+          padding: EdgeInsets.all(8),
+          itemBuilder: (context, index) {
+            return HomeWidgets.getWorkshopCard(context,
+                w: posts[index], fabKey: fabKey, reload: reload);
+          },
+        );
       } else {
         return Center(
           child: HomeWidgets.getPlaceholder(),
@@ -51,23 +61,8 @@ FutureBuilder<Response> buildInterestedWorkshopsBody(
   );
 }
 
-ListView _buildInterestedWorkshopPosts(
-    BuildContext context,
-    BuiltList<BuiltWorkshopSummaryPost> posts,
-    GlobalKey<FabCircularMenuState> fabKey) {
-  return ListView.builder(
-    physics: BouncingScrollPhysics(),
-    scrollDirection: Axis.vertical,
-    itemCount: posts.length,
-    padding: EdgeInsets.all(8),
-    itemBuilder: (context, index) {
-      return HomeWidgets.getWorkshopCard(context,
-          w: posts[index], fabKey: fabKey);
-    },
-  );
-}
-
-FutureBuilder<Response> buildWorkshopsFromSearch({context, searchPost}) {
+FutureBuilder<Response> buildWorkshopsFromSearch(
+    {context, searchPost, Function reload}) {
   return FutureBuilder<Response<BuiltAllWorkshopsPost>>(
     future: AppConstants.service.searchWorkshop(searchPost),
     builder: (context, snapshot) {
@@ -95,7 +90,7 @@ FutureBuilder<Response> buildWorkshopsFromSearch({context, searchPost}) {
 
         final posts = snapshot.data.body;
         print(posts);
-        return _buildWorkshopsFromSearchPosts(context, posts);
+        return _buildWorkshopsFromSearchPosts(context, posts, reload);
       } else {
         // Show a loading indicator while waiting for the posts
         return Center(
@@ -107,7 +102,7 @@ FutureBuilder<Response> buildWorkshopsFromSearch({context, searchPost}) {
 }
 
 Widget _buildWorkshopsFromSearchPosts(
-    BuildContext context, BuiltAllWorkshopsPost posts) {
+    BuildContext context, BuiltAllWorkshopsPost posts, Function reload) {
   return ListView(
     children: <Widget>[
       posts.active_workshops.isEmpty
@@ -130,7 +125,7 @@ Widget _buildWorkshopsFromSearchPosts(
           padding: EdgeInsets.all(8),
           itemBuilder: (context, index) {
             return HomeWidgets.getWorkshopCard(context,
-                w: posts.active_workshops[index]);
+                w: posts.active_workshops[index], reload: reload);
           },
         ),
       ),
@@ -154,7 +149,7 @@ Widget _buildWorkshopsFromSearchPosts(
           padding: EdgeInsets.all(8),
           itemBuilder: (context, index) {
             return HomeWidgets.getWorkshopCard(context,
-                w: posts.past_workshops[index]);
+                w: posts.past_workshops[index], reload: reload);
           },
         ),
       ),
