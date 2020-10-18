@@ -31,6 +31,10 @@ class _AllWorkshopsScreenState extends State<AllWorkshopsScreen>
     super.initState();
   }
 
+  void reload() {
+    setState(() {});
+  }
+
   @override
   void dispose() {
     searchFocusNode.dispose();
@@ -107,7 +111,7 @@ class _AllWorkshopsScreenState extends State<AllWorkshopsScreen>
             padding: EdgeInsets.all(8),
             itemBuilder: (context, index) {
               return HomeWidgets.getWorkshopCard(context,
-                  w: posts.active_workshops[index]);
+                  w: posts.active_workshops[index], reload: reload);
             },
           ),
         ),
@@ -131,6 +135,7 @@ class _AllWorkshopsScreenState extends State<AllWorkshopsScreen>
               return HomeWidgets.getWorkshopCard(
                 context,
                 w: posts.past_workshops[index],
+                reload: reload,
                 isPast: true,
               );
             },
