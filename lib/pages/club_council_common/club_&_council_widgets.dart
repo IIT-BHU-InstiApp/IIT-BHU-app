@@ -9,6 +9,7 @@ import 'package:iit_app/ui/text_style.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../club/club.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:iit_app/screens/account.dart';
 
 class ClubAndCouncilWidgets {
   static double getMinPanelHeight(context) {
@@ -143,9 +144,23 @@ class ClubAndCouncilWidgets {
 
   static Container getToolbar(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-      child: BackButton(color: Colors.lightGreen),
-    );
+        margin: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+        child: Row(
+          children: <Widget>[
+            BackButton(
+                color: Colors.lightGreen,
+                onPressed: () => {
+                      print(AccountScreen.flag),
+                      if (AccountScreen.flag == "Account")
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AccountScreen()))
+                      else
+                        Navigator.pop(context),
+                    }),
+          ],
+        ));
   }
 
   static Container getGradient() {

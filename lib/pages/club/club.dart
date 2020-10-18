@@ -11,6 +11,7 @@ import 'package:iit_app/pages/create.dart';
 import 'package:iit_app/ui/colorPicker.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'workshop_tabs.dart';
+import 'package:iit_app/screens/account.dart';
 
 class ClubPage extends StatefulWidget {
   final ClubListPost club;
@@ -243,6 +244,7 @@ class _ClubPageState extends State<ClubPage>
         .toggleClubSubscription(widget.club.id, AppConstants.djangoToken)
         .then((snapshot) async {
       print("status of club subscription: ${snapshot.statusCode}");
+
       if (snapshot.statusCode == 200) {
         await AppConstants.updateClubSubscriptionInDatabase(
             clubId: widget.club.id,
@@ -373,6 +375,16 @@ class _ClubPageState extends State<ClubPage>
     );
   }
 
+  Future<bool> _onPress() {
+    print("Clubscreen:${AccountScreen.flag}");
+    if (AccountScreen.flag == "Account")
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => AccountScreen()));
+    else
+      Navigator.pop(context);
+    return Future.value(false);
+  }
+
   BorderRadiusGeometry radius = BorderRadius.only(
     topLeft: Radius.circular(24.0),
     topRight: Radius.circular(24.0),
@@ -380,74 +392,77 @@ class _ClubPageState extends State<ClubPage>
   PanelController _pc = PanelController();
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      minimum: const EdgeInsets.all(2.0),
-      child: ValueListenableBuilder(
-          valueListenable: _colorListener,
-          builder: (context, color, child) {
-            setColor();
-            return Scaffold(
-              resizeToAvoidBottomInset: false,
-              resizeToAvoidBottomPadding: false,
-              backgroundColor: ColorConstants.backgroundThemeColor,
-              floatingActionButton: AppConstants.isGuest
-                  ? null
-                  : FloatingActionButton(
-                      backgroundColor: Colors.white,
-                      onPressed: () {
-                        if (this._toggling == false) {
-                          toggleSubscription();
-                        }
-                      },
-                      child: this._toggling || clubMap == null
-                          ? LoadingCircle
-                          : Icon(
-                              Icons.subscriptions,
-                              color: clubMap.is_subscribed
-                                  ? Colors.red
-                                  : Colors.black26,
-                            ),
-                    ),
-              body: RefreshIndicator(
-                onRefresh: () async {
-                  clubMap = await AppConstants.refreshClubInDatabase(
-                      clubId: widget.club.id);
-                  setState(() {});
-                },
-                child: Stack(
-                  children: [
-                    SlidingUpPanel(
-                      body: _getBackground(context),
-                      parallaxEnabled: true,
-                      controller: _pc,
-                      borderRadius: radius,
-                      collapsed: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: radius,
+    return WillPopScope(
+        onWillPop: _onPress,
+        child: SafeArea(
+          minimum: const EdgeInsets.all(2.0),
+          child: ValueListenableBuilder(
+              valueListenable: _colorListener,
+              builder: (context, color, child) {
+                setColor();
+                return Scaffold(
+                  resizeToAvoidBottomInset: false,
+                  resizeToAvoidBottomPadding: false,
+                  backgroundColor: ColorConstants.backgroundThemeColor,
+                  floatingActionButton: AppConstants.isGuest
+                      ? null
+                      : FloatingActionButton(
+                          backgroundColor: Colors.white,
+                          onPressed: () {
+                            if (this._toggling == false) {
+                              toggleSubscription();
+                            }
+                          },
+                          child: this._toggling || clubMap == null
+                              ? CircularProgressIndicator()
+                              : Icon(
+                                  Icons.subscriptions,
+                                  color: clubMap.is_subscribed
+                                      ? Colors.red
+                                      : Colors.black26,
+                                ),
                         ),
-                      ),
-                      backdropEnabled: true,
-                      /*panel: Dismissible(
+                  body: RefreshIndicator(
+                    onRefresh: () async {
+                      clubMap = await AppConstants.refreshClubInDatabase(
+                          clubId: widget.club.id);
+                      setState(() {});
+                    },
+                    child: Stack(
+                      children: [
+                        SlidingUpPanel(
+                          body: _getBackground(context),
+                          parallaxEnabled: true,
+                          controller: _pc,
+                          borderRadius: radius,
+                          collapsed: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: radius,
+                            ),
+                          ),
+                          backdropEnabled: true,
+                          /*panel: Dismissible(
                       key: Key('clubs'),
                       direction: DismissDirection.down,
                       onDismissed: (_) => _pc.close(),
                       child: _getPanel(),
                     ),*/
-                      panelBuilder: (ScrollController sc) => _getPanel(sc: sc),
-                      minHeight:
-                          ClubAndCouncilWidgets.getMinPanelHeight(context),
-                      maxHeight:
-                          ClubAndCouncilWidgets.getMaxPanelHeight(context),
-                      header: ClubAndCouncilWidgets.getHeader(context),
+                          panelBuilder: (ScrollController sc) =>
+                              _getPanel(sc: sc),
+                          minHeight:
+                              ClubAndCouncilWidgets.getMinPanelHeight(context),
+                          maxHeight:
+                              ClubAndCouncilWidgets.getMaxPanelHeight(context),
+                          header: ClubAndCouncilWidgets.getHeader(context),
+                        ),
+                        AppConstants.chooseColorPaletEnabled
+                            ? _colorSelectOptionRow(context)
+                            : Container()
+                      ],
                     ),
-                    AppConstants.chooseColorPaletEnabled
-                        ? _colorSelectOptionRow(context)
-                        : Container()
-                  ],
-                ),
-              ),
-            );
-          }),
-    );
+                  ),
+                );
+              }),
+        ));
   }
 }
