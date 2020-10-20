@@ -25,18 +25,16 @@ class _ResourceCreateScreenState extends State<ResourceCreateScreen> {
   final _resourceFormKey = GlobalKey<FormState>();
   TextEditingController _nameController;
   TextEditingController _linkController;
-  TextEditingController _resource_typeController;
 
   void initState() {
     this._nameController = TextEditingController();
     this._linkController = TextEditingController();
-    this._resource_typeController = TextEditingController();
     editMode = (widget.id != null) ? true : false;
     if (editMode) {
       _fetchedResources = getResourceById(widget.id);
       this._nameController.text = _fetchedResources.name;
       this._linkController.text = _fetchedResources.link;
-      this._resource_typeController.text = _fetchedResources.resource_type;
+      this.resource_type = _fetchedResources.resource_type;
     }
 
     super.initState();
@@ -180,40 +178,53 @@ class _ResourceCreateScreenState extends State<ResourceCreateScreen> {
                   },
                   onSaved: (val) => setState(() => link = val),
                 ),
-                Container(
-                  height: 65,
-                  child: DropdownButton(hint: Text("Resource type \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t"),
-                      value: resource_type,iconSize: 30,
-                      items: [
-                        DropdownMenuItem(
-                          child: Text("Prerequisite"),
-                          value: "Prerequisite",
-                        ),
-                        DropdownMenuItem(
-                          child: Text("Material"),
-                          value: "Material",
-                        ),
-                      ],
-                      onChanged: (value) {
-                        setState(() {
-                          resource_type = value;
-                        });
-                      }),
+                SizedBox(
+                  height: 15,
                 ),
-
-                /* TextFormField(
-                  autovalidate: true,
-                  decoration: InputDecoration(
-                      labelText: 'Resource type(Prerequisite/Material)'),
-                  controller: this._resource_typeController,
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return 'Please enter the resource type';
-                    }
-                    return null;
-                  },
-                  onSaved: (val) => setState(() => resource_type = val),
-                ),*/
+                resource_type == null
+                    ? Container()
+                    : Text("Resource type",
+                        style: TextStyle(color: Colors.grey, fontSize: 12)),
+                Container(
+                  height: 75,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      DropdownButton(
+                          hint: Text(
+                              "Resource type \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t"),
+                          value: resource_type,
+                          iconSize: 30,
+                          underline: Container(
+                            height: 1,
+                            color: resource_type == null
+                                ? Colors.red
+                                : Colors.grey,
+                          ),
+                          items: [
+                            DropdownMenuItem(
+                              child: Text("Prerequisite"),
+                              value: "Prerequisite",
+                            ),
+                            DropdownMenuItem(
+                              child: Text("Material"),
+                              value: "Material",
+                            ),
+                          ],
+                          onChanged: (value) {
+                            setState(() {
+                              resource_type = value;
+                            });
+                          }),
+                      resource_type == null
+                          ? Text(
+                              "Please choose a resource type",
+                              style: TextStyle(color: Colors.red, fontSize: 12),
+                            )
+                          : Container(),
+                    ],
+                  ),
+                ),
                 Container(
                   padding: const EdgeInsets.symmetric(
                       vertical: 16.0, horizontal: 16.0),
