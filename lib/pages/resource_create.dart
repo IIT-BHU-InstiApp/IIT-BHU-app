@@ -67,7 +67,7 @@ class _ResourceCreateScreenState extends State<ResourceCreateScreen> {
       print(
           'Error creating resource: ${onError.toString()} ${onError.runtimeType}');
     }).then((value) {
-      if(value.isSuccessful) {
+      if (value.isSuccessful) {
         done = true;
       }
     }).catchError((onError) {
@@ -76,9 +76,10 @@ class _ResourceCreateScreenState extends State<ResourceCreateScreen> {
     showDialog(
         context: context,
         builder: (BuildContext context) {
-          return AlertDialog(content: done
-              ? Text("Succesfully added")
-              : Text("UnSuccessful. Please try again"),
+          return AlertDialog(
+              content: done
+                  ? Text("Succesfully added")
+                  : Text("UnSuccessful. Please try again"),
               actions: <Widget>[
                 FlatButton(
                   child: Text("Okay"),
@@ -92,8 +93,8 @@ class _ResourceCreateScreenState extends State<ResourceCreateScreen> {
                     else
                       {Navigator.pop(context)}
                   },
-            )
-          ]);
+                )
+              ]);
         });
   }
 
@@ -107,19 +108,17 @@ class _ResourceCreateScreenState extends State<ResourceCreateScreen> {
         .updateWorkshopResourcesByPatch(
             widget.id, AppConstants.djangoToken, resource)
         .catchError((onError) {
-          final error = onError as Response<dynamic>;
-          print(error.body);
-          print(
-              'Error editing resource: ${onError.toString()} ${onError.runtimeType}');
-        })
-        .then((value) {
-      if(value.isSuccessful) {
+      final error = onError as Response<dynamic>;
+      print(error.body);
+      print(
+          'Error editing resource: ${onError.toString()} ${onError.runtimeType}');
+    }).then((value) {
+      if (value.isSuccessful) {
         done = true;
       }
-    })
-        .catchError((onError) {
-          print('Error printing edited resource: ${onError.toString()}');
-        });
+    }).catchError((onError) {
+      print('Error printing edited resource: ${onError.toString()}');
+    });
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -181,7 +180,28 @@ class _ResourceCreateScreenState extends State<ResourceCreateScreen> {
                   },
                   onSaved: (val) => setState(() => link = val),
                 ),
-                TextFormField(
+                Container(
+                  height: 65,
+                  child: DropdownButton(hint: Text("Resource type \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t"),
+                      value: resource_type,iconSize: 30,
+                      items: [
+                        DropdownMenuItem(
+                          child: Text("Prerequisite"),
+                          value: "Prerequisite",
+                        ),
+                        DropdownMenuItem(
+                          child: Text("Material"),
+                          value: "Material",
+                        ),
+                      ],
+                      onChanged: (value) {
+                        setState(() {
+                          resource_type = value;
+                        });
+                      }),
+                ),
+
+                /* TextFormField(
                   autovalidate: true,
                   decoration: InputDecoration(
                       labelText: 'Resource type(Prerequisite/Material)'),
@@ -193,7 +213,7 @@ class _ResourceCreateScreenState extends State<ResourceCreateScreen> {
                     return null;
                   },
                   onSaved: (val) => setState(() => resource_type = val),
-                ),
+                ),*/
                 Container(
                   padding: const EdgeInsets.symmetric(
                       vertical: 16.0, horizontal: 16.0),

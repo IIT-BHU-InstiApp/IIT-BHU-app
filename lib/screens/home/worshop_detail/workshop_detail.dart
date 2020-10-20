@@ -684,7 +684,7 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
                                   ],
                                 ),
                               ),
-                              (_workshop.is_por_holder != null)
+                              (_workshop != null && _workshop.is_por_holder != null)
                                   ? (_workshop.is_por_holder ||
                                           _workshop.is_workshop_contact)
                                       ? editResources(
@@ -700,7 +700,7 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
                       ),
                     ),
 
-          (_workshop.is_por_holder != null)
+          (_workshop != null && _workshop.is_por_holder != null)
               ? (_workshop.is_por_holder || _workshop.is_workshop_contact)
                   ? RaisedButton(
                       child: Text("Add resources"),
