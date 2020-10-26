@@ -30,8 +30,7 @@ class _AccountScreenState extends State<AccountScreen> {
     String returnData = '';
     return showDialog<String>(
       context: context,
-      barrierDismissible:
-          false, // dialog is dismissible with a tap on the barrier
+      barrierDismissible: false, // dialog is dismissible with a tap on the barrier
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Enter $queryName'),
@@ -42,9 +41,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 autofocus: true,
                 decoration: InputDecoration(
                     labelText: queryName,
-                    hintText: queryName == 'Phone No.'
-                        ? '+91987654321'
-                        : 'Sheldon Cooper'),
+                    hintText: queryName == 'Phone No.' ? '+91987654321' : 'Sheldon Cooper'),
                 onChanged: (value) {
                   returnData = value;
                 },
@@ -85,9 +82,7 @@ class _AccountScreenState extends State<AccountScreen> {
   }
 
   void fetchProfileDetails() async {
-    await AppConstants.service
-        .getProfile(AppConstants.djangoToken)
-        .catchError((onError) {
+    await AppConstants.service.getProfile(AppConstants.djangoToken).catchError((onError) {
       print("Error in fetching profile: ${onError.toString()}");
     }).then((value) {
       profileDetails = value.body;
@@ -111,7 +106,7 @@ class _AccountScreenState extends State<AccountScreen> {
   }
 
   Future<bool> onPop() {
-    Navigator.pushNamedAndRemoveUntil(context, '/home', (r) => false);
+    Navigator.pushNamedAndRemoveUntil(context, '/home', ModalRoute.withName('/'));
   }
 
   Widget subscribed(String v) {
@@ -156,8 +151,8 @@ class _AccountScreenState extends State<AccountScreen> {
             iconTheme: IconThemeData(color: Colors.black87),
             leading: IconButton(
               icon: Icon(Icons.arrow_back, color: Colors.black),
-              onPressed: () => Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => HomeScreen())),
+              onPressed: () =>
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen())),
             ),
           ),
           drawer: SideBar(context: context),
@@ -196,9 +191,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                   Row(
                                     children: <Widget>[
                                       Container(
-                                        width:
-                                            MediaQuery.of(context).size.width -
-                                                200,
+                                        width: MediaQuery.of(context).size.width - 200,
                                         child: Text(
                                           profileDetails.name,
                                           style: TextStyle(fontSize: 25),
@@ -207,22 +200,18 @@ class _AccountScreenState extends State<AccountScreen> {
                                       IconButton(
                                         icon: Icon(Icons.edit),
                                         onPressed: () async {
-                                          final name = await _asyncInputDialog(
-                                              context,
-                                              queryName: 'Name');
+                                          final name =
+                                              await _asyncInputDialog(context, queryName: 'Name');
                                           print(name);
                                           updateProfileDetails(
-                                              name: name,
-                                              phoneNumber:
-                                                  profileDetails.phone_number);
+                                              name: name, phoneNumber: profileDetails.phone_number);
                                         },
                                       )
                                     ],
                                   ),
                                   Text(
                                     profileDetails.department,
-                                    style: TextStyle(
-                                        fontSize: 19, color: Colors.grey),
+                                    style: TextStyle(fontSize: 19, color: Colors.grey),
                                   ),
                                 ],
                               ),
@@ -264,13 +253,11 @@ class _AccountScreenState extends State<AccountScreen> {
                             IconButton(
                               icon: Icon(Icons.edit),
                               onPressed: () async {
-                                final phoneNumber = await _asyncInputDialog(
-                                    context,
-                                    queryName: 'Phone No.');
+                                final phoneNumber =
+                                    await _asyncInputDialog(context, queryName: 'Phone No.');
                                 print(phoneNumber);
                                 updateProfileDetails(
-                                    name: profileDetails.name,
-                                    phoneNumber: phoneNumber);
+                                    name: profileDetails.name, phoneNumber: phoneNumber);
                               },
                             )
                           ],
@@ -281,9 +268,7 @@ class _AccountScreenState extends State<AccountScreen> {
                         Text(
                           "Subscriptions",
                           style: TextStyle(
-                              color: Color(0xff242424),
-                              fontSize: 28,
-                              fontWeight: FontWeight.w600),
+                              color: Color(0xff242424), fontSize: 28, fontWeight: FontWeight.w600),
                         ),
                         profileDetails == null
                             ? Container(
@@ -293,8 +278,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                 ),
                               )
                             : profileDetails.subscriptions.length == 0
-                                ? Text(
-                                    'You haven\'t subscribed to any channels yet!')
+                                ? Text('You haven\'t subscribed to any channels yet!')
                                 : Container(child: subscribed("Club")),
                         SizedBox(
                           height: 22,
@@ -317,13 +301,10 @@ class _AccountScreenState extends State<AccountScreen> {
                               return ClubAndCouncilWidgets.getClubCard(
                                   clubTypeForHero: 'Club Privileges',
                                   context: context,
-                                  title: profileDetails
-                                      .club_privileges[index].name,
-                                  subtitle: profileDetails
-                                      .club_privileges[index].council.name,
+                                  title: profileDetails.club_privileges[index].name,
+                                  subtitle: profileDetails.club_privileges[index].council.name,
                                   id: profileDetails.club_privileges[index].id,
-                                  imageUrl: profileDetails
-                                      .club_privileges[index].small_image_url,
+                                  imageUrl: profileDetails.club_privileges[index].small_image_url,
                                   club: profileDetails.club_privileges[index],
                                   isCouncil: false,
                                   horizontal: true);
@@ -353,8 +334,7 @@ class IconTile extends StatelessWidget {
       child: Container(
         height: 45,
         width: 45,
-        decoration: BoxDecoration(
-            color: backColor, borderRadius: BorderRadius.circular(15)),
+        decoration: BoxDecoration(color: backColor, borderRadius: BorderRadius.circular(15)),
         child: Image.asset(
           imgAssetPath,
           width: 20,

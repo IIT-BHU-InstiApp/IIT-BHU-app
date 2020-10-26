@@ -31,7 +31,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     });
     await AppConstants.deleteAllLocalDataWithImages();
     Navigator.of(context)
-        .pushAndRemoveUntil(MaterialPageRoute(builder: (context) => HomeScreen()), (r) => false);
+        .pushAndRemoveUntil(MaterialPageRoute(builder: (context) => HomeScreen()), ModalRoute.withName('/'));
     // setState(() {
     //   _refreshing = false;
     // });
