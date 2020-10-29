@@ -17,6 +17,7 @@ import 'package:iit_app/services/crud.dart';
 import 'package:iit_app/ui/theme.dart';
 import 'data/post_api_service.dart';
 import 'model/appConstants.dart';
+import 'package:iit_app/services/pushNotification.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,9 +46,10 @@ void main() async {
       MaterialApp(
     debugShowCheckedModeBanner: false,
     // home: AppConstants.isLoggedIn ? HomeScreen() : LoginPage(),
-    home: ConnectedMain(),
+    initialRoute: '/',
     routes: <String, WidgetBuilder>{
       // define the routes
+      '/': (BuildContext context)=> ConnectedMain(),
       '/home': (BuildContext context) => HomeScreen(),
       '/mess': (BuildContext context) => MessScreen(),
       '/allWorkshops': (BuildContext context) => AllWorkshopsScreen(),
@@ -76,7 +78,16 @@ class _ConnectedMainState extends State<ConnectedMain> {
   @override
   void initState() {
     checkConnection();
+
     super.initState();
+    _initFCM();
+  }
+
+  _initFCM() {
+    Future.delayed(
+      Duration(milliseconds: 300),
+      () => PushNotification.initialize(context),
+    );
   }
 
   void checkConnection() async {
