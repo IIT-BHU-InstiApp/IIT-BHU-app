@@ -32,7 +32,9 @@ class _CreateScreenState extends State<CreateScreen> {
   TextEditingController _descriptionController;
   TextEditingController _locationController;
   TextEditingController _audienceController;
-  TextEditingController _tagController;
+  TextEditingController _tagSearchController;
+  TextEditingController _tagCreateController;
+
   String _editingDate;
   String _editingTime;
 
@@ -91,7 +93,8 @@ class _CreateScreenState extends State<CreateScreen> {
     this._descriptionController = TextEditingController();
     this._locationController = TextEditingController();
     this._audienceController = TextEditingController();
-    this._tagController = TextEditingController();
+    this._tagSearchController = TextEditingController();
+    this._tagCreateController = TextEditingController();
 
     this._searchContactsController = TextEditingController();
 
@@ -136,6 +139,74 @@ class _CreateScreenState extends State<CreateScreen> {
             ],
           );
         });
+  }
+
+  tagCreateDialog() async {
+    bool errorMessageShown = false;
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+            content: TextFormField(
+              controller: this._tagCreateController,
+              decoration: InputDecoration(
+                  labelText: 'Create Tag',
+                  suffix: RaisedButton(
+                    child: Text('+ Create'),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                    onPressed: () async {
+                      print(this._tagCreateController.text);
+                      final newTag = TagCreate((b) => b
+                        ..tag_name = this._tagCreateController.text
+                        ..club = widget.club.id);
+                      await AppConstants.service
+                          .createTag(AppConstants.djangoToken, newTag)
+                          .catchError((onError) {
+                        final error = onError as Response<dynamic>;
+                        print(error.body);
+                        if (error.body
+                            .toString()
+                            .contains('The tag already exists for this club')) {
+                          tagAlertDialog('Tag Exists',
+                              'This tag already exists. Search for it if you wish to add it to the workshop.');
+                          errorMessageShown = true;
+                        }
+                        print(
+                            'Error while creating Tag: ${onError.toString()} ${onError.runtimeType}');
+                      }).then((value) {
+                        if (value != null) {
+                          this._createdTagResult = value.body;
+                          tagAlertDialog('Tag Created',
+                              'The Tag has been created succesfully. Search for it again, and add it to the worshop if you wish.');
+                        } else if (errorMessageShown == false) {
+                          tagAlertDialog(
+                              'Error', 'There was an error creating this tag.');
+                        }
+                      });
+                      setState(() {
+                        if (this._createdTagResult != null)
+                          // Uncomment the below lines if the created tag should automatically be added to the worshop.
+                          // this._workshop.tagNameofId[this
+                          //     ._createdTagResult
+                          //     .id] = this._createdTagResult.tag_name;
+                          ;
+                      });
+                    },
+                  )),
+            ),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('Ok'),
+                onPressed: () {
+                  this._tagCreateController.text = '';
+                  Navigator.of(context).pop();
+                },
+              )
+            ]);
+      },
+    );
   }
 
   @override
@@ -342,7 +413,7 @@ class _CreateScreenState extends State<CreateScreen> {
                   Row(children: [
                     Expanded(
                       child: TextFormField(
-                        controller: this._tagController,
+                        controller: this._tagSearchController,
                         decoration: InputDecoration(
                           contentPadding:
                               EdgeInsets.symmetric(vertical: 0, horizontal: 10),
@@ -350,7 +421,7 @@ class _CreateScreenState extends State<CreateScreen> {
                           suffix: IconButton(
                             icon: Icon(Icons.clear),
                             onPressed: () {
-                              this._tagController.text = '';
+                              this._tagSearchController.text = '';
                               if (!this.mounted) return;
                             },
                           ),
@@ -361,7 +432,7 @@ class _CreateScreenState extends State<CreateScreen> {
 
                           this._tagSearchPost = TagSearch((b) => b
                             ..club = widget.club.id
-                            ..tag_name = this._tagController.text);
+                            ..tag_name = this._tagSearchController.text);
 
                           if (!this.mounted) return;
                           setState(() {
@@ -386,45 +457,15 @@ class _CreateScreenState extends State<CreateScreen> {
                         },
                       ),
                     ),
-                    this._isSearchingTags
-                        ? RaisedButton(
-                            child: Text('+ Create'),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(50),
-                            ),
-                            onPressed: () async {
-                              final newTag = TagCreate((b) => b
-                                ..tag_name = this._tagController.text
-                                ..club = widget.club.id);
-
-                              await AppConstants.service
-                                  .createTag(AppConstants.djangoToken, newTag)
-                                  .catchError((onError) {
-                                final error = onError as Response<dynamic>;
-                                print(error.body);
-                                if (error.body.toString().contains(
-                                    'The tag already exists for this club'))
-                                  tagAlertDialog('Tag Exists',
-                                      'This tag already exists. Search for it if you wish to add it to the workshop.');
-                                print(
-                                    'Error while creating Tag: ${onError.toString()} ${onError.runtimeType}');
-                              }).then((value) {
-                                if (value != null)
-                                  this._createdTagResult = value.body;
-                                tagAlertDialog('Tag Created',
-                                    'The Tag has been created succesfully. Search for it again, and add it to the worshop if you wish.');
-                              });
-                              setState(() {
-                                if (this._createdTagResult != null)
-                                  // Uncomment the below lines if the created tag should automatically be added to the worshop.
-                                  // this._workshop.tagNameofId[this
-                                  //     ._createdTagResult
-                                  //     .id] = this._createdTagResult.tag_name;
-                                  ;
-                              });
-                            },
-                          )
-                        : Container(),
+                    RaisedButton(
+                      child: Text('+ Create'),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      onPressed: () async {
+                        await tagCreateDialog();
+                      },
+                    ),
                     this._isSearchingTags
                         ? RaisedButton(
                             child: Text('X Clear'),
@@ -432,7 +473,8 @@ class _CreateScreenState extends State<CreateScreen> {
                               borderRadius: BorderRadius.circular(50),
                             ),
                             onPressed: () {
-                              this._tagController.text = '';
+                              FocusScope.of(context).unfocus();
+                              this._tagSearchController.text = '';
                               this._isSearchingTags = false;
                               if (!this.mounted) return;
                               setState(() {});
@@ -444,6 +486,7 @@ class _CreateScreenState extends State<CreateScreen> {
                               borderRadius: BorderRadius.circular(50),
                             ),
                             onPressed: () async {
+                              FocusScope.of(context).unfocus();
                               await AppConstants.service
                                   .getClubTags(
                                       widget.club.id, AppConstants.djangoToken)
@@ -704,7 +747,7 @@ class _CreateScreenState extends State<CreateScreen> {
                     this._searchedTagResult.isEmpty)
                 ? Center(
                     child: Text(
-                      'No such Tags',
+                      'No such Tag',
                       textAlign: TextAlign.center,
                       textScaleFactor: 1.5,
                     ),
