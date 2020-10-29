@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:chopper/chopper.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:iit_app/external_libraries/spin_kit.dart';
 import 'package:iit_app/model/appConstants.dart';
@@ -16,14 +17,12 @@ import 'package:iit_app/screens/account.dart';
 class ClubPage extends StatefulWidget {
   final ClubListPost club;
   final bool editMode;
-  const ClubPage({Key key, @required this.club, this.editMode = false})
-      : super(key: key);
+  const ClubPage({Key key, @required this.club, this.editMode = false}) : super(key: key);
   @override
   _ClubPageState createState() => _ClubPageState();
 }
 
-class _ClubPageState extends State<ClubPage>
-    with SingleTickerProviderStateMixin {
+class _ClubPageState extends State<ClubPage> with SingleTickerProviderStateMixin {
   TextStyle tempStyle = TextStyle(fontSize: 50.0, fontWeight: FontWeight.bold);
   BuiltClubPost clubMap;
   BuiltAllWorkshopsPost clubWorkshops;
@@ -94,8 +93,7 @@ class _ClubPageState extends State<ClubPage>
               onTap: () {
                 setColorPalleteOff();
                 _bodyBg = true;
-                _colorListener.value =
-                    ColorConstants.workshopContainerBackground;
+                _colorListener.value = ColorConstants.workshopContainerBackground;
                 return _colorPicker.getColorPickerDialogBox(context);
               },
               child: Text('body bg'),
@@ -137,8 +135,7 @@ class _ClubPageState extends State<ClubPage>
               onTap: () {
                 setColorPalleteOff();
                 _panelContainer = true;
-                _colorListener.value =
-                    ColorConstants.workshopContainerBackground;
+                _colorListener.value = ColorConstants.workshopContainerBackground;
                 return _colorPicker.getColorPickerDialogBox(context);
               },
               child: Text('wokrshop container'),
@@ -195,19 +192,14 @@ class _ClubPageState extends State<ClubPage>
 
   fetchClubDataById() async {
     if (clubMap == null) {
-      clubMap =
-          await AppConstants.getClubDetailsFromDatabase(clubId: widget.club.id);
+      clubMap = await AppConstants.getClubDetailsFromDatabase(clubId: widget.club.id);
     }
     if (clubMap != null) {
-      _clubLargeLogoFile = AppConstants.getImageFile(
-          isClub: true, isSmall: false, id: clubMap.id);
+      _clubLargeLogoFile = AppConstants.getImageFile(isClub: true, isSmall: false, id: clubMap.id);
 
       if (_clubLargeLogoFile == null) {
         AppConstants.writeImageFileIntoDisk(
-            isClub: true,
-            isSmall: false,
-            id: clubMap.id,
-            url: clubMap.large_image_url);
+            isClub: true, isSmall: false, id: clubMap.id, url: clubMap.large_image_url);
       }
     }
     if (!this.mounted) {
@@ -254,8 +246,15 @@ class _ClubPageState extends State<ClubPage>
         // var activeWorkshops = clubMap.active_workshops;
         // var pastWorkshops = clubMap.past_workshops;
 
-        clubMap = await AppConstants.getClubDetailsFromDatabase(
-            clubId: widget.club.id);
+        clubMap = await AppConstants.getClubDetailsFromDatabase(clubId: widget.club.id);
+
+        if (clubMap.is_subscribed == true) {
+          await FirebaseMessaging()
+              .subscribeToTopic('C_${clubMap.id}')
+              .then((_) => print('subscribed to C_${clubMap.id}'));
+        } else {
+          await FirebaseMessaging().unsubscribeFromTopic('C_${clubMap.id}');
+        }
 
         // clubMap = clubMap.rebuild((b) => b
         //   ..active_workshops = activeWorkshops.toBuilder()
@@ -295,10 +294,8 @@ class _ClubPageState extends State<ClubPage>
                   children: [
                     Container(
                       child: _clubLargeLogoFile == null
-                          ? Image.network(clubMap.large_image_url,
-                              fit: BoxFit.cover, height: 300.0)
-                          : Image.file(_clubLargeLogoFile,
-                              fit: BoxFit.cover, height: 300.0),
+                          ? Image.network(clubMap.large_image_url, fit: BoxFit.cover, height: 300.0)
+                          : Image.file(_clubLargeLogoFile, fit: BoxFit.cover, height: 300.0),
                       constraints: BoxConstraints.expand(height: 295.0),
                     ),
                     ClubAndCouncilWidgets.getGradient(),
@@ -329,11 +326,8 @@ class _ClubPageState extends State<ClubPage>
                   child: Center(child: LoadingCircle))
               : ClubAndCouncilWidgets.getSecies(context,
                   secy: clubMap.secy, joint_secy: clubMap.joint_secy),
-          clubMap == null
-              ? Container()
-              : ClubAndCouncilWidgets.getSocialLinks(clubMap),
-          SizedBox(
-              height: 1.5 * ClubAndCouncilWidgets.getMinPanelHeight(context)),
+          clubMap == null ? Container() : ClubAndCouncilWidgets.getSocialLinks(clubMap),
+          SizedBox(height: 1.5 * ClubAndCouncilWidgets.getMinPanelHeight(context)),
         ],
       ),
     );
@@ -357,8 +351,8 @@ class _ClubPageState extends State<ClubPage>
                       onPressed: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => CreateScreen(
-                                club: widget.club, clubName: clubMap.name),
+                            builder: (context) =>
+                                CreateScreen(club: widget.club, clubName: clubMap.name),
                           ),
                         );
                       })
@@ -378,8 +372,7 @@ class _ClubPageState extends State<ClubPage>
   Future<bool> _onPress() {
     print("Clubscreen:${AccountScreen.flag}");
     if (AccountScreen.flag == "Account")
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => AccountScreen()));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => AccountScreen()));
     else
       Navigator.pop(context);
     return Future.value(false);
@@ -417,15 +410,12 @@ class _ClubPageState extends State<ClubPage>
                               ? CircularProgressIndicator()
                               : Icon(
                                   Icons.subscriptions,
-                                  color: clubMap.is_subscribed
-                                      ? Colors.red
-                                      : Colors.black26,
+                                  color: clubMap.is_subscribed ? Colors.red : Colors.black26,
                                 ),
                         ),
                   body: RefreshIndicator(
                     onRefresh: () async {
-                      clubMap = await AppConstants.refreshClubInDatabase(
-                          clubId: widget.club.id);
+                      clubMap = await AppConstants.refreshClubInDatabase(clubId: widget.club.id);
                       setState(() {});
                     },
                     child: Stack(
@@ -447,12 +437,9 @@ class _ClubPageState extends State<ClubPage>
                       onDismissed: (_) => _pc.close(),
                       child: _getPanel(),
                     ),*/
-                          panelBuilder: (ScrollController sc) =>
-                              _getPanel(sc: sc),
-                          minHeight:
-                              ClubAndCouncilWidgets.getMinPanelHeight(context),
-                          maxHeight:
-                              ClubAndCouncilWidgets.getMaxPanelHeight(context),
+                          panelBuilder: (ScrollController sc) => _getPanel(sc: sc),
+                          minHeight: ClubAndCouncilWidgets.getMinPanelHeight(context),
+                          maxHeight: ClubAndCouncilWidgets.getMaxPanelHeight(context),
                           header: ClubAndCouncilWidgets.getHeader(context),
                         ),
                         AppConstants.chooseColorPaletEnabled
