@@ -12,6 +12,8 @@ class WorkshopCreater {
   String date;
   String time;
   String location;
+  String latitude;
+  String longitude;
   String audience;
   List<int> contactIds = [];
   Map<int, String> contactNameofId = {};
@@ -55,6 +57,8 @@ class WorkshopCreater {
       ..date = workshop.date
       ..time = workshop.time
       ..location = workshop.location
+      ..latitude = workshop.latitude
+      ..longitude = workshop.longitude
       ..audience = workshop.audience
       ..resources = BuiltList<int>([1]).toBuilder()
       ..contacts = workshop.contactIds.build().toBuilder()
@@ -88,6 +92,8 @@ class WorkshopCreater {
       ..date = workshop.date
       ..time = workshop.time
       ..location = workshop.location
+      ..latitude = workshop.latitude
+      ..longitude = workshop.longitude
       ..audience = workshop.audience);
 
     await AppConstants.service

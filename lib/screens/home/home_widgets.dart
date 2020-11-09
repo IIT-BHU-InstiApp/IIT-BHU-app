@@ -221,8 +221,12 @@ class HomeWidgets {
                       ),
                     )
                     .then((value) => reload());
-                if (fabKey.currentState.isOpen) {
-                  fabKey.currentState.close();
+                try {
+                  if (fabKey.currentState.isOpen) {
+                    fabKey.currentState.close();
+                  }
+                } catch (e) {
+                  print(e);
                 }
               }
             : null,

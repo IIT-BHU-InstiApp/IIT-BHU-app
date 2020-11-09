@@ -22,7 +22,8 @@ import 'workshop_detail_widgets.dart';
 class WorkshopDetailPage extends StatefulWidget {
   BuiltWorkshopSummaryPost workshop;
   final bool isPast;
-  WorkshopDetailPage({Key key, this.workshop, this.isPast = false}) : super(key: key);
+  WorkshopDetailPage({Key key, this.workshop, this.isPast = false})
+      : super(key: key);
   @override
   _WorkshopDetailPage createState() => _WorkshopDetailPage();
 }
@@ -94,7 +95,8 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
               onTap: () {
                 setColorPalleteOff();
                 _bodyBg = true;
-                _colorListener.value = ColorConstants.workshopContainerBackground;
+                _colorListener.value =
+                    ColorConstants.workshopContainerBackground;
                 return _colorPicker.getColorPickerDialogBox(context);
               },
               child: Text('body bg'),
@@ -210,15 +212,15 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
         // ..tags = _workshop.tags
         );
 
-    print(widget.workshop.toString());
+    // print(widget.workshop.toString());
 
     if (!this.mounted) return;
     setState(() {});
   }
 
   void deleteWorkshop() async {
-    bool isConfirmed =
-        await CreatePageDialogBoxes.confirmDialog(context: context, action: 'Delete');
+    bool isConfirmed = await CreatePageDialogBoxes.confirmDialog(
+        context: context, action: 'Delete');
     if (isConfirmed == true) {
       AppConstants.service
           .removeWorkshop(widget.workshop.id, AppConstants.djangoToken)
@@ -250,8 +252,8 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
           FirebaseMessaging().unsubscribeFromTopic('W_${_workshop.id}');
         }
 
-        _workshop
-            .rebuild((b) => b..interested_users = _workshop.interested_users + _newInterestedUser);
+        _workshop.rebuild((b) => b
+          ..interested_users = _workshop.interested_users + _newInterestedUser);
       }
     }).catchError((onError) {
       print("Error in toggleing: ${onError.toString()}");
@@ -261,12 +263,13 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
   }
 
   Container _getBackground() {
-    final File clubLogoFile =
-        AppConstants.getImageFile(isSmall: true, id: widget.workshop.club.id, isClub: true);
+    final File clubLogoFile = AppConstants.getImageFile(
+        isSmall: true, id: widget.workshop.club.id, isClub: true);
 
     return Container(
       child: clubLogoFile == null
-          ? Image.network(widget.workshop.club.small_image_url, fit: BoxFit.cover, height: 300.0)
+          ? Image.network(widget.workshop.club.small_image_url,
+              fit: BoxFit.cover, height: 300.0)
           : Image.file(clubLogoFile, fit: BoxFit.cover, height: 300),
       constraints: BoxConstraints.expand(height: 295.0),
     );
@@ -302,24 +305,30 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
                     widget.isPast
                         ? Container()
                         : is_interested == 0
-                            ? Container(child: loadingAnimation(), height: 20, width: 20)
+                            ? Container(
+                                child: loadingAnimation(),
+                                height: 20,
+                                width: 20)
                             : InkWell(
                                 onTap: () async {
                                   if (AppConstants.isGuest) {
-                                    _scaffoldKey.currentState.showSnackBar(SnackBar(
+                                    _scaffoldKey.currentState
+                                        .showSnackBar(SnackBar(
                                       content: Text('Please Log In first'),
                                       duration: Duration(seconds: 2),
                                     ));
                                   } else {
                                     if (is_interested != 1) {
                                       bool shouldCalendarBeOpened =
-                                          await CreatePageDialogBoxes.confirmCalendarOpenDialog(
-                                              context: context);
+                                          await CreatePageDialogBoxes
+                                              .confirmCalendarOpenDialog(
+                                                  context: context);
                                       if (shouldCalendarBeOpened == true) {
                                         final String _calendarUrl =
                                             AppConstants.addEventToCalendarLink(
                                                 workshop: _workshop);
-                                        print('add event to calendar URL: $_calendarUrl');
+                                        print(
+                                            'add event to calendar URL: $_calendarUrl');
                                         launch(_calendarUrl);
                                       }
                                     }
@@ -327,7 +336,8 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
                                   }
                                 },
                                 child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
                                   children: [
                                     Icon(Icons.star,
                                         color: is_interested == 1
@@ -354,6 +364,31 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
     );
   }
 
+  Row _getLocationOnMaps() {
+    return Row(
+      children: [
+        Text('Open In Maps: ',
+            style: TextStyle(
+                fontFamily: 'Opensans',
+                fontSize: 15.0,
+                color: Colors.white,
+                fontWeight: FontWeight.w600)),
+        SizedBox(width: 20),
+        RaisedButton(
+          child: Icon(Icons.map),
+          onPressed: () {
+            print('lol');
+            Navigator.of(context).pushNamed('/mapScreen', arguments: {
+              'fromWorkshopDetails': true,
+              'latitude': _workshop?.latitude,
+              'longitude': _workshop?.longitude,
+            });
+          },
+        ),
+      ],
+    );
+  }
+
   Container _getContent() {
     final _overviewTitle = "Description".toUpperCase();
     return Container(
@@ -376,6 +411,11 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
                     ? loadingAnimation()
                     : Text(_workshop.description, style: Style.commonTextStyle),
                 _getPeopleGoing(),
+                Separator(),
+                (_workshop?.latitude ?? null) != null &&
+                        (_workshop?.longitude ?? null) != null
+                    ? _getLocationOnMaps()
+                    : Container(),
               ],
             ),
           ),
@@ -395,7 +435,8 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
             children: <Widget>[
               Text(
                 'Edit',
-                style: TextStyle(color: Colors.yellow, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    color: Colors.yellow, fontWeight: FontWeight.bold),
               ),
               IconButton(
                 icon: Icon(
@@ -422,7 +463,8 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
             children: <Widget>[
               Text(
                 'Delete',
-                style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+                style:
+                    TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
               ),
               IconButton(
                   iconSize: 50,
@@ -442,7 +484,8 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
           height: MediaQuery.of(context).size.height * 0.75,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(35.0), bottomRight: Radius.circular(35.0)),
+                bottomLeft: Radius.circular(35.0),
+                bottomRight: Radius.circular(35.0)),
             color: ColorConstants.workshopContainerBackground,
           ),
         ),
@@ -469,7 +512,8 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
       child: ListView(
         controller: sc,
         children: [
-          WorkshopDetailWidgets.getHeading(icon: Icons.location_on, title: 'Location'),
+          WorkshopDetailWidgets.getHeading(
+              icon: Icons.location_on, title: 'Location'),
           SizedBox(height: 5.0),
           _workshop == null
               ? Container(
@@ -482,13 +526,21 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
                   //style: baseTextStyle,
                 ),
           SizedBox(height: 5.0),
-          Text(
-            //'${_workshop.longitude}',
-            '(Lattitude,Longitude)',
-            //style: baseTextStyle,
+          Row(
+            children: [
+              Text(
+                //'${_workshop.longitude}',
+                (_workshop?.latitude ?? null) != null &&
+                        (_workshop?.longitude ?? null) != null
+                    ? '(${_workshop?.latitude}, ${_workshop?.longitude})'
+                    : '(Lattitude,Longitude)',
+                //style: baseTextStyle,
+              ),
+            ],
           ),
           SizedBox(height: 15.0),
-          WorkshopDetailWidgets.getHeading(icon: Icons.library_books, title: 'Resouces'),
+          WorkshopDetailWidgets.getHeading(
+              icon: Icons.library_books, title: 'Resouces'),
           SizedBox(height: 5.0),
           _workshop == null
               ? Container(
@@ -500,7 +552,8 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
                   'No Resources',
                 ),
           SizedBox(height: 15.0),
-          WorkshopDetailWidgets.getHeading(icon: Icons.people, title: 'Audience'),
+          WorkshopDetailWidgets.getHeading(
+              icon: Icons.people, title: 'Audience'),
           SizedBox(height: 5.0),
           _workshop == null
               ? Container(
@@ -512,7 +565,8 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
                   //'No Audience',
                 ),
           SizedBox(height: 15.0),
-          WorkshopDetailWidgets.getHeading(icon: Icons.contacts, title: 'Contacts'),
+          WorkshopDetailWidgets.getHeading(
+              icon: Icons.contacts, title: 'Contacts'),
           SizedBox(height: 5.0),
           _workshop == null
               ? Container(

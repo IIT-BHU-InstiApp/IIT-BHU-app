@@ -115,6 +115,8 @@ class _CreateScreenState extends State<CreateScreen> {
       widget.workshopData.tags.forEach((tag) {
         this._workshop.tagNameofId[tag.id] = tag.tag_name;
       });
+      this._workshop.latitude = widget.workshopData.latitude;
+      this._workshop.longitude = widget.workshopData.longitude;
     } else {
       _workshop = WorkshopCreater();
     }
@@ -269,15 +271,45 @@ class _CreateScreenState extends State<CreateScreen> {
                       ),
                     ],
                   ),
-                  TextFormField(
-                      autovalidate: true,
-                      decoration: InputDecoration(labelText: 'Location'),
-                      controller: this._locationController,
-                      validator: (value) {
-                        return null;
-                      },
-                      onSaved: (val) =>
-                          setState(() => _workshop.location = val)),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                            autovalidate: true,
+                            decoration: InputDecoration(
+                              labelText: 'Location',
+                            ),
+                            controller: this._locationController,
+                            validator: (value) {
+                              return null;
+                            },
+                            onSaved: (val) =>
+                                setState(() => _workshop.location = val)),
+                      ),
+                      RaisedButton(
+                        child: Icon(Icons.map),
+                        onPressed: () async {
+                          final location = await Navigator.of(context)
+                                  .pushNamed('/mapScreen',
+                                      arguments: {'fromWorkshopCreate': true})
+                              as List<String>;
+                          this._workshop.latitude =
+                              location == null ? null : location[0];
+                          this._workshop.longitude =
+                              location == null ? null : location[1];
+                          if (this._locationController.text == '')
+                            this._locationController.text =
+                                location == null ? null : location[2];
+                          setState(() {});
+                        },
+                      ),
+                    ],
+                  ),
+                  this._workshop.latitude != null &&
+                          this._workshop.longitude != null
+                      ? Text(
+                          '${this._workshop.latitude}, ${this._workshop.longitude}')
+                      : Container(),
                   TextFormField(
                     autovalidate: true,
                     decoration: InputDecoration(labelText: 'Audience'),
@@ -323,7 +355,7 @@ class _CreateScreenState extends State<CreateScreen> {
                                       this._searchPost)
                                   .catchError((onError) {
                                 print(
-                                    'Error whlie fetching search results: $onError');
+                                    'Error while fetching search results: $onError');
                               }).then((result) {
                                 if (result != null)
                                   this._searchedProfileresult = result.body;
@@ -494,7 +526,6 @@ class _CreateScreenState extends State<CreateScreen> {
                                 print('Error while fetching all tags $onError');
                               }).then((result) {
                                 if (result != null) {
-                                  print(result.body.runtimeType);
                                   this._allTagsOfClub = result.body.club_tags;
                                   this._allTagDataShow = true;
                                   this._allTagDataFetched = true;
@@ -539,8 +570,6 @@ class _CreateScreenState extends State<CreateScreen> {
                                   .tagNameofId
                                   .keys
                                   .toList()[index];
-                              print(
-                                  '$_id : ${this._workshop.tagNameofId[_id]}');
                               return Container(
                                 padding: EdgeInsets.all(2),
                                 child: Row(
