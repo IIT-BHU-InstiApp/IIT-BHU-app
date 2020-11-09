@@ -149,54 +149,54 @@ class _CreateScreenState extends State<CreateScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-            content: TextFormField(
-              controller: this._tagCreateController,
-              decoration: InputDecoration(
-                  labelText: 'Create Tag',
-                  suffix: RaisedButton(
-                    child: Text('+ Create'),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(50),
+            content: Row(
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    controller: this._tagCreateController,
+                    decoration: InputDecoration(
+                      labelText: 'Create Tag',
                     ),
-                    onPressed: () async {
-                      print(this._tagCreateController.text);
-                      final newTag = TagCreate((b) => b
-                        ..tag_name = this._tagCreateController.text
-                        ..club = widget.club.id);
-                      await AppConstants.service
-                          .createTag(AppConstants.djangoToken, newTag)
-                          .catchError((onError) {
-                        final error = onError as Response<dynamic>;
-                        print(error.body);
-                        if (error.body
-                            .toString()
-                            .contains('The tag already exists for this club')) {
-                          tagAlertDialog('Tag Exists',
-                              'This tag already exists. Search for it if you wish to add it to the workshop.');
-                          errorMessageShown = true;
-                        }
-                        print(
-                            'Error while creating Tag: ${onError.toString()} ${onError.runtimeType}');
-                      }).then((value) {
-                        if (value != null) {
-                          this._createdTagResult = value.body;
-                          tagAlertDialog('Tag Created',
-                              'The Tag has been created succesfully. Search for it again, and add it to the worshop if you wish.');
-                        } else if (errorMessageShown == false) {
-                          tagAlertDialog(
-                              'Error', 'There was an error creating this tag.');
-                        }
-                      });
-                      setState(() {
-                        if (this._createdTagResult != null)
-                          // Uncomment the below lines if the created tag should automatically be added to the worshop.
-                          // this._workshop.tagNameofId[this
-                          //     ._createdTagResult
-                          //     .id] = this._createdTagResult.tag_name;
-                          ;
-                      });
-                    },
-                  )),
+                  ),
+                ),
+                RaisedButton(
+                  child: Text('+ Create'),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(50),
+                  ),
+                  onPressed: () async {
+                    print(this._tagCreateController.text);
+                    final newTag = TagCreate((b) => b
+                      ..tag_name = this._tagCreateController.text
+                      ..club = widget.club.id);
+                    await AppConstants.service
+                        .createTag(AppConstants.djangoToken, newTag)
+                        .catchError((onError) {
+                      final error = onError as Response<dynamic>;
+                      print(error.body);
+                      if (error.body
+                          .toString()
+                          .contains('The tag already exists for this club')) {
+                        tagAlertDialog('Tag Exists',
+                            'This tag already exists. Search for it if you wish to add it to the workshop.');
+                        errorMessageShown = true;
+                      }
+                      print(
+                          'Error while creating Tag: ${onError.toString()} ${onError.runtimeType}');
+                    }).then((value) {
+                      if (value != null) {
+                        this._createdTagResult = value.body;
+                        tagAlertDialog('Tag Created',
+                            'The Tag has been created succesfully. Search for it again, and add it to the worshop if you wish.');
+                      } else if (errorMessageShown == false) {
+                        tagAlertDialog(
+                            'Error', 'There was an error creating this tag.');
+                      }
+                    });
+                    setState(() {});
+                  },
+                )
+              ],
             ),
             actions: <Widget>[
               FlatButton(
