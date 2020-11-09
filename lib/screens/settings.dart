@@ -5,6 +5,7 @@ import 'package:iit_app/model/colorConstants.dart';
 import 'package:iit_app/screens/drawer.dart';
 import 'package:iit_app/screens/home/home.dart';
 import 'package:iit_app/ui/colorPicker.dart';
+import 'package:iit_app/ui/text_style.dart';
 import 'package:iit_app/ui/theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -30,8 +31,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
       _refreshing = true;
     });
     await AppConstants.deleteAllLocalDataWithImages();
-    Navigator.of(context)
-        .pushAndRemoveUntil(MaterialPageRoute(builder: (context) => HomeScreen()), ModalRoute.withName('/'));
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => HomeScreen()),
+        ModalRoute.withName('/'));
     // setState(() {
     //   _refreshing = false;
     // });
@@ -74,8 +76,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     child: RaisedButton(
                       onPressed: () async {
                         AppTheme.dark();
-                        SharedPreferences prefs = await SharedPreferences.getInstance();
-                        await prefs.setString(SharedPreferenceKeys.usertheme, 'dark');
+                        SharedPreferences prefs =
+                            await SharedPreferences.getInstance();
+                        await prefs.setString(
+                            SharedPreferenceKeys.usertheme, 'dark');
                         Navigator.pop(context);
                       },
                       child: Text('dark'),
@@ -88,8 +92,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     child: RaisedButton(
                       onPressed: () async {
                         AppTheme.light();
-                        SharedPreferences prefs = await SharedPreferences.getInstance();
-                        await prefs.setString(SharedPreferenceKeys.usertheme, 'light');
+                        SharedPreferences prefs =
+                            await SharedPreferences.getInstance();
+                        await prefs.setString(
+                            SharedPreferenceKeys.usertheme, 'light');
                         Navigator.pop(context);
                       },
                       child: Text('light'),
@@ -116,7 +122,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
             backgroundColor: ColorConstants.settingBackground,
             appBar: AppBar(
               backgroundColor: _colorListener.value,
-              title: Text("Settings"),
+              title: Text(
+                "Settings",
+                style: Style.baseTextStyle.copyWith(color: Colors.black54),
+              ),
               leading: IconButton(
                 icon: Icon(Icons.arrow_back, color: Colors.black),
                 onPressed: () => Navigator.pop(context),
@@ -130,7 +139,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   child: Center(
                     child: this._refreshing
                         ? LoadingCircle
-                        : RaisedButton(onPressed: onResetDatabase, child: Text("Reset Saved Data")),
+                        : RaisedButton(
+                            onPressed: onResetDatabase,
+                            child: Text("Reset Saved Data")),
                   ),
                 ),
                 Container(
@@ -138,7 +149,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   child: RaisedButton(
                       onPressed: () =>
                           _chooseTheme(), //_colorPicker.getColorPickerDialogBox(context),
-                      child: Text('Pick theme')), //Text('Pick Color for theme'))
+                      child:
+                          Text('Pick theme')), //Text('Pick Color for theme'))
                 ),
                 /*Container(
                   child: Center(

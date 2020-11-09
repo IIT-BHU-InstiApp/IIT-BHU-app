@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
+import 'package:iit_app/ui/text_style.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:iit_app/pages/login.dart';
 
@@ -13,19 +14,62 @@ class SideBar extends Drawer {
     return Drawer(
       child: ListView(
         children: <Widget>[
-          UserAccountsDrawerHeader(
-            accountName: AppConstants.isGuest
-                ? Text('Welcome')
-                : Text(AppConstants.currentUser.displayName),
-            accountEmail: AppConstants.isGuest
-                ? Text('Guest User')
-                : Text(AppConstants.currentUser.email),
-            currentAccountPicture: Image(
-                image: (AppConstants.currentUser == null ||
-                        AppConstants.isGuest == true)
-                    ? AssetImage('assets/guest.png')
-                    : NetworkImage(AppConstants.currentUser.photoUrl),
-                fit: BoxFit.cover),
+          Material(
+            elevation: 2,
+            color: Colors.lightBlueAccent,
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(30),
+              bottomRight: Radius.circular(30),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    height: 70.0,
+                    width: 70.0,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: (AppConstants.currentUser == null ||
+                                AppConstants.isGuest == true)
+                            ? AssetImage('assets/guest.png')
+                            : NetworkImage(AppConstants.currentUser.photoUrl),
+                        fit: BoxFit.fill,
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(40.0)),
+                      border: Border.all(color: Colors.blueGrey, width: 2.0),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: AppConstants.isGuest
+                        ? Text(
+                            'Welcome',
+                            style: Style.titleTextStyle,
+                          )
+                        : Text(
+                            AppConstants.currentUser.displayName,
+                            style: Style.titleTextStyle,
+                          ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: AppConstants.isGuest
+                        ? Text(
+                            'Guest User',
+                            style: Style.baseTextStyle
+                                .copyWith(color: Colors.white),
+                          )
+                        : Text(
+                            AppConstants.currentUser.email,
+                            style: Style.baseTextStyle
+                                .copyWith(color: Colors.white),
+                          ),
+                  ),
+                ],
+              ),
+            ),
           ),
           getNavItem(Icons.home, "Home", '/home', replacement: true),
           getNavItem(Icons.map, "Map", '/mapScreen'),
