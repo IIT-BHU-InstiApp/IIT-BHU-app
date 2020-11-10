@@ -12,10 +12,13 @@ class WorkshopCreater {
   String date;
   String time;
   String location;
+  String latitude;
+  String longitude;
   String audience;
   List<int> contactIds = [];
   List<int> all_resources = [];
   Map<int, String> contactNameofId = {};
+  Map<int, String> tagNameofId = {};
   // TODO: add image_url
 
   WorkshopCreater({String editingDate, String editingTime}) {
@@ -55,16 +58,18 @@ class WorkshopCreater {
       ..date = workshop.date
       ..time = workshop.time
       ..location = workshop.location
+      ..latitude = workshop.latitude
+      ..longitude = workshop.longitude
       ..audience = workshop.audience
-     // ..resources = workshop.all_resources.build().toBuilder();
-      ..contacts = workshop.contactIds.build().toBuilder());
+      ..resources = BuiltList<int>([1]).toBuilder()
+      ..contacts = workshop.contactIds.build().toBuilder()
+      ..tags = workshop.tagNameofId.keys.toList().build().toBuilder());
     await AppConstants.service
         .postNewWorkshop(AppConstants.djangoToken, newWorkshop)
         .catchError((onError) {
       final error = onError as Response<dynamic>;
       print(error.body);
-      print(
-          'Error creating workshop: ${onError.toString()} ${onError.runtimeType}');
+      print('Error creating workshop: ${onError.toString()} ${onError.runtimeType}');
       CreatePageDialogBoxes.showUnSuccessfulDialog(context: context);
     }).then((value) {
       if (value.isSuccessful) {
@@ -87,19 +92,19 @@ class WorkshopCreater {
       ..date = workshop.date
       ..time = workshop.time
       ..location = workshop.location
+      ..latitude = workshop.latitude
+      ..longitude = workshop.longitude
       ..audience = workshop.audience);
 
     await AppConstants.service
-        .updateWorkshopByPatch(
-            widgetWorkshopData.id, AppConstants.djangoToken, editedWorkshop)
+        .updateWorkshopByPatch(widgetWorkshopData.id, AppConstants.djangoToken, editedWorkshop)
         .catchError((onError) {
       print('Error editing workshop: ${onError.toString()}');
       CreatePageDialogBoxes.showUnSuccessfulDialog(context: context);
     }).then((value) {
       if (value.isSuccessful) {
         print('Edited!');
-        CreatePageDialogBoxes.showSuccesfulDialog(
-            context: context, club: club, isEditing: true);
+        CreatePageDialogBoxes.showSuccesfulDialog(context: context, club: club, isEditing: true);
       }
     }).catchError((onError) {
       print('Error printing EDITED workshop: ${onError.toString()}');
@@ -112,12 +117,22 @@ class WorkshopCreater {
       BuiltContacts(
         (b) => b..contacts = workshop.contactIds.build().toBuilder(),
       ),
-      )
-
+    )
         .catchError((onError) {
       print('Error editing contacts in edited workshop: ${onError.toString()}');
       //  CreatePageDialogBoxes.showUnSuccessfulDialog(
       //     context: context);
+    });
+
+    await AppConstants.service
+        .updateTags(
+            widgetWorkshopData.id,
+            AppConstants.djangoToken,
+            BuiltTags(
+              (b) => b..tags = workshop.tagNameofId.keys.toList().build().toBuilder(),
+            ))
+        .catchError((onError) {
+      print('Error editing contacts in edited workshop: ${onError.toString()}');
     });
   }
 }

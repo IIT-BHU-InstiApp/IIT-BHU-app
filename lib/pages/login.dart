@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/material.dart';
+import 'package:iit_app/external_libraries/spin_kit.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/sharedPreferenceKeys.dart';
@@ -135,15 +136,13 @@ class _LoginPageState extends State<LoginPage> {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         body: _loading
-            ? Center(
-                child: CircularProgressIndicator(backgroundColor: Colors.black))
+            ? Center(child: LoadingCircle)
             : ListView(
                 children: <Widget>[
                   Container(
                     padding: EdgeInsets.fromLTRB(15.0, 110.0, 0.0, 0.0),
                     child: Text('Welcome to IIT(BHU)\'s Workshops App.',
-                        style: TextStyle(
-                            fontSize: 40.0, fontWeight: FontWeight.bold)),
+                        style: TextStyle(fontSize: 40.0, fontWeight: FontWeight.bold)),
                   ),
                   SizedBox(height: 15),
                   OutlineButton(
@@ -160,8 +159,7 @@ class _LoginPageState extends State<LoginPage> {
                                 this._loading = true;
                               });
 
-                              AppConstants.currentUser =
-                                  await signInWithGoogle();
+                              AppConstants.currentUser = await signInWithGoogle();
 
                               AppConstants.logInButtonEnabled = true;
 
@@ -177,21 +175,18 @@ class _LoginPageState extends State<LoginPage> {
                               } else {
                                 // logged in successfully :)
 
-                                SharedPreferences prefs =
-                                    await SharedPreferences.getInstance();
+                                SharedPreferences prefs = await SharedPreferences.getInstance();
                                 await prefs.setString(
-                                    SharedPreferenceKeys.djangoToken,
-                                    AppConstants.djangoToken);
+                                    SharedPreferenceKeys.djangoToken, AppConstants.djangoToken);
 
-                                Navigator.of(context).pushNamedAndRemoveUntil(
-                                    '/home', (r) => false);
+                                Navigator.of(context)
+                                    .pushNamedAndRemoveUntil('/home', ModalRoute.withName('/'));
                               }
                             }
 
                             setState(() {});
                           },
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(40)),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
                     highlightElevation: 0,
                     borderSide: BorderSide(color: Colors.grey),
                     child: Padding(
@@ -200,9 +195,7 @@ class _LoginPageState extends State<LoginPage> {
                         mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Image(
-                              image: AssetImage("assets/google_logo.png"),
-                              height: 25.0),
+                          Image(image: AssetImage("assets/google_logo.png"), height: 25.0),
                           Padding(
                             padding: const EdgeInsets.only(left: 10),
                             child: Text(
@@ -233,20 +226,19 @@ class _LoginPageState extends State<LoginPage> {
                       AppConstants.isGuest = true;
                       AppConstants.djangoToken = null;
                       //saving guest mode in shared preferences
-                      SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
+                      SharedPreferences prefs = await SharedPreferences.getInstance();
                       prefs.clear();
                       prefs = await SharedPreferences.getInstance();
                       prefs.setBool(SharedPreferenceKeys.isGuest, true);
 
                       Navigator.of(context)
-                          .pushNamedAndRemoveUntil('/home', (r) => false);
+                          .pushNamedAndRemoveUntil('/home', ModalRoute.withName('/'));
                     },
                     child: Text('Let Me be Guest only'),
                   ),
                 ],
               ),
       ),
-    );
+    );  
   }
 }

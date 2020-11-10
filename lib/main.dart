@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:iit_app/external_libraries/spin_kit.dart';
 import 'package:iit_app/screens/map.dart';
 import 'package:iit_app/screens/account.dart';
 import 'package:iit_app/screens/allWorkshops.dart';
@@ -13,8 +14,10 @@ import 'package:iit_app/screens/about.dart';
 import 'package:iit_app/screens/settings.dart';
 import 'package:iit_app/services/connectivityCheck.dart';
 import 'package:iit_app/services/crud.dart';
+import 'package:iit_app/ui/theme.dart';
 import 'data/post_api_service.dart';
 import 'model/appConstants.dart';
+import 'package:iit_app/services/pushNotification.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,6 +28,10 @@ void main() async {
   AppConstants.service = PostApiService.create();
   AppConstants.connectionStatus = ConnectionStatusSingleton.getInstance();
   AppConstants.connectionStatus.initialize();
+
+// TODO: populating the ColorConstants. Use sharedPreference here to find out the correct theme.
+  AppTheme.dark();
+
   await AppConstants.setDeviceDirectoryForImages();
   // bool logStatus = await CrudMethods.isLoggedIn();
   // print('log status: $logStatus');
@@ -39,9 +46,10 @@ void main() async {
       MaterialApp(
     debugShowCheckedModeBanner: false,
     // home: AppConstants.isLoggedIn ? HomeScreen() : LoginPage(),
-    home: ConnectedMain(),
+    initialRoute: '/',
     routes: <String, WidgetBuilder>{
       // define the routes
+      '/': (BuildContext context)=> ConnectedMain(),
       '/home': (BuildContext context) => HomeScreen(),
       '/mess': (BuildContext context) => MessScreen(),
       '/allWorkshops': (BuildContext context) => AllWorkshopsScreen(),
@@ -70,7 +78,16 @@ class _ConnectedMainState extends State<ConnectedMain> {
   @override
   void initState() {
     checkConnection();
+
     super.initState();
+    _initFCM();
+  }
+
+  _initFCM() {
+    Future.delayed(
+      Duration(milliseconds: 300),
+      () => PushNotification.initialize(context),
+    );
   }
 
   void checkConnection() async {
@@ -94,9 +111,7 @@ class _ConnectedMainState extends State<ConnectedMain> {
   Widget build(BuildContext context) {
     return this._isOnline == null
         ? Scaffold(
-            body: Center(
-              child: CircularProgressIndicator(),
-            ),
+            body: Center(child: LoadingCircle),
           )
         : (this._isOnline == false
             ? Scaffold(
@@ -111,8 +126,6 @@ class _ConnectedMainState extends State<ConnectedMain> {
                   ),
                 ),
               )
-            : ((AppConstants.isLoggedIn || AppConstants.isGuest)
-                ? HomeScreen()
-                : LoginPage()));
+            : ((AppConstants.isLoggedIn || AppConstants.isGuest) ? HomeScreen() : LoginPage()));
   }
 }

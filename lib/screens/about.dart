@@ -1,9 +1,12 @@
 import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
+import 'package:iit_app/external_libraries/spin_kit.dart';
+import 'package:iit_app/external_libraries/url_launcher.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:iit_app/screens/drawer.dart';
+import 'package:iit_app/ui/text_style.dart';
 
 class AboutPage extends StatefulWidget {
   @override
@@ -61,13 +64,8 @@ class _AboutPageState extends State<AboutPage> {
     );
   }
 
-  final headingStyle = TextStyle(
-      fontSize: 30.0,
-      color: Colors.black,
-      fontWeight: FontWeight.bold,
-      letterSpacing: 1.0);
   final generalTextStyle = TextStyle(fontSize: 20.0, color: Colors.black);
-  final divide = Divider(height: 8.0, thickness: 2.0, color: Colors.blue);
+  final divide = Divider(height: 8.0, thickness: 2.0, color: Colors.blueGrey);
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -79,36 +77,36 @@ class _AboutPageState extends State<AboutPage> {
             ? Container(
                 height: MediaQuery.of(context).size.height / 4,
                 child: Center(
-                  child: CircularProgressIndicator(),
+                  child: LoadingCircle,
                 ),
               )
             : ListView.builder(
-                shrinkWrap: true,
-                // physics: const NeverScrollableScrollPhysics(),
+                physics: BouncingScrollPhysics(),
                 itemCount: teamData.length,
                 itemBuilder: (context, index) {
                   return Container(
+                    margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0.0),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.white70),
                     padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       //scrollDirection: Axis.vertical,
                       children: <Widget>[
                         Container(
-                          color: Colors.white,
-                          //margin: EdgeInsets.all(8.0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
                               Container(
-                                color: Colors.white,
                                 padding: EdgeInsets.all(5.0),
                                 child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: <Widget>[
                                     Text(
                                       teamData[index].role,
-                                      style: headingStyle,
-                                      textAlign: TextAlign.left,
+                                      style: Style.headingStyle
+                                          .copyWith(color: Colors.black54),
                                     ),
                                     divide,
                                   ],
@@ -118,7 +116,6 @@ class _AboutPageState extends State<AboutPage> {
                           ),
                         ),
                         Container(
-                          color: Colors.white,
                           child: ListView.builder(
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
@@ -144,26 +141,32 @@ class _AboutPageState extends State<AboutPage> {
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(30.0)),
                                       border: Border.all(
-                                          color: Colors.blue, width: 2.0)),
+                                          color: Colors.blueGrey, width: 2.0)),
                                 ),
                                 title: Container(
-                                  child: Card(
-                                    shape: RoundedRectangleBorder(
-                                      side: BorderSide(
-                                          color: Colors.blue, width: 2.0),
-                                      borderRadius: BorderRadius.circular(15.0),
-                                    ),
-                                    color: Colors.black,
-                                    child: Container(
-                                      height: 50.0,
-                                      child: Center(
-                                        child: Text(
-                                            teamData[index]
-                                                .team_members[index2]
-                                                .github_username,
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 25.0)),
+                                  child: GestureDetector(
+                                    onTap: () => openGithub(teamData[index]
+                                        .team_members[index2]
+                                        .github_username),
+                                    child: Card(
+                                      shape: RoundedRectangleBorder(
+                                        side: BorderSide(
+                                            color: Colors.blueGrey, width: 2.0),
+                                        borderRadius:
+                                            BorderRadius.circular(15.0),
+                                      ),
+                                      color: Colors.blueGrey[200],
+                                      child: Container(
+                                        height: 50.0,
+                                        child: Center(
+                                          child: Text(
+                                              teamData[index]
+                                                  .team_members[index2]
+                                                  .name,
+                                              style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 15.0)),
+                                        ),
                                       ),
                                     ),
                                   ),

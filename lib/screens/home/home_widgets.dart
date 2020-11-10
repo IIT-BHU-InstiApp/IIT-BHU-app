@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
@@ -107,13 +108,13 @@ class HomeWidgets {
                 )));
       });
 
-  static Widget getWorkshopCard(
-    BuildContext context, {
-    BuiltWorkshopSummaryPost w,
-    bool editMode = false,
-    bool horizontal = true,
-    bool isPast = false,
-  }) {
+  static Widget getWorkshopCard(BuildContext context,
+      {BuiltWorkshopSummaryPost w,
+      bool editMode = false,
+      bool horizontal = true,
+      bool isPast = false,
+      GlobalKey<FabCircularMenuState> fabKey,
+      Function reload}) {
     final File clubLogoFile =
         AppConstants.getImageFile(isSmall: true, id: w.club.id, isClub: true);
 
@@ -208,15 +209,26 @@ class HomeWidgets {
 
     return GestureDetector(
         onTap: horizontal
-            ? () => Navigator.of(context).push(
-                  PageRouteBuilder(
-                    pageBuilder: (_, __, ___) =>
-                        WorkshopDetailPage(workshop: w, isPast: isPast),
-                    transitionsBuilder:
-                        (context, animation, secondaryAnimation, child) =>
+            ? () {
+                Navigator.of(context)
+                    .push(
+                      PageRouteBuilder(
+                        pageBuilder: (_, __, ___) =>
+                            WorkshopDetailPage(workshop: w, isPast: isPast),
+                        transitionsBuilder: (context, animation,
+                                secondaryAnimation, child) =>
                             FadeTransition(opacity: animation, child: child),
-                  ),
-                )
+                      ),
+                    )
+                    .then((value) => reload());
+                try {
+                  if (fabKey.currentState.isOpen) {
+                    fabKey.currentState.close();
+                  }
+                } catch (e) {
+                  print(e);
+                }
+              }
             : null,
         child: Container(
           margin: const EdgeInsets.symmetric(
@@ -322,14 +334,24 @@ class HomeChild extends StatelessWidget {
   final SearchBarWidget searchBarWidget;
   final TabController tabController;
   final bool isSearching;
+  final GlobalKey<FabCircularMenuState> fabKey;
+  final Function reload;
 
   const HomeChild(
       {Key key,
       this.context,
       this.searchBarWidget,
       this.tabController,
-      this.isSearching})
+      this.isSearching,
+      this.fabKey,
+      this.reload})
       : super(key: key);
+
+  void onRefresh() async {
+    await AppConstants.updateAndPopulateWorkshops();
+    this.reload();
+  }
+
   @override
   Widget build(BuildContext context) {
     return StatefulBuilder(
@@ -343,6 +365,11 @@ class HomeChild extends StatelessWidget {
                   indicatorColor: Colors.deepPurple,
                   unselectedLabelColor: Colors.white70,
                   labelColor: Colors.black,
+                  onTap: (value) {
+                    if (fabKey.currentState.isOpen) {
+                      fabKey.currentState.close();
+                    }
+                  },
                   tabs: [
                     Tab(text: 'Latest'),
                     Tab(text: 'Interested'),
@@ -358,28 +385,27 @@ class HomeChild extends StatelessWidget {
                             ? HomeWidgets.getPlaceholder()
                             : RefreshIndicator(
                                 displacement: 60,
-                                onRefresh: () async {
-                                  await AppConstants
-                                      .updateAndPopulateWorkshops();
-                                  setState(() {});
-                                },
-                                child: buildWorkhops
-                                    .buildCurrentWorkshopPosts(context)),
+                                onRefresh: () async => onRefresh(),
+                                child: buildWorkhops.buildCurrentWorkshopPosts(
+                                    context, fabKey,
+                                    reload: onRefresh)),
                       ),
                       Container(
-                        child: AppConstants.isGuest
-                            ? Container(
-                                margin: EdgeInsets.only(top: 100),
-                                padding: EdgeInsets.all(10),
-                                child: Text(
-                                  'We value your interest, but first you have to trust us by logging in.   {Dear Guest, it can not be one sided.}',
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 25),
-                                ),
-                              )
-                            : buildWorkhops
-                                .buildInterestedWorkshopsBody(context),
-                      )
+                          child: AppConstants.isGuest
+                              ? Container(
+                                  margin: EdgeInsets.only(top: 100),
+                                  padding: EdgeInsets.all(10),
+                                  child: Text(
+                                    'We value your interest, but first you have to trust us by logging in.   {Dear Guest, it can not be one sided.}',
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 25),
+                                  ),
+                                )
+                              : buildWorkhops.buildInterestedWorkshopsBody(
+                                  context,
+                                  fabKey,
+                                  reload: onRefresh,
+                                ))
                     ],
                   ),
                 ),

@@ -1,4 +1,5 @@
 import 'package:chopper/chopper.dart';
+import 'package:flutter/material.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:built_collection/built_collection.dart';
 import 'built_value_converter.dart';
@@ -49,12 +50,12 @@ abstract class PostApiService extends ChopperService {
 
   //? ----------------------------------- Put -------------------------------
 
-  @Put(path: '/workshops/{id}/update-tags/')
-  Future<Response<BuiltList<ContactPost>>> updateContacts(@Path('id') int id,
+  @Put(path: '/workshops/{id}/update-contacts/')
+  Future<Response<BuiltContacts>> updateContacts(@Path('id') int id,
       @Header('Authorization') String token, @Body() BuiltContacts body);
 
-  @Put(path: '/workshops/{id}/update-contacts/')
-  Future<Response<BuiltList<ContactPost>>> updateTags(@Path('id') int id,
+  @Put(path: '/workshops/{id}/update-tags/')
+  Future<Response<BuiltTags>> updateTags(@Path('id') int id,
       @Header('Authorization') String token, @Body() BuiltTags body);
 
   @Put(path: '/workshops/{id}/')
@@ -153,6 +154,10 @@ abstract class PostApiService extends ChopperService {
   Future<Response<BuiltAllWorkshopsPost>> getClubWorkshops(
       @Path('id') int id, @Header('Authorization') String token);
 
+  @Get(path: '/clubs/{id}/tags/')
+  Future<Response<ClubTags>> getClubTags(
+      @Path('id') int id, @Header('Authorization') String token);
+
   //? ----------------------------------- Put -------------------------------
   @Put(path: '/clubs/{id}/')
   Future<Response> updateClubByPut(@Path('id') int id,
@@ -210,13 +215,13 @@ abstract class PostApiService extends ChopperService {
   //? ----------------------------------- Post -------------------------------
 
   @Post(path: '/tags/create/')
-  Future<Response> createTag(
+  Future<Response<TagDetail>> createTag(
       @Header('Authorization') String token, @Body() TagCreate body);
 
 // TODO: what is the return response body of searchTag ?
-  // @Post(path: '/tags/search/')
-  // Future<Response<(type of body)>> searchTag(
-  //     @Header('Authorization') String token, @Body() TagSearch body);
+  @Post(path: '/tags/search/')
+  Future<Response<BuiltList<TagDetail>>> searchTag(
+      @Header('Authorization') String token, @Body() TagSearch body);
 
   @Post(path: '/login/')
   Future<Response<Token>> logInPost(@Body() LoginPost body);

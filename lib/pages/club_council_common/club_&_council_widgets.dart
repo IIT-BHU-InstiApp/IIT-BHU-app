@@ -9,6 +9,7 @@ import 'package:iit_app/ui/text_style.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../club/club.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:iit_app/screens/account.dart';
 
 class ClubAndCouncilWidgets {
   static double getMinPanelHeight(context) {
@@ -143,9 +144,23 @@ class ClubAndCouncilWidgets {
 
   static Container getToolbar(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-      child: BackButton(color: Colors.lightGreen),
-    );
+        margin: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+        child: Row(
+          children: <Widget>[
+            BackButton(
+                color: Colors.lightGreen,
+                onPressed: () => {
+                      print(AccountScreen.flag),
+                      if (AccountScreen.flag == "Account")
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AccountScreen()))
+                      else
+                        Navigator.pop(context),
+                    }),
+          ],
+        ));
   }
 
   static Container getGradient() {
@@ -196,7 +211,11 @@ class ClubAndCouncilWidgets {
             ),
           ),
           Container(
-            child: Text(name, textAlign: TextAlign.center),
+            child: Text(
+              name,
+              textAlign: TextAlign.center,
+              maxLines: 2,
+            ),
             width: 100,
           ),
           desg == ''
@@ -370,7 +389,7 @@ class ClubAndCouncilWidgets {
                     //crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        name,
+                        name ?? 'No Name Available',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 25.0,
@@ -381,14 +400,14 @@ class ClubAndCouncilWidgets {
                       SizedBox(height: 10.0),
                       ListTile(
                         onTap: () {
-                          launch("mailto:$email");
+                          if (email != null) launch("mailto:$email");
                         },
                         leading: Icon(
                           Icons.email,
                           color: dialogColor,
                         ),
                         title: Text(
-                          email,
+                          email ?? 'No Email Available',
                           style: TextStyle(
                             color: dialogColor,
                           ),
@@ -396,14 +415,14 @@ class ClubAndCouncilWidgets {
                       ),
                       ListTile(
                         onTap: () {
-                          if (phone != '') launch("tel:$phone");
+                          if (phone != null) launch("tel:$phone");
                         },
                         leading: Icon(
                           Icons.phone,
                           color: dialogColor,
                         ),
                         title: Text(
-                          phone == '' ? 'No Phone' : phone,
+                          phone ?? 'No Phone Available',
                           style: TextStyle(
                             color: dialogColor,
                           ),

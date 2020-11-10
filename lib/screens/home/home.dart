@@ -8,6 +8,11 @@ import 'package:iit_app/screens/home/home_widgets.dart';
 import 'package:iit_app/screens/home/search_workshop.dart';
 import 'package:iit_app/screens/drawer.dart';
 import 'package:iit_app/ui/colorPicker.dart';
+import 'package:flutter/services.dart';
+import 'package:iit_app/ui/theme.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../model/sharedPreferenceKeys.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -23,6 +28,8 @@ class _HomeScreenState extends State<HomeScreen>
   ValueNotifier<Color> _colorListener;
   ColorPicker _colorPicker;
 
+  FocusNode searchFocusNode;
+
   bool _mainBg = false,
       _ringBg = false,
       _shimmerBg = false,
@@ -37,14 +44,26 @@ class _HomeScreenState extends State<HomeScreen>
   void initState() {
     _tabController = TabController(length: 2, vsync: this);
     fetchWorkshopsAndCouncilButtons();
-
+    _setTheme();
     searchListener = ValueNotifier(false);
     searchBarWidget = SearchBarWidget(searchListener);
 
     this._colorListener = ValueNotifier(Colors.white);
     this._colorPicker = ColorPicker(this._colorListener);
 
+    searchFocusNode = FocusNode();
     super.initState();
+  }
+
+  _setTheme() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    // print(prefs.getString(SharedPreferenceKeys.usertheme));
+
+    if (prefs.getString(SharedPreferenceKeys.usertheme) == 'light') {
+      AppTheme.light();
+    } else {
+      AppTheme.dark();
+    }
   }
 
   fetchWorkshopsAndCouncilButtons() async {
@@ -52,10 +71,6 @@ class _HomeScreenState extends State<HomeScreen>
     setState(() {
       AppConstants.firstTimeFetching = false;
     });
-    fetchUpdatedDetails();
-  }
-
-  void fetchUpdatedDetails() async {
     await AppConstants.updateAndPopulateWorkshops();
     await AppConstants.writeCouncilLogosIntoDisk(
         AppConstants.councilsSummaryfromDatabase);
@@ -74,6 +89,18 @@ class _HomeScreenState extends State<HomeScreen>
 
       return false;
     }
+    // if on home screen but searchController is onFocus
+    if (!searchBarWidget.isSearching.value && searchFocusNode.hasFocus) {
+      searchBarWidget.searchController.clear();
+      searchFocusNode.unfocus();
+      return false;
+    }
+    // to retrun on home route on popping from search result screen
+    if (searchBarWidget.isSearching.value) {
+      Navigator.pop(context);
+      Navigator.pushNamed(context, '/home');
+      return false;
+    }
     return showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -87,7 +114,8 @@ class _HomeScreenState extends State<HomeScreen>
                 ),
                 FlatButton(
                   child: Text('Yes'),
-                  onPressed: () => Navigator.pop(context, true),
+                  onPressed: () => SystemChannels.platform
+                      .invokeMethod('SystemNavigator.pop'),
                 )
               ],
             ));
@@ -226,32 +254,43 @@ class _HomeScreenState extends State<HomeScreen>
               backgroundColor: ColorConstants.homeBackground,
               drawer: SideBar(context: context),
               floatingActionButton: homeFAB(context, fabKey: fabKey),
-              appBar: homeAppBar(context, searchBarWidget: searchBarWidget),
-              body: Stack(
-                children: [
-                  Container(
-                    margin: EdgeInsets.fromLTRB(12, 10, 12, 0),
-                    decoration: BoxDecoration(
-                        color: ColorConstants.workshopContainerBackground,
-                        borderRadius: BorderRadius.only(
-                            topLeft: const Radius.circular(40.0),
-                            topRight: const Radius.circular(40.0))),
-                    child: ValueListenableBuilder(
-                      valueListenable: searchListener,
-                      builder: (context, isSearching, child) {
-                        return HomeChild(
-                          context: context,
-                          searchBarWidget: searchBarWidget,
-                          tabController: _tabController,
-                          isSearching: isSearching,
-                        );
-                      },
+              appBar: homeAppBar(context,
+                  searchBarWidget: searchBarWidget,
+                  fabKey: fabKey,
+                  searchFocusNode: searchFocusNode),
+              body: GestureDetector(
+                onTap: () {
+                  if (fabKey.currentState.isOpen) {
+                    fabKey.currentState.close();
+                  }
+                },
+                child: Stack(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.fromLTRB(12, 10, 12, 0),
+                      decoration: BoxDecoration(
+                          color: ColorConstants.workshopContainerBackground,
+                          borderRadius: BorderRadius.only(
+                              topLeft: const Radius.circular(40.0),
+                              topRight: const Radius.circular(40.0))),
+                      child: ValueListenableBuilder(
+                        valueListenable: searchListener,
+                        builder: (context, isSearching, child) {
+                          return HomeChild(
+                              context: context,
+                              searchBarWidget: searchBarWidget,
+                              tabController: _tabController,
+                              isSearching: isSearching,
+                              fabKey: fabKey,
+                              reload: () => {setState(() {})});
+                        },
+                      ),
                     ),
-                  ),
-                  AppConstants.chooseColorPaletEnabled
-                      ? _colorSelectOptionRow(context)
-                      : Container()
-                ],
+                    AppConstants.chooseColorPaletEnabled
+                        ? _colorSelectOptionRow(context)
+                        : Container()
+                  ],
+                ),
               ),
             );
           },

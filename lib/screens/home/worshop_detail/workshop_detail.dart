@@ -1,7 +1,9 @@
 import 'dart:io';
 
 import 'package:chopper/chopper.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:iit_app/external_libraries/spin_kit.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/colorConstants.dart';
@@ -9,6 +11,7 @@ import 'package:iit_app/pages/club/club.dart';
 import 'package:iit_app/pages/club_council_common/club_&_council_widgets.dart';
 import 'package:iit_app/pages/create.dart';
 import 'package:iit_app/pages/resource_create.dart';
+import 'package:iit_app/pages/dialogBoxes.dart';
 import 'package:iit_app/screens/home/home_widgets.dart';
 import 'package:iit_app/ui/colorPicker.dart';
 import 'package:iit_app/ui/separator.dart';
@@ -18,15 +21,15 @@ import 'package:url_launcher/url_launcher.dart';
 import 'workshop_detail_widgets.dart';
 
 class WorkshopDetailPage extends StatefulWidget {
-  final BuiltWorkshopSummaryPost workshop;
+  BuiltWorkshopSummaryPost workshop;
   final bool isPast;
-  const WorkshopDetailPage({Key key, this.workshop, this.isPast = false})
-      : super(key: key);
+  WorkshopDetailPage({Key key, this.workshop, this.isPast = false}) : super(key: key);
   @override
   _WorkshopDetailPage createState() => _WorkshopDetailPage();
 }
 
 class _WorkshopDetailPage extends State<WorkshopDetailPage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   BuiltWorkshopDetailPost _workshop;
   int is_interested;
 
@@ -92,8 +95,7 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
               onTap: () {
                 setColorPalleteOff();
                 _bodyBg = true;
-                _colorListener.value =
-                    ColorConstants.workshopContainerBackground;
+                _colorListener.value = ColorConstants.workshopContainerBackground;
                 return _colorPicker.getColorPickerDialogBox(context);
               },
               child: Text('body bg'),
@@ -185,7 +187,7 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
   }
 
   Widget loadingAnimation() {
-    return CircularProgressIndicator();
+    return LoadingCircle;
   }
 
   showSuccessfulDialog() {
@@ -206,8 +208,7 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) =>
-                            ClubPage(club: _workshop.club, editMode: true)));
+                        builder: (context) => ClubPage(club: _workshop.club, editMode: true)));
               },
             ),
           ],
@@ -302,22 +303,35 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
     } else {
       is_interested = -1;
     }
+
+    widget.workshop = widget.workshop.rebuild((builder) => builder
+          ..title = _workshop.title
+          ..date = _workshop.date
+          ..time = _workshop.time
+// TODO: add tags in workshop detail model.
+        // ..tags = _workshop.tags
+        );
+
+    // print(widget.workshop.toString());
+
     if (!this.mounted) return;
     setState(() {});
   }
 
   void deleteWorkshop() async {
-    await confirmCreateDialog()
-        ? await AppConstants.service
-            .removeWorkshop(widget.workshop.id, AppConstants.djangoToken)
-            .then((snapshot) {
-            print("status of deleting workshop: ${snapshot.statusCode}");
-            showSuccessfulDialog();
-          }).catchError((onError) {
-            print("Error in deleting: ${onError.toString()}");
-            showUnSuccessfulDialog();
-          })
-        : null;
+    bool isConfirmed =
+        await CreatePageDialogBoxes.confirmDialog(context: context, action: 'Delete');
+    if (isConfirmed == true) {
+      AppConstants.service
+          .removeWorkshop(widget.workshop.id, AppConstants.djangoToken)
+          .then((snapshot) {
+        print("status of deleting workshop: ${snapshot.statusCode}");
+        CreatePageDialogBoxes.showUnSuccessfulDialog(context: context);
+      }).catchError((onError) {
+        print("Error in deleting: ${onError.toString()}");
+        CreatePageDialogBoxes.showUnSuccessfulDialog(context: context);
+      });
+    }
     setState(() {});
   }
 
@@ -331,17 +345,15 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
             showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return AlertDialog(
-                      content: Text("Resource deleted"),
-                      actions: <Widget>[
-                        FlatButton(
-                          child: Text("yay"),
-                          onPressed: () {
-                            Navigator.pop(context);
-                            Navigator.pop(context);
-                          },
-                        )
-                      ]);
+                  return AlertDialog(content: Text("Resource deleted"), actions: <Widget>[
+                    FlatButton(
+                      child: Text("yay"),
+                      onPressed: () {
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                      },
+                    )
+                  ]);
                 });
           }).catchError((onError) {
             final error = onError as Response<dynamic>;
@@ -363,8 +375,15 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
       if (snapshot.isSuccessful) {
         is_interested = (_workshop.is_interested ? 1 : -1) * -1;
         int _newInterestedUser = is_interested == 1 ? 1 : -1;
-        _workshop.rebuild((b) => b
-          ..interested_users = _workshop.interested_users + _newInterestedUser);
+
+        if (_newInterestedUser == 1) {
+          FirebaseMessaging().subscribeToTopic('W_${_workshop.id}');
+        } else {
+          FirebaseMessaging().unsubscribeFromTopic('W_${_workshop.id}');
+        }
+
+        _workshop
+            .rebuild((b) => b..interested_users = _workshop.interested_users + _newInterestedUser);
       }
     }).catchError((onError) {
       print("Error in toggleing: ${onError.toString()}");
@@ -374,13 +393,12 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
   }
 
   Container _getBackground() {
-    final File clubLogoFile = AppConstants.getImageFile(
-        isSmall: true, id: widget.workshop.club.id, isClub: true);
+    final File clubLogoFile =
+        AppConstants.getImageFile(isSmall: true, id: widget.workshop.club.id, isClub: true);
 
     return Container(
       child: clubLogoFile == null
-          ? Image.network(widget.workshop.club.small_image_url,
-              fit: BoxFit.cover, height: 300.0)
+          ? Image.network(widget.workshop.club.small_image_url, fit: BoxFit.cover, height: 300.0)
           : Image.file(clubLogoFile, fit: BoxFit.cover, height: 300),
       constraints: BoxConstraints.expand(height: 295.0),
     );
@@ -416,32 +434,32 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
                     widget.isPast
                         ? Container()
                         : is_interested == 0
-                            ? Container(
-                                child: loadingAnimation(),
-                                height: 20,
-                                width: 20)
+                            ? Container(child: loadingAnimation(), height: 20, width: 20)
                             : InkWell(
-                                onTap: () {
+                                onTap: () async {
                                   if (AppConstants.isGuest) {
-                                    Scaffold.of(context).showSnackBar(SnackBar(
+                                    _scaffoldKey.currentState.showSnackBar(SnackBar(
                                       content: Text('Please Log In first'),
                                       duration: Duration(seconds: 2),
                                     ));
                                   } else {
                                     if (is_interested != 1) {
-                                      final String _calendarUrl =
-                                          AppConstants.addEventToCalendarLink(
-                                              workshop: _workshop);
-                                      print(
-                                          'add event to calendar URL: $_calendarUrl');
-                                      launch(_calendarUrl);
+                                      bool shouldCalendarBeOpened =
+                                          await CreatePageDialogBoxes.confirmCalendarOpenDialog(
+                                              context: context);
+                                      if (shouldCalendarBeOpened == true) {
+                                        final String _calendarUrl =
+                                            AppConstants.addEventToCalendarLink(
+                                                workshop: _workshop);
+                                        print('add event to calendar URL: $_calendarUrl');
+                                        launch(_calendarUrl);
+                                      }
                                     }
                                     updateButton();
                                   }
                                 },
                                 child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                   children: [
                                     Icon(Icons.star,
                                         color: is_interested == 1
@@ -468,6 +486,31 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
     );
   }
 
+  Row _getLocationOnMaps() {
+    return Row(
+      children: [
+        Text('Open In Maps: ',
+            style: TextStyle(
+                fontFamily: 'Opensans',
+                fontSize: 15.0,
+                color: Colors.white,
+                fontWeight: FontWeight.w600)),
+        SizedBox(width: 20),
+        RaisedButton(
+          child: Icon(Icons.map),
+          onPressed: () {
+            print('lol');
+            Navigator.of(context).pushNamed('/mapScreen', arguments: {
+              'fromWorkshopDetails': true,
+              'latitude': _workshop?.latitude,
+              'longitude': _workshop?.longitude,
+            });
+          },
+        ),
+      ],
+    );
+  }
+
   Container _getContent() {
     final _overviewTitle = "Description".toUpperCase();
     return Container(
@@ -490,6 +533,10 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
                     ? loadingAnimation()
                     : Text(_workshop.description, style: Style.commonTextStyle),
                 _getPeopleGoing(),
+                Separator(),
+                (_workshop?.latitude ?? null) != null && (_workshop?.longitude ?? null) != null
+                    ? _getLocationOnMaps()
+                    : Container(),
               ],
             ),
           ),
@@ -553,8 +600,7 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
             children: <Widget>[
               Text(
                 'Edit',
-                style: TextStyle(
-                    color: Colors.yellow, fontWeight: FontWeight.bold),
+                style: TextStyle(color: Colors.yellow, fontWeight: FontWeight.bold),
               ),
               IconButton(
                 icon: Icon(
@@ -562,8 +608,8 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
                   color: Colors.yellow,
                 ),
                 iconSize: 50,
-                onPressed: () {
-                  Navigator.push(
+                onPressed: () async {
+                  await Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => CreateScreen(
@@ -572,7 +618,7 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
                         workshopData: _workshop,
                       ),
                     ),
-                  );
+                  ).then((_) => fetchWorkshopDetails());
                 },
               ),
             ],
@@ -581,8 +627,7 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
             children: <Widget>[
               Text(
                 'Delete',
-                style:
-                    TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+                style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
               ),
               IconButton(
                   iconSize: 50,
@@ -602,8 +647,7 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
           height: MediaQuery.of(context).size.height * 0.75,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(35.0),
-                bottomRight: Radius.circular(35.0)),
+                bottomLeft: Radius.circular(35.0), bottomRight: Radius.circular(35.0)),
             color: ColorConstants.workshopContainerBackground,
           ),
         ),
@@ -630,13 +674,12 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
       child: ListView(
         controller: sc,
         children: [
-          WorkshopDetailWidgets.getHeading(
-              icon: Icons.location_on, title: 'Location'),
+          WorkshopDetailWidgets.getHeading(icon: Icons.location_on, title: 'Location'),
           SizedBox(height: 5.0),
           _workshop == null
               ? Container(
                   height: 35.0,
-                  child: Center(child: CircularProgressIndicator()),
+                  child: Center(child: LoadingCircle),
                 )
               : Text(
                   _workshop.location,
@@ -644,19 +687,24 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
                   //style: baseTextStyle,
                 ),
           SizedBox(height: 5.0),
-          Text(
-            //'${_workshop.longitude}',
-            '(Lattitude,Longitude)',
-            //style: baseTextStyle,
+          Row(
+            children: [
+              Text(
+                //'${_workshop.longitude}',
+                (_workshop?.latitude ?? null) != null && (_workshop?.longitude ?? null) != null
+                    ? '(${_workshop?.latitude}, ${_workshop?.longitude})'
+                    : '(Lattitude,Longitude)',
+                //style: baseTextStyle,
+              ),
+            ],
           ),
           SizedBox(height: 15.0),
-          WorkshopDetailWidgets.getHeading(
-              icon: Icons.library_books, title: 'Resouces'),
+          WorkshopDetailWidgets.getHeading(icon: Icons.library_books, title: 'Resouces'),
           SizedBox(height: 5.0),
           _workshop == null
               ? Container(
                   height: 35.0,
-                  child: Center(child: CircularProgressIndicator()),
+                  child: Center(child: LoadingCircle),
                 )
               : (_workshop.resources.length == 0)
                   ? Text("No resources yet")
@@ -674,10 +722,8 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                        "Name: ${_workshop.resources[index].name}"),
-                                    Text(
-                                        "Link: ${_workshop.resources[index].link}"),
+                                    Text("Name: ${_workshop.resources[index].name}"),
+                                    Text("Link: ${_workshop.resources[index].link}"),
                                     Text(
                                         "Resource Type: ${_workshop.resources[index].resource_type}"),
                                     SizedBox(height: 7)
@@ -685,10 +731,8 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
                                 ),
                               ),
                               (_workshop != null && _workshop.is_por_holder != null)
-                                  ? (_workshop.is_por_holder ||
-                                          _workshop.is_workshop_contact)
-                                      ? editResources(
-                                          _workshop.resources[index].id)
+                                  ? (_workshop.is_por_holder || _workshop.is_workshop_contact)
+                                      ? editResources(_workshop.resources[index].id)
                                       : Container()
                                   : Container(),
                             ],
@@ -708,8 +752,7 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>
-                                ResourceCreateScreen(_workshop),
+                            builder: (context) => ResourceCreateScreen(_workshop),
                           ),
                         )
                       },
@@ -722,26 +765,24 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
           //_workshop.resources,
 
           SizedBox(height: 15.0),
-          WorkshopDetailWidgets.getHeading(
-              icon: Icons.people, title: 'Audience'),
+          WorkshopDetailWidgets.getHeading(icon: Icons.people, title: 'Audience'),
           SizedBox(height: 5.0),
           _workshop == null
               ? Container(
                   height: 35.0,
-                  child: Center(child: CircularProgressIndicator()),
+                  child: Center(child: LoadingCircle),
                 )
               : Text(
                   _workshop.audience,
                   //'No Audience',
                 ),
           SizedBox(height: 15.0),
-          WorkshopDetailWidgets.getHeading(
-              icon: Icons.contacts, title: 'Contacts'),
+          WorkshopDetailWidgets.getHeading(icon: Icons.contacts, title: 'Contacts'),
           SizedBox(height: 5.0),
           _workshop == null
               ? Container(
                   height: 35.0,
-                  child: Center(child: CircularProgressIndicator()),
+                  child: Center(child: LoadingCircle),
                 )
               : Container(
                   decoration: BoxDecoration(
@@ -775,7 +816,7 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
           _workshop == null
               ? Container(
                   height: 35.0,
-                  child: Center(child: CircularProgressIndicator()),
+                  child: Center(child: LoadingCircle),
                 )
               : Container(
                   //height: ,
@@ -810,6 +851,7 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
             setColor();
 
             return Scaffold(
+              key: _scaffoldKey,
               backgroundColor: ColorConstants.backgroundThemeColor,
               body: Stack(
                 children: [

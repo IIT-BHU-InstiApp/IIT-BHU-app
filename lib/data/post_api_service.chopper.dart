@@ -86,24 +86,23 @@ class _$PostApiService extends PostApiService {
     return client.send<BuiltAllWorkshopsPost, BuiltAllWorkshopsPost>($request);
   }
 
-  Future<Response<BuiltList<ContactPost>>> updateContacts(
+  Future<Response<BuiltContacts>> updateContacts(
       int id, String token, BuiltContacts body) {
-    final $url = '/workshops/${id}/update-tags/';
-    final $headers = {'Authorization': token};
-    final $body = body;
-    final $request =
-        Request('PUT', $url, client.baseUrl, body: $body, headers: $headers);
-    return client.send<BuiltList<ContactPost>, ContactPost>($request);
-  }
-
-  Future<Response<BuiltList<ContactPost>>> updateTags(
-      int id, String token, BuiltTags body) {
     final $url = '/workshops/${id}/update-contacts/';
     final $headers = {'Authorization': token};
     final $body = body;
     final $request =
         Request('PUT', $url, client.baseUrl, body: $body, headers: $headers);
-    return client.send<BuiltList<ContactPost>, ContactPost>($request);
+    return client.send<BuiltContacts, BuiltContacts>($request);
+  }
+
+  Future<Response<BuiltTags>> updateTags(int id, String token, BuiltTags body) {
+    final $url = '/workshops/${id}/update-tags/';
+    final $headers = {'Authorization': token};
+    final $body = body;
+    final $request =
+        Request('PUT', $url, client.baseUrl, body: $body, headers: $headers);
+    return client.send<BuiltTags, BuiltTags>($request);
   }
 
   Future<Response> updateWorkshopByPut(
@@ -222,6 +221,13 @@ class _$PostApiService extends PostApiService {
     return client.send<BuiltAllWorkshopsPost, BuiltAllWorkshopsPost>($request);
   }
 
+  Future<Response<ClubTags>> getClubTags(int id, String token) {
+    final $url = '/clubs/${id}/tags/';
+    final $headers = {'Authorization': token};
+    final $request = Request('GET', $url, client.baseUrl, headers: $headers);
+    return client.send<ClubTags, ClubTags>($request);
+  }
+
   Future<Response> updateClubByPut(int id, String token, BuiltClubPost body) {
     final $url = '/clubs/${id}/';
     final $headers = {'Authorization': token};
@@ -284,13 +290,23 @@ class _$PostApiService extends PostApiService {
         .send<BuiltList<BuiltTeamMemberPost>, BuiltTeamMemberPost>($request);
   }
 
-  Future<Response> createTag(String token, TagCreate body) {
+  Future<Response<TagDetail>> createTag(String token, TagCreate body) {
     final $url = '/tags/create/';
     final $headers = {'Authorization': token};
     final $body = body;
     final $request =
         Request('POST', $url, client.baseUrl, body: $body, headers: $headers);
-    return client.send<dynamic, dynamic>($request);
+    return client.send<TagDetail, TagDetail>($request);
+  }
+
+  Future<Response<BuiltList<TagDetail>>> searchTag(
+      String token, TagSearch body) {
+    final $url = '/tags/search/';
+    final $headers = {'Authorization': token};
+    final $body = body;
+    final $request =
+        Request('POST', $url, client.baseUrl, body: $body, headers: $headers);
+    return client.send<BuiltList<TagDetail>, TagDetail>($request);
   }
 
   Future<Response<Token>> logInPost(LoginPost body) {

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:iit_app/external_libraries/spin_kit.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/colorConstants.dart';
 import 'package:iit_app/pages/club_council_common/club_&_council_widgets.dart';
 import 'package:iit_app/screens/drawer.dart';
+import 'package:iit_app/screens/home/home.dart';
 
 class AccountScreen extends StatefulWidget {
+  static String flag = "Account";
   @override
   _AccountScreenState createState() => _AccountScreenState();
 }
@@ -16,6 +19,7 @@ class _AccountScreenState extends State<AccountScreen> {
   @override
   void initState() {
     fetchProfileDetails();
+    flagmarker();
     super.initState();
   }
 
@@ -26,8 +30,7 @@ class _AccountScreenState extends State<AccountScreen> {
     String returnData = '';
     return showDialog<String>(
       context: context,
-      barrierDismissible:
-          false, // dialog is dismissible with a tap on the barrier
+      barrierDismissible: false, // dialog is dismissible with a tap on the barrier
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Enter $queryName'),
@@ -38,9 +41,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 autofocus: true,
                 decoration: InputDecoration(
                     labelText: queryName,
-                    hintText: queryName == 'Phone No.'
-                        ? '+91987654321'
-                        : 'Sheldon Cooper'),
+                    hintText: queryName == 'Phone No.' ? '+91987654321' : 'Sheldon Cooper'),
                 onChanged: (value) {
                   returnData = value;
                 },
@@ -81,9 +82,7 @@ class _AccountScreenState extends State<AccountScreen> {
   }
 
   void fetchProfileDetails() async {
-    await AppConstants.service
-        .getProfile(AppConstants.djangoToken)
-        .catchError((onError) {
+    await AppConstants.service.getProfile(AppConstants.djangoToken).catchError((onError) {
       print("Error in fetching profile: ${onError.toString()}");
     }).then((value) {
       profileDetails = value.body;
@@ -107,7 +106,34 @@ class _AccountScreenState extends State<AccountScreen> {
   }
 
   Future<bool> onPop() {
-    Navigator.pushNamedAndRemoveUntil(context, '/home', (r) => false);
+    Navigator.pushNamedAndRemoveUntil(context, '/home', ModalRoute.withName('/'));
+  }
+
+  Widget subscribed(String v) {
+    print("Subscribed: $v");
+    print("Flag:${AccountScreen.flag}");
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: profileDetails.subscriptions.length,
+      itemBuilder: (context, index) {
+        return ClubAndCouncilWidgets.getClubCard(
+            clubTypeForHero: 'Subscriptions',
+            context: context,
+            title: profileDetails.subscriptions[index].name,
+            subtitle: profileDetails.subscriptions[index].council.name,
+            id: profileDetails.subscriptions[index].id,
+            imageUrl: profileDetails.subscriptions[index].small_image_url,
+            club: profileDetails.subscriptions[index],
+            isCouncil: false,
+            horizontal: true);
+      },
+    );
+  }
+
+  flagmarker() {
+    AccountScreen.flag = "Account";
+    print(AccountScreen.flag);
   }
 
   @override
@@ -125,7 +151,8 @@ class _AccountScreenState extends State<AccountScreen> {
             iconTheme: IconThemeData(color: Colors.black87),
             leading: IconButton(
               icon: Icon(Icons.arrow_back, color: Colors.black),
-              onPressed: () => Navigator.pop(context),
+              onPressed: () =>
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen())),
             ),
           ),
           drawer: SideBar(context: context),
@@ -134,7 +161,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 ? Container(
                     height: MediaQuery.of(context).size.height / 4,
                     child: Center(
-                      child: CircularProgressIndicator(),
+                      child: LoadingCircle,
                     ),
                   )
                 : Container(
@@ -164,9 +191,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                   Row(
                                     children: <Widget>[
                                       Container(
-                                        width:
-                                            MediaQuery.of(context).size.width -
-                                                200,
+                                        width: MediaQuery.of(context).size.width - 200,
                                         child: Text(
                                           profileDetails.name,
                                           style: TextStyle(fontSize: 25),
@@ -175,22 +200,18 @@ class _AccountScreenState extends State<AccountScreen> {
                                       IconButton(
                                         icon: Icon(Icons.edit),
                                         onPressed: () async {
-                                          final name = await _asyncInputDialog(
-                                              context,
-                                              queryName: 'Name');
+                                          final name =
+                                              await _asyncInputDialog(context, queryName: 'Name');
                                           print(name);
                                           updateProfileDetails(
-                                              name: name,
-                                              phoneNumber:
-                                                  profileDetails.phone_number);
+                                              name: name, phoneNumber: profileDetails.phone_number);
                                         },
                                       )
                                     ],
                                   ),
                                   Text(
                                     profileDetails.department,
-                                    style: TextStyle(
-                                        fontSize: 19, color: Colors.grey),
+                                    style: TextStyle(fontSize: 19, color: Colors.grey),
                                   ),
                                 ],
                               ),
@@ -206,9 +227,11 @@ class _AccountScreenState extends State<AccountScreen> {
                               backColor: Color(0xffFFECDD),
                               imgAssetPath: "assets/email.png",
                             ),
-                            Text(
-                              profileDetails.email,
-                              style: TextStyle(fontSize: 15),
+                            Expanded(
+                              child: Text(
+                                profileDetails.email,
+                                style: TextStyle(fontSize: 15),
+                              ),
                             ),
                           ],
                         ),
@@ -230,13 +253,11 @@ class _AccountScreenState extends State<AccountScreen> {
                             IconButton(
                               icon: Icon(Icons.edit),
                               onPressed: () async {
-                                final phoneNumber = await _asyncInputDialog(
-                                    context,
-                                    queryName: 'Phone No.');
+                                final phoneNumber =
+                                    await _asyncInputDialog(context, queryName: 'Phone No.');
                                 print(phoneNumber);
                                 updateProfileDetails(
-                                    name: profileDetails.name,
-                                    phoneNumber: phoneNumber);
+                                    name: profileDetails.name, phoneNumber: phoneNumber);
                               },
                             )
                           ],
@@ -247,51 +268,18 @@ class _AccountScreenState extends State<AccountScreen> {
                         Text(
                           "Subscriptions",
                           style: TextStyle(
-                              color: Color(0xff242424),
-                              fontSize: 28,
-                              fontWeight: FontWeight.w600),
+                              color: Color(0xff242424), fontSize: 28, fontWeight: FontWeight.w600),
                         ),
                         profileDetails == null
                             ? Container(
                                 height: MediaQuery.of(context).size.height / 4,
                                 child: Center(
-                                  child: CircularProgressIndicator(),
+                                  child: LoadingCircle,
                                 ),
                               )
                             : profileDetails.subscriptions.length == 0
-                                ? Text(
-                                    'You haven\'t subscribed to any channels yet!')
-                                : Container(
-                                    child: ListView.builder(
-                                      shrinkWrap: true,
-                                      physics:
-                                          const NeverScrollableScrollPhysics(),
-                                      itemCount:
-                                          profileDetails.subscriptions.length,
-                                      itemBuilder: (context, index) {
-                                        return ClubAndCouncilWidgets
-                                            .getClubCard(
-                                                clubTypeForHero:
-                                                    'Subscriptions',
-                                                context: context,
-                                                title: profileDetails
-                                                    .subscriptions[index].name,
-                                                subtitle: profileDetails
-                                                    .subscriptions[index]
-                                                    .council
-                                                    .name,
-                                                id: profileDetails
-                                                    .subscriptions[index].id,
-                                                imageUrl: profileDetails
-                                                    .subscriptions[index]
-                                                    .small_image_url,
-                                                club: profileDetails
-                                                    .subscriptions[index],
-                                                isCouncil: false,
-                                                horizontal: true);
-                                      },
-                                    ),
-                                  ),
+                                ? Text('You haven\'t subscribed to any channels yet!')
+                                : Container(child: subscribed("Club")),
                         SizedBox(
                           height: 22,
                         ),
@@ -313,13 +301,10 @@ class _AccountScreenState extends State<AccountScreen> {
                               return ClubAndCouncilWidgets.getClubCard(
                                   clubTypeForHero: 'Club Privileges',
                                   context: context,
-                                  title: profileDetails
-                                      .club_privileges[index].name,
-                                  subtitle: profileDetails
-                                      .club_privileges[index].council.name,
+                                  title: profileDetails.club_privileges[index].name,
+                                  subtitle: profileDetails.club_privileges[index].council.name,
                                   id: profileDetails.club_privileges[index].id,
-                                  imageUrl: profileDetails
-                                      .club_privileges[index].small_image_url,
+                                  imageUrl: profileDetails.club_privileges[index].small_image_url,
                                   club: profileDetails.club_privileges[index],
                                   isCouncil: false,
                                   horizontal: true);
@@ -349,8 +334,7 @@ class IconTile extends StatelessWidget {
       child: Container(
         height: 45,
         width: 45,
-        decoration: BoxDecoration(
-            color: backColor, borderRadius: BorderRadius.circular(15)),
+        decoration: BoxDecoration(color: backColor, borderRadius: BorderRadius.circular(15)),
         child: Image.asset(
           imgAssetPath,
           width: 20,

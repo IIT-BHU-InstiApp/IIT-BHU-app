@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:chopper/chopper.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:iit_app/external_libraries/spin_kit.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/colorConstants.dart';
@@ -10,18 +12,17 @@ import 'package:iit_app/pages/create.dart';
 import 'package:iit_app/ui/colorPicker.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'workshop_tabs.dart';
+import 'package:iit_app/screens/account.dart';
 
 class ClubPage extends StatefulWidget {
   final ClubListPost club;
   final bool editMode;
-  const ClubPage({Key key, @required this.club, this.editMode = false})
-      : super(key: key);
+  const ClubPage({Key key, @required this.club, this.editMode = false}) : super(key: key);
   @override
   _ClubPageState createState() => _ClubPageState();
 }
 
-class _ClubPageState extends State<ClubPage>
-    with SingleTickerProviderStateMixin {
+class _ClubPageState extends State<ClubPage> with SingleTickerProviderStateMixin {
   TextStyle tempStyle = TextStyle(fontSize: 50.0, fontWeight: FontWeight.bold);
   BuiltClubPost clubMap;
   BuiltAllWorkshopsPost clubWorkshops;
@@ -92,8 +93,7 @@ class _ClubPageState extends State<ClubPage>
               onTap: () {
                 setColorPalleteOff();
                 _bodyBg = true;
-                _colorListener.value =
-                    ColorConstants.workshopContainerBackground;
+                _colorListener.value = ColorConstants.workshopContainerBackground;
                 return _colorPicker.getColorPickerDialogBox(context);
               },
               child: Text('body bg'),
@@ -135,8 +135,7 @@ class _ClubPageState extends State<ClubPage>
               onTap: () {
                 setColorPalleteOff();
                 _panelContainer = true;
-                _colorListener.value =
-                    ColorConstants.workshopContainerBackground;
+                _colorListener.value = ColorConstants.workshopContainerBackground;
                 return _colorPicker.getColorPickerDialogBox(context);
               },
               child: Text('wokrshop container'),
@@ -187,21 +186,20 @@ class _ClubPageState extends State<ClubPage>
     super.initState();
   }
 
+  void reload() {
+    fetchClubDataById();
+  }
+
   fetchClubDataById() async {
     if (clubMap == null) {
-      clubMap =
-          await AppConstants.getClubDetailsFromDatabase(clubId: widget.club.id);
+      clubMap = await AppConstants.getClubDetailsFromDatabase(clubId: widget.club.id);
     }
     if (clubMap != null) {
-      _clubLargeLogoFile = AppConstants.getImageFile(
-          isClub: true, isSmall: false, id: clubMap.id);
+      _clubLargeLogoFile = AppConstants.getImageFile(isClub: true, isSmall: false, id: clubMap.id);
 
       if (_clubLargeLogoFile == null) {
         AppConstants.writeImageFileIntoDisk(
-            isClub: true,
-            isSmall: false,
-            id: clubMap.id,
-            url: clubMap.large_image_url);
+            isClub: true, isSmall: false, id: clubMap.id, url: clubMap.large_image_url);
       }
     }
     if (!this.mounted) {
@@ -238,6 +236,7 @@ class _ClubPageState extends State<ClubPage>
         .toggleClubSubscription(widget.club.id, AppConstants.djangoToken)
         .then((snapshot) async {
       print("status of club subscription: ${snapshot.statusCode}");
+
       if (snapshot.statusCode == 200) {
         await AppConstants.updateClubSubscriptionInDatabase(
             clubId: widget.club.id,
@@ -247,8 +246,15 @@ class _ClubPageState extends State<ClubPage>
         // var activeWorkshops = clubMap.active_workshops;
         // var pastWorkshops = clubMap.past_workshops;
 
-        clubMap = await AppConstants.getClubDetailsFromDatabase(
-            clubId: widget.club.id);
+        clubMap = await AppConstants.getClubDetailsFromDatabase(clubId: widget.club.id);
+
+        if (clubMap.is_subscribed == true) {
+          await FirebaseMessaging()
+              .subscribeToTopic('C_${clubMap.id}')
+              .then((_) => print('subscribed to C_${clubMap.id}'));
+        } else {
+          await FirebaseMessaging().unsubscribeFromTopic('C_${clubMap.id}');
+        }
 
         // clubMap = clubMap.rebuild((b) => b
         //   ..active_workshops = activeWorkshops.toBuilder()
@@ -281,17 +287,15 @@ class _ClubPageState extends State<ClubPage>
               ? Container(
                   height: MediaQuery.of(context).size.height * 3 / 4,
                   child: Center(
-                    child: CircularProgressIndicator(),
+                    child: LoadingCircle,
                   ),
                 )
               : Stack(
                   children: [
                     Container(
                       child: _clubLargeLogoFile == null
-                          ? Image.network(clubMap.large_image_url,
-                              fit: BoxFit.cover, height: 300.0)
-                          : Image.file(_clubLargeLogoFile,
-                              fit: BoxFit.cover, height: 300.0),
+                          ? Image.network(clubMap.large_image_url, fit: BoxFit.cover, height: 300.0)
+                          : Image.file(_clubLargeLogoFile, fit: BoxFit.cover, height: 300.0),
                       constraints: BoxConstraints.expand(height: 295.0),
                     ),
                     ClubAndCouncilWidgets.getGradient(),
@@ -319,14 +323,11 @@ class _ClubPageState extends State<ClubPage>
           clubWorkshops == null
               ? Container(
                   height: ClubAndCouncilWidgets.getMinPanelHeight(context),
-                  child: Center(child: CircularProgressIndicator()))
+                  child: Center(child: LoadingCircle))
               : ClubAndCouncilWidgets.getSecies(context,
                   secy: clubMap.secy, joint_secy: clubMap.joint_secy),
-          clubMap == null
-              ? Container()
-              : ClubAndCouncilWidgets.getSocialLinks(clubMap),
-          SizedBox(
-              height: 1.5 * ClubAndCouncilWidgets.getMinPanelHeight(context)),
+          clubMap == null ? Container() : ClubAndCouncilWidgets.getSocialLinks(clubMap),
+          SizedBox(height: 1.5 * ClubAndCouncilWidgets.getMinPanelHeight(context)),
         ],
       ),
     );
@@ -350,8 +351,8 @@ class _ClubPageState extends State<ClubPage>
                       onPressed: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => CreateScreen(
-                                club: widget.club, clubName: clubMap.name),
+                            builder: (context) =>
+                                CreateScreen(club: widget.club, clubName: clubMap.name),
                           ),
                         );
                       })
@@ -360,11 +361,21 @@ class _ClubPageState extends State<ClubPage>
           WorkshopTabs.getActiveAndPastTabBarForClub(
               clubWorkshops: clubWorkshops,
               tabController: _tabController,
-              context: context),
+              context: context,
+              reload: reload),
           space,
         ],
       ),
     );
+  }
+
+  Future<bool> _onPress() {
+    print("Clubscreen:${AccountScreen.flag}");
+    if (AccountScreen.flag == "Account")
+      Navigator.push(context, MaterialPageRoute(builder: (context) => AccountScreen()));
+    else
+      Navigator.pop(context);
+    return Future.value(false);
   }
 
   BorderRadiusGeometry radius = BorderRadius.only(
@@ -374,74 +385,71 @@ class _ClubPageState extends State<ClubPage>
   PanelController _pc = PanelController();
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      minimum: const EdgeInsets.all(2.0),
-      child: ValueListenableBuilder(
-          valueListenable: _colorListener,
-          builder: (context, color, child) {
-            setColor();
-            return Scaffold(
-              resizeToAvoidBottomInset: false,
-              resizeToAvoidBottomPadding: false,
-              backgroundColor: ColorConstants.backgroundThemeColor,
-              floatingActionButton: AppConstants.isGuest
-                  ? null
-                  : FloatingActionButton(
-                      backgroundColor: Colors.white,
-                      onPressed: () {
-                        if (this._toggling == false) {
-                          toggleSubscription();
-                        }
-                      },
-                      child: this._toggling || clubMap == null
-                          ? CircularProgressIndicator()
-                          : Icon(
-                              Icons.subscriptions,
-                              color: clubMap.is_subscribed
-                                  ? Colors.red
-                                  : Colors.black26,
-                            ),
-                    ),
-              body: RefreshIndicator(
-                onRefresh: () async {
-                  clubMap = await AppConstants.refreshClubInDatabase(
-                      clubId: widget.club.id);
-                  setState(() {});
-                },
-                child: Stack(
-                  children: [
-                    SlidingUpPanel(
-                      body: _getBackground(context),
-                      parallaxEnabled: true,
-                      controller: _pc,
-                      borderRadius: radius,
-                      collapsed: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: radius,
+    return WillPopScope(
+        onWillPop: _onPress,
+        child: SafeArea(
+          minimum: const EdgeInsets.all(2.0),
+          child: ValueListenableBuilder(
+              valueListenable: _colorListener,
+              builder: (context, color, child) {
+                setColor();
+                return Scaffold(
+                  resizeToAvoidBottomInset: false,
+                  resizeToAvoidBottomPadding: false,
+                  backgroundColor: ColorConstants.backgroundThemeColor,
+                  floatingActionButton: AppConstants.isGuest
+                      ? null
+                      : FloatingActionButton(
+                          backgroundColor: Colors.white,
+                          onPressed: () {
+                            if (this._toggling == false) {
+                              toggleSubscription();
+                            }
+                          },
+                          child: this._toggling || clubMap == null
+                              ? CircularProgressIndicator()
+                              : Icon(
+                                  Icons.subscriptions,
+                                  color: clubMap.is_subscribed ? Colors.red : Colors.black26,
+                                ),
                         ),
-                      ),
-                      backdropEnabled: true,
-                      /*panel: Dismissible(
+                  body: RefreshIndicator(
+                    onRefresh: () async {
+                      clubMap = await AppConstants.refreshClubInDatabase(clubId: widget.club.id);
+                      setState(() {});
+                    },
+                    child: Stack(
+                      children: [
+                        SlidingUpPanel(
+                          body: _getBackground(context),
+                          parallaxEnabled: true,
+                          controller: _pc,
+                          borderRadius: radius,
+                          collapsed: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: radius,
+                            ),
+                          ),
+                          backdropEnabled: true,
+                          /*panel: Dismissible(
                       key: Key('clubs'),
                       direction: DismissDirection.down,
                       onDismissed: (_) => _pc.close(),
                       child: _getPanel(),
                     ),*/
-                      panelBuilder: (ScrollController sc) => _getPanel(sc: sc),
-                      minHeight:
-                          ClubAndCouncilWidgets.getMinPanelHeight(context),
-                      maxHeight:
-                          ClubAndCouncilWidgets.getMaxPanelHeight(context),
-                      header: ClubAndCouncilWidgets.getHeader(context),
+                          panelBuilder: (ScrollController sc) => _getPanel(sc: sc),
+                          minHeight: ClubAndCouncilWidgets.getMinPanelHeight(context),
+                          maxHeight: ClubAndCouncilWidgets.getMaxPanelHeight(context),
+                          header: ClubAndCouncilWidgets.getHeader(context),
+                        ),
+                        AppConstants.chooseColorPaletEnabled
+                            ? _colorSelectOptionRow(context)
+                            : Container()
+                      ],
                     ),
-                    AppConstants.chooseColorPaletEnabled
-                        ? _colorSelectOptionRow(context)
-                        : Container()
-                  ],
-                ),
-              ),
-            );
-          }),
-    );
+                  ),
+                );
+              }),
+        ));
   }
 }

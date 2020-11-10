@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:iit_app/external_libraries/spin_kit.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/colorConstants.dart';
 import 'package:iit_app/screens/home/home_widgets.dart';
 
 class WorkshopTabs {
-  static Widget _getWorkshops(workshops) {
+  static Widget _getWorkshops(workshops, Function reload) {
     return workshops == null
-        ? Container(child: Center(child: CircularProgressIndicator()))
+        ? Container(child: Center(child: LoadingCircle))
         : workshops.length == 0
             ? Center(child: Text('No workshops here :('))
             : ListView.builder(
@@ -16,10 +17,8 @@ class WorkshopTabs {
                 itemCount: workshops.length,
                 padding: EdgeInsets.all(8),
                 itemBuilder: (context, index) {
-                  return HomeWidgets.getWorkshopCard(
-                    context,
-                    w: workshops[index],
-                  );
+                  return HomeWidgets.getWorkshopCard(context,
+                      w: workshops[index], reload: reload);
                 },
               );
   }
@@ -27,7 +26,8 @@ class WorkshopTabs {
   static Widget getActiveAndPastTabBarForClub(
       {BuiltAllWorkshopsPost clubWorkshops,
       @required TabController tabController,
-      BuildContext context}) {
+      BuildContext context,
+      Function reload}) {
     return Container(
       margin: EdgeInsets.fromLTRB(12, 10, 12, 0),
       decoration: BoxDecoration(
@@ -53,13 +53,11 @@ class WorkshopTabs {
               controller: tabController,
               children: <Widget>[
                 clubWorkshops == null
-                    ? Container(
-                        child: Center(child: CircularProgressIndicator()))
-                    : _getWorkshops(clubWorkshops.active_workshops),
+                    ? Container(child: Center(child: LoadingCircle))
+                    : _getWorkshops(clubWorkshops.active_workshops, reload),
                 clubWorkshops == null
-                    ? Container(
-                        child: Center(child: CircularProgressIndicator()))
-                    : _getWorkshops(clubWorkshops.past_workshops),
+                    ? Container(child: Center(child: LoadingCircle))
+                    : _getWorkshops(clubWorkshops.past_workshops, reload),
               ],
             ),
           ),

@@ -45,11 +45,71 @@
         "code",
         "design"
       ]
+    },
+    {
+      "login": "Yashjain715",
+      "name": "Yashjain715",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/58399080?v=4",
+      "profile": "https://github.com/Yashjain715",
+      "contributions": [
+        "code",
+        "bug"
+      ]
+    },
+    {
+      "login": "Vikhyath08",
+      "name": "Vikhyath Venkatraman",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/55887656?v=4",
+      "profile": "https://github.com/Vikhyath08",
+      "contributions": [
+        "code",
+        "design"
+      ]
+    },
+    {
+      "login": "chethana233",
+      "name": "Chethana",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/57175071?v=4",
+      "profile": "https://github.com/chethana233",
+      "contributions": [
+        "code",
+        "bug"
+      ]
+    },
+    {
+      "login": "ARJUPTA",
+      "name": "Arjun Gupta",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/64064110?v=4",
+      "profile": "https://github.com/ARJUPTA",
+      "contributions": [
+        "code",
+        "design"
+      ]
+    },
+    {
+      "login": "nb9960",
+      "name": "Nishtha Bodani",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/63557873?v=4",
+      "profile": "https://github.com/nb9960",
+      "contributions": [
+        "code",
+        "bug"
+      ]
+    },
+    {
+      "login": "Satendra124",
+      "name": "Satendra Raj",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/60358771?v=4",
+      "profile": "https://github.com/Satendra124",
+      "contributions": [
+        "code",
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
   "projectName": "IIT-BHU-app",
-  "projectOwner": "nishantkr18",
+  "projectOwner": "IIT-BHU-InstiApp",
   "repoType": "github",
   "repoHost": "https://github.com",
   "skipCi": true

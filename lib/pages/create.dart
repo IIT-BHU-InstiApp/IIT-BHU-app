@@ -1,4 +1,8 @@
+import 'dart:ui';
+
+import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
+import 'package:iit_app/external_libraries/spin_kit.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'dart:async';
 import 'package:iit_app/model/built_post.dart';
@@ -28,6 +32,9 @@ class _CreateScreenState extends State<CreateScreen> {
   TextEditingController _descriptionController;
   TextEditingController _locationController;
   TextEditingController _audienceController;
+  TextEditingController _tagSearchController;
+  TextEditingController _tagCreateController;
+
   String _editingDate;
   String _editingTime;
 
@@ -39,7 +46,19 @@ class _CreateScreenState extends State<CreateScreen> {
 
   BuiltList<BuiltProfilePost> _searchedProfileresult;
   String _searchByValue = 'name';
-  bool _searchedDataFetched = false;
+
+  TagSearch _tagSearchPost; // Tag to search for
+  TagDetail
+      _createdTagResult; // Response of a created tag(may be null if the tag already exists)
+  bool _tagDataFetched = false; // Has the created tag data been fetched?
+  bool _isSearchingTags = false; // Has the user searched for the tag?
+  bool _searchedDataFetched = false; // Have the searched tags been fetched?
+  bool _allTagDataFetched =
+      false; // Have all the tags of this club been fetched?
+  bool _allTagDataShow = false; // Should all the tags of the club be shown?
+
+  BuiltList<TagDetail> _searchedTagResult;
+  BuiltList<TagDetail> _allTagsOfClub;
 
   final dropDownButtonTextStyle = TextStyle(fontSize: 12);
   DropdownButton _searchCategoryDropDown() => DropdownButton<String>(
@@ -74,6 +93,8 @@ class _CreateScreenState extends State<CreateScreen> {
     this._descriptionController = TextEditingController();
     this._locationController = TextEditingController();
     this._audienceController = TextEditingController();
+    this._tagSearchController = TextEditingController();
+    this._tagCreateController = TextEditingController();
 
     this._searchContactsController = TextEditingController();
 
@@ -91,11 +112,103 @@ class _CreateScreenState extends State<CreateScreen> {
         this._workshop.contactNameofId[contact.id] =
             WorkshopCreater.nameOfContact(contact.name);
       });
+      widget.workshopData.tags.forEach((tag) {
+        this._workshop.tagNameofId[tag.id] = tag.tag_name;
+      });
+      this._workshop.latitude = widget.workshopData.latitude;
+      this._workshop.longitude = widget.workshopData.longitude;
     } else {
       _workshop = WorkshopCreater();
     }
 
     super.initState();
+  }
+
+  tagAlertDialog(String title, String innerText) async {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(title ?? '(No Title)'),
+            content: Text(innerText ?? '(No Inner Text)'),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('Ok'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          );
+        });
+  }
+
+  tagCreateDialog() async {
+    bool errorMessageShown = false;
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+            content: Row(
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    controller: this._tagCreateController,
+                    decoration: InputDecoration(
+                      labelText: 'Create Tag',
+                    ),
+                  ),
+                ),
+                RaisedButton(
+                  child: Text('+ Create'),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(50),
+                  ),
+                  onPressed: () async {
+                    print(this._tagCreateController.text);
+                    final newTag = TagCreate((b) => b
+                      ..tag_name = this._tagCreateController.text
+                      ..club = widget.club.id);
+                    await AppConstants.service
+                        .createTag(AppConstants.djangoToken, newTag)
+                        .catchError((onError) {
+                      final error = onError as Response<dynamic>;
+                      print(error.body);
+                      if (error.body
+                          .toString()
+                          .contains('The tag already exists for this club')) {
+                        tagAlertDialog('Tag Exists',
+                            'This tag already exists. Search for it if you wish to add it to the workshop.');
+                        errorMessageShown = true;
+                      }
+                      print(
+                          'Error while creating Tag: ${onError.toString()} ${onError.runtimeType}');
+                    }).then((value) {
+                      if (value != null) {
+                        this._createdTagResult = value.body;
+                        tagAlertDialog('Tag Created',
+                            'The Tag has been created succesfully. Search for it again, and add it to the worshop if you wish.');
+                      } else if (errorMessageShown == false) {
+                        tagAlertDialog(
+                            'Error', 'There was an error creating this tag.');
+                      }
+                    });
+                    setState(() {});
+                  },
+                )
+              ],
+            ),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('Ok'),
+                onPressed: () {
+                  this._tagCreateController.text = '';
+                  Navigator.of(context).pop();
+                },
+              )
+            ]);
+      },
+    );
   }
 
   @override
@@ -158,15 +271,45 @@ class _CreateScreenState extends State<CreateScreen> {
                       ),
                     ],
                   ),
-                  TextFormField(
-                      autovalidate: true,
-                      decoration: InputDecoration(labelText: 'Location'),
-                      controller: this._locationController,
-                      validator: (value) {
-                        return null;
-                      },
-                      onSaved: (val) =>
-                          setState(() => _workshop.location = val)),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                            autovalidate: true,
+                            decoration: InputDecoration(
+                              labelText: 'Location',
+                            ),
+                            controller: this._locationController,
+                            validator: (value) {
+                              return null;
+                            },
+                            onSaved: (val) =>
+                                setState(() => _workshop.location = val)),
+                      ),
+                      RaisedButton(
+                        child: Icon(Icons.map),
+                        onPressed: () async {
+                          final location = await Navigator.of(context)
+                                  .pushNamed('/mapScreen',
+                                      arguments: {'fromWorkshopCreate': true})
+                              as List<String>;
+                          this._workshop.latitude =
+                              location == null ? null : location[0];
+                          this._workshop.longitude =
+                              location == null ? null : location[1];
+                          if (this._locationController.text == '')
+                            this._locationController.text =
+                                location == null ? null : location[2];
+                          setState(() {});
+                        },
+                      ),
+                    ],
+                  ),
+                  this._workshop.latitude != null &&
+                          this._workshop.longitude != null
+                      ? Text(
+                          '${this._workshop.latitude}, ${this._workshop.longitude}')
+                      : Container(),
                   TextFormField(
                     autovalidate: true,
                     decoration: InputDecoration(labelText: 'Audience'),
@@ -212,7 +355,7 @@ class _CreateScreenState extends State<CreateScreen> {
                                       this._searchPost)
                                   .catchError((onError) {
                                 print(
-                                    'Error whlie fetching search results: $onError');
+                                    'Error while fetching search results: $onError');
                               }).then((result) {
                                 if (result != null)
                                   this._searchedProfileresult = result.body;
@@ -299,6 +442,160 @@ class _CreateScreenState extends State<CreateScreen> {
                           ),
                         )
                       : Container(),
+                  Row(children: [
+                    Expanded(
+                      child: TextFormField(
+                        controller: this._tagSearchController,
+                        decoration: InputDecoration(
+                          contentPadding:
+                              EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                          labelText: 'Search tags by name',
+                          suffix: IconButton(
+                            icon: Icon(Icons.clear),
+                            onPressed: () {
+                              this._tagSearchController.text = '';
+                              if (!this.mounted) return;
+                            },
+                          ),
+                        ),
+                        onFieldSubmitted: (value) async {
+                          print("Submitted");
+                          if (value.isEmpty) return;
+
+                          this._tagSearchPost = TagSearch((b) => b
+                            ..club = widget.club.id
+                            ..tag_name = this._tagSearchController.text);
+
+                          if (!this.mounted) return;
+                          setState(() {
+                            this._isSearchingTags = true;
+                            this._tagDataFetched = false;
+                            this._searchedTagResult = null;
+                            this._allTagDataShow = false;
+                          });
+                          await AppConstants.service
+                              .searchTag(
+                                  AppConstants.djangoToken, this._tagSearchPost)
+                              .catchError((onError) {
+                            print('Error while fetching tags $onError');
+                          }).then((result) {
+                            if (result != null)
+                              this._searchedTagResult = result.body;
+                          });
+                          if (!this.mounted) return;
+                          setState(() {
+                            this._tagDataFetched = true;
+                          });
+                        },
+                      ),
+                    ),
+                    RaisedButton(
+                      child: Text('+ Create'),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      onPressed: () async {
+                        await tagCreateDialog();
+                      },
+                    ),
+                    this._isSearchingTags
+                        ? RaisedButton(
+                            child: Text('X Clear'),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(50),
+                            ),
+                            onPressed: () {
+                              FocusScope.of(context).unfocus();
+                              this._tagSearchController.text = '';
+                              this._isSearchingTags = false;
+                              if (!this.mounted) return;
+                              setState(() {});
+                            },
+                          )
+                        : RaisedButton(
+                            child: Text('All Tags'),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(50),
+                            ),
+                            onPressed: () async {
+                              FocusScope.of(context).unfocus();
+                              await AppConstants.service
+                                  .getClubTags(
+                                      widget.club.id, AppConstants.djangoToken)
+                                  .catchError((onError) {
+                                print('Error while fetching all tags $onError');
+                              }).then((result) {
+                                if (result != null) {
+                                  this._allTagsOfClub = result.body.club_tags;
+                                  this._allTagDataShow = true;
+                                  this._allTagDataFetched = true;
+                                  setState(() {});
+                                }
+                              });
+                            },
+                          ),
+                  ]),
+                  this._isSearchingTags || this._allTagDataShow
+                      ? Column(
+                          children: <Widget>[
+                            Divider(
+                              height: 2,
+                              thickness: 2,
+                            ),
+                            Container(
+                              height: MediaQuery.of(context).size.height / 6,
+                              child: this._isSearchingTags
+                                  ? _buildTagsFromSearchPosts(context)
+                                  : this._allTagDataShow
+                                      ? _buildAllTagsOfClub(context)
+                                      : Container(),
+                            ),
+                            Divider(
+                              height: 2,
+                              thickness: 2,
+                            ),
+                          ],
+                        )
+                      : Container(),
+                  this._workshop.tagNameofId.keys.length > 0
+                      ? Container(
+                          height: 50,
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemCount: this._workshop.tagNameofId.keys.length,
+                            itemBuilder: (context, index) {
+                              int _id = this
+                                  ._workshop
+                                  .tagNameofId
+                                  .keys
+                                  .toList()[index];
+                              return Container(
+                                padding: EdgeInsets.all(2),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Text(this._workshop.tagNameofId[_id]),
+                                    InkWell(
+                                      child: Icon(Icons.cancel),
+                                      splashColor: Colors.red,
+                                      onTap: () {
+                                        setState(() {
+                                          this
+                                              ._workshop
+                                              .tagNameofId
+                                              .remove(_id);
+                                        });
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                        )
+                      : Container(),
                   Container(
                     padding: const EdgeInsets.symmetric(
                         vertical: 16.0, horizontal: 16.0),
@@ -307,6 +604,17 @@ class _CreateScreenState extends State<CreateScreen> {
                         final form = _formKey.currentState;
                         if (form.validate()) {
                           form.save();
+
+                          bool isconfirmed =
+                              await CreatePageDialogBoxes.confirmDialog(
+                                  context: context,
+                                  action: widget.workshopData == null
+                                      ? 'Create'
+                                      : 'Edit');
+
+                          if (isconfirmed == false || isconfirmed == null)
+                            return;
+
                           Scaffold.of(context).showSnackBar(
                             SnackBar(
                               content: widget.workshopData == null
@@ -315,22 +623,13 @@ class _CreateScreenState extends State<CreateScreen> {
                             ),
                           );
 
-                          bool isconfirmed =
-                              await CreatePageDialogBoxes.confirmDialog(
-                                  context: context,
-                                  isEditing: widget.workshopData == null
-                                      ? false
-                                      : true);
-
-                          if (isconfirmed == false) return;
-
                           if (widget.workshopData == null) {
                             await WorkshopCreater.create(
                                 context: context,
                                 workshop: _workshop,
                                 club: widget.club);
                           } else {
-                            WorkshopCreater.edit(
+                            await WorkshopCreater.edit(
                                 context: context,
                                 workshop: _workshop,
                                 club: widget.club,
@@ -464,8 +763,135 @@ class _CreateScreenState extends State<CreateScreen> {
             ],
           )
         : Center(
-            child: CircularProgressIndicator(),
+            child: LoadingCircle,
           );
+  }
+
+  Widget _buildTagsFromSearchPosts(
+    BuildContext context,
+  ) {
+    return this._tagDataFetched
+        ? Container(
+            child: (this._searchedTagResult == null ||
+                    this._searchedTagResult.isEmpty)
+                ? Center(
+                    child: Text(
+                      'No such Tag',
+                      textAlign: TextAlign.center,
+                      textScaleFactor: 1.5,
+                    ),
+                  )
+                : GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3, childAspectRatio: 4),
+                    physics: ScrollPhysics(),
+                    shrinkWrap: true,
+                    scrollDirection: Axis.vertical,
+                    itemCount: this._searchedTagResult.length,
+                    padding: EdgeInsets.all(2),
+                    itemBuilder: (context, index) {
+                      int _id = this._searchedTagResult[index].id;
+                      return Container(
+                        padding: EdgeInsets.all(2),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text(this._searchedTagResult[index].tag_name),
+                            InkWell(
+                              child: (this
+                                      ._workshop
+                                      .tagNameofId
+                                      .keys
+                                      .contains(_id))
+                                  ? Icon(Icons.highlight_remove_rounded)
+                                  : Icon(Icons.add_box_rounded),
+                              splashColor: Colors.green,
+                              onTap: () {
+                                setState(() {
+                                  if (this
+                                      ._workshop
+                                      .tagNameofId
+                                      .keys
+                                      .contains(_id))
+                                    this._workshop.tagNameofId.remove(_id);
+                                  else
+                                    this._workshop.tagNameofId[_id] =
+                                        this._searchedTagResult[index].tag_name;
+                                });
+                              },
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ))
+        : Container();
+  }
+
+  Widget _buildAllTagsOfClub(
+    BuildContext context,
+  ) {
+    return this._allTagDataFetched
+        ? Container(
+            child: (this._allTagsOfClub == null || this._allTagsOfClub.isEmpty)
+                ? Center(
+                    child: Text(
+                      'No Tags of this club available',
+                      textAlign: TextAlign.center,
+                      textScaleFactor: 1.5,
+                    ),
+                  )
+                : GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3, childAspectRatio: 4),
+                    physics: ScrollPhysics(),
+                    shrinkWrap: true,
+                    scrollDirection: Axis.vertical,
+                    itemCount: this._allTagsOfClub.length,
+                    padding: EdgeInsets.all(2),
+                    itemBuilder: (context, index) {
+                      int _id = this._allTagsOfClub[index].id;
+                      return Container(
+                        padding: EdgeInsets.all(2),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text(this._allTagsOfClub[index].tag_name),
+                            InkWell(
+                              child: (this
+                                      ._workshop
+                                      .tagNameofId
+                                      .keys
+                                      .contains(_id))
+                                  ? Icon(Icons.highlight_remove_rounded)
+                                  : Icon(Icons.add_box_rounded),
+                              splashColor: (this
+                                      ._workshop
+                                      .tagNameofId
+                                      .keys
+                                      .contains(_id))
+                                  ? Colors.red
+                                  : Colors.green,
+                              onTap: () {
+                                setState(() {
+                                  if (this
+                                      ._workshop
+                                      .tagNameofId
+                                      .keys
+                                      .contains(_id))
+                                    this._workshop.tagNameofId.remove(_id);
+                                  else
+                                    this._workshop.tagNameofId[_id] =
+                                        this._allTagsOfClub[index].tag_name;
+                                });
+                              },
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ))
+        : Container();
   }
 
   Future<Null> _selectDate(BuildContext context) async {

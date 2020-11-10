@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/pages/club/club.dart';
+import 'package:iit_app/model/appConstants.dart';
 
 class CreatePageDialogBoxes {
   static showSuccesfulDialog({
@@ -19,18 +20,14 @@ class CreatePageDialogBoxes {
           actions: <Widget>[
             FlatButton(
               child: Text("yay"),
-              onPressed: () {
-                Navigator.pop(context);
-                Navigator.pop(context);
+              onPressed: () async {
+                await AppConstants.updateAndPopulateWorkshops();
                 Navigator.pop(context);
                 if (isEditing) {
                   Navigator.pop(context);
+                  return;
                 }
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            ClubPage(club: club, editMode: true)));
+                Navigator.pop(context);
               },
             ),
           ],
@@ -61,16 +58,14 @@ class CreatePageDialogBoxes {
 
   static Future<bool> confirmDialog({
     @required BuildContext context,
-    bool isEditing = false,
+    String action,
   }) async {
     return showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: isEditing ? Text("Edit workshop") : Text("Create workshop"),
-          content: isEditing
-              ? Text("Are you sure to edit this workshop?")
-              : Text("Are you sure to create this  workshop?"),
+          title: Text(action + " workshop"),
+          content: Text("Are you sure to " + action + " this?"),
           actions: <Widget>[
             FlatButton(
               child: Text("Yup!"),
@@ -79,7 +74,36 @@ class CreatePageDialogBoxes {
               },
             ),
             FlatButton(
-              child: Text("nope, let me rethink.."),
+              child: Text("Nope!"),
+              onPressed: () {
+                Navigator.of(context).pop(false);
+                return false;
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  static Future<bool> confirmCalendarOpenDialog(
+      {@required BuildContext context}) async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Open Calendar"),
+          content: new Text(
+              "You have expressed Interest!\nDo you want to save this event to your Google Calendar?"),
+          actions: <Widget>[
+            FlatButton(
+              child: Text("Yup!"),
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+            ),
+            FlatButton(
+              child: Text("Nope."),
               onPressed: () {
                 Navigator.of(context).pop(false);
                 return false;

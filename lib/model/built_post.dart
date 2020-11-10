@@ -44,6 +44,15 @@ abstract class TagDetail implements Built<TagDetail, TagDetailBuilder> {
   static Serializer<TagDetail> get serializer => _$tagDetailSerializer;
 }
 
+abstract class ClubTags implements Built<ClubTags, ClubTagsBuilder> {
+  @nullable
+  BuiltList<TagDetail> get club_tags;
+
+  ClubTags._();
+  factory ClubTags([updates(ClubTagsBuilder b)]) = _$ClubTags;
+  static Serializer<ClubTags> get serializer => _$clubTagsSerializer;
+}
+
 abstract class WorkshopResources
     implements Built<WorkshopResources, WorkshopResourcesBuilder> {
   @nullable
