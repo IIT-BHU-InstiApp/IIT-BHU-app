@@ -6,7 +6,7 @@ import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/colorConstants.dart';
 import 'package:iit_app/screens/drawer.dart';
 import 'package:iit_app/screens/home/buildWorkshops.dart';
-import 'package:iit_app/screens/home/home_widgets.dart';
+import 'package:iit_app/pages/Home/home_widgets.dart';
 import 'package:iit_app/screens/home/search_workshop.dart';
 
 class AllWorkshopsScreen extends StatefulWidget {

@@ -2,21 +2,20 @@ import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/colorConstants.dart';
-import 'package:iit_app/screens/home/app_bar.dart';
-import 'package:iit_app/screens/home/floating_action_button.dart';
-import 'package:iit_app/screens/home/home_widgets.dart';
+import 'package:iit_app/screens/homeScreen.dart';
+import 'package:iit_app/screens/home_app_bar.dart';
+import 'package:iit_app/screens/home_FAB.dart';
 import 'package:iit_app/screens/home/search_workshop.dart';
 import 'package:iit_app/screens/drawer.dart';
 import 'package:flutter/services.dart';
+import '../../screens/home/buildWorkshops.dart' as buildWorkhops;
 
-class HomeScreen extends StatefulWidget {
+class HomePage extends StatefulWidget {
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  _HomePageState createState() => _HomePageState();
 }
 
-class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin {
-  TabController _tabController;
-
+class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
   SearchBarWidget searchBarWidget;
   ValueNotifier<bool> searchListener;
 
@@ -27,7 +26,6 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
 
   @override
   void initState() {
-    _tabController = TabController(length: 2, vsync: this);
     fetchWorkshopsAndCouncilButtons();
     searchListener = ValueNotifier(false);
     searchBarWidget = SearchBarWidget(searchListener);
@@ -47,14 +45,11 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
 
   Future<bool> _onPopHome() async {
     if (fabKey.currentState.isOpen) {
-      print('fab is open');
       fabKey.currentState.close();
       return false;
     }
     if (_scaffoldKey.currentState.isDrawerOpen) {
-      print('drawer is open');
       Navigator.of(context).pop();
-
       return false;
     }
     // if on home screen but searchController is onFocus
@@ -113,16 +108,17 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                     borderRadius: BorderRadius.only(
                         topLeft: const Radius.circular(40.0),
                         topRight: const Radius.circular(40.0))),
-                child: ValueListenableBuilder(
+                child: ValueListenableBuilder<bool>(
                   valueListenable: searchListener,
                   builder: (context, isSearching, child) {
-                    return HomeChild(
-                        context: context,
-                        searchBarWidget: searchBarWidget,
-                        tabController: _tabController,
-                        isSearching: isSearching,
-                        fabKey: fabKey,
-                        reload: () => {setState(() {})});
+                    return isSearching
+                        ? buildWorkhops.buildWorkshopsFromSearch(
+                            context: context, searchPost: searchBarWidget.searchPost)
+                        : HomeScreen(
+                            context: context,
+                            fabKey: fabKey,
+                            reload: () => {setState(() {})},
+                          );
                   },
                 ),
               ),

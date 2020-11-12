@@ -6,8 +6,8 @@ import 'package:iit_app/screens/map.dart';
 import 'package:iit_app/screens/account.dart';
 import 'package:iit_app/screens/allWorkshops.dart';
 import 'package:iit_app/screens/complaints.dart';
-import 'package:iit_app/screens/home/home.dart';
-import 'package:iit_app/screens/home/home_widgets.dart';
+import 'package:iit_app/pages/Home/homePage.dart';
+import 'package:iit_app/pages/Home/home_widgets.dart';
 import 'package:iit_app/screens/mess/mess.dart';
 import 'package:iit_app/pages/login.dart';
 import 'package:iit_app/screens/about.dart';
@@ -43,7 +43,7 @@ void main() async {
     routes: <String, WidgetBuilder>{
       // define the routes
       '/': (BuildContext context) => ConnectedMain(),
-      '/home': (BuildContext context) => HomeScreen(),
+      '/home': (BuildContext context) => HomePage(),
       '/mess': (BuildContext context) => MessScreen(),
       '/allWorkshops': (BuildContext context) => AllWorkshopsScreen(),
       '/account': (BuildContext context) => AccountScreen(),
@@ -126,6 +126,6 @@ class _ConnectedMainState extends State<ConnectedMain> {
                   ),
                 ),
               )
-            : ((AppConstants.isLoggedIn || AppConstants.isGuest) ? HomeScreen() : LoginPage()));
+            : ((AppConstants.isLoggedIn || AppConstants.isGuest) ? HomePage() : LoginPage()));
   }
 }

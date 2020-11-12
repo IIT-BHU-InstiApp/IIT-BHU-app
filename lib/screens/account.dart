@@ -5,7 +5,7 @@ import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/colorConstants.dart';
 import 'package:iit_app/pages/club_council_common/club_&_council_widgets.dart';
 import 'package:iit_app/screens/drawer.dart';
-import 'package:iit_app/screens/home/home.dart';
+import 'package:iit_app/pages/Home/homePage.dart';
 
 class AccountScreen extends StatefulWidget {
   static String flag = "Account";
@@ -152,7 +152,7 @@ class _AccountScreenState extends State<AccountScreen> {
             leading: IconButton(
               icon: Icon(Icons.arrow_back, color: Colors.black),
               onPressed: () =>
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen())),
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage())),
             ),
           ),
           drawer: SideBar(context: context),

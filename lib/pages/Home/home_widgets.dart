@@ -5,14 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/colorConstants.dart';
-import 'package:iit_app/screens/home/search_workshop.dart';
 import 'package:iit_app/screens/home/worshop_detail/workshop_detail.dart';
 import 'package:iit_app/services/authentication.dart' as authentication;
 import 'package:iit_app/ui/separator.dart';
 import 'package:iit_app/ui/text_style.dart';
 
 import 'package:skeleton_text/skeleton_text.dart';
-import 'buildWorkshops.dart' as buildWorkhops;
 
 class HomeWidgets {
   static final Color textPaleColor = Color(0xFFAFAFAF);
@@ -310,91 +308,5 @@ class HomeWidgets {
             ),
           );
         });
-  }
-}
-
-class HomeChild extends StatelessWidget {
-  final BuildContext context;
-  final SearchBarWidget searchBarWidget;
-  final TabController tabController;
-  final bool isSearching;
-  final GlobalKey<FabCircularMenuState> fabKey;
-  final Function reload;
-
-  const HomeChild(
-      {Key key,
-      this.context,
-      this.searchBarWidget,
-      this.tabController,
-      this.isSearching,
-      this.fabKey,
-      this.reload})
-      : super(key: key);
-
-  void onRefresh() async {
-    await AppConstants.updateAndPopulateWorkshops();
-    this.reload();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return StatefulBuilder(
-      builder: (context, setState) => isSearching
-          ? buildWorkhops.buildWorkshopsFromSearch(
-              context: context, searchPost: searchBarWidget.searchPost)
-          : Column(
-              children: [
-                TabBar(
-                  indicatorSize: TabBarIndicatorSize.tab,
-                  indicatorColor: Colors.deepPurple,
-                  unselectedLabelColor: Colors.white70,
-                  labelColor: Colors.black,
-                  onTap: (value) {
-                    if (fabKey.currentState.isOpen) {
-                      fabKey.currentState.close();
-                    }
-                  },
-                  tabs: [
-                    Tab(text: 'Latest'),
-                    Tab(text: 'Interested'),
-                  ],
-                  controller: tabController,
-                ),
-                Expanded(
-                  child: TabBarView(
-                    controller: tabController,
-                    children: <Widget>[
-                      Container(
-                        child: AppConstants.firstTimeFetching
-                            ? HomeWidgets.getPlaceholder()
-                            : RefreshIndicator(
-                                displacement: 60,
-                                onRefresh: () async => onRefresh(),
-                                child: buildWorkhops.buildCurrentWorkshopPosts(context, fabKey,
-                                    reload: onRefresh)),
-                      ),
-                      Container(
-                          child: AppConstants.isGuest
-                              ? Container(
-                                  margin: EdgeInsets.symmetric(
-                                      vertical: 70, horizontal: 20),
-                                  padding: EdgeInsets.all(10),
-                                  child: Text(
-                                    'We value your interest, but first you have to trust us by logging in.   {Dear Guest, it can not be one sided.}',
-                                    style: TextStyle(color: Colors.white, fontSize: 25),
-
-                                  ),
-                                )
-                              : buildWorkhops.buildInterestedWorkshopsBody(
-                                  context,
-                                  fabKey,
-                                  reload: onRefresh,
-                                ))
-                    ],
-                  ),
-                ),
-              ],
-            ),
-    );
   }
 }

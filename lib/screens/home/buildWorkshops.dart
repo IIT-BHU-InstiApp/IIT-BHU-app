@@ -3,22 +3,19 @@ import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
-import 'package:iit_app/screens/home/home_widgets.dart';
+import 'package:iit_app/pages/Home/home_widgets.dart';
 import 'package:built_collection/built_collection.dart';
 
-ListView buildCurrentWorkshopPosts(
-    BuildContext context, GlobalKey<FabCircularMenuState> fabKey,
+ListView buildCurrentWorkshopPosts(BuildContext context, GlobalKey<FabCircularMenuState> fabKey,
     {Function reload}) {
   return ListView.builder(
-    physics: BouncingScrollPhysics(),
+    physics: ScrollPhysics(),
     scrollDirection: Axis.vertical,
     itemCount: AppConstants.workshopFromDatabase.length,
     padding: EdgeInsets.all(8),
     itemBuilder: (context, index) {
       return HomeWidgets.getWorkshopCard(context,
-          w: AppConstants.workshopFromDatabase[index],
-          fabKey: fabKey,
-          reload: reload);
+          w: AppConstants.workshopFromDatabase[index], fabKey: fabKey, reload: reload);
     },
   );
 }
@@ -27,8 +24,7 @@ FutureBuilder<Response> buildInterestedWorkshopsBody(
     BuildContext context, GlobalKey<FabCircularMenuState> fabKey,
     {Function reload}) {
   return FutureBuilder<Response<BuiltList<BuiltWorkshopSummaryPost>>>(
-    future:
-        AppConstants.service.getInterestedWorkshops(AppConstants.djangoToken),
+    future: AppConstants.service.getInterestedWorkshops(AppConstants.djangoToken),
     builder: (context, snapshot) {
       if (snapshot.connectionState == ConnectionState.done) {
         if (snapshot.hasError) {
@@ -61,8 +57,7 @@ FutureBuilder<Response> buildInterestedWorkshopsBody(
   );
 }
 
-FutureBuilder<Response> buildWorkshopsFromSearch(
-    {context, searchPost, Function reload}) {
+FutureBuilder<Response> buildWorkshopsFromSearch({context, searchPost, Function reload}) {
   return FutureBuilder<Response<BuiltAllWorkshopsPost>>(
     future: AppConstants.service.searchWorkshop(searchPost),
     builder: (context, snapshot) {

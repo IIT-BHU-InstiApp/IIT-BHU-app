@@ -12,7 +12,7 @@ import 'package:iit_app/pages/club_council_common/club_&_council_widgets.dart';
 import 'package:iit_app/pages/create.dart';
 import 'package:iit_app/pages/resource_create.dart';
 import 'package:iit_app/pages/dialogBoxes.dart';
-import 'package:iit_app/screens/home/home_widgets.dart';
+import 'package:iit_app/pages/Home/home_widgets.dart';
 import 'package:iit_app/ui/colorPicker.dart';
 import 'package:iit_app/ui/separator.dart';
 import 'package:iit_app/ui/text_style.dart';
