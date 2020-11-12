@@ -15,9 +15,12 @@ import 'package:iit_app/screens/settings.dart';
 import 'package:iit_app/services/connectivityCheck.dart';
 import 'package:iit_app/services/crud.dart';
 import 'package:iit_app/ui/theme.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'data/post_api_service.dart';
 import 'model/appConstants.dart';
 import 'package:iit_app/services/pushNotification.dart';
+
+import 'model/sharedPreferenceKeys.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,23 +36,13 @@ void main() async {
   AppTheme.dark();
 
   await AppConstants.setDeviceDirectoryForImages();
-  // bool logStatus = await CrudMethods.isLoggedIn();
-  // print('log status: $logStatus');
 
-  runApp(
-      // Provider(
-      //   builder: (_) => PostApiService.create(),
-      //   dispose: (_, PostApiService service) => service.client.dispose(),
-      //   create: (BuildContext context) {},
-      // child:
-
-      MaterialApp(
+  runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
-    // home: AppConstants.isLoggedIn ? HomeScreen() : LoginPage(),
     initialRoute: '/',
     routes: <String, WidgetBuilder>{
       // define the routes
-      '/': (BuildContext context)=> ConnectedMain(),
+      '/': (BuildContext context) => ConnectedMain(),
       '/home': (BuildContext context) => HomeScreen(),
       '/mess': (BuildContext context) => MessScreen(),
       '/allWorkshops': (BuildContext context) => AllWorkshopsScreen(),
@@ -60,10 +53,7 @@ void main() async {
       '/about': (BuildContext context) => AboutPage(),
       '/mapScreen': (BuildContext context) => MapScreen(),
     },
-  )
-
-      // ),
-      );
+  ));
 }
 
 class ConnectedMain extends StatefulWidget {
@@ -78,9 +68,19 @@ class _ConnectedMainState extends State<ConnectedMain> {
   @override
   void initState() {
     checkConnection();
+    _setTheme();
 
     super.initState();
     _initFCM();
+  }
+
+  _setTheme() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.getString(SharedPreferenceKeys.usertheme) == 'light') {
+      AppTheme.light();
+    } else {
+      AppTheme.dark();
+    }
   }
 
   _initFCM() {

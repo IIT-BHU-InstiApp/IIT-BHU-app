@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/colorConstants.dart';
-import 'package:iit_app/pages/login.dart';
 import 'package:iit_app/screens/home/search_workshop.dart';
 import 'package:iit_app/screens/home/worshop_detail/workshop_detail.dart';
+import 'package:iit_app/services/authentication.dart' as authentication;
 import 'package:iit_app/ui/separator.dart';
 import 'package:iit_app/ui/text_style.dart';
 
@@ -26,8 +26,7 @@ class HomeWidgets {
         Text("Could not find active internet connection"),
         Text(
           'Try again',
-          style: TextStyle(
-              color: Colors.green, fontWeight: FontWeight.bold, fontSize: 20),
+          style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold, fontSize: 20),
         ),
       ],
     );
@@ -38,13 +37,11 @@ class HomeWidgets {
       barrierDismissible: true,
       builder: (BuildContext context) {
         return Dialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0)),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
             child: Container(
                 height: 350.0,
                 width: 200.0,
-                decoration:
-                    BoxDecoration(borderRadius: BorderRadius.circular(20.0)),
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(20.0)),
                 child: Column(
                   children: <Widget>[
                     Stack(
@@ -68,11 +65,8 @@ class HomeWidgets {
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(45.0),
                                   border: Border.all(
-                                      color: Colors.white,
-                                      style: BorderStyle.solid,
-                                      width: 2.0),
-                                  image: DecorationImage(
-                                      image: details[0], fit: BoxFit.cover)),
+                                      color: Colors.white, style: BorderStyle.solid, width: 2.0),
+                                  image: DecorationImage(image: details[0], fit: BoxFit.cover)),
                             ))
                       ],
                     ),
@@ -93,14 +87,12 @@ class HomeWidgets {
                           child: Text(
                             'Log Out',
                             style: TextStyle(
-                                fontFamily: 'Montserrat',
-                                fontSize: 14.0,
-                                color: Colors.teal),
+                                fontFamily: 'Montserrat', fontSize: 14.0, color: Colors.teal),
                           ),
                         ),
                         onPressed: () {
                           Navigator.of(context).pop();
-                          signOutGoogle();
+                          authentication.signOutGoogle();
                           Navigator.of(context).pushReplacementNamed('/login');
                         },
                         color: Colors.transparent)
@@ -115,13 +107,11 @@ class HomeWidgets {
       bool isPast = false,
       GlobalKey<FabCircularMenuState> fabKey,
       Function reload}) {
-    final File clubLogoFile =
-        AppConstants.getImageFile(isSmall: true, id: w.club.id, isClub: true);
+    final File clubLogoFile = AppConstants.getImageFile(isSmall: true, id: w.club.id, isClub: true);
 
     final workshopThumbnail = Container(
       margin: EdgeInsets.symmetric(vertical: 16.0),
-      alignment:
-          horizontal ? FractionalOffset.centerLeft : FractionalOffset.center,
+      alignment: horizontal ? FractionalOffset.centerLeft : FractionalOffset.center,
       child: Hero(
         tag: "w-hero-${w.id}",
         child: Container(
@@ -157,8 +147,7 @@ class HomeWidgets {
       constraints: BoxConstraints.expand(),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment:
-            horizontal ? CrossAxisAlignment.start : CrossAxisAlignment.center,
+        crossAxisAlignment: horizontal ? CrossAxisAlignment.start : CrossAxisAlignment.center,
         children: <Widget>[
           editMode
               ? Text("CLICK TO EDIT", style: TextStyle(color: Colors.green))
@@ -191,8 +180,7 @@ class HomeWidgets {
     final workshopCard = Container(
       child: workshopCardContent,
       height: horizontal ? 140.0 : 154.0,
-      margin:
-          horizontal ? EdgeInsets.only(left: 46.0) : EdgeInsets.only(top: 72.0),
+      margin: horizontal ? EdgeInsets.only(left: 46.0) : EdgeInsets.only(top: 72.0),
       decoration: BoxDecoration(
         color: ColorConstants.workshopCardContainer,
         shape: BoxShape.rectangle,
@@ -215,8 +203,7 @@ class HomeWidgets {
                       PageRouteBuilder(
                         pageBuilder: (_, __, ___) =>
                             WorkshopDetailPage(workshop: w, isPast: isPast),
-                        transitionsBuilder: (context, animation,
-                                secondaryAnimation, child) =>
+                        transitionsBuilder: (context, animation, secondaryAnimation, child) =>
                             FadeTransition(opacity: animation, child: child),
                       ),
                     )
@@ -254,8 +241,7 @@ class HomeWidgets {
             padding: const EdgeInsets.all(10.0),
             child: Container(
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                  color: Colors.transparent),
+                  borderRadius: BorderRadius.all(Radius.circular(10.0)), color: Colors.transparent),
               child: Container(
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -293,8 +279,7 @@ class HomeWidgets {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(
-                              left: 15.0, right: 5.0, bottom: 15.0),
+                          padding: const EdgeInsets.only(left: 15.0, right: 5.0, bottom: 15.0),
                           child: SkeletonAnimation(
                             child: Container(
                               width: MediaQuery.of(context).size.width * 0.4,
@@ -306,8 +291,7 @@ class HomeWidgets {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(
-                              left: 15.0, right: 5.0, bottom: 15.0),
+                          padding: const EdgeInsets.only(left: 15.0, right: 5.0, bottom: 15.0),
                           child: SkeletonAnimation(
                             child: Container(
                               width: MediaQuery.of(context).size.width * 0.3,
@@ -386,8 +370,7 @@ class HomeChild extends StatelessWidget {
                             : RefreshIndicator(
                                 displacement: 60,
                                 onRefresh: () async => onRefresh(),
-                                child: buildWorkhops.buildCurrentWorkshopPosts(
-                                    context, fabKey,
+                                child: buildWorkhops.buildCurrentWorkshopPosts(context, fabKey,
                                     reload: onRefresh)),
                       ),
                       Container(
@@ -397,9 +380,9 @@ class HomeChild extends StatelessWidget {
                                       vertical: 70, horizontal: 20),
                                   padding: EdgeInsets.all(10),
                                   child: Text(
-                                    'Please login to see your interests...',
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 25),
+                                    'We value your interest, but first you have to trust us by logging in.   {Dear Guest, it can not be one sided.}',
+                                    style: TextStyle(color: Colors.white, fontSize: 25),
+
                                   ),
                                 )
                               : buildWorkhops.buildInterestedWorkshopsBody(

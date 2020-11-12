@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/ui/text_style.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:iit_app/pages/login.dart';
+import 'package:iit_app/services/authentication.dart' as authentication;
 
 // TODO: when user click on list tile, navigation stack keeps filling,
 
@@ -31,8 +31,7 @@ class SideBar extends Drawer {
                     width: 70.0,
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: (AppConstants.currentUser == null ||
-                                AppConstants.isGuest == true)
+                        image: (AppConstants.currentUser == null || AppConstants.isGuest == true)
                             ? AssetImage('assets/guest.png')
                             : NetworkImage(AppConstants.currentUser.photoUrl),
                         fit: BoxFit.fill,
@@ -58,13 +57,11 @@ class SideBar extends Drawer {
                     child: AppConstants.isGuest
                         ? Text(
                             'Guest User',
-                            style: Style.baseTextStyle
-                                .copyWith(color: Colors.white),
+                            style: Style.baseTextStyle.copyWith(color: Colors.white),
                           )
                         : Text(
                             AppConstants.currentUser.email,
-                            style: Style.baseTextStyle
-                                .copyWith(color: Colors.white),
+                            style: Style.baseTextStyle.copyWith(color: Colors.white),
                           ),
                   ),
                 ],
@@ -97,7 +94,7 @@ class SideBar extends Drawer {
             leading: Icon(Icons.exit_to_app),
             title: AppConstants.isGuest ? Text('Log In') : Text('LogOut'),
             onTap: () async {
-              await signOutGoogle();
+              await authentication.signOutGoogle();
               await AppConstants.deleteLocalDatabaseOnly();
               SharedPreferences prefs = await SharedPreferences.getInstance();
               await prefs.clear();
@@ -111,8 +108,7 @@ class SideBar extends Drawer {
     );
   }
 
-  ListTile getNavItem(IconData icon, String s, String routeName,
-      {bool replacement = false}) {
+  ListTile getNavItem(IconData icon, String s, String routeName, {bool replacement = false}) {
     return ListTile(
       leading: Icon(icon),
       title: Text(s),

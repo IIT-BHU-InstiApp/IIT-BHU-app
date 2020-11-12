@@ -1,99 +1,18 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/material.dart';
 import 'package:iit_app/external_libraries/spin_kit.dart';
 import 'package:iit_app/model/appConstants.dart';
-import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/sharedPreferenceKeys.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../services/authentication.dart' as authentication;
 
 class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => new _LoginPageState();
 }
 
-final GoogleSignIn googleSignIn = GoogleSignIn(
-  scopes: ['profile', 'email', 'openid'],
-  hostedDomain: 'itbhu.ac.in',
-);
-String responseIdToken;
-User currentUser;
-
-Future<User> signInWithGoogle() async {
-  GoogleSignInAccount googleSignInAccount;
-  try {
-    googleSignInAccount = await googleSignIn.signIn();
-  } catch (e) {
-    print('google sign in error: ${e.toString()}');
-    return null;
-  }
-
-  print(googleSignInAccount);
-  if (googleSignInAccount == null) {
-    return null;
-  }
-
-  final GoogleSignInAuthentication googleSignInAuthentication =
-      await googleSignInAccount.authentication;
-
-  final AuthCredential credential = GoogleAuthProvider.credential(
-    accessToken: googleSignInAuthentication.accessToken,
-    idToken: googleSignInAuthentication.idToken,
-  );
-  // final User user =
-  //     (await FirebaseAuth.instance.signInWithCredential(credential)).user;
-
-  User user;
-  try {
-    user = (await FirebaseAuth.instance.signInWithCredential(credential)).user;
-  } catch (e) {
-    print('firebase sign in error: ${e.toString()}');
-    await signOutGoogle();
-    return null;
-  }
-
-  assert(!user.isAnonymous);
-
-  String idToken = (await user.getIdToken());
-
-  assert(await user.getIdToken() != null);
-
-  currentUser = FirebaseAuth.instance.currentUser;
-
-  assert(user.uid == currentUser.uid);
-
-  await verifyToken(idToken);
-
-  return currentUser;
-}
-
-verifyToken(String idToken) async {
-  final LoginPost logInCredentials = LoginPost(
-    (b) => b..id_token = idToken,
-  );
-  await AppConstants.service.logInPost(logInCredentials).catchError((onError) {
-    print('Error in requesting requesting token: $onError');
-  }).then((response) {
-    if (response.isSuccessful) {
-      print('successfully verified token with backend');
-      AppConstants.djangoToken = "token ${response.body.token}";
-      print(
-          'DjangoToken from backend (with "token" added in beginning): ${AppConstants.djangoToken}');
-    }
-  });
-}
-
-Future<void> signOutGoogle() async {
-  if (googleSignIn != null) {
-    await googleSignIn.signOut();
-  }
-  AppConstants.djangoToken = null;
-  print("User Sign Out");
-}
-
 void errorDialog(BuildContext context) {
   AppConstants.logInButtonEnabled = true;
-
   showDialog(
     context: context,
     builder: (_) => AlertDialog(
@@ -147,45 +66,8 @@ class _LoginPageState extends State<LoginPage> {
                   SizedBox(height: 15),
                   OutlineButton(
                     splashColor: Colors.grey,
-                    onPressed: AppConstants.logInButtonEnabled == false
-                        ? null
-                        : () async {
-                            if (AppConstants.logInButtonEnabled == true) {
-                              print(
-                                  'appConstants.logInButtonEnabled : ${AppConstants.logInButtonEnabled}');
-                              AppConstants.logInButtonEnabled = false;
-
-                              setState(() {
-                                this._loading = true;
-                              });
-
-                              AppConstants.currentUser = await signInWithGoogle();
-
-                              AppConstants.logInButtonEnabled = true;
-
-                              if (AppConstants.currentUser == null ||
-                                  AppConstants.djangoToken == null) {
-                                setState(() {
-                                  this._loading = false;
-                                });
-
-                                await signOutGoogle();
-
-                                return errorDialog(context);
-                              } else {
-                                // logged in successfully :)
-
-                                SharedPreferences prefs = await SharedPreferences.getInstance();
-                                await prefs.setString(
-                                    SharedPreferenceKeys.djangoToken, AppConstants.djangoToken);
-
-                                Navigator.of(context)
-                                    .pushNamedAndRemoveUntil('/home', ModalRoute.withName('/'));
-                              }
-                            }
-
-                            setState(() {});
-                          },
+                    onPressed:
+                        AppConstants.logInButtonEnabled == false ? null : () => _signInWithGoogle(),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
                     highlightElevation: 0,
                     borderSide: BorderSide(color: Colors.grey),
@@ -200,10 +82,7 @@ class _LoginPageState extends State<LoginPage> {
                             padding: const EdgeInsets.only(left: 10),
                             child: Text(
                               'Sign in with Google',
-                              style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.grey,
-                              ),
+                              style: TextStyle(fontSize: 20, color: Colors.grey),
                             ),
                           )
                         ],
@@ -220,9 +99,9 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 200.0),
-                  RaisedButton(
-                    onPressed: () async {
+                  SizedBox(height: 150.0),
+                  GestureDetector(
+                    onTap: () async {
                       AppConstants.isGuest = true;
                       AppConstants.djangoToken = null;
                       //saving guest mode in shared preferences
@@ -234,11 +113,58 @@ class _LoginPageState extends State<LoginPage> {
                       Navigator.of(context)
                           .pushNamedAndRemoveUntil('/home', ModalRoute.withName('/'));
                     },
-                    child: Text('Let Me be Guest only'),
+                    child: CircleAvatar(
+                      radius: 52,
+                      backgroundColor: Colors.purple.withOpacity(0.3),
+                      child: CircleAvatar(
+                        radius: 50,
+                        backgroundColor: Colors.black.withOpacity(0.8),
+                        child: Center(
+                            child: Text(
+                          'Guest',
+                          style: TextStyle(
+                              fontSize: 26, fontWeight: FontWeight.bold, color: Colors.white),
+                        )),
+                      ),
+                    ),
                   ),
                 ],
               ),
       ),
-    );  
+    );
+  }
+
+  void _signInWithGoogle() async {
+    if (AppConstants.logInButtonEnabled == true) {
+      print('appConstants.logInButtonEnabled : ${AppConstants.logInButtonEnabled}');
+      AppConstants.logInButtonEnabled = false;
+
+      setState(() {
+        this._loading = true;
+      });
+
+      AppConstants.currentUser = await authentication.signInWithGoogle();
+
+      AppConstants.logInButtonEnabled = true;
+
+      if (AppConstants.currentUser == null || AppConstants.djangoToken == null) {
+        setState(() {
+          this._loading = false;
+        });
+
+        await authentication.signOutGoogle();
+
+        return errorDialog(context);
+      } else {
+        // logged in successfully :)
+
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString(SharedPreferenceKeys.djangoToken, AppConstants.djangoToken);
+
+        Navigator.of(context).pushNamedAndRemoveUntil('/home', ModalRoute.withName('/'));
+      }
+    }
+
+    setState(() {});
   }
 }
