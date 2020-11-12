@@ -62,8 +62,7 @@ class _ResourceCreateScreenState extends State<ResourceCreateScreen> {
         .catchError((onError) {
       final error = onError as Response<dynamic>;
       print(error.body);
-      print(
-          'Error creating resource: ${onError.toString()} ${onError.runtimeType}');
+      print('Error creating resource: ${onError.toString()} ${onError.runtimeType}');
     }).then((value) {
       if (value.isSuccessful) {
         done = true;
@@ -75,9 +74,7 @@ class _ResourceCreateScreenState extends State<ResourceCreateScreen> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-              content: done
-                  ? Text("Succesfully added")
-                  : Text("UnSuccessful. Please try again"),
+              content: done ? Text("Succesfully added") : Text("UnSuccessful. Please try again"),
               actions: <Widget>[
                 FlatButton(
                   child: Text("Okay"),
@@ -103,13 +100,11 @@ class _ResourceCreateScreenState extends State<ResourceCreateScreen> {
   }) async {
     bool done = false;
     await AppConstants.service
-        .updateWorkshopResourcesByPatch(
-            widget.id, AppConstants.djangoToken, resource)
+        .updateWorkshopResourcesByPatch(widget.id, AppConstants.djangoToken, resource)
         .catchError((onError) {
       final error = onError as Response<dynamic>;
       print(error.body);
-      print(
-          'Error editing resource: ${onError.toString()} ${onError.runtimeType}');
+      print('Error editing resource: ${onError.toString()} ${onError.runtimeType}');
     }).then((value) {
       if (value.isSuccessful) {
         done = true;
@@ -121,9 +116,7 @@ class _ResourceCreateScreenState extends State<ResourceCreateScreen> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-              content: done
-                  ? Text("Succesfully edited")
-                  : Text("UnSuccessful! Please try again"),
+              content: done ? Text("Succesfully edited") : Text("UnSuccessful! Please try again"),
               actions: <Widget>[
                 FlatButton(
                   child: Text("Okay"),
@@ -147,126 +140,112 @@ class _ResourceCreateScreenState extends State<ResourceCreateScreen> {
       minimum: const EdgeInsets.all(5.0),
       child: Scaffold(
         appBar: AppBar(title: Text("Add and edit resources")),
-        body: Container(
-          padding: EdgeInsets.all(15),
-          child: Form(
-            key: _resourceFormKey,
-            child: ListView(
-              children: [
-                TextFormField(
-                  autovalidate: true,
-                  decoration:
-                      InputDecoration(labelText: 'Name of the resource'),
-                  controller: this._nameController,
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return 'Please enter the name of the resource';
-                    }
-                    return null;
-                  },
-                  onSaved: (val) => setState(() => name = val),
-                ),
-                TextFormField(
-                  autovalidate: true,
-                  decoration: InputDecoration(labelText: 'Link'),
-                  controller: this._linkController,
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return 'Please enter some resource link';
-                    }
-                    return null;
-                  },
-                  onSaved: (val) => setState(() => link = val),
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                resource_type == null
-                    ? Container()
-                    : Text("Resource type",
-                        style: TextStyle(color: Colors.grey, fontSize: 12)),
-                Container(
-                  height: 75,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      DropdownButton(
-                          hint: Text(
-                              "Resource type \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t"),
-                          value: resource_type,
-                          iconSize: 30,
-                          underline: Container(
-                            height: 1,
-                            color: resource_type == null
-                                ? Colors.red
-                                : Colors.grey,
-                          ),
-                          items: [
-                            DropdownMenuItem(
-                              child: Text("Prerequisite"),
-                              value: "Prerequisite",
-                            ),
-                            DropdownMenuItem(
-                              child: Text("Material"),
-                              value: "Material",
-                            ),
-                          ],
-                          onChanged: (value) {
-                            setState(() {
-                              resource_type = value;
-                            });
-                          }),
-                      resource_type == null
-                          ? Text(
-                              "Please choose a resource type",
-                              style: TextStyle(color: Colors.red, fontSize: 12),
-                            )
-                          : Container(),
-                    ],
+        body: Builder(builder: (context) {
+          return Container(
+            padding: EdgeInsets.all(15),
+            child: Form(
+              key: _resourceFormKey,
+              child: ListView(
+                children: [
+                  TextFormField(
+                    autovalidate: true,
+                    decoration: InputDecoration(labelText: 'Name of the resource'),
+                    controller: this._nameController,
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Please enter the name of the resource';
+                      }
+                      return null;
+                    },
+                    onSaved: (val) => setState(() => name = val),
                   ),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 16.0, horizontal: 16.0),
-                  child: RaisedButton(
-                      child: Text(editMode ? "Edit Resource" : "Add Resource"),
-                      onPressed: () async {
-                        final form = _resourceFormKey.currentState;
-                        if (form.validate()) {
-                          form.save();
+                  TextFormField(
+                    autovalidate: true,
+                    decoration: InputDecoration(labelText: 'Link'),
+                    controller: this._linkController,
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Please enter some resource link';
+                      }
+                      return null;
+                    },
+                    onSaved: (val) => setState(() => link = val),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  resource_type == null
+                      ? Container()
+                      : Text("Resource type", style: TextStyle(color: Colors.grey, fontSize: 12)),
+                  Container(
+                    height: 75,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        DropdownButton(
+                            hint: Text(
+                                "Resource type \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t"),
+                            value: resource_type,
+                            iconSize: 30,
+                            underline: Container(
+                              height: 1,
+                              color: resource_type == null ? Colors.red : Colors.grey,
+                            ),
+                            items: [
+                              DropdownMenuItem(
+                                child: Text("Prerequisite"),
+                                value: "Prerequisite",
+                              ),
+                              DropdownMenuItem(
+                                child: Text("Material"),
+                                value: "Material",
+                              ),
+                            ],
+                            onChanged: (value) {
+                              setState(() {
+                                resource_type = value;
+                              });
+                            }),
+                        resource_type == null
+                            ? Text(
+                                "Please choose a resource type",
+                                style: TextStyle(color: Colors.red, fontSize: 12),
+                              )
+                            : Container(),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
+                    child: RaisedButton(
+                        child: Text(editMode ? "Edit Resource" : "Add Resource"),
+                        onPressed: () async {
+                          final form = _resourceFormKey.currentState;
+                          if (form.validate()) {
+                            form.save();
 
-                          this._resources = WorkshopResources((b) => b
-                            ..name = name
-                            ..link = link
-                            ..resource_type = resource_type);
+                            this._resources = WorkshopResources((b) => b
+                              ..name = name
+                              ..link = link
+                              ..resource_type = resource_type);
 
-                          FutureBuilder<int>(
-                            future: editMode
-                                ? editResource(
-                                    context: context,
-                                    resource: _resources,
-                                    id: widget.id)
-                                : createResource(
-                                    context: context, resource: _resources),
-                            builder: (BuildContext context,
-                                AsyncSnapshot<int> snapshot) {
-                              if (snapshot.hasData) {
-                                return Text('${snapshot.data}');
-                              }
-                              return Container();
-                            },
-                          );
-                          SnackBar(
-                              content: editMode
-                                  ? Text("Editing resource")
-                                  : Text("Creating Resource"));
-                        }
-                      }),
-                ),
-              ],
+                            if (editMode) {
+                              editResource(context: context, resource: _resources, id: widget.id);
+                            } else {
+                              createResource(context: context, resource: _resources);
+                            }
+                            Scaffold.of(context).showSnackBar(SnackBar(
+                                content: editMode
+                                    ? Text("Editing resource")
+                                    : Text("Creating Resource")));
+                          }
+                        }),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ),
+          );
+        }),
       ),
     );
   }
