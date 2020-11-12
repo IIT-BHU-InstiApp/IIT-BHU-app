@@ -16,6 +16,7 @@ class WorkshopCreater {
   String longitude;
   String audience;
   List<int> contactIds = [];
+  List<int> all_resources = [];
   Map<int, String> contactNameofId = {};
   Map<int, String> tagNameofId = {};
   // TODO: add image_url
@@ -68,8 +69,7 @@ class WorkshopCreater {
         .catchError((onError) {
       final error = onError as Response<dynamic>;
       print(error.body);
-      print(
-          'Error creating workshop: ${onError.toString()} ${onError.runtimeType}');
+      print('Error creating workshop: ${onError.toString()} ${onError.runtimeType}');
       CreatePageDialogBoxes.showUnSuccessfulDialog(context: context);
     }).then((value) {
       if (value.isSuccessful) {
@@ -97,16 +97,14 @@ class WorkshopCreater {
       ..audience = workshop.audience);
 
     await AppConstants.service
-        .updateWorkshopByPatch(
-            widgetWorkshopData.id, AppConstants.djangoToken, editedWorkshop)
+        .updateWorkshopByPatch(widgetWorkshopData.id, AppConstants.djangoToken, editedWorkshop)
         .catchError((onError) {
       print('Error editing workshop: ${onError.toString()}');
       CreatePageDialogBoxes.showUnSuccessfulDialog(context: context);
     }).then((value) {
       if (value.isSuccessful) {
         print('Edited!');
-        CreatePageDialogBoxes.showSuccesfulDialog(
-            context: context, club: club, isEditing: true);
+        CreatePageDialogBoxes.showSuccesfulDialog(context: context, club: club, isEditing: true);
       }
     }).catchError((onError) {
       print('Error printing EDITED workshop: ${onError.toString()}');
@@ -131,8 +129,7 @@ class WorkshopCreater {
             widgetWorkshopData.id,
             AppConstants.djangoToken,
             BuiltTags(
-              (b) => b
-                ..tags = workshop.tagNameofId.keys.toList().build().toBuilder(),
+              (b) => b..tags = workshop.tagNameofId.keys.toList().build().toBuilder(),
             ))
         .catchError((onError) {
       print('Error editing contacts in edited workshop: ${onError.toString()}');

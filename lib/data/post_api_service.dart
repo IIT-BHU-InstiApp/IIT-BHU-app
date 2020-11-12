@@ -40,6 +40,10 @@ abstract class PostApiService extends ChopperService {
   Future<Response> postNewWorkshop(@Header('Authorization') String token,
       @Body() BuiltWorkshopCreatePost body);
 
+  @Post(path: '/workshops/{id}/resources/')
+  Future<Response> postNewResource(@Path('id') int id, @Header('Authorization') String token,
+      @Body() WorkshopResources resources);
+
   @Post(path: '/workshops/search/')
   Future<Response<BuiltAllWorkshopsPost>> searchWorkshop(
       @Body() BuiltWorkshopSearchByStringPost body);
