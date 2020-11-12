@@ -393,10 +393,11 @@ class HomeChild extends StatelessWidget {
                       Container(
                           child: AppConstants.isGuest
                               ? Container(
-                                  margin: EdgeInsets.only(top: 100),
+                                  margin: EdgeInsets.symmetric(
+                                      vertical: 70, horizontal: 20),
                                   padding: EdgeInsets.all(10),
                                   child: Text(
-                                    'We value your interest, but first you have to trust us by logging in.   {Dear Guest, it can not be one sided.}',
+                                    'Please login to see your interests...',
                                     style: TextStyle(
                                         color: Colors.white, fontSize: 25),
                                   ),
