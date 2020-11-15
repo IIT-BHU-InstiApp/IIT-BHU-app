@@ -16,6 +16,7 @@ class HomeWidgets {
   static final Color textPaleColor = Color(0xFFAFAFAF);
   static final Color textColor = Color(0xFF004681);
 
+
   static Widget get connectionError {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -230,6 +231,7 @@ class HomeWidgets {
   }
 
   static ListView getPlaceholder() {
+    final BorderRadius borderRadius =  BorderRadius.circular(10.0);
     return ListView.builder(
         scrollDirection: Axis.vertical,
         physics: BouncingScrollPhysics(),
@@ -239,20 +241,21 @@ class HomeWidgets {
             padding: const EdgeInsets.all(10.0),
             child: Container(
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(10.0)), color: Colors.transparent),
+                  borderRadius: borderRadius, color: Colors.transparent),
               child: Container(
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
-                    SkeletonAnimation(
-                      child: Container(
-                        width: 110.0,
-                        height: 110.0,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10.0),
-                          color: ColorConstants.shimmerSkeletonColor,
+                    ClipRRect(borderRadius:  borderRadius,
+                      child: SkeletonAnimation(
+                        child: Container(
+                          width: 110.0,
+                          height: 110.0,
+                          decoration: BoxDecoration(
+                            color: ColorConstants.shimmerSkeletonColor,
+                          ),
                         ),
                       ),
                     ),
@@ -266,37 +269,43 @@ class HomeWidgets {
                             left: 15.0,
                             bottom: 15.0,
                           ),
-                          child: SkeletonAnimation(
-                            child: Container(
-                              height: 20.0,
-                              width: MediaQuery.of(context).size.width * 0.5,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  color: ColorConstants.shimmerSkeletonColor),
+                          child: ClipRRect(
+                            borderRadius: borderRadius,
+                            child: SkeletonAnimation(
+                              child: Container(
+                                height: 20.0,
+                                width: MediaQuery.of(context).size.width * 0.5,
+                                decoration: BoxDecoration(
+                                    color: ColorConstants.shimmerSkeletonColor),
+                              ),
                             ),
                           ),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(left: 15.0, right: 5.0, bottom: 15.0),
-                          child: SkeletonAnimation(
-                            child: Container(
-                              width: MediaQuery.of(context).size.width * 0.4,
-                              height: 20.0,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  color: ColorConstants.shimmerSkeletonColor),
+                          child: ClipRRect(
+                            borderRadius: borderRadius,
+                            child: SkeletonAnimation(
+                              child: Container(
+                                width: MediaQuery.of(context).size.width * 0.4,
+                                height: 20.0,
+                                decoration: BoxDecoration(
+
+                                    color: ColorConstants.shimmerSkeletonColor),
+                              ),
                             ),
                           ),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(left: 15.0, right: 5.0, bottom: 15.0),
-                          child: SkeletonAnimation(
-                            child: Container(
-                              width: MediaQuery.of(context).size.width * 0.3,
-                              height: 20.0,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  color: ColorConstants.shimmerSkeletonColor),
+                          child: ClipRRect(borderRadius:  BorderRadius.circular(10.0),
+                            child: SkeletonAnimation(
+                              child: Container(
+                                width: MediaQuery.of(context).size.width * 0.3,
+                                height: 20.0,
+                                decoration: BoxDecoration(
+                                    color: ColorConstants.shimmerSkeletonColor),
+                              ),
                             ),
                           ),
                         ),
