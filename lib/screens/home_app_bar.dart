@@ -4,7 +4,7 @@ import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/colorConstants.dart';
 import 'package:iit_app/screens/home/search_workshop.dart';
 
-import 'home/notification.dart';
+import 'notification.dart';
 
 AppBar homeAppBar(context,
         {SearchBarWidget searchBarWidget,

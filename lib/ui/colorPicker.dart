@@ -6,8 +6,7 @@ class ColorPicker {
   TextEditingController _colorCodeController = TextEditingController();
 
   ColorPicker(this.colorListener) {
-    _colorCodeController.text =
-        colorListener.value.toString().substring(6).split(')')[0];
+    _colorCodeController.text = colorListener.value.toString().substring(6).split(')')[0];
   }
 
   getColorPickerDialogBox(context) {
@@ -20,8 +19,7 @@ class ColorPicker {
             initialColor: colorListener.value,
             onChanged: (color) {
               colorListener.value = color;
-              _colorCodeController.text =
-                  colorListener.value.toString().substring(6).split(')')[0];
+              _colorCodeController.text = colorListener.value.toString().substring(6).split(')')[0];
             },
             colorCodeBuilder: (context, color) {
               return Container(

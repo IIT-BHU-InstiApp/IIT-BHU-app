@@ -3,9 +3,9 @@ import 'package:iit_app/external_libraries/spin_kit.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/colorConstants.dart';
-import 'package:iit_app/pages/club_council_common/club_&_council_widgets.dart';
 import 'package:iit_app/screens/drawer.dart';
 import 'package:iit_app/pages/Home/homePage.dart';
+import 'package:iit_app/ui/club_council_common/club_&_council_widgets.dart';
 
 class AccountScreen extends StatefulWidget {
   static String flag = "Account";
@@ -117,7 +117,7 @@ class _AccountScreenState extends State<AccountScreen> {
       physics: const NeverScrollableScrollPhysics(),
       itemCount: profileDetails.subscriptions.length,
       itemBuilder: (context, index) {
-        return ClubAndCouncilWidgets.getClubCard(
+        return ClubAndCouncilWidgets.getTitleCard(
             clubTypeForHero: 'Subscriptions',
             context: context,
             title: profileDetails.subscriptions[index].name,
@@ -298,7 +298,7 @@ class _AccountScreenState extends State<AccountScreen> {
                             physics: const NeverScrollableScrollPhysics(),
                             itemCount: profileDetails.club_privileges.length,
                             itemBuilder: (context, index) {
-                              return ClubAndCouncilWidgets.getClubCard(
+                              return ClubAndCouncilWidgets.getTitleCard(
                                   clubTypeForHero: 'Club Privileges',
                                   context: context,
                                   title: profileDetails.club_privileges[index].name,

@@ -2,19 +2,18 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:iit_app/external_libraries/spin_kit.dart';
+import 'package:iit_app/model/colorConstants.dart';
+import 'package:iit_app/pages/mess/mess.dart';
 import 'package:iit_app/screens/map.dart';
 import 'package:iit_app/screens/account.dart';
 import 'package:iit_app/screens/allWorkshops.dart';
 import 'package:iit_app/screens/complaints.dart';
 import 'package:iit_app/pages/Home/homePage.dart';
-import 'package:iit_app/pages/Home/home_widgets.dart';
-import 'package:iit_app/screens/mess/mess.dart';
 import 'package:iit_app/pages/login.dart';
 import 'package:iit_app/screens/about.dart';
 import 'package:iit_app/screens/settings.dart';
 import 'package:iit_app/services/connectivityCheck.dart';
 import 'package:iit_app/services/crud.dart';
-import 'package:iit_app/ui/theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'data/post_api_service.dart';
 import 'model/appConstants.dart';
@@ -33,7 +32,7 @@ void main() async {
   AppConstants.connectionStatus.initialize();
 
 // TODO: populating the ColorConstants. Use sharedPreference here to find out the correct theme.
-  AppTheme.dark();
+  ColorConstants.dark();
 
   await AppConstants.setDeviceDirectoryForImages();
 
@@ -77,9 +76,9 @@ class _ConnectedMainState extends State<ConnectedMain> {
   _setTheme() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (prefs.getString(SharedPreferenceKeys.usertheme) == 'light') {
-      AppTheme.light();
+      ColorConstants.light();
     } else {
-      AppTheme.dark();
+      ColorConstants.dark();
     }
   }
 
@@ -122,10 +121,24 @@ class _ConnectedMainState extends State<ConnectedMain> {
                         : () {
                             checkConnection();
                           },
-                    child: HomeWidgets.connectionError,
+                    child: connectionError,
                   ),
                 ),
               )
             : ((AppConstants.isLoggedIn || AppConstants.isGuest) ? HomePage() : LoginPage()));
   }
+}
+
+Widget get connectionError {
+  return Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    crossAxisAlignment: CrossAxisAlignment.center,
+    children: <Widget>[
+      Text("Could not find active internet connection"),
+      Text(
+        'Try again',
+        style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold, fontSize: 20),
+      ),
+    ],
+  );
 }

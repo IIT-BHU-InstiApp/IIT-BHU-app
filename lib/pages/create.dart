@@ -8,7 +8,7 @@ import 'dart:async';
 import 'package:iit_app/model/built_post.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:iit_app/model/workshopCreator.dart';
-import 'package:iit_app/pages/dialogBoxes.dart';
+import 'package:iit_app/ui/dialogBoxes.dart';
 
 class CreateScreen extends StatefulWidget {
   final ClubListPost club;

@@ -8,11 +8,11 @@ import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/colorConstants.dart';
 import 'package:iit_app/pages/club/club.dart';
-import 'package:iit_app/pages/club_council_common/club_&_council_widgets.dart';
 import 'package:iit_app/pages/create.dart';
 import 'package:iit_app/pages/resource_create.dart';
-import 'package:iit_app/pages/dialogBoxes.dart';
-import 'package:iit_app/pages/Home/home_widgets.dart';
+import 'package:iit_app/ui/club_council_common/club_&_council_widgets.dart';
+import 'package:iit_app/ui/dialogBoxes.dart';
+import 'package:iit_app/ui/workshop_custom_widgets.dart';
 import 'package:iit_app/ui/colorPicker.dart';
 import 'package:iit_app/ui/separator.dart';
 import 'package:iit_app/ui/text_style.dart';
@@ -517,7 +517,7 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
       child: ListView(
         padding: EdgeInsets.fromLTRB(0.0, 72.0, 0.0, 32.0),
         children: <Widget>[
-          HomeWidgets.getWorkshopCard(context,
+          WorkshopCustomWidgets.getWorkshopCard(context,
               w: widget.workshop, editMode: false, horizontal: false),
           Container(
             padding: EdgeInsets.symmetric(horizontal: 32.0),

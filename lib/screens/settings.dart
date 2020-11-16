@@ -6,7 +6,6 @@ import 'package:iit_app/screens/drawer.dart';
 import 'package:iit_app/pages/Home/homePage.dart';
 import 'package:iit_app/ui/colorPicker.dart';
 import 'package:iit_app/ui/text_style.dart';
-import 'package:iit_app/ui/theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../model/colorConstants.dart';
@@ -74,7 +73,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   Container(
                     child: RaisedButton(
                       onPressed: () async {
-                        AppTheme.dark();
+                        ColorConstants.dark();
                         SharedPreferences prefs = await SharedPreferences.getInstance();
                         await prefs.setString(SharedPreferenceKeys.usertheme, 'dark');
                         Navigator.pop(context);
@@ -88,7 +87,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   Container(
                     child: RaisedButton(
                       onPressed: () async {
-                        AppTheme.light();
+                        ColorConstants.light();
                         SharedPreferences prefs = await SharedPreferences.getInstance();
                         await prefs.setString(SharedPreferenceKeys.usertheme, 'light');
                         Navigator.pop(context);

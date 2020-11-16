@@ -1,17 +1,84 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'package:iit_app/external_libraries/spin_kit.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/colorConstants.dart';
+import 'package:iit_app/pages/club/club.dart';
+import 'package:iit_app/ui/club_council_common/description.dart';
 import 'package:iit_app/ui/separator.dart';
 import 'package:iit_app/ui/text_style.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import '../club/club.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:iit_app/screens/account.dart';
 
 class ClubAndCouncilWidgets {
+  static Widget getPanelBackground(
+    BuildContext context,
+    File largeLogoFile, {
+    bool isCouncil = false,
+    BuiltCouncilPost councilDetail,
+    bool isClub = false,
+    BuiltClubPost clubDetail,
+  }) {
+    assert((isCouncil == true && isClub == false) || (isCouncil == false && isClub == true));
+    assert((isCouncil && councilDetail != null) || (isCouncil == false));
+    assert((isClub && clubDetail != null) || (isClub == false));
+
+    final bottom = MediaQuery.of(context).viewInsets.bottom;
+    dynamic _data = isCouncil ? councilDetail : clubDetail;
+
+    final _secy = isCouncil ? councilDetail.gensec : clubDetail.secy;
+    final _jointSecy = isCouncil ? councilDetail.joint_gensec : clubDetail.joint_secy;
+
+    return Container(
+      color: ColorConstants.workshopContainerBackground,
+      height: MediaQuery.of(context).size.height * 0.90,
+      child: _data == null
+          ? Container(
+              height: MediaQuery.of(context).size.height * 3 / 4,
+              child: Center(
+                child: LoadingCircle,
+              ),
+            )
+          : ListView(
+              shrinkWrap: true,
+              children: [
+                Stack(
+                  children: [
+                    Container(
+                      child: largeLogoFile == null
+                          ? Image.network(_data.large_image_url, fit: BoxFit.cover, height: 300.0)
+                          : Image.file(largeLogoFile, fit: BoxFit.cover, height: 300.0),
+                      constraints: BoxConstraints.expand(height: 295.0),
+                    ),
+                    ClubAndCouncilWidgets.getGradient(),
+                    Container(
+                      padding: EdgeInsets.fromLTRB(0.0, 72.0, 0.0, 0.0),
+                      child: ClubAndCouncilWidgets.getTitleCard(
+                          title: _data.name,
+                          id: _data.id,
+                          imageUrl: _data.large_image_url,
+                          isCouncil: isCouncil,
+                          context: context),
+                    ),
+                    ClubAndCouncilWidgets.getToolbar(context),
+                  ],
+                ),
+                SizedBox(height: 8.0),
+                Padding(
+                  padding: EdgeInsets.only(bottom: bottom),
+                  child: Description(map: _data, isCouncil: isCouncil, isClub: isClub),
+                ),
+                SizedBox(height: 15.0),
+                ClubAndCouncilWidgets.getSecies(context, secy: _secy, jointSecy: _jointSecy),
+                _data == null ? Container() : ClubAndCouncilWidgets.getSocialLinks(_data),
+                SizedBox(height: 1.5 * ClubAndCouncilWidgets.getMinPanelHeight(context)),
+              ],
+            ),
+    );
+  }
+
   static double getMinPanelHeight(context) {
     return MediaQuery.of(context).size.height / 10;
   }
@@ -65,33 +132,28 @@ class ClubAndCouncilWidgets {
         children: <Widget>[
           map.youtube_url == null || map.youtube_url.length == 0
               ? Container()
-              : _buildButtonColumn(
-                  FontAwesomeIcons.youtube, 'YouTube', map.youtube_url),
+              : _buildButtonColumn(FontAwesomeIcons.youtube, 'YouTube', map.youtube_url),
           map.website_url == null || map.website_url.length == 0
               ? Container()
               : _buildButtonColumn(Icons.web, 'Website', map.website_url),
           map.linkedin_url == null || map.linkedin_url.length == 0
               ? Container()
-              : _buildButtonColumn(
-                  FontAwesomeIcons.linkedin, 'LinkedIn', map.linkedin_url),
+              : _buildButtonColumn(FontAwesomeIcons.linkedin, 'LinkedIn', map.linkedin_url),
           map.instagram_url == null || map.instagram_url.length == 0
               ? Container()
-              : _buildButtonColumn(
-                  FontAwesomeIcons.instagram, 'Instagram', map.instagram_url),
+              : _buildButtonColumn(FontAwesomeIcons.instagram, 'Instagram', map.instagram_url),
           map.facebook_url == null || map.facebook_url.length == 0
               ? Container()
-              : _buildButtonColumn(
-                  FontAwesomeIcons.facebook, 'Facebook', map.facebook_url),
+              : _buildButtonColumn(FontAwesomeIcons.facebook, 'Facebook', map.facebook_url),
           map.twitter_url == null || map.twitter_url.length == 0
               ? Container()
-              : _buildButtonColumn(
-                  FontAwesomeIcons.twitter, 'Twitter', map.twitter_url),
+              : _buildButtonColumn(FontAwesomeIcons.twitter, 'Twitter', map.twitter_url),
         ],
       ),
     );
   }
 
-  static Container getSecies(BuildContext context, {secy, joint_secy}) {
+  static Container getSecies(BuildContext context, {secy, jointSecy}) {
     return Container(
       margin: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
       decoration: BoxDecoration(
@@ -104,14 +166,14 @@ class ClubAndCouncilWidgets {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              joint_secy.length > 0
+              jointSecy.length > 0
                   ? ClubAndCouncilWidgets.getPosHolder(
                       context: context,
-                      imageUrl: joint_secy[0].photo_url,
+                      imageUrl: jointSecy[0].photo_url,
                       desg: 'Joint-Secy',
-                      name: joint_secy[0].name,
-                      email: joint_secy[0].email,
-                      phone: joint_secy[0].phone_number,
+                      name: jointSecy[0].name,
+                      email: jointSecy[0].email,
+                      phone: jointSecy[0].phone_number,
                     )
                   : SizedBox(width: 1),
               secy == null
@@ -124,14 +186,14 @@ class ClubAndCouncilWidgets {
                       email: secy.email,
                       phone: secy.phone_number,
                     ),
-              joint_secy.length > 1
+              jointSecy.length > 1
                   ? ClubAndCouncilWidgets.getPosHolder(
                       context: context,
-                      imageUrl: joint_secy[1].photo_url,
+                      imageUrl: jointSecy[1].photo_url,
                       desg: 'Joint Secy',
-                      name: joint_secy[1].name,
-                      email: joint_secy[1].email,
-                      phone: joint_secy[1].phone_number,
+                      name: jointSecy[1].name,
+                      email: jointSecy[1].email,
+                      phone: jointSecy[1].phone_number,
                     )
                   : SizedBox(width: 1),
             ],
@@ -153,9 +215,7 @@ class ClubAndCouncilWidgets {
                       print(AccountScreen.flag),
                       if (AccountScreen.flag == "Account")
                         Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => AccountScreen()))
+                            context, MaterialPageRoute(builder: (context) => AccountScreen()))
                       else
                         Navigator.pop(context),
                     }),
@@ -203,9 +263,8 @@ class ClubAndCouncilWidgets {
           SizedBox(height: 4.0),
           Center(
             child: CircleAvatar(
-              backgroundImage: imageUrl == null
-                  ? AssetImage('assets/iitbhu.jpeg')
-                  : NetworkImage(imageUrl),
+              backgroundImage:
+                  imageUrl == null ? AssetImage('assets/iitbhu.jpeg') : NetworkImage(imageUrl),
               radius: 30.0,
               backgroundColor: Colors.transparent,
             ),
@@ -218,16 +277,14 @@ class ClubAndCouncilWidgets {
             ),
             width: 100,
           ),
-          desg == ''
-              ? SizedBox(height: 1.0)
-              : Text(desg, textAlign: TextAlign.center),
+          desg == '' ? SizedBox(height: 1.0) : Text(desg, textAlign: TextAlign.center),
           SizedBox(height: 4.0),
         ],
       ),
     );
   }
 
-  static Widget getClubCard(
+  static Widget getTitleCard(
       {BuildContext context,
       String title,
       String subtitle,
@@ -237,20 +294,17 @@ class ClubAndCouncilWidgets {
       horizontal = false,
       ClubListPost club,
       String clubTypeForHero = 'default'}) {
-    final File clubLogoFile =
-        AppConstants.getImageFile(isSmall: true, id: id, isClub: true);
+    final File clubLogoFile = AppConstants.getImageFile(isSmall: true, id: id, isClub: true);
 
     if (clubLogoFile == null) {
-      AppConstants.writeImageFileIntoDisk(
-          isClub: true, isSmall: true, id: id, url: imageUrl);
+      AppConstants.writeImageFileIntoDisk(isClub: true, isSmall: true, id: id, url: imageUrl);
     }
-    final File _largeLogofile = AppConstants.getImageFile(
-        isCouncil: isCouncil, isClub: !isCouncil, isSmall: false, id: id);
+    final File _largeLogofile =
+        AppConstants.getImageFile(isCouncil: isCouncil, isClub: !isCouncil, isSmall: false, id: id);
 
     final clubThumbnail = Container(
       margin: EdgeInsets.symmetric(vertical: 16.0),
-      alignment:
-          horizontal ? FractionalOffset.centerLeft : FractionalOffset.center,
+      alignment: horizontal ? FractionalOffset.centerLeft : FractionalOffset.center,
       child: Hero(
         tag: "club-hero-$id-$clubTypeForHero",
         child: Container(
@@ -296,15 +350,12 @@ class ClubAndCouncilWidgets {
       constraints: BoxConstraints.expand(),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment:
-            horizontal ? CrossAxisAlignment.start : CrossAxisAlignment.center,
+        crossAxisAlignment: horizontal ? CrossAxisAlignment.start : CrossAxisAlignment.center,
         children: <Widget>[
           horizontal ? Container() : SizedBox(height: 4.0),
           Text(title, style: Style.titleTextStyle),
           Container(height: horizontal ? 4 : 10),
-          subtitle == null
-              ? Container()
-              : Text(subtitle, style: Style.commonTextStyle),
+          subtitle == null ? Container() : Text(subtitle, style: Style.commonTextStyle),
           horizontal ? Container() : Separator(),
         ],
       ),
@@ -313,8 +364,7 @@ class ClubAndCouncilWidgets {
     final clubCard = Container(
       child: clubCardContent,
       height: horizontal ? 75.0 : 154.0,
-      margin:
-          horizontal ? EdgeInsets.only(left: 30.0) : EdgeInsets.only(top: 72.0),
+      margin: horizontal ? EdgeInsets.only(left: 30.0) : EdgeInsets.only(top: 72.0),
       decoration: BoxDecoration(
         color: ColorConstants.workshopCardContainer,
         shape: BoxShape.rectangle,
@@ -333,11 +383,9 @@ class ClubAndCouncilWidgets {
         onTap: horizontal
             ? () => Navigator.of(context).push(
                   PageRouteBuilder(
-                    pageBuilder: (_, __, ___) =>
-                        ClubPage(club: club, editMode: true),
-                    transitionsBuilder:
-                        (context, animation, secondaryAnimation, child) =>
-                            FadeTransition(opacity: animation, child: child),
+                    pageBuilder: (_, __, ___) => ClubPage(club: club, editMode: true),
+                    transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+                        FadeTransition(opacity: animation, child: child),
                   ),
                 )
             : null,
@@ -356,11 +404,7 @@ class ClubAndCouncilWidgets {
   }
 
   static Future detailsDialog(
-          {BuildContext context,
-          String name,
-          String imageUrl,
-          String email,
-          String phone}) =>
+          {BuildContext context, String name, String imageUrl, String email, String phone}) =>
       showDialog(
         context: context,
         barrierDismissible: true,
@@ -479,8 +523,7 @@ class ClubAndCouncilWidgets {
             color: Color(0xff00c6ff),
             borderRadius: BorderRadius.circular(2.0),
           ),
-          margin: EdgeInsets.fromLTRB(
-              MediaQuery.of(context).size.width / 2 - 12.0, 10.0, 0.0, 0.0),
+          margin: EdgeInsets.fromLTRB(MediaQuery.of(context).size.width / 2 - 12.0, 10.0, 0.0, 0.0),
           height: 4.0,
           width: 24.0,
           //color:   Color(0xff00c6ff)

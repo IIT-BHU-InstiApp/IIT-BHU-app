@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
+import 'package:iit_app/ui/dialogBoxes.dart';
 import 'package:iit_app/ui/text_style.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:iit_app/services/authentication.dart' as authentication;
@@ -94,12 +95,26 @@ class SideBar extends Drawer {
             leading: Icon(Icons.exit_to_app),
             title: AppConstants.isGuest ? Text('Log In') : Text('LogOut'),
             onTap: () async {
-              await authentication.signOutGoogle();
-              await AppConstants.deleteLocalDatabaseOnly();
-              SharedPreferences prefs = await SharedPreferences.getInstance();
-              await prefs.clear();
-              AppConstants.isGuest = false;
-              Navigator.of(context).pushReplacementNamed('/login');
+              if (!AppConstants.isGuest) {
+                bool result = await getLogOutDialog(context, [
+                  NetworkImage(AppConstants.currentUser.photoUrl),
+                  AppConstants.currentUser.displayName,
+                ]);
+                if (result == true) {
+                  await authentication.signOutGoogle();
+                  await AppConstants.deleteLocalDatabaseOnly();
+                  SharedPreferences prefs = await SharedPreferences.getInstance();
+                  await prefs.clear();
+                  AppConstants.isGuest = false;
+                  Navigator.of(context).pushReplacementNamed('/login');
+                }
+              } else {
+                await AppConstants.deleteLocalDatabaseOnly();
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                await prefs.clear();
+                AppConstants.isGuest = false;
+                Navigator.of(context).pushReplacementNamed('/login');
+              }
             },
           ),
           getNavItem(Icons.info, "About", '/about'),

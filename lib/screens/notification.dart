@@ -54,8 +54,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
   @override
   Widget build(BuildContext context) {
     List<NotificationsPost> notifs = [];
-    notifs
-        .add(NotificationsPost(title: 'Hey', body: 'lol', date: '25-07-2020'));
+    notifs.add(NotificationsPost(title: 'Hey', body: 'lol', date: '25-07-2020'));
     notifs.add(NotificationsPost(
         date: '25-07-2020',
         title: 'Hey',

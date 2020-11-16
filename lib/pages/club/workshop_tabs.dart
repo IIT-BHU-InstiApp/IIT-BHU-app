@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:iit_app/external_libraries/spin_kit.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/colorConstants.dart';
-import 'package:iit_app/pages/Home/home_widgets.dart';
+import 'package:iit_app/ui/workshop_custom_widgets.dart';
 
 class WorkshopTabs {
   static Widget _getWorkshops(workshops, Function reload) {
     return workshops == null
         ? Container(child: Center(child: LoadingCircle))
         : workshops.length == 0
-            ? Center(child: Text('No workshops here :('))
+            ? Center(
+                child: Text('No workshops here :(',
+                    style: TextStyle(color: Colors.white, fontSize: 25)))
             : ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
@@ -17,7 +19,7 @@ class WorkshopTabs {
                 itemCount: workshops.length,
                 padding: EdgeInsets.all(8),
                 itemBuilder: (context, index) {
-                  return HomeWidgets.getWorkshopCard(context,
+                  return WorkshopCustomWidgets.getWorkshopCard(context,
                       w: workshops[index], reload: reload);
                 },
               );
@@ -39,9 +41,7 @@ class WorkshopTabs {
         children: [
           TabBar(
             indicatorSize: TabBarIndicatorSize.tab,
-            indicatorColor: Colors.deepPurple,
-            unselectedLabelColor: Colors.white70,
-            labelColor: Colors.black,
+            indicatorColor: ColorConstants.workshopCardContainer,
             tabs: [
               Tab(text: 'Active Workshops'),
               Tab(text: 'Past Workshops'),

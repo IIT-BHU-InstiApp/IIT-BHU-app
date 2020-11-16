@@ -8,7 +8,7 @@ import 'package:iit_app/screens/home_FAB.dart';
 import 'package:iit_app/screens/home/search_workshop.dart';
 import 'package:iit_app/screens/drawer.dart';
 import 'package:flutter/services.dart';
-import '../../screens/home/buildWorkshops.dart' as buildWorkhops;
+import '../../services/buildWorkshops.dart' as buildWorkhops;
 
 class HomePage extends StatefulWidget {
   @override

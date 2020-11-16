@@ -3,7 +3,7 @@ import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
-import 'package:iit_app/pages/Home/home_widgets.dart';
+import 'package:iit_app/ui/workshop_custom_widgets.dart';
 import 'package:built_collection/built_collection.dart';
 
 ListView buildCurrentWorkshopPosts(BuildContext context, GlobalKey<FabCircularMenuState> fabKey,
@@ -14,7 +14,7 @@ ListView buildCurrentWorkshopPosts(BuildContext context, GlobalKey<FabCircularMe
     itemCount: AppConstants.workshopFromDatabase.length,
     padding: EdgeInsets.all(8),
     itemBuilder: (context, index) {
-      return HomeWidgets.getWorkshopCard(context,
+      return WorkshopCustomWidgets.getWorkshopCard(context,
           w: AppConstants.workshopFromDatabase[index], fabKey: fabKey, reload: reload);
     },
   );
@@ -44,13 +44,13 @@ FutureBuilder<Response> buildInterestedWorkshopsBody(
           itemCount: posts.length,
           padding: EdgeInsets.all(8),
           itemBuilder: (context, index) {
-            return HomeWidgets.getWorkshopCard(context,
+            return WorkshopCustomWidgets.getWorkshopCard(context,
                 w: posts[index], fabKey: fabKey, reload: reload);
           },
         );
       } else {
         return Center(
-          child: HomeWidgets.getPlaceholder(),
+          child: WorkshopCustomWidgets.getPlaceholder(),
         );
       }
     },
@@ -89,7 +89,7 @@ FutureBuilder<Response> buildWorkshopsFromSearch({context, searchPost, Function 
       } else {
         // Show a loading indicator while waiting for the posts
         return Center(
-          child: HomeWidgets.getPlaceholder(),
+          child: WorkshopCustomWidgets.getPlaceholder(),
         );
       }
     },
@@ -119,7 +119,7 @@ Widget _buildWorkshopsFromSearchPosts(
           itemCount: posts.active_workshops.length,
           padding: EdgeInsets.all(8),
           itemBuilder: (context, index) {
-            return HomeWidgets.getWorkshopCard(context,
+            return WorkshopCustomWidgets.getWorkshopCard(context,
                 w: posts.active_workshops[index], reload: reload);
           },
         ),
@@ -143,7 +143,7 @@ Widget _buildWorkshopsFromSearchPosts(
           itemCount: posts.past_workshops.length,
           padding: EdgeInsets.all(8),
           itemBuilder: (context, index) {
-            return HomeWidgets.getWorkshopCard(context,
+            return WorkshopCustomWidgets.getWorkshopCard(context,
                 w: posts.past_workshops[index], reload: reload);
           },
         ),

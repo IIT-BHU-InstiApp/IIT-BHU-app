@@ -1,8 +1,9 @@
 import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
-import 'package:iit_app/pages/Home/home_widgets.dart';
-import '../screens/home/buildWorkshops.dart' as buildWorkhops;
+import 'package:iit_app/model/colorConstants.dart';
+import 'package:iit_app/ui/workshop_custom_widgets.dart';
+import '../services/buildWorkshops.dart' as buildWorkhops;
 
 class HomeScreen extends StatefulWidget {
   final BuildContext context;
@@ -35,9 +36,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
       children: [
         TabBar(
           indicatorSize: TabBarIndicatorSize.tab,
-          indicatorColor: Colors.deepPurple,
-          unselectedLabelColor: Colors.white70,
-          labelColor: Colors.black,
+          indicatorColor: ColorConstants.workshopCardContainer,
           onTap: (value) {
             if (widget.fabKey.currentState.isOpen) {
               widget.fabKey.currentState.close();
@@ -55,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
             children: <Widget>[
               Container(
                 child: AppConstants.firstTimeFetching
-                    ? HomeWidgets.getPlaceholder()
+                    ? WorkshopCustomWidgets.getPlaceholder()
                     : RefreshIndicator(
                         displacement: 60,
                         onRefresh: () async => onRefresh(),

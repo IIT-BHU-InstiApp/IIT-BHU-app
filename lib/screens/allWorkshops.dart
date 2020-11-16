@@ -5,8 +5,8 @@ import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/colorConstants.dart';
 import 'package:iit_app/screens/drawer.dart';
-import 'package:iit_app/screens/home/buildWorkshops.dart';
-import 'package:iit_app/pages/Home/home_widgets.dart';
+import 'package:iit_app/services/buildWorkshops.dart';
+import 'package:iit_app/ui/workshop_custom_widgets.dart';
 import 'package:iit_app/screens/home/search_workshop.dart';
 
 class AllWorkshopsScreen extends StatefulWidget {
@@ -89,8 +89,7 @@ class _AllWorkshopsScreenState extends State<AllWorkshopsScreen>
     );
   }
 
-  Widget _buildAllWorkshopPosts(
-      BuildContext context, BuiltAllWorkshopsPost posts) {
+  Widget _buildAllWorkshopPosts(BuildContext context, BuiltAllWorkshopsPost posts) {
     return ListView(
       children: <Widget>[
         Padding(
@@ -110,7 +109,7 @@ class _AllWorkshopsScreenState extends State<AllWorkshopsScreen>
             itemCount: posts.active_workshops.length,
             padding: EdgeInsets.all(8),
             itemBuilder: (context, index) {
-              return HomeWidgets.getWorkshopCard(context,
+              return WorkshopCustomWidgets.getWorkshopCard(context,
                   w: posts.active_workshops[index], reload: reload);
             },
           ),
@@ -132,7 +131,7 @@ class _AllWorkshopsScreenState extends State<AllWorkshopsScreen>
             itemCount: posts.past_workshops.length,
             padding: EdgeInsets.all(8),
             itemBuilder: (context, index) {
-              return HomeWidgets.getWorkshopCard(
+              return WorkshopCustomWidgets.getWorkshopCard(
                 context,
                 w: posts.past_workshops[index],
                 reload: reload,
@@ -168,8 +167,7 @@ class _AllWorkshopsScreenState extends State<AllWorkshopsScreen>
               builder: (context, isSearching, child) {
                 return (isSearching
                     ? buildWorkshopsFromSearch(
-                        context: context,
-                        searchPost: searchBarWidget.searchPost)
+                        context: context, searchPost: searchBarWidget.searchPost)
                     : _buildAllWorkshopsBody(context));
               }),
         ),

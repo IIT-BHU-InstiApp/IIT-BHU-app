@@ -6,98 +6,14 @@ import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/colorConstants.dart';
 import 'package:iit_app/screens/home/worshop_detail/workshop_detail.dart';
-import 'package:iit_app/services/authentication.dart' as authentication;
 import 'package:iit_app/ui/separator.dart';
 import 'package:iit_app/ui/text_style.dart';
 
 import 'package:skeleton_text/skeleton_text.dart';
 
-class HomeWidgets {
+class WorkshopCustomWidgets {
   static final Color textPaleColor = Color(0xFFAFAFAF);
   static final Color textColor = Color(0xFF004681);
-
-
-  static Widget get connectionError {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        Text("Could not find active internet connection"),
-        Text(
-          'Try again',
-          style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold, fontSize: 20),
-        ),
-      ],
-    );
-  }
-
-  static Future<bool> getLogOutDialog(context, details) => showDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: (BuildContext context) {
-        return Dialog(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-            child: Container(
-                height: 350.0,
-                width: 200.0,
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(20.0)),
-                child: Column(
-                  children: <Widget>[
-                    Stack(
-                      children: <Widget>[
-                        Container(height: 150.0),
-                        Container(
-                          height: 100.0,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(10.0),
-                                topRight: Radius.circular(10.0),
-                              ),
-                              color: Colors.teal),
-                        ),
-                        Positioned(
-                            top: 50.0,
-                            left: 94.0,
-                            child: Container(
-                              height: 90.0,
-                              width: 90.0,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(45.0),
-                                  border: Border.all(
-                                      color: Colors.white, style: BorderStyle.solid, width: 2.0),
-                                  image: DecorationImage(image: details[0], fit: BoxFit.cover)),
-                            ))
-                      ],
-                    ),
-                    SizedBox(height: 20.0),
-                    Padding(
-                        padding: EdgeInsets.all(10.0),
-                        child: Text(
-                          details[1],
-                          style: TextStyle(
-                            fontFamily: 'Quicksand',
-                            fontSize: 14.0,
-                            fontWeight: FontWeight.w300,
-                          ),
-                        )),
-                    SizedBox(height: 15.0),
-                    FlatButton(
-                        child: Center(
-                          child: Text(
-                            'Log Out',
-                            style: TextStyle(
-                                fontFamily: 'Montserrat', fontSize: 14.0, color: Colors.teal),
-                          ),
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                          authentication.signOutGoogle();
-                          Navigator.of(context).pushReplacementNamed('/login');
-                        },
-                        color: Colors.transparent)
-                  ],
-                )));
-      });
 
   static Widget getWorkshopCard(BuildContext context,
       {BuiltWorkshopSummaryPost w,
@@ -231,7 +147,7 @@ class HomeWidgets {
   }
 
   static ListView getPlaceholder() {
-    final BorderRadius borderRadius =  BorderRadius.circular(10.0);
+    final BorderRadius borderRadius = BorderRadius.circular(10.0);
     return ListView.builder(
         scrollDirection: Axis.vertical,
         physics: BouncingScrollPhysics(),
@@ -240,15 +156,15 @@ class HomeWidgets {
           return Padding(
             padding: const EdgeInsets.all(10.0),
             child: Container(
-              decoration: BoxDecoration(
-                  borderRadius: borderRadius, color: Colors.transparent),
+              decoration: BoxDecoration(borderRadius: borderRadius, color: Colors.transparent),
               child: Container(
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
-                    ClipRRect(borderRadius:  borderRadius,
+                    ClipRRect(
+                      borderRadius: borderRadius,
                       child: SkeletonAnimation(
                         child: Container(
                           width: 110.0,
@@ -275,8 +191,8 @@ class HomeWidgets {
                               child: Container(
                                 height: 20.0,
                                 width: MediaQuery.of(context).size.width * 0.5,
-                                decoration: BoxDecoration(
-                                    color: ColorConstants.shimmerSkeletonColor),
+                                decoration:
+                                    BoxDecoration(color: ColorConstants.shimmerSkeletonColor),
                               ),
                             ),
                           ),
@@ -289,22 +205,22 @@ class HomeWidgets {
                               child: Container(
                                 width: MediaQuery.of(context).size.width * 0.4,
                                 height: 20.0,
-                                decoration: BoxDecoration(
-
-                                    color: ColorConstants.shimmerSkeletonColor),
+                                decoration:
+                                    BoxDecoration(color: ColorConstants.shimmerSkeletonColor),
                               ),
                             ),
                           ),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(left: 15.0, right: 5.0, bottom: 15.0),
-                          child: ClipRRect(borderRadius:  BorderRadius.circular(10.0),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10.0),
                             child: SkeletonAnimation(
                               child: Container(
                                 width: MediaQuery.of(context).size.width * 0.3,
                                 height: 20.0,
-                                decoration: BoxDecoration(
-                                    color: ColorConstants.shimmerSkeletonColor),
+                                decoration:
+                                    BoxDecoration(color: ColorConstants.shimmerSkeletonColor),
                               ),
                             ),
                           ),
