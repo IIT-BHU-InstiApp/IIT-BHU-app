@@ -699,7 +699,7 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
             ],
           ),
           SizedBox(height: 15.0),
-          WorkshopDetailWidgets.getHeading(icon: Icons.library_books, title: 'Resouces'),
+          WorkshopDetailWidgets.getHeading(icon: Icons.library_books, title: 'Resources'),
           SizedBox(height: 5.0),
           _workshop == null
               ? Container(
@@ -716,9 +716,9 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
                         itemCount: _workshop.resources.length,
                         itemBuilder: (context, index) {
                           return Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              SizedBox(
-                                width: 280,
+                              Flexible(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
