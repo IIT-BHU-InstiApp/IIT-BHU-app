@@ -100,6 +100,9 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                 if (fabKey.currentState.isOpen) {
                   fabKey.currentState.close();
                 }
+                if (searchFocusNode.hasFocus) {
+                  searchFocusNode.unfocus();
+                }
               },
               child: Container(
                 margin: EdgeInsets.fromLTRB(12, 10, 12, 0),

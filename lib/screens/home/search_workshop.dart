@@ -33,14 +33,10 @@ class SearchBarWidget {
                   isSearching.value = false;
                   searchFocusNode.unfocus();
                 });
-                // FocusScope.of(context).unfocus();
               },
             )),
         onFieldSubmitted: (value) {
-          if (value.isEmpty) {
-            // searchFocusNode.unfocus();
-            return;
-          }
+          if (value.isEmpty) return;
 
           setState(() {
             isSearching.value = true;
