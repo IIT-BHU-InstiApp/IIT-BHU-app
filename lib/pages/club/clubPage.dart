@@ -5,10 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/colorConstants.dart';
-import 'package:iit_app/pages/create.dart';
 import 'package:iit_app/ui/club_council_common/club_&_council_widgets.dart';
+import 'package:iit_app/ui/club_custom_widgets.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'workshop_tabs.dart';
 import 'package:iit_app/screens/account.dart';
 
 class ClubPage extends StatefulWidget {
@@ -31,15 +30,15 @@ class _ClubPageState extends State<ClubPage> with SingleTickerProviderStateMixin
   void initState() {
     print("Club opened in edit mode:${widget.editMode}");
     _tabController = TabController(length: 2, vsync: this);
-    fetchClubDataById();
+    _fetchClubDataById();
     super.initState();
   }
 
-  void reload() {
-    fetchClubDataById();
+  void _reload() {
+    _fetchClubDataById();
   }
 
-  fetchClubDataById() async {
+  _fetchClubDataById() async {
     if (clubMap == null) {
       clubMap = await AppConstants.getClubDetailsFromDatabase(clubId: widget.club.id);
     }
@@ -114,45 +113,6 @@ class _ClubPageState extends State<ClubPage> with SingleTickerProviderStateMixin
     });
   }
 
-  final divide = Divider(height: 8.0, thickness: 2.0, color: Colors.blue);
-  final space = SizedBox(height: 8.0);
-
-  Widget _getPanel({ScrollController sc}) {
-    return Container(
-      padding: EdgeInsets.only(top: 20.0),
-      decoration: BoxDecoration(
-        borderRadius: radius,
-        color: ColorConstants.panelColor,
-      ),
-      child: ListView(
-        controller: sc,
-        children: [
-          space,
-          clubMap != null
-              ? clubMap.is_por_holder == true
-                  ? RaisedButton(
-                      child: Text('Create workshop'),
-                      onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                CreateScreen(club: widget.club, clubName: clubMap.name),
-                          ),
-                        );
-                      })
-                  : Container()
-              : Container(),
-          WorkshopTabs.getActiveAndPastTabBarForClub(
-              clubWorkshops: clubWorkshops,
-              tabController: _tabController,
-              context: context,
-              reload: reload),
-          space,
-        ],
-      ),
-    );
-  }
-
   Future<bool> _onWillPop() {
     print("Clubscreen:${AccountScreen.flag}");
     if (AccountScreen.flag == "Account")
@@ -162,13 +122,23 @@ class _ClubPageState extends State<ClubPage> with SingleTickerProviderStateMixin
     return Future.value(false);
   }
 
-  BorderRadiusGeometry radius = BorderRadius.only(
+  final BorderRadiusGeometry radius = BorderRadius.only(
     topLeft: Radius.circular(24.0),
     topRight: Radius.circular(24.0),
   );
+
   PanelController _pc = PanelController();
   @override
   Widget build(BuildContext context) {
+    final clubCustomWidgets = ClubCustomWidgets(
+      context: context,
+      clubMap: clubMap,
+      clubWorkshops: clubWorkshops,
+      radius: radius,
+      tabController: _tabController,
+      reload: _reload,
+    );
+
     return WillPopScope(
       onWillPop: _onWillPop,
       child: SafeArea(
@@ -210,7 +180,8 @@ class _ClubPageState extends State<ClubPage> with SingleTickerProviderStateMixin
                 ),
               ),
               backdropEnabled: true,
-              panelBuilder: (ScrollController sc) => _getPanel(sc: sc),
+              panelBuilder: (ScrollController sc) =>
+                  clubCustomWidgets.getPanel(sc: sc, club: widget.club),
               minHeight: ClubAndCouncilWidgets.getMinPanelHeight(context),
               maxHeight: ClubAndCouncilWidgets.getMaxPanelHeight(context),
               header: ClubAndCouncilWidgets.getHeader(context),

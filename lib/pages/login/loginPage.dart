@@ -4,7 +4,7 @@ import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/sharedPreferenceKeys.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../services/authentication.dart' as authentication;
+import '../../services/authentication.dart' as authentication;
 
 class LoginPage extends StatefulWidget {
   @override

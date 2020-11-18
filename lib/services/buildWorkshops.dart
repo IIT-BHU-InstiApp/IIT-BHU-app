@@ -57,7 +57,8 @@ FutureBuilder<Response> buildInterestedWorkshopsBody(
   );
 }
 
-FutureBuilder<Response> buildWorkshopsFromSearch({context, searchPost, Function reload}) {
+FutureBuilder<Response> buildWorkshopsFromSearch(
+    {BuildContext context, BuiltWorkshopSearchByStringPost searchPost, Function reload}) {
   return FutureBuilder<Response<BuiltAllWorkshopsPost>>(
     future: AppConstants.service.searchWorkshop(searchPost),
     builder: (context, snapshot) {

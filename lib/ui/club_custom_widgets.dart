@@ -2,9 +2,64 @@ import 'package:flutter/material.dart';
 import 'package:iit_app/external_libraries/spin_kit.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/colorConstants.dart';
+import 'package:iit_app/pages/create.dart';
 import 'package:iit_app/ui/workshop_custom_widgets.dart';
 
-class WorkshopTabs {
+class ClubCustomWidgets {
+  final BorderRadiusGeometry radius;
+  final BuildContext context;
+  final TabController tabController;
+  final Function reload;
+
+  final BuiltClubPost clubMap;
+  final BuiltAllWorkshopsPost clubWorkshops;
+
+  ClubCustomWidgets(
+      {this.clubMap,
+      this.clubWorkshops,
+      this.radius,
+      this.context,
+      this.tabController,
+      this.reload});
+
+  final divide = Divider(height: 8.0, thickness: 2.0, color: Colors.blue);
+  final space = SizedBox(height: 8.0);
+
+  Widget getPanel({@required ScrollController sc, @required ClubListPost club}) {
+    return Container(
+      padding: EdgeInsets.only(top: 20.0),
+      decoration: BoxDecoration(
+        borderRadius: radius,
+        color: ColorConstants.panelColor,
+      ),
+      child: ListView(
+        controller: sc,
+        children: [
+          space,
+          clubMap != null
+              ? clubMap.is_por_holder == true
+                  ? RaisedButton(
+                      child: Text('Create workshop'),
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => CreateScreen(club: club, clubName: clubMap.name),
+                          ),
+                        );
+                      })
+                  : Container()
+              : Container(),
+          _getActiveAndPastTabBarForClub(
+              clubWorkshops: clubWorkshops,
+              tabController: tabController,
+              context: context,
+              reload: reload),
+          space,
+        ],
+      ),
+    );
+  }
+
   static Widget _getWorkshops(workshops, Function reload) {
     return workshops == null
         ? Container(child: Center(child: LoadingCircle))
@@ -25,7 +80,7 @@ class WorkshopTabs {
               );
   }
 
-  static Widget getActiveAndPastTabBarForClub(
+  Widget _getActiveAndPastTabBarForClub(
       {BuiltAllWorkshopsPost clubWorkshops,
       @required TabController tabController,
       BuildContext context,

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/built_post.dart';
-import 'package:iit_app/pages/club/club.dart';
+import 'package:iit_app/pages/club/clubPage.dart';
 import 'package:iit_app/model/appConstants.dart';
 
 class CreatePageDialogBoxes {

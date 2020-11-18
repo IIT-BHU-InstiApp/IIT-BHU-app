@@ -9,7 +9,7 @@ import 'package:iit_app/screens/account.dart';
 import 'package:iit_app/screens/allWorkshops.dart';
 import 'package:iit_app/screens/complaints.dart';
 import 'package:iit_app/pages/Home/homePage.dart';
-import 'package:iit_app/pages/login.dart';
+import 'package:iit_app/pages/login/loginPage.dart';
 import 'package:iit_app/screens/about.dart';
 import 'package:iit_app/screens/settings.dart';
 import 'package:iit_app/services/connectivityCheck.dart';

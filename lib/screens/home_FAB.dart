@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/colorConstants.dart';
-import 'package:iit_app/pages/councilPage.dart';
+import 'package:iit_app/pages/council/councilPage.dart';
 import 'package:fab_circular_menu/fab_circular_menu.dart';
 
 Widget homeFAB(context, {fabKey}) => AppConstants.councilsSummaryfromDatabase == null
