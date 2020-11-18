@@ -70,7 +70,7 @@ class WorkshopCreater {
       final error = onError as Response<dynamic>;
       print(error.body);
       print('Error creating workshop: ${onError.toString()} ${onError.runtimeType}');
-      CreatePageDialogBoxes.showUnSuccessfulDialog(context: context);
+      CreatePageDialogBoxes.showUnsuccessfulDialog(context: context);
     }).then((value) {
       if (value.isSuccessful) {
         print('Created!');
@@ -100,7 +100,7 @@ class WorkshopCreater {
         .updateWorkshopByPatch(widgetWorkshopData.id, AppConstants.djangoToken, editedWorkshop)
         .catchError((onError) {
       print('Error editing workshop: ${onError.toString()}');
-      CreatePageDialogBoxes.showUnSuccessfulDialog(context: context);
+      CreatePageDialogBoxes.showUnsuccessfulDialog(context: context);
     }).then((value) {
       if (value.isSuccessful) {
         print('Edited!');
@@ -120,7 +120,7 @@ class WorkshopCreater {
     )
         .catchError((onError) {
       print('Error editing contacts in edited workshop: ${onError.toString()}');
-      //  CreatePageDialogBoxes.showUnSuccessfulDialog(
+      //  CreatePageDialogBoxes.showUnsuccessfulDialog(
       //     context: context);
     });
 

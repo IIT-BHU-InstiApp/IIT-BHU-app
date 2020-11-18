@@ -61,12 +61,12 @@ class _AccountScreenState extends State<AccountScreen> {
     );
   }
 
-  Future showUnSuccessfulDialog() async {
+  Future showUnsuccessfulDialog() async {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: new Text("UnSuccessful :("),
+          title: new Text("Unsuccessful :("),
           content: new Text("Please try again"),
           actions: <Widget>[
             FlatButton(
@@ -101,7 +101,7 @@ class _AccountScreenState extends State<AccountScreen> {
       setState(() {});
     }).catchError((onError) {
       print("Error in updating profile: ${onError.toString()}");
-      showUnSuccessfulDialog();
+      showUnsuccessfulDialog();
     });
   }
 

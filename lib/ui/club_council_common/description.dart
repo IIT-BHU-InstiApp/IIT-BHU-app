@@ -27,12 +27,12 @@ class _DescriptionState extends State<Description> {
   final _overviewTitle = "Description".toUpperCase();
   bool editing = false;
 
-  Future showUnSuccessfulDialog({@required BuildContext context}) async {
+  Future showUnsuccessfulDialog({@required BuildContext context}) async {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("UnSuccessful :("),
+          title: Text("Unsuccessful :("),
           content: Text("Please try again"),
           actions: <Widget>[
             FlatButton(
@@ -80,7 +80,7 @@ class _DescriptionState extends State<Description> {
         .updateClubByPatch(club.id, AppConstants.djangoToken, editedClub)
         .catchError((onError) {
       print('Error editing club description: ${onError.toString()}');
-      this.showUnSuccessfulDialog(context: context);
+      this.showUnsuccessfulDialog(context: context);
     }).then((value) {
       if (value.isSuccessful) {
         print('Edited!');
@@ -102,7 +102,7 @@ class _DescriptionState extends State<Description> {
             council.id, AppConstants.djangoToken, editedCouncil)
         .catchError((onError) {
       print('Error editing council description: ${onError.toString()}');
-      this.showUnSuccessfulDialog(context: context);
+      this.showUnsuccessfulDialog(context: context);
     }).then((value) {
       if (value.isSuccessful) {
         print('Edited!');

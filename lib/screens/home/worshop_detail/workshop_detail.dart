@@ -217,12 +217,12 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
     );
   }
 
-  Future showUnSuccessfulDialog() async {
+  Future showUnsuccessfulDialog() async {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: new Text("UnSuccessful :("),
+          title: new Text("Unsuccessful :("),
           content: new Text("Please try again"),
           actions: <Widget>[
             FlatButton(
@@ -326,10 +326,10 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
           .removeWorkshop(widget.workshop.id, AppConstants.djangoToken)
           .then((snapshot) {
         print("status of deleting workshop: ${snapshot.statusCode}");
-        CreatePageDialogBoxes.showUnSuccessfulDialog(context: context);
+        showSuccessfulDialog();
       }).catchError((onError) {
         print("Error in deleting: ${onError.toString()}");
-        CreatePageDialogBoxes.showUnSuccessfulDialog(context: context);
+        CreatePageDialogBoxes.showUnsuccessfulDialog(context: context);
       });
     }
     setState(() {});
@@ -359,7 +359,7 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
             final error = onError as Response<dynamic>;
             print(error.body);
             print("Error in deleting: ${onError.toString()}");
-            showUnSuccessfulDialog();
+            showUnsuccessfulDialog();
           })
         : null;
     setState(() {});

@@ -36,12 +36,12 @@ class CreatePageDialogBoxes {
     );
   }
 
-  static Future showUnSuccessfulDialog({@required BuildContext context}) async {
+  static Future showUnsuccessfulDialog({@required BuildContext context}) async {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("UnSuccessful :("),
+          title: Text("Unsuccessful :("),
           content: Text("Please try again"),
           actions: <Widget>[
             FlatButton(

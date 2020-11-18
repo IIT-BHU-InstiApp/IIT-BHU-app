@@ -74,7 +74,7 @@ class _ResourceCreateScreenState extends State<ResourceCreateScreen> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-              content: done ? Text("Succesfully added") : Text("UnSuccessful. Please try again"),
+              content: done ? Text("Succesfully added") : Text("Unsuccessful. Please try again"),
               actions: <Widget>[
                 FlatButton(
                   child: Text("Okay"),
@@ -116,7 +116,7 @@ class _ResourceCreateScreenState extends State<ResourceCreateScreen> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-              content: done ? Text("Succesfully edited") : Text("UnSuccessful! Please try again"),
+              content: done ? Text("Succesfully edited") : Text("Unsuccessful! Please try again"),
               actions: <Widget>[
                 FlatButton(
                   child: Text("Okay"),
