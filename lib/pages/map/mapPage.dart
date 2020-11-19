@@ -10,7 +10,7 @@ import 'package:iit_app/screens/drawer.dart';
 
 int timesCalled = 0;
 
-class MapScreen extends StatelessWidget {
+class MapPage extends StatelessWidget {
   bool _fromCreateWorkshop = false;
   bool _fromWorkshopDetails = false;
   String _workshopLatitude = '';

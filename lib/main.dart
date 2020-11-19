@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:iit_app/external_libraries/spin_kit.dart';
 import 'package:iit_app/model/colorConstants.dart';
 import 'package:iit_app/pages/mess/mess.dart';
-import 'package:iit_app/screens/map.dart';
+import 'package:iit_app/pages/map/mapPage.dart';
 import 'package:iit_app/pages/account/accountPage.dart';
 import 'package:iit_app/pages/allWorkshops/allWorkshopsPage.dart';
 import 'package:iit_app/screens/complaints.dart';
