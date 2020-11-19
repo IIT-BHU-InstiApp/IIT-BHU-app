@@ -9,3 +9,4 @@
 - Make custom, reusable general dialog boxes
 - Name on drawer (taken from google profile) should be same with name on account page (saved in our database)
 - Fetch theme from shared preferencs and set it in beginning
+- use flutter_local_notification

@@ -46,6 +46,8 @@ dependencies:
   flutter_spinkit: ^4.1.2
   google_maps_flutter:
 
+  flutter_local_notifications: ^1.4.4+1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
