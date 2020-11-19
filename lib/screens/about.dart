@@ -122,26 +122,32 @@ class _AboutPageState extends State<AboutPage> {
                             itemCount: teamData[index].team_members.length,
                             itemBuilder: (context, index2) {
                               return ListTile(
-                                leading: Container(
-                                  height: 50.0,
-                                  width: 50.0,
-                                  decoration: BoxDecoration(
-                                      //color: Colors.black,
-                                      image: DecorationImage(
-                                        image: teamData[index]
-                                                    .team_members[index2]
-                                                    .github_image_url ==
-                                                null
-                                            ? AssetImage('assets/AMC.png')
-                                            : NetworkImage(teamData[index]
-                                                .team_members[index2]
-                                                .github_image_url),
-                                        fit: BoxFit.fill,
-                                      ),
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(30.0)),
-                                      border: Border.all(
-                                          color: Colors.blueGrey, width: 2.0)),
+                                leading: GestureDetector(
+                                  onTap: () => openGithub(teamData[index]
+                                      .team_members[index2]
+                                      .github_username),
+                                  child: Container(
+                                    height: 50.0,
+                                    width: 50.0,
+                                    decoration: BoxDecoration(
+                                        //color: Colors.black,
+                                        image: DecorationImage(
+                                          image: teamData[index]
+                                                      .team_members[index2]
+                                                      .github_image_url ==
+                                                  null
+                                              ? AssetImage('assets/AMC.png')
+                                              : NetworkImage(teamData[index]
+                                                  .team_members[index2]
+                                                  .github_image_url),
+                                          fit: BoxFit.fill,
+                                        ),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(30.0)),
+                                        border: Border.all(
+                                            color: Colors.blueGrey,
+                                            width: 2.0)),
+                                  ),
                                 ),
                                 title: Container(
                                   child: GestureDetector(
