@@ -22,14 +22,12 @@ class ClubAndCouncilWidgets {
     BuiltClubPost clubDetail,
   }) {
     assert((isCouncil == true && isClub == false) || (isCouncil == false && isClub == true));
-    assert((isCouncil && councilDetail != null) || (isCouncil == false));
-    assert((isClub && clubDetail != null) || (isClub == false));
-
+    
     final bottom = MediaQuery.of(context).viewInsets.bottom;
     dynamic _data = isCouncil ? councilDetail : clubDetail;
 
-    final _secy = isCouncil ? councilDetail.gensec : clubDetail.secy;
-    final _jointSecy = isCouncil ? councilDetail.joint_gensec : clubDetail.joint_secy;
+    final _secy = isCouncil ? councilDetail?.gensec : clubDetail?.secy;
+    final _jointSecy = isCouncil ? councilDetail?.joint_gensec : clubDetail?.joint_secy;
 
     return Container(
       color: ColorConstants.workshopContainerBackground,

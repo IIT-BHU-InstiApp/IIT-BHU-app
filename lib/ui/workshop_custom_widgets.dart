@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/colorConstants.dart';
-import 'package:iit_app/screens/home/worshop_detail/workshop_detail.dart';
+import 'package:iit_app/pages/worshop_detail/workshopDetailPage.dart';
 import 'package:iit_app/ui/separator.dart';
 import 'package:iit_app/ui/text_style.dart';
 

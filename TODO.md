@@ -6,3 +6,5 @@
 - Guest click karne pe sometimes error aata hai
 - notification page ka kuch karna hai
 - Text('No upcoming workshops..') if no workshop in latest tab.
+
+- Make custom, reusable general dialog boxes
