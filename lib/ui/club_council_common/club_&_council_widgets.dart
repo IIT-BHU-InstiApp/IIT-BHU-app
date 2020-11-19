@@ -10,7 +10,7 @@ import 'package:iit_app/ui/separator.dart';
 import 'package:iit_app/ui/text_style.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:iit_app/screens/account.dart';
+import 'package:iit_app/pages/account/accountPage.dart';
 
 class ClubAndCouncilWidgets {
   static Widget getPanelBackground(
@@ -22,7 +22,7 @@ class ClubAndCouncilWidgets {
     BuiltClubPost clubDetail,
   }) {
     assert((isCouncil == true && isClub == false) || (isCouncil == false && isClub == true));
-    
+
     final bottom = MediaQuery.of(context).viewInsets.bottom;
     dynamic _data = isCouncil ? councilDetail : clubDetail;
 
@@ -210,10 +210,10 @@ class ClubAndCouncilWidgets {
             BackButton(
                 color: Colors.lightGreen,
                 onPressed: () => {
-                      print(AccountScreen.flag),
-                      if (AccountScreen.flag == "Account")
+                      print(AccountPage.flag),
+                      if (AccountPage.flag == "Account")
                         Navigator.push(
-                            context, MaterialPageRoute(builder: (context) => AccountScreen()))
+                            context, MaterialPageRoute(builder: (context) => AccountPage()))
                       else
                         Navigator.pop(context),
                     }),

@@ -59,23 +59,34 @@ class _AllWorkshopsScreenState extends State<AllWorkshopsScreen>
         child: Scaffold(
           backgroundColor: ColorConstants.homeBackground,
           appBar: AppBar(
+            backgroundColor: ColorConstants.homeBackground,
             automaticallyImplyLeading: false,
             title: Text("All Workshops"),
             actions: <Widget>[
               Expanded(
-                  child: searchBarWidget.getSearchTextField(context,
-                      searchFocusNode: searchFocusNode)),
+                  child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child:
+                    searchBarWidget.getSearchTextField(context, searchFocusNode: searchFocusNode),
+              )),
             ],
           ),
           drawer: SideBar(context: context),
-          body: ValueListenableBuilder(
-              valueListenable: searchListener,
-              builder: (context, isSearching, child) {
-                return (isSearching
-                    ? buildWorkshop.buildWorkshopsFromSearch(
-                        context: context, searchPost: searchBarWidget.searchPost, reload: reload)
-                    : buildWorkshop.buildAllWorkshopsBody(context, reload: reload));
-              }),
+          body: GestureDetector(
+            onTap: () {
+              if (searchFocusNode.hasFocus) {
+                searchFocusNode.unfocus();
+              }
+            },
+            child: ValueListenableBuilder(
+                valueListenable: searchListener,
+                builder: (context, isSearching, child) {
+                  return (isSearching
+                      ? buildWorkshop.buildWorkshopsFromSearch(
+                          context: context, searchPost: searchBarWidget.searchPost, reload: reload)
+                      : buildWorkshop.buildAllWorkshopsBody(context, reload: reload));
+                }),
+          ),
         ),
       ),
     );

@@ -8,3 +8,4 @@
 - Text('No upcoming workshops..') if no workshop in latest tab.
 
 - Make custom, reusable general dialog boxes
+- Name on drawer (taken from google profile) should be same with name on account page (saved in our database)

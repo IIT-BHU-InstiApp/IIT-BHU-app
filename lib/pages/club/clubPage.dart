@@ -8,7 +8,7 @@ import 'package:iit_app/model/colorConstants.dart';
 import 'package:iit_app/ui/club_council_common/club_&_council_widgets.dart';
 import 'package:iit_app/ui/club_custom_widgets.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:iit_app/screens/account.dart';
+import 'package:iit_app/pages/account/accountPage.dart';
 
 class ClubPage extends StatefulWidget {
   final ClubListPost club;
@@ -114,9 +114,9 @@ class _ClubPageState extends State<ClubPage> with SingleTickerProviderStateMixin
   }
 
   Future<bool> _onWillPop() {
-    print("Clubscreen:${AccountScreen.flag}");
-    if (AccountScreen.flag == "Account")
-      Navigator.push(context, MaterialPageRoute(builder: (context) => AccountScreen()));
+    print("Clubscreen:${AccountPage.flag}");
+    if (AccountPage.flag == "Account")
+      Navigator.push(context, MaterialPageRoute(builder: (context) => AccountPage()));
     else
       Navigator.pop(context);
     return Future.value(false);

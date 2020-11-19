@@ -6,7 +6,7 @@ import 'package:iit_app/model/colorConstants.dart';
 import 'package:iit_app/ui/club_council_common/club_&_council_widgets.dart';
 import 'package:iit_app/ui/council_custom_widgets.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:iit_app/screens/account.dart';
+import 'package:iit_app/pages/account/accountPage.dart';
 
 class CouncilPage extends StatefulWidget {
   @override
@@ -18,7 +18,7 @@ class _CouncilPageState extends State<CouncilPage> {
   File _councilLargeLogoFile;
 
   flag() {
-    AccountScreen.flag = "Council";
+    AccountPage.flag = "Council";
   }
 
   @override

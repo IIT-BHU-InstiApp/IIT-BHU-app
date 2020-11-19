@@ -190,11 +190,11 @@ Widget _buildAllWorkshopsBodyPosts(BuildContext context, BuiltAllWorkshopsPost p
   return ListView(
     children: <Widget>[
       Padding(
-        padding: const EdgeInsets.all(15.0),
+        padding: const EdgeInsets.fromLTRB(15, 20, 15, 0),
         child: Center(
           child: Text(
             'Active Workshops',
-            style: TextStyle(fontSize: 25),
+            style: TextStyle(fontSize: 25, color: Colors.white, fontWeight: FontWeight.bold),
           ),
         ),
       ),
@@ -212,11 +212,11 @@ Widget _buildAllWorkshopsBodyPosts(BuildContext context, BuiltAllWorkshopsPost p
         ),
       ),
       Padding(
-        padding: const EdgeInsets.all(15.0),
+        padding: const EdgeInsets.fromLTRB(15, 20, 15, 0),
         child: Center(
           child: Text(
             'Past Workshops',
-            style: TextStyle(fontSize: 25),
+            style: TextStyle(fontSize: 25, color: Colors.white, fontWeight: FontWeight.bold),
           ),
         ),
       ),
