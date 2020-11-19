@@ -4,7 +4,7 @@ import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/colorConstants.dart';
 import 'package:iit_app/pages/Home/homePage.dart';
 import 'package:iit_app/pages/account/accountPage.dart';
-import 'package:iit_app/screens/drawer.dart';
+import 'package:iit_app/ui/drawer.dart';
 import 'package:iit_app/ui/club_council_common/club_&_council_widgets.dart';
 
 class AccountScreen extends StatelessWidget {

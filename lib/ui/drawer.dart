@@ -70,7 +70,7 @@ class SideBar extends Drawer {
             ),
           ),
           getNavItem(Icons.home, "Home", '/home', replacement: true),
-          getNavItem(Icons.map, "Map", '/mapScreen'),
+          getNavItem(Icons.map, "Map", '/mapPage'),
           getNavItem(Icons.local_dining, "Mess management", '/mess'),
           getNavItem(Icons.group_work, "All Workshops", '/allWorkshops'),
           AppConstants.isGuest

@@ -5,7 +5,7 @@ import 'package:iit_app/external_libraries/url_launcher.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:built_collection/built_collection.dart';
-import 'package:iit_app/screens/drawer.dart';
+import 'package:iit_app/ui/drawer.dart';
 import 'package:iit_app/ui/text_style.dart';
 
 class AboutPage extends StatefulWidget {

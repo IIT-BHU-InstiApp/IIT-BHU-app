@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:iit_app/external_libraries/spin_kit.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/colorConstants.dart';
-import 'package:iit_app/screens/drawer.dart';
+import 'package:iit_app/ui/drawer.dart';
 import 'package:iit_app/pages/Home/homePage.dart';
 import 'package:iit_app/ui/text_style.dart';
 import 'package:shared_preferences/shared_preferences.dart';

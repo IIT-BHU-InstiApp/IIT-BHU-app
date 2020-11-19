@@ -14,11 +14,7 @@ class CreateScreen extends StatefulWidget {
   final ClubListPost club;
   final String clubName;
   final BuiltWorkshopDetailPost workshopData;
-  const CreateScreen(
-      {Key key,
-      @required this.club,
-      @required this.clubName,
-      this.workshopData})
+  const CreateScreen({Key key, @required this.club, @required this.clubName, this.workshopData})
       : super(key: key);
   @override
   _CreateScreenState createState() => _CreateScreenState();
@@ -48,13 +44,11 @@ class _CreateScreenState extends State<CreateScreen> {
   String _searchByValue = 'name';
 
   TagSearch _tagSearchPost; // Tag to search for
-  TagDetail
-      _createdTagResult; // Response of a created tag(may be null if the tag already exists)
+  TagDetail _createdTagResult; // Response of a created tag(may be null if the tag already exists)
   bool _tagDataFetched = false; // Has the created tag data been fetched?
   bool _isSearchingTags = false; // Has the user searched for the tag?
   bool _searchedDataFetched = false; // Have the searched tags been fetched?
-  bool _allTagDataFetched =
-      false; // Have all the tags of this club been fetched?
+  bool _allTagDataFetched = false; // Have all the tags of this club been fetched?
   bool _allTagDataShow = false; // Should all the tags of the club be shown?
 
   BuiltList<TagDetail> _searchedTagResult;
@@ -105,12 +99,10 @@ class _CreateScreenState extends State<CreateScreen> {
       this._editingTime = widget.workshopData.time;
       this._locationController.text = widget.workshopData.location;
       this._audienceController.text = widget.workshopData.audience;
-      _workshop = WorkshopCreater(
-          editingDate: this._editingDate, editingTime: this._editingTime);
+      _workshop = WorkshopCreater(editingDate: this._editingDate, editingTime: this._editingTime);
       widget.workshopData.contacts.forEach((contact) {
         this._workshop.contactIds.add(contact.id);
-        this._workshop.contactNameofId[contact.id] =
-            WorkshopCreater.nameOfContact(contact.name);
+        this._workshop.contactNameofId[contact.id] = WorkshopCreater.nameOfContact(contact.name);
       });
       widget.workshopData.tags.forEach((tag) {
         this._workshop.tagNameofId[tag.id] = tag.tag_name;
@@ -174,9 +166,7 @@ class _CreateScreenState extends State<CreateScreen> {
                         .catchError((onError) {
                       final error = onError as Response<dynamic>;
                       print(error.body);
-                      if (error.body
-                          .toString()
-                          .contains('The tag already exists for this club')) {
+                      if (error.body.toString().contains('The tag already exists for this club')) {
                         tagAlertDialog('Tag Exists',
                             'This tag already exists. Search for it if you wish to add it to the workshop.');
                         errorMessageShown = true;
@@ -189,8 +179,7 @@ class _CreateScreenState extends State<CreateScreen> {
                         tagAlertDialog('Tag Created',
                             'The Tag has been created succesfully. Search for it again, and add it to the worshop if you wish.');
                       } else if (errorMessageShown == false) {
-                        tagAlertDialog(
-                            'Error', 'There was an error creating this tag.');
+                        tagAlertDialog('Error', 'There was an error creating this tag.');
                       }
                     });
                     setState(() {});
@@ -217,9 +206,7 @@ class _CreateScreenState extends State<CreateScreen> {
       minimum: const EdgeInsets.all(2.0),
       child: Scaffold(
         appBar: AppBar(
-            title: widget.workshopData == null
-                ? Text('Create Workshop')
-                : Text('Edit Workshop')),
+            title: widget.workshopData == null ? Text('Create Workshop') : Text('Edit Workshop')),
         body: Container(
           padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
           child: Builder(
@@ -230,8 +217,7 @@ class _CreateScreenState extends State<CreateScreen> {
                   Text(widget.clubName),
                   TextFormField(
                     autovalidate: true,
-                    decoration:
-                        InputDecoration(labelText: 'Title of the Workshop'),
+                    decoration: InputDecoration(labelText: 'Title of the Workshop'),
                     controller: this._titleController,
                     validator: (value) {
                       if (value.isEmpty) {
@@ -251,8 +237,7 @@ class _CreateScreenState extends State<CreateScreen> {
                         }
                         return null;
                       },
-                      onSaved: (val) =>
-                          setState(() => _workshop.description = val)),
+                      onSaved: (val) => setState(() => _workshop.description = val)),
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
@@ -283,32 +268,24 @@ class _CreateScreenState extends State<CreateScreen> {
                             validator: (value) {
                               return null;
                             },
-                            onSaved: (val) =>
-                                setState(() => _workshop.location = val)),
+                            onSaved: (val) => setState(() => _workshop.location = val)),
                       ),
                       RaisedButton(
                         child: Icon(Icons.map),
                         onPressed: () async {
-                          final location = await Navigator.of(context)
-                                  .pushNamed('/mapScreen',
-                                      arguments: {'fromWorkshopCreate': true})
-                              as List<String>;
-                          this._workshop.latitude =
-                              location == null ? null : location[0];
-                          this._workshop.longitude =
-                              location == null ? null : location[1];
+                          final location = await Navigator.of(context).pushNamed('/mapPage',
+                              arguments: {'fromWorkshopCreate': true}) as List<String>;
+                          this._workshop.latitude = location == null ? null : location[0];
+                          this._workshop.longitude = location == null ? null : location[1];
                           if (this._locationController.text == '')
-                            this._locationController.text =
-                                location == null ? null : location[2];
+                            this._locationController.text = location == null ? null : location[2];
                           setState(() {});
                         },
                       ),
                     ],
                   ),
-                  this._workshop.latitude != null &&
-                          this._workshop.longitude != null
-                      ? Text(
-                          '${this._workshop.latitude}, ${this._workshop.longitude}')
+                  this._workshop.latitude != null && this._workshop.longitude != null
+                      ? Text('${this._workshop.latitude}, ${this._workshop.longitude}')
                       : Container(),
                   TextFormField(
                     autovalidate: true,
@@ -328,20 +305,15 @@ class _CreateScreenState extends State<CreateScreen> {
                           child: TextFormField(
                             autovalidate: true,
                             decoration: InputDecoration(
-                                labelText:
-                                    'Search contacts by ${this._searchByValue}'),
+                                labelText: 'Search contacts by ${this._searchByValue}'),
                             onFieldSubmitted: (value) async {
                               if (value.isEmpty) return;
 
-                              if (!this
-                                  ._searchContactFormKey
-                                  .currentState
-                                  .validate()) return;
+                              if (!this._searchContactFormKey.currentState.validate()) return;
 
                               this._searchPost = BuiltProfileSearchPost((b) => b
                                 ..search_by = this._searchByValue
-                                ..search_string =
-                                    this._searchContactsController.text);
+                                ..search_string = this._searchContactsController.text);
 
                               if (!this.mounted) return;
                               setState(() {
@@ -351,14 +323,11 @@ class _CreateScreenState extends State<CreateScreen> {
                                 this._searchedProfileresult = null;
                               });
                               await AppConstants.service
-                                  .searchProfile(AppConstants.djangoToken,
-                                      this._searchPost)
+                                  .searchProfile(AppConstants.djangoToken, this._searchPost)
                                   .catchError((onError) {
-                                print(
-                                    'Error while fetching search results: $onError');
+                                print('Error while fetching search results: $onError');
                               }).then((result) {
-                                if (result != null)
-                                  this._searchedProfileresult = result.body;
+                                if (result != null) this._searchedProfileresult = result.body;
                               });
 
                               if (!this.mounted) return;
@@ -375,8 +344,8 @@ class _CreateScreenState extends State<CreateScreen> {
                         ),
                         this._isSearchingContacts
                             ? RaisedButton(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(50)),
+                                shape:
+                                    RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
                                 onPressed: () {
                                   this._searchContactsController.text = '';
                                   this._isSearchingContacts = false;
@@ -427,10 +396,7 @@ class _CreateScreenState extends State<CreateScreen> {
                                       onTap: () {
                                         setState(() {
                                           this._workshop.contactIds.remove(_id);
-                                          this
-                                              ._workshop
-                                              .contactNameofId
-                                              .remove(_id);
+                                          this._workshop.contactNameofId.remove(_id);
                                         });
                                       },
                                       child: Icon(Icons.cancel),
@@ -447,8 +413,7 @@ class _CreateScreenState extends State<CreateScreen> {
                       child: TextFormField(
                         controller: this._tagSearchController,
                         decoration: InputDecoration(
-                          contentPadding:
-                              EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                          contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
                           labelText: 'Search tags by name',
                           suffix: IconButton(
                             icon: Icon(Icons.clear),
@@ -474,13 +439,11 @@ class _CreateScreenState extends State<CreateScreen> {
                             this._allTagDataShow = false;
                           });
                           await AppConstants.service
-                              .searchTag(
-                                  AppConstants.djangoToken, this._tagSearchPost)
+                              .searchTag(AppConstants.djangoToken, this._tagSearchPost)
                               .catchError((onError) {
                             print('Error while fetching tags $onError');
                           }).then((result) {
-                            if (result != null)
-                              this._searchedTagResult = result.body;
+                            if (result != null) this._searchedTagResult = result.body;
                           });
                           if (!this.mounted) return;
                           setState(() {
@@ -520,8 +483,7 @@ class _CreateScreenState extends State<CreateScreen> {
                             onPressed: () async {
                               FocusScope.of(context).unfocus();
                               await AppConstants.service
-                                  .getClubTags(
-                                      widget.club.id, AppConstants.djangoToken)
+                                  .getClubTags(widget.club.id, AppConstants.djangoToken)
                                   .catchError((onError) {
                                 print('Error while fetching all tags $onError');
                               }).then((result) {
@@ -565,16 +527,11 @@ class _CreateScreenState extends State<CreateScreen> {
                             scrollDirection: Axis.horizontal,
                             itemCount: this._workshop.tagNameofId.keys.length,
                             itemBuilder: (context, index) {
-                              int _id = this
-                                  ._workshop
-                                  .tagNameofId
-                                  .keys
-                                  .toList()[index];
+                              int _id = this._workshop.tagNameofId.keys.toList()[index];
                               return Container(
                                 padding: EdgeInsets.all(2),
                                 child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
                                     Text(this._workshop.tagNameofId[_id]),
                                     InkWell(
@@ -582,10 +539,7 @@ class _CreateScreenState extends State<CreateScreen> {
                                       splashColor: Colors.red,
                                       onTap: () {
                                         setState(() {
-                                          this
-                                              ._workshop
-                                              .tagNameofId
-                                              .remove(_id);
+                                          this._workshop.tagNameofId.remove(_id);
                                         });
                                       },
                                     ),
@@ -597,23 +551,18 @@ class _CreateScreenState extends State<CreateScreen> {
                         )
                       : Container(),
                   Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 16.0, horizontal: 16.0),
+                    padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
                     child: RaisedButton(
                       onPressed: () async {
                         final form = _formKey.currentState;
                         if (form.validate()) {
                           form.save();
 
-                          bool isconfirmed =
-                              await CreatePageDialogBoxes.confirmDialog(
-                                  context: context,
-                                  action: widget.workshopData == null
-                                      ? 'Create'
-                                      : 'Edit');
+                          bool isconfirmed = await CreatePageDialogBoxes.confirmDialog(
+                              context: context,
+                              action: widget.workshopData == null ? 'Create' : 'Edit');
 
-                          if (isconfirmed == false || isconfirmed == null)
-                            return;
+                          if (isconfirmed == false || isconfirmed == null) return;
 
                           Scaffold.of(context).showSnackBar(
                             SnackBar(
@@ -625,9 +574,7 @@ class _CreateScreenState extends State<CreateScreen> {
 
                           if (widget.workshopData == null) {
                             await WorkshopCreater.create(
-                                context: context,
-                                workshop: _workshop,
-                                club: widget.club);
+                                context: context, workshop: _workshop, club: widget.club);
                           } else {
                             await WorkshopCreater.edit(
                                 context: context,
@@ -637,9 +584,7 @@ class _CreateScreenState extends State<CreateScreen> {
                           }
                         }
                       },
-                      child: widget.workshopData == null
-                          ? Text('Create')
-                          : Text('Edit'),
+                      child: widget.workshopData == null ? Text('Create') : Text('Edit'),
                     ),
                   ),
                 ],
@@ -659,8 +604,7 @@ class _CreateScreenState extends State<CreateScreen> {
             shrinkWrap: true,
             children: <Widget>[
               Container(
-                child: (this._searchedProfileresult == null ||
-                        this._searchedProfileresult.isEmpty)
+                child: (this._searchedProfileresult == null || this._searchedProfileresult.isEmpty)
                     ? Center(
                         child: Text(
                           'No such contact found........',
@@ -675,14 +619,11 @@ class _CreateScreenState extends State<CreateScreen> {
                         itemCount: _searchedProfileresult.length,
                         padding: EdgeInsets.all(8),
                         itemBuilder: (context, index) {
-                          bool _isAdded = this
-                              ._workshop
-                              .contactIds
-                              .contains(_searchedProfileresult[index].id);
+                          bool _isAdded =
+                              this._workshop.contactIds.contains(_searchedProfileresult[index].id);
 
                           return Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 3, vertical: 10),
+                            padding: EdgeInsets.symmetric(horizontal: 3, vertical: 10),
                             child: Container(
                               // color: Colors.lightBlue.withOpacity(0.3),
                               height: MediaQuery.of(context).size.height / 11,
@@ -693,31 +634,21 @@ class _CreateScreenState extends State<CreateScreen> {
                                     child: Container(
                                       decoration: BoxDecoration(
                                           image: DecorationImage(
-                                        image: (_searchedProfileresult[index]
-                                                        .photo_url ==
-                                                    null ||
-                                                _searchedProfileresult[index]
-                                                    .photo_url
-                                                    .isEmpty)
-                                            ? Image.asset(
-                                                'assets/profile_test.jpg')
-                                            : NetworkImage(
-                                                _searchedProfileresult[index]
-                                                    .photo_url),
+                                        image: (_searchedProfileresult[index].photo_url == null ||
+                                                _searchedProfileresult[index].photo_url.isEmpty)
+                                            ? Image.asset('assets/profile_test.jpg')
+                                            : NetworkImage(_searchedProfileresult[index].photo_url),
                                       )),
                                     ),
                                   ),
                                   Expanded(
                                     flex: 8,
                                     child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 8.0, right: 10.0),
+                                      padding: const EdgeInsets.only(left: 8.0, right: 10.0),
                                       child: Column(
                                         children: <Widget>[
-                                          Text(_searchedProfileresult[index]
-                                              .name),
-                                          Text(_searchedProfileresult[index]
-                                              .email),
+                                          Text(_searchedProfileresult[index].name),
+                                          Text(_searchedProfileresult[index].email),
                                         ],
                                       ),
                                     ),
@@ -726,31 +657,23 @@ class _CreateScreenState extends State<CreateScreen> {
                                     flex: 2,
                                     child: OutlineButton(
                                       onPressed: () {
-                                        int _id =
-                                            _searchedProfileresult[index].id;
-                                        String _name =
-                                            WorkshopCreater.nameOfContact(
-                                                _searchedProfileresult[index]
-                                                    .name);
+                                        int _id = _searchedProfileresult[index].id;
+                                        String _name = WorkshopCreater.nameOfContact(
+                                            _searchedProfileresult[index].name);
 
                                         if (_isAdded) {
                                           _isAdded = false;
                                           this._workshop.contactIds.remove(_id);
-                                          this
-                                              ._workshop
-                                              .contactNameofId
-                                              .remove(_id);
+                                          this._workshop.contactNameofId.remove(_id);
                                         } else {
                                           _isAdded = true;
                                           this._workshop.contactIds.add(_id);
-                                          this._workshop.contactNameofId[_id] =
-                                              _name;
+                                          this._workshop.contactNameofId[_id] = _name;
                                         }
                                         if (!this.mounted) return;
                                         setState(() {});
                                       },
-                                      child: Icon(
-                                          _isAdded ? Icons.remove : Icons.add),
+                                      child: Icon(_isAdded ? Icons.remove : Icons.add),
                                     ),
                                   ),
                                 ],
@@ -772,8 +695,7 @@ class _CreateScreenState extends State<CreateScreen> {
   ) {
     return this._tagDataFetched
         ? Container(
-            child: (this._searchedTagResult == null ||
-                    this._searchedTagResult.isEmpty)
+            child: (this._searchedTagResult == null || this._searchedTagResult.isEmpty)
                 ? Center(
                     child: Text(
                       'No such Tag',
@@ -798,21 +720,13 @@ class _CreateScreenState extends State<CreateScreen> {
                           children: <Widget>[
                             Text(this._searchedTagResult[index].tag_name),
                             InkWell(
-                              child: (this
-                                      ._workshop
-                                      .tagNameofId
-                                      .keys
-                                      .contains(_id))
+                              child: (this._workshop.tagNameofId.keys.contains(_id))
                                   ? Icon(Icons.highlight_remove_rounded)
                                   : Icon(Icons.add_box_rounded),
                               splashColor: Colors.green,
                               onTap: () {
                                 setState(() {
-                                  if (this
-                                      ._workshop
-                                      .tagNameofId
-                                      .keys
-                                      .contains(_id))
+                                  if (this._workshop.tagNameofId.keys.contains(_id))
                                     this._workshop.tagNameofId.remove(_id);
                                   else
                                     this._workshop.tagNameofId[_id] =
@@ -858,27 +772,15 @@ class _CreateScreenState extends State<CreateScreen> {
                           children: <Widget>[
                             Text(this._allTagsOfClub[index].tag_name),
                             InkWell(
-                              child: (this
-                                      ._workshop
-                                      .tagNameofId
-                                      .keys
-                                      .contains(_id))
+                              child: (this._workshop.tagNameofId.keys.contains(_id))
                                   ? Icon(Icons.highlight_remove_rounded)
                                   : Icon(Icons.add_box_rounded),
-                              splashColor: (this
-                                      ._workshop
-                                      .tagNameofId
-                                      .keys
-                                      .contains(_id))
+                              splashColor: (this._workshop.tagNameofId.keys.contains(_id))
                                   ? Colors.red
                                   : Colors.green,
                               onTap: () {
                                 setState(() {
-                                  if (this
-                                      ._workshop
-                                      .tagNameofId
-                                      .keys
-                                      .contains(_id))
+                                  if (this._workshop.tagNameofId.keys.contains(_id))
                                     this._workshop.tagNameofId.remove(_id);
                                   else
                                     this._workshop.tagNameofId[_id] =

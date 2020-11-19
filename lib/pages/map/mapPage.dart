@@ -4,7 +4,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:iit_app/model/colorConstants.dart';
-import 'package:iit_app/screens/drawer.dart';
+import 'package:iit_app/ui/drawer.dart';
 
 // TODO: in androidManifest.xml , api key has to be changed  (register on goole cloud platform from original gmail and generate api key and enable required services)
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:iit_app/screens/drawer.dart';
+import 'package:iit_app/ui/drawer.dart';
 
 class MessScreen extends StatelessWidget {
   @override

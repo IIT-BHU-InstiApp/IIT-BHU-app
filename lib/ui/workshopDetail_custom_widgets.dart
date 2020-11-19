@@ -5,8 +5,8 @@ import 'package:iit_app/external_libraries/spin_kit.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/colorConstants.dart';
-import 'package:iit_app/pages/create.dart';
-import 'package:iit_app/pages/resource_create.dart';
+import 'package:iit_app/screens/create.dart';
+import 'package:iit_app/screens/resource_create.dart';
 import 'package:iit_app/ui/club_council_common/club_&_council_widgets.dart';
 import 'package:iit_app/ui/dialogBoxes.dart';
 import 'package:iit_app/ui/separator.dart';
@@ -402,7 +402,7 @@ class WorkshopDetailCustomWidgets {
       child: Icon(Icons.map),
       onPressed: () {
         print('lol');
-        Navigator.of(context).pushNamed('/mapScreen', arguments: {
+        Navigator.of(context).pushNamed('/mapPage', arguments: {
           'fromWorkshopDetails': true,
           'latitude': workshopDetail?.latitude,
           'longitude': workshopDetail?.longitude,
