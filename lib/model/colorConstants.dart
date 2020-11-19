@@ -14,10 +14,6 @@ class ColorConstants {
   static Color headingColor;
   static Color porHolderBackground;
 
-// Other screens than home page
-  static Color allWorkshopsBackground;
-  static Color accountScreenBackground;
-  static Color settingBackground;
 
   static light() {
     ColorConstants.homeBackground = Colors.blue[200];
@@ -29,9 +25,6 @@ class ColorConstants {
     ColorConstants.panelColor = Colors.white;
     ColorConstants.headingColor = Color(0xFF736AB7);
     ColorConstants.porHolderBackground = Colors.grey[300];
-    ColorConstants.allWorkshopsBackground = Colors.white;
-    ColorConstants.accountScreenBackground = Colors.white;
-    ColorConstants.settingBackground = Colors.white;
   }
 
   static dark() {
@@ -44,8 +37,5 @@ class ColorConstants {
     ColorConstants.panelColor = Color(0xff000000);
     ColorConstants.headingColor = Color(0xFF5dbcd2);
     ColorConstants.porHolderBackground = Color(0xff5dbcd2);
-    ColorConstants.allWorkshopsBackground = Color(0xff5dbcd2);
-    ColorConstants.accountScreenBackground = Color(0xff5dbcd2);
-    ColorConstants.settingBackground = Color(0xff333a42);
   }
 }

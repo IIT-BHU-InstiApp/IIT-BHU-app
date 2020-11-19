@@ -143,7 +143,7 @@ class _AccountScreenState extends State<AccountScreen> {
       child: SafeArea(
         minimum: const EdgeInsets.all(2.0),
         child: Scaffold(
-          backgroundColor: ColorConstants.accountScreenBackground,
+          backgroundColor: ColorConstants.homeBackground,
           appBar: AppBar(
             backgroundColor: Colors.transparent,
             elevation: 0.0,

@@ -86,9 +86,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return SafeArea(
       minimum: const EdgeInsets.all(2.0),
       child: Scaffold(
-        backgroundColor: ColorConstants.settingBackground,
+        backgroundColor: ColorConstants.homeBackground,
         appBar: AppBar(
-          backgroundColor: ColorConstants.settingBackground,
+          backgroundColor: ColorConstants.homeBackground,
           title: Text(
             "Settings",
             style: Style.baseTextStyle.copyWith(color: Colors.white),

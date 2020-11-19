@@ -6,7 +6,7 @@ import 'package:iit_app/model/colorConstants.dart';
 import 'package:iit_app/pages/mess/mess.dart';
 import 'package:iit_app/screens/map.dart';
 import 'package:iit_app/screens/account.dart';
-import 'package:iit_app/screens/allWorkshops.dart';
+import 'package:iit_app/pages/allWorkshops/allWorkshopsPage.dart';
 import 'package:iit_app/screens/complaints.dart';
 import 'package:iit_app/pages/Home/homePage.dart';
 import 'package:iit_app/pages/login/loginPage.dart';
