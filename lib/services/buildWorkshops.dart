@@ -10,7 +10,7 @@ import 'package:built_collection/built_collection.dart';
 ListView buildCurrentWorkshopPosts(BuildContext context, GlobalKey<FabCircularMenuState> fabKey,
     {Function reload}) {
   return ListView.builder(
-    physics: ScrollPhysics(),
+    physics: AlwaysScrollableScrollPhysics(),
     scrollDirection: Axis.vertical,
     itemCount: AppConstants.workshopFromDatabase.length,
     padding: EdgeInsets.all(8),
