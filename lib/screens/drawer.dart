@@ -93,10 +93,10 @@ class SideBar extends Drawer {
           getNavItem(Icons.settings, "Settings", '/settings'),
           ListTile(
             leading: Icon(Icons.exit_to_app),
-            title: AppConstants.isGuest ? Text('Log In') : Text('LogOut'),
+            title: AppConstants.isGuest ? Text('Log In') : Text('Logout'),
             onTap: () async {
               if (!AppConstants.isGuest) {
-                bool result = await getLogOutDialog(context, [
+                bool result = await getLogoutDialog(context, [
                   NetworkImage(AppConstants.currentUser.photoUrl),
                   AppConstants.currentUser.displayName,
                 ]);

@@ -115,7 +115,7 @@ class CreatePageDialogBoxes {
   }
 }
 
-Future<bool> getLogOutDialog(context, details) => showDialog(
+Future<bool> getLogoutDialog(context, details) => showDialog(
     context: context,
     barrierDismissible: true,
     builder: (BuildContext context) {
