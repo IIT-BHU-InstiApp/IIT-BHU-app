@@ -7,7 +7,7 @@ import 'package:iit_app/model/colorConstants.dart';
 import 'package:iit_app/screens/drawer.dart';
 import 'package:iit_app/services/buildWorkshops.dart';
 import 'package:iit_app/ui/workshop_custom_widgets.dart';
-import 'package:iit_app/screens/home/search_workshop.dart';
+import 'package:iit_app/ui/search_workshop.dart';
 
 class AllWorkshopsScreen extends StatefulWidget {
   @override

@@ -71,7 +71,7 @@ class ClubAndCouncilWidgets {
                 SizedBox(height: 15.0),
                 ClubAndCouncilWidgets.getSecies(context, secy: _secy, jointSecy: _jointSecy),
                 _data == null ? Container() : ClubAndCouncilWidgets.getSocialLinks(_data),
-                SizedBox(height: 1.5 * ClubAndCouncilWidgets.getMinPanelHeight(context)),
+                SizedBox(height: 2 * ClubAndCouncilWidgets.getMinPanelHeight(context)),
               ],
             ),
     );

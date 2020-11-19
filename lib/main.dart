@@ -11,7 +11,7 @@ import 'package:iit_app/screens/complaints.dart';
 import 'package:iit_app/pages/Home/homePage.dart';
 import 'package:iit_app/pages/login/loginPage.dart';
 import 'package:iit_app/screens/about.dart';
-import 'package:iit_app/screens/settings.dart';
+import 'package:iit_app/pages/settings/settingsPage.dart';
 import 'package:iit_app/services/connectivityCheck.dart';
 import 'package:iit_app/services/crud.dart';
 import 'package:shared_preferences/shared_preferences.dart';

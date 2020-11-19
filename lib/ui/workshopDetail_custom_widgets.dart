@@ -293,7 +293,7 @@ class WorkshopDetailCustomWidgets {
                     : Text(workshopDetail.description, style: Style.commonTextStyle),
                 _getPeopleGoing(),
                 Separator(),
-                SizedBox(height: 1.5 * ClubAndCouncilWidgets.getMinPanelHeight(context)),
+                SizedBox(height: 2 * ClubAndCouncilWidgets.getMinPanelHeight(context)),
               ],
             ),
           ),
@@ -426,8 +426,8 @@ class WorkshopDetailCustomWidgets {
 
   Widget editWorkshopOptions() {
     return Positioned(
-      right: 50,
-      top: 30,
+      right: 10,
+      top: 10,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[

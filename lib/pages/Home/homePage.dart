@@ -5,7 +5,7 @@ import 'package:iit_app/model/colorConstants.dart';
 import 'package:iit_app/screens/homeScreen.dart';
 import 'package:iit_app/screens/home_app_bar.dart';
 import 'package:iit_app/screens/home_FAB.dart';
-import 'package:iit_app/screens/home/search_workshop.dart';
+import 'package:iit_app/ui/search_workshop.dart';
 import 'package:iit_app/screens/drawer.dart';
 import 'package:flutter/services.dart';
 import '../../services/buildWorkshops.dart' as buildWorkhops;
