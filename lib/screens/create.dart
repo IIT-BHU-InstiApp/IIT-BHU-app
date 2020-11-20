@@ -866,8 +866,8 @@ class _CreateScreenState extends State<CreateScreen> {
                             Text(this._searchedTagResult[index].tag_name),
                             InkWell(
                               child: (this._workshop.tagNameofId.keys.contains(_id))
-                                  ? Icon(Icons.highlight_remove_rounded)
-                                  : Icon(Icons.add_box_rounded),
+                                  ? Icon(Icons.close)
+                                  : Icon(Icons.add),
                               splashColor: Colors.green,
                               onTap: () {
                                 setState(() {
@@ -918,8 +918,8 @@ class _CreateScreenState extends State<CreateScreen> {
                             Text(this._allTagsOfClub[index].tag_name),
                             InkWell(
                               child: (this._workshop.tagNameofId.keys.contains(_id))
-                                  ? Icon(Icons.highlight_remove_rounded)
-                                  : Icon(Icons.add_box_rounded),
+                                  ? Icon(Icons.close)
+                                  : Icon(Icons.add),
                               splashColor: (this._workshop.tagNameofId.keys.contains(_id))
                                   ? Colors.red
                                   : Colors.green,
