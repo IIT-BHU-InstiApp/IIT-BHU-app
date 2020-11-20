@@ -5,6 +5,7 @@ import 'package:iit_app/external_libraries/spin_kit.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/colorConstants.dart';
+import 'package:iit_app/model/workshopCreator.dart';
 import 'package:iit_app/pages/club/clubPage.dart';
 import 'package:iit_app/ui/club_council_common/club_&_council_widgets.dart';
 import 'package:iit_app/ui/dialogBoxes.dart';
@@ -151,6 +152,8 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
       is_interested = -1;
     }
 
+    print(_workshop.toString());
+
     workshopSummary = workshopSummary.rebuild((builder) => builder
       ..title = _workshop.title
       ..date = _workshop.date
@@ -167,7 +170,9 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
     if (isConfirmed == true) {
       AppConstants.service
           .removeWorkshop(workshopSummary.id, AppConstants.djangoToken)
-          .then((snapshot) {
+          .then((snapshot) async {
+        await WorkshopCreater.deleteImageFromFirestore(_workshop.image_url);
+
         print("status of deleting workshop: ${snapshot.statusCode}");
         showSuccessfulDialog();
       }).catchError((onError) {

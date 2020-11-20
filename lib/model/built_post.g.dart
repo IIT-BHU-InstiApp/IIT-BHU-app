@@ -1583,13 +1583,6 @@ class _$BuiltWorkshopCreatePostSerializer
         ..add(serializers.serialize(object.audience,
             specifiedType: const FullType(String)));
     }
-    if (object.resources != null) {
-      result
-        ..add('resources')
-        ..add(serializers.serialize(object.resources,
-            specifiedType:
-                const FullType(BuiltList, const [const FullType(int)])));
-    }
     if (object.contacts != null) {
       result
         ..add('contacts')
@@ -1631,6 +1624,10 @@ class _$BuiltWorkshopCreatePostSerializer
       iterator.moveNext();
       final dynamic value = iterator.current;
       switch (key) {
+        case 'id':
+          result.id = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
         case 'title':
           result.title = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
@@ -1642,10 +1639,6 @@ class _$BuiltWorkshopCreatePostSerializer
         case 'date':
           result.date = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
-          break;
-        case 'id':
-          result.id = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
           break;
         case 'description':
           result.description = serializers.deserialize(value,
@@ -1670,12 +1663,6 @@ class _$BuiltWorkshopCreatePostSerializer
         case 'audience':
           result.audience = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
-          break;
-        case 'resources':
-          result.resources.replace(serializers.deserialize(value,
-                  specifiedType:
-                      const FullType(BuiltList, const [const FullType(int)]))
-              as BuiltList<dynamic>);
           break;
         case 'contacts':
           result.contacts.replace(serializers.deserialize(value,
@@ -4483,13 +4470,13 @@ class BuiltClubPostBuilder
 
 class _$BuiltWorkshopCreatePost extends BuiltWorkshopCreatePost {
   @override
+  final int id;
+  @override
   final String title;
   @override
   final int club;
   @override
   final String date;
-  @override
-  final int id;
   @override
   final String description;
   @override
@@ -4502,8 +4489,6 @@ class _$BuiltWorkshopCreatePost extends BuiltWorkshopCreatePost {
   final String longitude;
   @override
   final String audience;
-  @override
-  final BuiltList<int> resources;
   @override
   final BuiltList<int> contacts;
   @override
@@ -4518,17 +4503,16 @@ class _$BuiltWorkshopCreatePost extends BuiltWorkshopCreatePost {
       (new BuiltWorkshopCreatePostBuilder()..update(updates)).build();
 
   _$BuiltWorkshopCreatePost._(
-      {this.title,
+      {this.id,
+      this.title,
       this.club,
       this.date,
-      this.id,
       this.description,
       this.time,
       this.location,
       this.latitude,
       this.longitude,
       this.audience,
-      this.resources,
       this.contacts,
       this.image_url,
       this.tags,
@@ -4558,17 +4542,16 @@ class _$BuiltWorkshopCreatePost extends BuiltWorkshopCreatePost {
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
     return other is BuiltWorkshopCreatePost &&
+        id == other.id &&
         title == other.title &&
         club == other.club &&
         date == other.date &&
-        id == other.id &&
         description == other.description &&
         time == other.time &&
         location == other.location &&
         latitude == other.latitude &&
         longitude == other.longitude &&
         audience == other.audience &&
-        resources == other.resources &&
         contacts == other.contacts &&
         image_url == other.image_url &&
         tags == other.tags &&
@@ -4589,20 +4572,16 @@ class _$BuiltWorkshopCreatePost extends BuiltWorkshopCreatePost {
                                         $jc(
                                             $jc(
                                                 $jc(
-                                                    $jc(
-                                                        $jc(
-                                                            $jc(0,
-                                                                title.hashCode),
-                                                            club.hashCode),
-                                                        date.hashCode),
-                                                    id.hashCode),
-                                                description.hashCode),
-                                            time.hashCode),
-                                        location.hashCode),
-                                    latitude.hashCode),
-                                longitude.hashCode),
-                            audience.hashCode),
-                        resources.hashCode),
+                                                    $jc($jc(0, id.hashCode),
+                                                        title.hashCode),
+                                                    club.hashCode),
+                                                date.hashCode),
+                                            description.hashCode),
+                                        time.hashCode),
+                                    location.hashCode),
+                                latitude.hashCode),
+                            longitude.hashCode),
+                        audience.hashCode),
                     contacts.hashCode),
                 image_url.hashCode),
             tags.hashCode),
@@ -4612,17 +4591,16 @@ class _$BuiltWorkshopCreatePost extends BuiltWorkshopCreatePost {
   @override
   String toString() {
     return (newBuiltValueToStringHelper('BuiltWorkshopCreatePost')
+          ..add('id', id)
           ..add('title', title)
           ..add('club', club)
           ..add('date', date)
-          ..add('id', id)
           ..add('description', description)
           ..add('time', time)
           ..add('location', location)
           ..add('latitude', latitude)
           ..add('longitude', longitude)
           ..add('audience', audience)
-          ..add('resources', resources)
           ..add('contacts', contacts)
           ..add('image_url', image_url)
           ..add('tags', tags)
@@ -4636,6 +4614,10 @@ class BuiltWorkshopCreatePostBuilder
         Builder<BuiltWorkshopCreatePost, BuiltWorkshopCreatePostBuilder> {
   _$BuiltWorkshopCreatePost _$v;
 
+  int _id;
+  int get id => _$this._id;
+  set id(int id) => _$this._id = id;
+
   String _title;
   String get title => _$this._title;
   set title(String title) => _$this._title = title;
@@ -4647,10 +4629,6 @@ class BuiltWorkshopCreatePostBuilder
   String _date;
   String get date => _$this._date;
   set date(String date) => _$this._date = date;
-
-  int _id;
-  int get id => _$this._id;
-  set id(int id) => _$this._id = id;
 
   String _description;
   String get description => _$this._description;
@@ -4676,11 +4654,6 @@ class BuiltWorkshopCreatePostBuilder
   String get audience => _$this._audience;
   set audience(String audience) => _$this._audience = audience;
 
-  ListBuilder<int> _resources;
-  ListBuilder<int> get resources =>
-      _$this._resources ??= new ListBuilder<int>();
-  set resources(ListBuilder<int> resources) => _$this._resources = resources;
-
   ListBuilder<int> _contacts;
   ListBuilder<int> get contacts => _$this._contacts ??= new ListBuilder<int>();
   set contacts(ListBuilder<int> contacts) => _$this._contacts = contacts;
@@ -4701,17 +4674,16 @@ class BuiltWorkshopCreatePostBuilder
 
   BuiltWorkshopCreatePostBuilder get _$this {
     if (_$v != null) {
+      _id = _$v.id;
       _title = _$v.title;
       _club = _$v.club;
       _date = _$v.date;
-      _id = _$v.id;
       _description = _$v.description;
       _time = _$v.time;
       _location = _$v.location;
       _latitude = _$v.latitude;
       _longitude = _$v.longitude;
       _audience = _$v.audience;
-      _resources = _$v.resources?.toBuilder();
       _contacts = _$v.contacts?.toBuilder();
       _image_url = _$v.image_url;
       _tags = _$v.tags?.toBuilder();
@@ -4740,17 +4712,16 @@ class BuiltWorkshopCreatePostBuilder
     try {
       _$result = _$v ??
           new _$BuiltWorkshopCreatePost._(
+              id: id,
               title: title,
               club: club,
               date: date,
-              id: id,
               description: description,
               time: time,
               location: location,
               latitude: latitude,
               longitude: longitude,
               audience: audience,
-              resources: _resources?.build(),
               contacts: _contacts?.build(),
               image_url: image_url,
               tags: _tags?.build(),
@@ -4758,8 +4729,6 @@ class BuiltWorkshopCreatePostBuilder
     } catch (_) {
       String _$failedField;
       try {
-        _$failedField = 'resources';
-        _resources?.build();
         _$failedField = 'contacts';
         _contacts?.build();
 

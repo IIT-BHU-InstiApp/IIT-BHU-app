@@ -410,7 +410,7 @@ class _MyAppState extends State<TheMap> {
                                     context,
                                     'Location Set',
                                     'Do you want to set ${_displayMarkers[index].infoWindow.title} as the location for the workshop?');
-                                if (shouldLocationbeSet) {
+                                if (shouldLocationbeSet == true) {
                                   Navigator.pop(context, [
                                     _displayMarkers[index].position.latitude.toString(),
                                     _displayMarkers[index].position.longitude.toString(),

@@ -1,4 +1,3 @@
-
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
@@ -53,8 +52,7 @@ abstract class ClubTags implements Built<ClubTags, ClubTagsBuilder> {
   static Serializer<ClubTags> get serializer => _$clubTagsSerializer;
 }
 
-abstract class WorkshopResources
-    implements Built<WorkshopResources, WorkshopResourcesBuilder> {
+abstract class WorkshopResources implements Built<WorkshopResources, WorkshopResourcesBuilder> {
   @nullable
   int get id;
   @nullable
@@ -65,10 +63,8 @@ abstract class WorkshopResources
   String get resource_type;
 
   WorkshopResources._();
-  factory WorkshopResources([updates(WorkshopResourcesBuilder b)]) =
-      _$WorkshopResources;
-  static Serializer<WorkshopResources> get serializer =>
-      _$workshopResourcesSerializer;
+  factory WorkshopResources([updates(WorkshopResourcesBuilder b)]) = _$WorkshopResources;
+  static Serializer<WorkshopResources> get serializer => _$workshopResourcesSerializer;
 }
 
 // !--------------------------------------------------------------------------------------------------------------------
@@ -84,14 +80,12 @@ abstract class BuiltAllWorkshopsPost
   factory BuiltAllWorkshopsPost([updates(BuiltAllWorkshopsPostBuilder b)]) =
       _$BuiltAllWorkshopsPost;
 
-  static Serializer<BuiltAllWorkshopsPost> get serializer =>
-      _$builtAllWorkshopsPostSerializer;
+  static Serializer<BuiltAllWorkshopsPost> get serializer => _$builtAllWorkshopsPostSerializer;
 }
 
 ///* In backend - this model is named Active workshops
 abstract class BuiltWorkshopSummaryPost
-    implements
-        Built<BuiltWorkshopSummaryPost, BuiltWorkshopSummaryPostBuilder> {
+    implements Built<BuiltWorkshopSummaryPost, BuiltWorkshopSummaryPostBuilder> {
   @nullable
   int get id;
   @nullable
@@ -107,8 +101,7 @@ abstract class BuiltWorkshopSummaryPost
 
   BuiltWorkshopSummaryPost._();
 
-  factory BuiltWorkshopSummaryPost(
-          [updates(BuiltWorkshopSummaryPostBuilder b)]) =
+  factory BuiltWorkshopSummaryPost([updates(BuiltWorkshopSummaryPostBuilder b)]) =
       _$BuiltWorkshopSummaryPost;
 
   static Serializer<BuiltWorkshopSummaryPost> get serializer =>
@@ -165,8 +158,7 @@ abstract class BuiltWorkshopDetailPost
   factory BuiltWorkshopDetailPost([updates(BuiltWorkshopDetailPostBuilder b)]) =
       _$BuiltWorkshopDetailPost;
 
-  static Serializer<BuiltWorkshopDetailPost> get serializer =>
-      _$builtWorkshopDetailPostSerializer;
+  static Serializer<BuiltWorkshopDetailPost> get serializer => _$builtWorkshopDetailPostSerializer;
 }
 
 abstract class ContactPost implements Built<ContactPost, ContactPostBuilder> {
@@ -187,9 +179,7 @@ abstract class ContactPost implements Built<ContactPost, ContactPostBuilder> {
 }
 
 abstract class BuiltWorkshopSearchByStringPost
-    implements
-        Built<BuiltWorkshopSearchByStringPost,
-            BuiltWorkshopSearchByStringPostBuilder> {
+    implements Built<BuiltWorkshopSearchByStringPost, BuiltWorkshopSearchByStringPostBuilder> {
   @nullable
   String get search_by;
   @nullable
@@ -197,8 +187,7 @@ abstract class BuiltWorkshopSearchByStringPost
 
   BuiltWorkshopSearchByStringPost._();
 
-  factory BuiltWorkshopSearchByStringPost(
-          [updates(BuiltWorkshopSearchByStringPostBuilder b)]) =
+  factory BuiltWorkshopSearchByStringPost([updates(BuiltWorkshopSearchByStringPostBuilder b)]) =
       _$BuiltWorkshopSearchByStringPost;
 
   static Serializer<BuiltWorkshopSearchByStringPost> get serializer =>
@@ -238,16 +227,13 @@ abstract class BuiltAllCouncilsPost
 
   BuiltAllCouncilsPost._();
 
-  factory BuiltAllCouncilsPost([updates(BuiltAllCouncilsPostBuilder b)]) =
-      _$BuiltAllCouncilsPost;
+  factory BuiltAllCouncilsPost([updates(BuiltAllCouncilsPostBuilder b)]) = _$BuiltAllCouncilsPost;
 
-  static Serializer<BuiltAllCouncilsPost> get serializer =>
-      _$builtAllCouncilsPostSerializer;
+  static Serializer<BuiltAllCouncilsPost> get serializer => _$builtAllCouncilsPostSerializer;
 }
 
 // !--------------------------------------------------------------------------------------------------------------------
-abstract class BuiltCouncilPost
-    implements Built<BuiltCouncilPost, BuiltCouncilPostBuilder> {
+abstract class BuiltCouncilPost implements Built<BuiltCouncilPost, BuiltCouncilPostBuilder> {
   @nullable
   int get id;
   @nullable
@@ -281,11 +267,9 @@ abstract class BuiltCouncilPost
 
   BuiltCouncilPost._();
 
-  factory BuiltCouncilPost([updates(BuiltCouncilPostBuilder b)]) =
-      _$BuiltCouncilPost;
+  factory BuiltCouncilPost([updates(BuiltCouncilPostBuilder b)]) = _$BuiltCouncilPost;
 
-  static Serializer<BuiltCouncilPost> get serializer =>
-      _$builtCouncilPostSerializer;
+  static Serializer<BuiltCouncilPost> get serializer => _$builtCouncilPostSerializer;
 }
 
 // !--------------------------------------------------------------------------------------------------------------------
@@ -307,8 +291,7 @@ abstract class SecyPost implements Built<SecyPost, SecyPostBuilder> {
 }
 
 // !--------------------------------------------------------------------------------------------------------------------
-abstract class ClubListPost
-    implements Built<ClubListPost, ClubListPostBuilder> {
+abstract class ClubListPost implements Built<ClubListPost, ClubListPostBuilder> {
   @nullable
   int get id;
   @nullable
@@ -326,8 +309,7 @@ abstract class ClubListPost
 }
 
 // !--------------------------------------------------------------------------------------------------------------------
-abstract class BuiltClubPost
-    implements Built<BuiltClubPost, BuiltClubPostBuilder> {
+abstract class BuiltClubPost implements Built<BuiltClubPost, BuiltClubPostBuilder> {
   @nullable
   int get id;
   @nullable
@@ -374,12 +356,13 @@ abstract class BuiltClubPost
 // !--------------------------------------------------------------------------------------------------------------------
 abstract class BuiltWorkshopCreatePost
     implements Built<BuiltWorkshopCreatePost, BuiltWorkshopCreatePostBuilder> {
+  @nullable
+  int get id;
+
   String get title;
   int get club;
   String get date;
 
-  @nullable
-  int get id;
   @nullable
   String get description;
   @nullable
@@ -395,27 +378,26 @@ abstract class BuiltWorkshopCreatePost
   @nullable
   String get audience;
   @nullable
-  BuiltList<int> get resources;
-  @nullable
   BuiltList<int> get contacts;
+
   @nullable
   String get image_url;
+
   @nullable
   BuiltList<int> get tags;
+
   @nullable
   String get link;
 
   BuiltWorkshopCreatePost._();
   factory BuiltWorkshopCreatePost([updates(BuiltWorkshopCreatePostBuilder b)]) =
       _$BuiltWorkshopCreatePost;
-  static Serializer<BuiltWorkshopCreatePost> get serializer =>
-      _$builtWorkshopCreatePostSerializer;
+  static Serializer<BuiltWorkshopCreatePost> get serializer => _$builtWorkshopCreatePostSerializer;
 }
 
 // !--------------------------------------------------------------------------------------------------------------------
 
-abstract class BuiltProfilePost
-    implements Built<BuiltProfilePost, BuiltProfilePostBuilder> {
+abstract class BuiltProfilePost implements Built<BuiltProfilePost, BuiltProfilePostBuilder> {
   @nullable
   int get id;
   @nullable
@@ -437,11 +419,9 @@ abstract class BuiltProfilePost
 
   BuiltProfilePost._();
 
-  factory BuiltProfilePost([updates(BuiltProfilePostBuilder b)]) =
-      _$BuiltProfilePost;
+  factory BuiltProfilePost([updates(BuiltProfilePostBuilder b)]) = _$BuiltProfilePost;
 
-  static Serializer<BuiltProfilePost> get serializer =>
-      _$builtProfilePostSerializer;
+  static Serializer<BuiltProfilePost> get serializer => _$builtProfilePostSerializer;
 }
 
 abstract class BuiltProfileSearchPost
@@ -456,8 +436,7 @@ abstract class BuiltProfileSearchPost
   factory BuiltProfileSearchPost([updates(BuiltProfileSearchPostBuilder b)]) =
       _$BuiltProfileSearchPost;
 
-  static Serializer<BuiltProfileSearchPost> get serializer =>
-      _$builtProfileSearchPostSerializer;
+  static Serializer<BuiltProfileSearchPost> get serializer => _$builtProfileSearchPostSerializer;
 }
 
 // !--------------------------------------------------------------------------------------------------------------------
@@ -470,10 +449,8 @@ abstract class BuiltTeamMemberPost
   BuiltList<TeamMember> get team_members;
 
   BuiltTeamMemberPost._();
-  factory BuiltTeamMemberPost([updates(BuiltTeamMemberPostBuilder b)]) =
-      _$BuiltTeamMemberPost;
-  static Serializer<BuiltTeamMemberPost> get serializer =>
-      _$builtTeamMemberPostSerializer;
+  factory BuiltTeamMemberPost([updates(BuiltTeamMemberPostBuilder b)]) = _$BuiltTeamMemberPost;
+  static Serializer<BuiltTeamMemberPost> get serializer => _$builtTeamMemberPostSerializer;
 }
 
 abstract class TeamMember implements Built<TeamMember, TeamMemberBuilder> {
@@ -490,8 +467,7 @@ abstract class TeamMember implements Built<TeamMember, TeamMemberBuilder> {
 }
 
 // !--------------------------------------------------------------------------------------------------------------------
-abstract class BuiltContacts
-    implements Built<BuiltContacts, BuiltContactsBuilder> {
+abstract class BuiltContacts implements Built<BuiltContacts, BuiltContactsBuilder> {
   @nullable
   BuiltList<int> get contacts;
 
