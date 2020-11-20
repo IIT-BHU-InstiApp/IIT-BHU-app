@@ -71,10 +71,12 @@ class WorkshopCreater {
         .then((value) async {
       if (value.isSuccessful) {
         print('Created!');
+        print(value.body['id']);
         final imageUrl = await _uploadImageToFirestore(image);
+
         if (imageUrl != null) {
-          await AppConstants.service.updateWorkshopByPatch(value.body.id, AppConstants.djangoToken,
-              BuiltWorkshopDetailPost((b) => b..image_url = imageUrl));
+          await AppConstants.service.updateWorkshopByPatch(value.body['id'],
+              AppConstants.djangoToken, BuiltWorkshopDetailPost((b) => b..image_url = imageUrl));
         }
         CreatePageDialogBoxes.showSuccesfulDialog(context: context, club: club);
       }

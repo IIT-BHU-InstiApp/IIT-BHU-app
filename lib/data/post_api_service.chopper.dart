@@ -59,15 +59,13 @@ class _$PostApiService extends PostApiService {
     return client.send<dynamic, dynamic>($request);
   }
 
-  Future<Response<BuiltWorkshopCreatePost>> postNewWorkshop(
-      String token, BuiltWorkshopCreatePost body) {
+  Future<Response> postNewWorkshop(String token, BuiltWorkshopCreatePost body) {
     final $url = '/workshops/create/';
     final $headers = {'Authorization': token};
     final $body = body;
     final $request =
         Request('POST', $url, client.baseUrl, body: $body, headers: $headers);
-    return client
-        .send<BuiltWorkshopCreatePost, BuiltWorkshopCreatePost>($request);
+    return client.send<dynamic, dynamic>($request);
   }
 
   Future<Response> postNewResource(
