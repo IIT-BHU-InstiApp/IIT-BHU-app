@@ -1,0 +1,308 @@
+import 'package:flutter/foundation.dart';
+import 'package:iit_app/model/LocalDatabase/databaseMapping.dart';
+import 'package:iit_app/model/built_post.dart';
+import 'package:iit_app/model/LocalDatabase/stringConstants.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:built_collection/built_collection.dart';
+
+class DatabaseQuery {
+  // Fetching the data-----------------------------------------------------------------------
+
+  static Future<BuiltList<BuiltWorkshopSummaryPost>> getAllWorkshopsSummary(
+      {@required Database db}) async {
+    List<Map> maps = await db.query(
+      StringConst.workshopSummaryString,
+      columns: [
+        StringConst.idString,
+        StringConst.clubIdString,
+        StringConst.clubString,
+        StringConst.councilIdString,
+        StringConst.smallImageUrlString,
+        StringConst.largeImageUrlString,
+        StringConst.titleString,
+        StringConst.dateString,
+        StringConst.timeString,
+      ],
+    );
+
+    if (maps.isEmpty) {
+      return null;
+    }
+
+    BuiltList<BuiltWorkshopSummaryPost> list = BuiltList<BuiltWorkshopSummaryPost>([]);
+    var builder = list.toBuilder();
+
+    for (var map in maps) {
+      // need to fetch council summary data
+
+      BuiltAllCouncilsPost councilSummary =
+          await getCouncilsSummaryById(db: db, councilId: map[StringConst.councilIdString]);
+
+      BuiltWorkshopSummaryPost workshop =
+          DatabaseMapping.workshopSummaryFromMap(map, councilSummary);
+      builder.add(workshop);
+    }
+    var workshops = builder.build();
+    return workshops;
+  }
+
+  static Future<BuiltAllCouncilsPost> getCouncilsSummaryById(
+      {@required Database db, @required int councilId}) async {
+    List<Map> maps = await db.query(
+      StringConst.allCouncislSummaryString,
+      columns: [
+        StringConst.idString,
+        StringConst.nameString,
+        StringConst.smallImageUrlString,
+        StringConst.largeImageUrlString,
+      ],
+      where: '${StringConst.idString}  = $councilId',
+    );
+
+    if (maps.isEmpty) {
+      return null;
+    }
+
+    var map = maps[0];
+
+    BuiltAllCouncilsPost councilSummary = DatabaseMapping.councilSummaryFromMap(map);
+
+    return councilSummary;
+  }
+
+  static Future<BuiltList<BuiltAllCouncilsPost>> getAllCouncilsSummary(
+      {@required Database db}) async {
+    List<Map> maps = await db.query(StringConst.allCouncislSummaryString,
+        columns: [
+          StringConst.idString,
+          StringConst.nameString,
+          StringConst.smallImageUrlString,
+          StringConst.largeImageUrlString,
+        ],
+        orderBy: StringConst.idString);
+
+    BuiltList<BuiltAllCouncilsPost> list = BuiltList<BuiltAllCouncilsPost>([]);
+    var builder = list.toBuilder();
+
+    for (var map in maps) {
+      builder.add(DatabaseMapping.councilSummaryFromMap(map));
+    }
+
+    var councilsSummary = builder.build();
+    return councilsSummary;
+  }
+
+// TODO; fetch council only when its required , do not store all councils beforehand.
+
+  static Future<BuiltCouncilPost> getCouncilDetail(
+      {@required Database db, @required int councilId}) async {
+    // it will return only 1 map as every council has unique id
+
+    List<Map> maps = await db.query(
+      StringConst.councilDetailString,
+      columns: [
+        StringConst.idString,
+        StringConst.nameString,
+        StringConst.descriptionString,
+        StringConst.gensecIdString,
+        StringConst.jointGensecId1String,
+        StringConst.jointGensecId2String,
+        StringConst.smallImageUrlString,
+        StringConst.largeImageUrlString,
+        StringConst.isPORHolderString,
+        StringConst.websiteUrlString,
+        StringConst.facebookUrlString,
+        StringConst.twitterUrlString,
+        StringConst.instagramUrlString,
+        StringConst.linkedinUrlString,
+        StringConst.youtubeUrlString,
+      ],
+      where: '${StringConst.idString}  = $councilId',
+    );
+
+    if (maps.isEmpty) {
+      return null;
+    }
+
+    var map = maps[0];
+
+    SecyPost gensec;
+    if (map[StringConst.gensecIdString] != -1) {
+      gensec = await getPORHolderInfo(db: db, porId: map[StringConst.gensecIdString]);
+    }
+
+    BuiltList<SecyPost> porList = BuiltList<SecyPost>([]);
+    var porBuilder = porList.toBuilder();
+
+    if (map[StringConst.jointGensecId1String] != -1) {
+      var jg1 = await getPORHolderInfo(db: db, porId: map[StringConst.jointGensecId1String]);
+      porBuilder.add(jg1);
+    }
+
+    if (map[StringConst.jointGensecId2String] != -1) {
+      var jg2 = await getPORHolderInfo(db: db, porId: map[StringConst.jointGensecId2String]);
+      porBuilder.add(jg2);
+    }
+
+    BuiltList<SecyPost> jointGensec = porBuilder.build();
+
+    BuiltList<ClubListPost> clubs = await getClubsSummary(db: db, councilId: councilId);
+
+    final BuiltCouncilPost councilDetails = BuiltCouncilPost((b) => b
+      ..id = map[StringConst.idString]
+      ..name = map[StringConst.nameString]
+      ..description = map[StringConst.descriptionString]
+      ..gensec = gensec == null ? null : (gensec.toBuilder())
+      ..joint_gensec = jointGensec == null ? null : (jointGensec.toBuilder())
+      ..clubs = clubs == null ? null : (clubs.toBuilder())
+      ..small_image_url = map[StringConst.smallImageUrlString]
+      ..large_image_url = map[StringConst.largeImageUrlString]
+      ..is_por_holder = map[StringConst.isPORHolderString] == 1 ? true : false
+      ..website_url = map[StringConst.websiteUrlString]
+      ..facebook_url = map[StringConst.facebookUrlString]
+      ..twitter_url = map[StringConst.twitterUrlString]
+      ..instagram_url = map[StringConst.instagramUrlString]
+      ..linkedin_url = map[StringConst.linkedinUrlString]
+      ..youtube_url = map[StringConst.youtubeUrlString]);
+
+    return councilDetails;
+  }
+
+  static Future<SecyPost> getPORHolderInfo({@required Database db, @required int porId}) async {
+    // it will return only 1 map as every POR Holder has unique id
+
+    List<Map> maps = await db.query(
+      StringConst.porHoldersString,
+      columns: [
+        StringConst.idString,
+        StringConst.nameString,
+        StringConst.emailString,
+        StringConst.phoneNumberString,
+        StringConst.photoUrlString,
+      ],
+      where: '${StringConst.idString}  = $porId',
+    );
+
+    var map = maps[0];
+
+    SecyPost porHolder = DatabaseMapping.porHolderInfoFromMap(map);
+
+    return porHolder;
+  }
+
+  static Future<BuiltList<ClubListPost>> getClubsSummary(
+      {@required Database db, @required councilId}) async {
+    List<Map> maps = await db.query(
+      StringConst.clubSummaryString,
+      columns: [
+        StringConst.idString,
+        StringConst.nameString,
+        StringConst.councilIdString,
+        StringConst.smallImageUrlString,
+        StringConst.largeImageUrlString,
+      ],
+      where: '${StringConst.councilIdString}  = $councilId',
+    );
+
+    BuiltList<ClubListPost> list = BuiltList<ClubListPost>([]);
+    var builder = list.toBuilder();
+
+    for (var map in maps) {
+// need to fetch council summary data
+
+      BuiltAllCouncilsPost councilSummary =
+          await getCouncilsSummaryById(db: db, councilId: map[StringConst.councilIdString]);
+
+      builder.add(DatabaseMapping.clubSummaryFromMap(map, councilSummary));
+    }
+
+    var clubsSummary = builder.build();
+    return clubsSummary;
+  }
+
+// TODO; fetch club only when its required , do not store all clubs beforehand.
+  static Future<BuiltClubPost> getClubDetails({@required Database db, @required int clubId}) async {
+    // it will return only 1 map as every POR Holder has unique id
+
+    List<Map> maps = await db.query(
+      StringConst.clubDetailsString,
+      columns: [
+        StringConst.idString,
+        StringConst.nameString,
+        StringConst.descriptionString,
+        StringConst.councilIdString,
+        StringConst.councilNameString,
+        StringConst.councilSmallImageUrlString,
+        StringConst.councilLargeImageUrlString,
+        StringConst.secyIdString,
+        StringConst.jointSecyId1String,
+        StringConst.jointSecyId2String,
+        StringConst.smallImageUrlString,
+        StringConst.largeImageUrlString,
+        StringConst.isSubscribedString,
+        StringConst.subscribedUsersString,
+        StringConst.isPORHolderString,
+        StringConst.websiteUrlString,
+        StringConst.facebookUrlString,
+        StringConst.twitterUrlString,
+        StringConst.instagramUrlString,
+        StringConst.linkedinUrlString,
+        StringConst.youtubeUrlString,
+      ],
+      where: '${StringConst.idString}  = $clubId',
+    );
+    print('club id = $clubId -----------------------------------------------------');
+    print(maps.length);
+
+    if (maps.isEmpty) {
+      return null;
+    }
+    var map = maps[0];
+
+    BuiltAllCouncilsPost council = BuiltAllCouncilsPost((b) => b
+      ..id = map[StringConst.councilIdString]
+      ..name = map[StringConst.councilNameString]
+      ..small_image_url = map[StringConst.councilSmallImageUrlString]
+      ..large_image_url = map[StringConst.councilLargeImageUrlString]);
+
+    SecyPost secy;
+    if (map[StringConst.secyIdString] != -1) {
+      secy = await getPORHolderInfo(db: db, porId: map[StringConst.secyIdString]);
+    }
+
+    BuiltList<SecyPost> porList = BuiltList<SecyPost>([]);
+    var porBuilder = porList.toBuilder();
+
+    if (map[StringConst.jointSecyId1String] != -1) {
+      var js1 = await getPORHolderInfo(db: db, porId: map[StringConst.jointSecyId1String]);
+      porBuilder.add(js1);
+    }
+
+    if (map[StringConst.jointSecyId2String] != -1) {
+      var js2 = await getPORHolderInfo(db: db, porId: map[StringConst.jointSecyId2String]);
+      porBuilder.add(js2);
+    }
+    BuiltList<SecyPost> jointSecy = porBuilder.build();
+
+    final BuiltClubPost clubDetails = BuiltClubPost((b) => b
+      ..id = map[StringConst.idString]
+      ..name = map[StringConst.nameString]
+      ..description = map[StringConst.descriptionString]
+      ..council = council == null ? null : (council.toBuilder())
+      ..secy = secy == null ? null : (secy.toBuilder())
+      ..joint_secy = jointSecy == null ? null : (jointSecy.toBuilder())
+      ..small_image_url = map[StringConst.smallImageUrlString]
+      ..large_image_url = map[StringConst.largeImageUrlString]
+      ..is_subscribed = map[StringConst.isSubscribedString] == 1 ? true : false
+      ..subscribed_users = map[StringConst.subscribedUsersString]
+      ..is_por_holder = map[StringConst.isPORHolderString] == 1 ? true : false
+      ..website_url = map[StringConst.websiteUrlString]
+      ..facebook_url = map[StringConst.facebookUrlString]
+      ..twitter_url = map[StringConst.twitterUrlString]
+      ..instagram_url = map[StringConst.instagramUrlString]
+      ..linkedin_url = map[StringConst.linkedinUrlString]
+      ..youtube_url = map[StringConst.youtubeUrlString]);
+
+    return clubDetails;
+  }
+}
