@@ -403,69 +403,67 @@ class _CreateScreenState extends State<CreateScreen> {
                     },
                     onSaved: (val) => _workshop.audience = val,
                   ),
-                  widget.workshopData != null
-                      ? Container()
-                      : Form(
-                          key: this._searchContactFormKey,
-                          child: Row(
-                            children: <Widget>[
-                              _searchCategoryDropDown(),
-                              Expanded(
-                                child: TextFormField(
-                                  decoration: InputDecoration(
-                                      labelText: 'Search contacts by ${this._searchByValue}'),
-                                  onFieldSubmitted: (value) async {
-                                    if (value.isEmpty) return;
+                  Form(
+                    key: this._searchContactFormKey,
+                    child: Row(
+                      children: <Widget>[
+                        _searchCategoryDropDown(),
+                        Expanded(
+                          child: TextFormField(
+                            decoration: InputDecoration(
+                                labelText: 'Search contacts by ${this._searchByValue}'),
+                            onFieldSubmitted: (value) async {
+                              if (value.isEmpty) return;
 
-                                    if (!this._searchContactFormKey.currentState.validate()) return;
+                              if (!this._searchContactFormKey.currentState.validate()) return;
 
-                                    this._searchPost = BuiltProfileSearchPost((b) => b
-                                      ..search_by = this._searchByValue
-                                      ..search_string = this._searchContactsController.text);
+                              this._searchPost = BuiltProfileSearchPost((b) => b
+                                ..search_by = this._searchByValue
+                                ..search_string = this._searchContactsController.text);
 
-                                    if (!this.mounted) return;
-                                    setState(() {
-                                      this._isSearchingContacts = true;
-                                      this._searchedDataFetched = false;
+                              if (!this.mounted) return;
+                              setState(() {
+                                this._isSearchingContacts = true;
+                                this._searchedDataFetched = false;
 
-                                      this._searchedProfileresult = null;
-                                    });
-                                    await AppConstants.service
-                                        .searchProfile(AppConstants.djangoToken, this._searchPost)
-                                        .catchError((onError) {
-                                      print('Error while fetching search results: $onError');
-                                    }).then((result) {
-                                      if (result != null) this._searchedProfileresult = result.body;
-                                    });
+                                this._searchedProfileresult = null;
+                              });
+                              await AppConstants.service
+                                  .searchProfile(AppConstants.djangoToken, this._searchPost)
+                                  .catchError((onError) {
+                                print('Error while fetching search results: $onError');
+                              }).then((result) {
+                                if (result != null) this._searchedProfileresult = result.body;
+                              });
 
-                                    if (!this.mounted) return;
-                                    setState(() {
-                                      this._searchedDataFetched = true;
-                                    });
-                                  },
-                                  controller: this._searchContactsController,
-                                  validator: (value) {
-                                    if (value.isNotEmpty && value.length < 3)
-                                      return '${this._searchByValue} must contain atleast 3 characters';
-                                  },
-                                ),
-                              ),
-                              this._isSearchingContacts
-                                  ? RaisedButton(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(50)),
-                                      onPressed: () {
-                                        this._searchContactsController.text = '';
-                                        this._isSearchingContacts = false;
-                                        if (!this.mounted) return;
-                                        setState(() {});
-                                      },
-                                      child: Text('X Clear'),
-                                    )
-                                  : Container()
-                            ],
+                              if (!this.mounted) return;
+                              setState(() {
+                                this._searchedDataFetched = true;
+                              });
+                            },
+                            controller: this._searchContactsController,
+                            validator: (value) {
+                              if (value.isNotEmpty && value.length < 3)
+                                return '${this._searchByValue} must contain atleast 3 characters';
+                            },
                           ),
                         ),
+                        this._isSearchingContacts
+                            ? RaisedButton(
+                                shape:
+                                    RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+                                onPressed: () {
+                                  this._searchContactsController.text = '';
+                                  this._isSearchingContacts = false;
+                                  if (!this.mounted) return;
+                                  setState(() {});
+                                },
+                                child: Text('X Clear'),
+                              )
+                            : Container()
+                      ],
+                    ),
+                  ),
                   this._isSearchingContacts
                       ? Column(
                           children: <Widget>[
@@ -503,18 +501,16 @@ class _CreateScreenState extends State<CreateScreen> {
                                         mainAxisSize: MainAxisSize.min,
                                         children: <Widget>[
                                           Text(this._workshop.contactNameofId[_id]),
-                                          widget.workshopData != null
-                                              ? Container()
-                                              : InkWell(
-                                                  splashColor: Colors.red,
-                                                  onTap: () {
-                                                    setState(() {
-                                                      this._workshop.contactIds.remove(_id);
-                                                      this._workshop.contactNameofId.remove(_id);
-                                                    });
-                                                  },
-                                                  child: Icon(Icons.cancel),
-                                                ),
+                                          InkWell(
+                                            splashColor: Colors.red,
+                                            onTap: () {
+                                              setState(() {
+                                                this._workshop.contactIds.remove(_id);
+                                                this._workshop.contactNameofId.remove(_id);
+                                              });
+                                            },
+                                            child: Icon(Icons.cancel),
+                                          ),
                                         ],
                                       ),
                                     );
@@ -528,103 +524,101 @@ class _CreateScreenState extends State<CreateScreen> {
                           ),
                         )
                       : Container(),
-                  widget.workshopData != null
-                      ? Container()
-                      : Row(children: [
-                          Expanded(
-                            child: TextFormField(
-                              controller: this._tagSearchController,
-                              decoration: InputDecoration(
-                                contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-                                labelText: 'Search tags by name',
-                                suffix: IconButton(
-                                  icon: Icon(Icons.clear),
-                                  onPressed: () {
-                                    this._tagSearchController.text = '';
-                                    if (!this.mounted) return;
-                                  },
-                                ),
-                              ),
-                              onFieldSubmitted: (value) async {
-                                print("Submitted");
-                                if (value.isEmpty) return;
-
-                                this._tagSearchPost = TagSearch((b) => b
-                                  ..club = widget.club.id
-                                  ..tag_name = this._tagSearchController.text);
-
-                                if (!this.mounted) return;
-                                setState(() {
-                                  this._isSearchingTags = true;
-                                  this._tagDataFetched = false;
-                                  this._searchedTagResult = null;
-                                  this._allTagDataShow = false;
-                                });
-                                await AppConstants.service
-                                    .searchTag(AppConstants.djangoToken, this._tagSearchPost)
-                                    .catchError((onError) {
-                                  print('Error while fetching tags $onError');
-                                }).then((result) {
-                                  if (result != null) this._searchedTagResult = result.body;
-                                });
-                                if (!this.mounted) return;
-                                setState(() {
-                                  this._tagDataFetched = true;
-                                });
-                              },
-                            ),
+                  Row(children: [
+                    Expanded(
+                      child: TextFormField(
+                        controller: this._tagSearchController,
+                        decoration: InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                          labelText: 'Search tags by name',
+                          suffix: IconButton(
+                            icon: Icon(Icons.clear),
+                            onPressed: () {
+                              this._tagSearchController.text = '';
+                              if (!this.mounted) return;
+                            },
                           ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                            child: RaisedButton(
-                              child: Text('+ Create'),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(50),
-                              ),
-                              onPressed: () async {
-                                await tagCreateDialog();
-                              },
+                        ),
+                        onFieldSubmitted: (value) async {
+                          print("Submitted");
+                          if (value.isEmpty) return;
+
+                          this._tagSearchPost = TagSearch((b) => b
+                            ..club = widget.club.id
+                            ..tag_name = this._tagSearchController.text);
+
+                          if (!this.mounted) return;
+                          setState(() {
+                            this._isSearchingTags = true;
+                            this._tagDataFetched = false;
+                            this._searchedTagResult = null;
+                            this._allTagDataShow = false;
+                          });
+                          await AppConstants.service
+                              .searchTag(AppConstants.djangoToken, this._tagSearchPost)
+                              .catchError((onError) {
+                            print('Error while fetching tags $onError');
+                          }).then((result) {
+                            if (result != null) this._searchedTagResult = result.body;
+                          });
+                          if (!this.mounted) return;
+                          setState(() {
+                            this._tagDataFetched = true;
+                          });
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                      child: RaisedButton(
+                        child: Text('+ Create'),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                        onPressed: () async {
+                          await tagCreateDialog();
+                        },
+                      ),
+                    ),
+                    this._isSearchingTags || this._allTagDataShow
+                        ? RaisedButton(
+                            child: Text('X Clear'),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(50),
                             ),
+                            onPressed: () {
+                              FocusScope.of(context).unfocus();
+                              this._tagSearchController.text = '';
+                              this._isSearchingTags = false;
+                              this._allTagsOfClub = null;
+                              this._allTagDataShow = false;
+                              this._allTagDataFetched = false;
+                              if (!this.mounted) return;
+                              setState(() {});
+                            },
+                          )
+                        : RaisedButton(
+                            child: Text('All Tags'),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(50),
+                            ),
+                            onPressed: () async {
+                              FocusScope.of(context).unfocus();
+                              await AppConstants.service
+                                  .getClubTags(widget.club.id, AppConstants.djangoToken)
+                                  .catchError((onError) {
+                                print('Error while fetching all tags $onError');
+                              }).then((result) {
+                                if (result != null) {
+                                  this._allTagsOfClub = result.body.club_tags;
+                                  this._allTagDataShow = true;
+                                  this._allTagDataFetched = true;
+                                  setState(() {});
+                                }
+                              });
+                            },
                           ),
-                          this._isSearchingTags || this._allTagDataShow
-                              ? RaisedButton(
-                                  child: Text('X Clear'),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(50),
-                                  ),
-                                  onPressed: () {
-                                    FocusScope.of(context).unfocus();
-                                    this._tagSearchController.text = '';
-                                    this._isSearchingTags = false;
-                                    this._allTagsOfClub = null;
-                                    this._allTagDataShow = false;
-                                    this._allTagDataFetched = false;
-                                    if (!this.mounted) return;
-                                    setState(() {});
-                                  },
-                                )
-                              : RaisedButton(
-                                  child: Text('All Tags'),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(50),
-                                  ),
-                                  onPressed: () async {
-                                    FocusScope.of(context).unfocus();
-                                    await AppConstants.service
-                                        .getClubTags(widget.club.id, AppConstants.djangoToken)
-                                        .catchError((onError) {
-                                      print('Error while fetching all tags $onError');
-                                    }).then((result) {
-                                      if (result != null) {
-                                        this._allTagsOfClub = result.body.club_tags;
-                                        this._allTagDataShow = true;
-                                        this._allTagDataFetched = true;
-                                        setState(() {});
-                                      }
-                                    });
-                                  },
-                                ),
-                        ]),
+                  ]),
                   this._isSearchingTags || this._allTagDataShow
                       ? Column(
                           children: <Widget>[
@@ -668,17 +662,15 @@ class _CreateScreenState extends State<CreateScreen> {
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: <Widget>[
                                           Text(this._workshop.tagNameofId[_id]),
-                                          widget.workshopData != null
-                                              ? Container()
-                                              : InkWell(
-                                                  child: Icon(Icons.cancel),
-                                                  splashColor: Colors.red,
-                                                  onTap: () {
-                                                    setState(() {
-                                                      this._workshop.tagNameofId.remove(_id);
-                                                    });
-                                                  },
-                                                ),
+                                          InkWell(
+                                            child: Icon(Icons.cancel),
+                                            splashColor: Colors.red,
+                                            onTap: () {
+                                              setState(() {
+                                                this._workshop.tagNameofId.remove(_id);
+                                              });
+                                            },
+                                          ),
                                         ],
                                       ),
                                     );
@@ -720,9 +712,12 @@ class _CreateScreenState extends State<CreateScreen> {
                                 context: context, club: widget.club, image: _newImage);
                           } else {
                             await _workshop.edit(
-                                context: context,
-                                club: widget.club,
-                                widgetWorkshopData: widget.workshopData);
+                              context: context,
+                              club: widget.club,
+                              widgetWorkshopData: widget.workshopData,
+                              oldImage: _oldImage,
+                              newImage: _newImage,
+                            );
                           }
                         }
                       },

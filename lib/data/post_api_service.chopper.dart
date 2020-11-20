@@ -86,23 +86,22 @@ class _$PostApiService extends PostApiService {
     return client.send<BuiltAllWorkshopsPost, BuiltAllWorkshopsPost>($request);
   }
 
-  Future<Response<BuiltContacts>> updateContacts(
-      int id, String token, BuiltContacts body) {
+  Future<Response> updateContacts(int id, String token, BuiltContacts body) {
     final $url = '/workshops/${id}/update-contacts/';
     final $headers = {'Authorization': token};
     final $body = body;
     final $request =
         Request('PUT', $url, client.baseUrl, body: $body, headers: $headers);
-    return client.send<BuiltContacts, BuiltContacts>($request);
+    return client.send<dynamic, dynamic>($request);
   }
 
-  Future<Response<BuiltTags>> updateTags(int id, String token, BuiltTags body) {
+  Future<Response> updateTags(int id, String token, BuiltTags body) {
     final $url = '/workshops/${id}/update-tags/';
     final $headers = {'Authorization': token};
     final $body = body;
     final $request =
         Request('PUT', $url, client.baseUrl, body: $body, headers: $headers);
-    return client.send<BuiltTags, BuiltTags>($request);
+    return client.send<dynamic, dynamic>($request);
   }
 
   Future<Response> updateWorkshopByPut(

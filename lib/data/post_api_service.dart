@@ -51,11 +51,11 @@ abstract class PostApiService extends ChopperService {
   //? ----------------------------------- Put -------------------------------
 
   @Put(path: '/workshops/{id}/update-contacts/')
-  Future<Response<BuiltContacts>> updateContacts(
+  Future<Response> updateContacts(
       @Path('id') int id, @Header('Authorization') String token, @Body() BuiltContacts body);
 
   @Put(path: '/workshops/{id}/update-tags/')
-  Future<Response<BuiltTags>> updateTags(
+  Future<Response> updateTags(
       @Path('id') int id, @Header('Authorization') String token, @Body() BuiltTags body);
 
   @Put(path: '/workshops/{id}/')

@@ -73,10 +73,20 @@ class WorkshopCreater {
         print('Created!');
         print(value.body['id']);
         final imageUrl = await _uploadImageToFirestore(image);
-
         if (imageUrl != null) {
-          await AppConstants.service.updateWorkshopByPatch(value.body['id'],
-              AppConstants.djangoToken, BuiltWorkshopDetailPost((b) => b..image_url = imageUrl));
+          await AppConstants.service
+              .updateWorkshopByPatch(
+                  value.body['id'],
+                  AppConstants.djangoToken,
+                  BuiltWorkshopDetailPost((b) => b
+                    ..title = title
+                    ..date = date
+                    ..image_url = imageUrl))
+              .then((value) {
+            print("image url updated successfully");
+          }).catchError((err) {
+            print('error in updating image url: $err');
+          });
         }
         CreatePageDialogBoxes.showSuccesfulDialog(context: context, club: club);
       }
@@ -91,8 +101,9 @@ class WorkshopCreater {
     final uuid = Uuid().v4();
     final storageRef = FirebaseStorage.instance.ref().child('workshops');
     final uploadTask = storageRef.child(uuid).putData(memoryImage.bytes);
-    return await uploadTask.then((val) async => await val.ref.getDownloadURL(), onError: () {
-      print('image could not be uploaded');
+
+    return await uploadTask.then((val) async => await val.ref.getDownloadURL(), onError: (err) {
+      print('image could not be uploaded : $err');
       return null;
     });
   }
@@ -138,8 +149,13 @@ class WorkshopCreater {
         if (newImage != null) {
           final imageUrl = await _uploadImageToFirestore(newImage);
           if (imageUrl != null) {
-            await AppConstants.service.updateWorkshopByPatch(value.body.id,
-                AppConstants.djangoToken, BuiltWorkshopDetailPost((b) => b..image_url = imageUrl));
+            await AppConstants.service.updateWorkshopByPatch(
+                widgetWorkshopData.id,
+                AppConstants.djangoToken,
+                BuiltWorkshopDetailPost((b) => b
+                  ..title = title
+                  ..date = date
+                  ..image_url = imageUrl));
           }
         }
         CreatePageDialogBoxes.showSuccesfulDialog(context: context, club: club, isEditing: true);
@@ -158,8 +174,6 @@ class WorkshopCreater {
     )
         .catchError((onError) {
       print('Error editing contacts in edited workshop: ${onError.toString()}');
-      //  CreatePageDialogBoxes.showUnsuccessfulDialog(
-      //     context: context);
     });
 
     await AppConstants.service
@@ -170,7 +184,7 @@ class WorkshopCreater {
               (b) => b..tags = tagNameofId.keys.toList().build().toBuilder(),
             ))
         .catchError((onError) {
-      print('Error editing contacts in edited workshop: ${onError.toString()}');
+      print('Error editing tags in edited workshop: ${onError.toString()}');
     });
   }
 }

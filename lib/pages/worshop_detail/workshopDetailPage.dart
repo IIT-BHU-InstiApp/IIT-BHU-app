@@ -41,6 +41,7 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
   showSuccessfulDialog() {
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
           title: new Text("Successful!"),
@@ -152,7 +153,7 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
       is_interested = -1;
     }
 
-    print(_workshop.toString());
+    debugPrint(_workshop.toString());
 
     workshopSummary = workshopSummary.rebuild((builder) => builder
       ..title = _workshop.title
