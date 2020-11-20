@@ -12,6 +12,7 @@ import 'package:iit_app/ui/dialogBoxes.dart';
 import 'package:iit_app/ui/separator.dart';
 import 'package:iit_app/ui/text_style.dart';
 import 'package:iit_app/ui/workshop_custom_widgets.dart';
+import 'package:photo_view/photo_view.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class WorkshopDetailCustomWidgets {
@@ -272,7 +273,8 @@ class WorkshopDetailCustomWidgets {
               _getBackground(),
               getGradient(),
               Container(
-                padding: EdgeInsets.fromLTRB(0.0, 72.0, 0.0, 0.0),
+                padding: EdgeInsets.fromLTRB(
+                    0.0, workshopDetail?.image_url != null ? 160 : 72.0, 0.0, 0.0),
                 child: WorkshopCustomWidgets.getWorkshopCard(context,
                     w: workshopSummary, editMode: false, horizontal: false),
               ),
@@ -303,7 +305,23 @@ class WorkshopDetailCustomWidgets {
     );
   }
 
-  Container _getBackground() {
+  Widget _getBackground() {
+    if (workshopDetail?.image_url != null) {
+      return GestureDetector(
+        onTap: () {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (ctx) => PhotoView(
+              imageProvider: NetworkImage(workshopDetail.image_url),
+            ),
+          ));
+        },
+        child: Container(
+          child: Image.network(workshopDetail.image_url),
+          constraints: BoxConstraints.expand(height: 360.0),
+        ),
+      );
+    }
+
     final File clubLogoFile =
         AppConstants.getImageFile(isSmall: true, id: workshopSummary.club.id, isClub: true);
 
