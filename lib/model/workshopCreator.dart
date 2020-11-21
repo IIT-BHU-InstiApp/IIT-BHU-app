@@ -1,11 +1,9 @@
-import 'package:chopper/chopper.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/ui/dialogBoxes.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:built_collection/built_collection.dart';
-import 'package:uuid/uuid.dart';
 
 class WorkshopCreater {
   String title;
@@ -72,7 +70,7 @@ class WorkshopCreater {
       if (value.isSuccessful) {
         print('Created!');
         print(value.body['id']);
-        final imageUrl = await _uploadImageToFirestore(image);
+        final imageUrl = await _uploadImageToFirestore(image, value.body['id']);
         if (imageUrl != null) {
           await AppConstants.service
               .updateWorkshopByPatch(
@@ -95,12 +93,11 @@ class WorkshopCreater {
     });
   }
 
-  static Future<String> _uploadImageToFirestore(MemoryImage memoryImage) async {
+  static Future<String> _uploadImageToFirestore(MemoryImage memoryImage, int workshopId) async {
     if (memoryImage == null) return null;
 
-    final uuid = Uuid().v4();
     final storageRef = FirebaseStorage.instance.ref().child('workshops');
-    final uploadTask = storageRef.child(uuid).putData(memoryImage.bytes);
+    final uploadTask = storageRef.child('$workshopId').putData(memoryImage.bytes);
 
     return await uploadTask.then((val) async => await val.ref.getDownloadURL(), onError: (err) {
       print('image could not be uploaded : $err');
@@ -147,7 +144,7 @@ class WorkshopCreater {
           await deleteImageFromFirestore(widgetWorkshopData.image_url);
         }
         if (newImage != null) {
-          final imageUrl = await _uploadImageToFirestore(newImage);
+          final imageUrl = await _uploadImageToFirestore(newImage, widgetWorkshopData.id);
           if (imageUrl != null) {
             await AppConstants.service.updateWorkshopByPatch(
                 widgetWorkshopData.id,
