@@ -106,18 +106,22 @@ class WorkshopDetailCustomWidgets {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text("Name: ${workshopDetail.resources[index].name}"),
-                                    Text("Link: ${workshopDetail.resources[index].link}"),
+                                    Text(
+                                        "Name: ${workshopDetail.resources[index].name}"),
+                                    Text(
+                                        "Link: ${workshopDetail.resources[index].link}"),
                                     Text(
                                         "Resource Type: ${workshopDetail.resources[index].resource_type}"),
                                     SizedBox(height: 7)
                                   ],
                                 ),
                               ),
-                              (workshopDetail != null && workshopDetail.is_por_holder != null)
+                              (workshopDetail != null &&
+                                      workshopDetail.is_por_holder != null)
                                   ? (workshopDetail.is_por_holder ||
                                           workshopDetail.is_workshop_contact)
-                                      ? _editResources(workshopDetail.resources[index].id)
+                                      ? _editResources(
+                                          workshopDetail.resources[index].id)
                                       : Container()
                                   : Container(),
                             ],
@@ -130,14 +134,16 @@ class WorkshopDetailCustomWidgets {
                     ),
 
           (workshopDetail != null && workshopDetail.is_por_holder != null)
-              ? (workshopDetail.is_por_holder || workshopDetail.is_workshop_contact)
+              ? (workshopDetail.is_por_holder ||
+                      workshopDetail.is_workshop_contact)
                   ? RaisedButton(
                       child: Text("Add resources"),
                       onPressed: () => {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => ResourceCreateScreen(workshopDetail),
+                            builder: (context) =>
+                                ResourceCreateScreen(workshopDetail),
                           ),
                         )
                       },
@@ -211,7 +217,9 @@ class WorkshopDetailCustomWidgets {
                     scrollDirection: Axis.vertical,
                     itemCount: workshopDetail.tags.length,
                     itemBuilder: (context, index) {
-                      return getTag(tag: workshopDetail.tags[index].tag_name, index: index);
+                      return getTag(
+                          tag: workshopDetail.tags[index].tag_name,
+                          index: index);
                     },
                   ),
                 ),
@@ -235,7 +243,8 @@ class WorkshopDetailCustomWidgets {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => ResourceCreateScreen(workshopDetail, id),
+                  builder: (context) =>
+                      ResourceCreateScreen(workshopDetail, id),
                 ),
               );
             },
@@ -257,9 +266,10 @@ class WorkshopDetailCustomWidgets {
   }
 
   Widget getPanelBackground() {
-    final _editWorkshop = (workshopDetail != null && workshopDetail.is_por_holder != false)
-        ? editWorkshopOptions()
-        : Container();
+    final _editWorkshop =
+        (workshopDetail != null && workshopDetail.is_por_holder != false)
+            ? editWorkshopOptions()
+            : Container();
     final _overviewTitle = "Description".toUpperCase();
 
     return Container(
@@ -273,9 +283,9 @@ class WorkshopDetailCustomWidgets {
               _getBackground(),
               getGradient(),
               Container(
-                padding: EdgeInsets.fromLTRB(
-                    0.0, workshopDetail?.image_url != null ? 160 : 72.0, 0.0, 0.0),
-                child: WorkshopCustomWidgets.getWorkshopCard(context,
+                padding: EdgeInsets.fromLTRB(0.0,
+                    workshopDetail?.image_url != null ? 160 : 72.0, 0.0, 0.0),
+                child: WorkshopCustomWidgets.getWorkshopOrEventCard(context,
                     w: workshopSummary, editMode: false, horizontal: false),
               ),
               _editWorkshop,
@@ -292,10 +302,13 @@ class WorkshopDetailCustomWidgets {
                 Separator(),
                 workshopDetail == null
                     ? _loadingAnimation()
-                    : Text(workshopDetail.description, style: Style.commonTextStyle),
+                    : Text(workshopDetail.description,
+                        style: Style.commonTextStyle),
                 _getPeopleGoing(),
                 Separator(),
-                SizedBox(height: 2 * ClubAndCouncilWidgets.getMinPanelHeight(context)),
+                SizedBox(
+                    height:
+                        2 * ClubAndCouncilWidgets.getMinPanelHeight(context)),
               ],
             ),
           ),
@@ -322,12 +335,13 @@ class WorkshopDetailCustomWidgets {
       );
     }
 
-    final File clubLogoFile =
-        AppConstants.getImageFile(isSmall: true, id: workshopSummary.club.id, isClub: true);
+    final File clubLogoFile = AppConstants.getImageFile(
+        isSmall: true, id: workshopSummary.club.id, isClub: true);
 
     return Container(
       child: clubLogoFile == null
-          ? Image.network(workshopSummary.club.small_image_url, fit: BoxFit.cover, height: 300.0)
+          ? Image.network(workshopSummary.club.small_image_url,
+              fit: BoxFit.cover, height: 300.0)
           : Image.file(clubLogoFile, fit: BoxFit.cover, height: 300),
       constraints: BoxConstraints.expand(height: 295.0),
     );
@@ -363,24 +377,30 @@ class WorkshopDetailCustomWidgets {
                     isPast
                         ? Container()
                         : is_interested == 0
-                            ? Container(child: _loadingAnimation(), height: 20, width: 20)
+                            ? Container(
+                                child: _loadingAnimation(),
+                                height: 20,
+                                width: 20)
                             : InkWell(
                                 onTap: () async {
                                   if (AppConstants.isGuest) {
-                                    scaffoldKey.currentState.showSnackBar(SnackBar(
+                                    scaffoldKey.currentState
+                                        .showSnackBar(SnackBar(
                                       content: Text('Please Log In first'),
                                       duration: Duration(seconds: 2),
                                     ));
                                   } else {
                                     if (is_interested != 1) {
                                       bool shouldCalendarBeOpened =
-                                          await CreatePageDialogBoxes.confirmCalendarOpenDialog(
-                                              context: context);
+                                          await CreatePageDialogBoxes
+                                              .confirmCalendarOpenDialog(
+                                                  context: context);
                                       if (shouldCalendarBeOpened == true) {
                                         final String _calendarUrl =
                                             AppConstants.addEventToCalendarLink(
                                                 workshop: workshopDetail);
-                                        print('add event to calendar URL: $_calendarUrl');
+                                        print(
+                                            'add event to calendar URL: $_calendarUrl');
                                         launch(_calendarUrl);
                                       }
                                     }
@@ -388,7 +408,8 @@ class WorkshopDetailCustomWidgets {
                                   }
                                 },
                                 child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
                                   children: [
                                     Icon(Icons.star,
                                         color: is_interested == 1
@@ -453,7 +474,8 @@ class WorkshopDetailCustomWidgets {
             children: <Widget>[
               Text(
                 'Edit',
-                style: TextStyle(color: Colors.yellow, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    color: Colors.yellow, fontWeight: FontWeight.bold),
               ),
               IconButton(
                 icon: Icon(
@@ -481,7 +503,8 @@ class WorkshopDetailCustomWidgets {
             children: <Widget>[
               Text(
                 'Delete',
-                style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+                style:
+                    TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
               ),
               IconButton(
                   iconSize: 50,
@@ -503,7 +526,8 @@ class WorkshopDetailCustomWidgets {
             color: Color(0xff00c6ff),
             borderRadius: BorderRadius.circular(2.0),
           ),
-          margin: EdgeInsets.fromLTRB(MediaQuery.of(context).size.width / 2 - 12.0, 10.0, 0.0, 0.0),
+          margin: EdgeInsets.fromLTRB(
+              MediaQuery.of(context).size.width / 2 - 12.0, 10.0, 0.0, 0.0),
           height: 4.0,
           width: 24.0,
         ),
@@ -513,8 +537,11 @@ class WorkshopDetailCustomWidgets {
 
   Row getHeading({IconData icon, String title}) {
     Color color = ColorConstants.headingColor;
-    TextStyle headingStyle =
-        TextStyle(fontSize: 22.0, fontFamily: 'Poppins', fontWeight: FontWeight.w300, color: color);
+    TextStyle headingStyle = TextStyle(
+        fontSize: 22.0,
+        fontFamily: 'Poppins',
+        fontWeight: FontWeight.w300,
+        color: color);
     return Row(
       children: [
         Icon(

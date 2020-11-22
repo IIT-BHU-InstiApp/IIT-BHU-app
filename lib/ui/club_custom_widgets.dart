@@ -25,7 +25,8 @@ class ClubCustomWidgets {
   final divide = Divider(height: 8.0, thickness: 2.0, color: Colors.blue);
   final space = SizedBox(height: 8.0);
 
-  Widget getPanel({@required ScrollController sc, @required ClubListPost club}) {
+  Widget getPanel(
+      {@required ScrollController sc, @required ClubListPost club}) {
     return Container(
       padding: EdgeInsets.only(top: 20.0),
       decoration: BoxDecoration(
@@ -43,8 +44,8 @@ class ClubCustomWidgets {
                       onPressed: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) =>
-                                CreateScreen(club: club, title: clubMap.name, entity: null),
+                            builder: (context) => CreateScreen(
+                                club: club, title: clubMap.name, entity: null),
                           ),
                         );
                       })
@@ -75,7 +76,7 @@ class ClubCustomWidgets {
                 itemCount: workshops.length,
                 padding: EdgeInsets.all(8),
                 itemBuilder: (context, index) {
-                  return WorkshopCustomWidgets.getWorkshopCard(context,
+                  return WorkshopCustomWidgets.getWorkshopOrEventCard(context,
                       w: workshops[index], reload: reload);
                 },
               );

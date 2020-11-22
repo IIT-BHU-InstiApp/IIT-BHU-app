@@ -173,6 +173,7 @@ abstract class BuiltWorkshopSummaryPost
 
   String get title;
   String get date;
+
   bool get is_workshop;
 
   @nullable
@@ -207,6 +208,7 @@ abstract class BuiltWorkshopDetailPost
   EntityListPost get entity;
 
   String get date;
+
   bool get is_workshop;
 
   @nullable

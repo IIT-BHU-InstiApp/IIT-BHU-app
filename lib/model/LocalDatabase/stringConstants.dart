@@ -16,8 +16,10 @@ class StringConst {
   static const String dateString = 'date';
   static const String timeString = 'time';
   static const String interestedString = 'interested';
+  static const String isWorkshopString = 'isWorkshop';
 
-  static const String allCouncislSummaryString = 'allCouncilsSummary'; //*table name
+  static const String allCouncislSummaryString =
+      'allCouncilsSummary'; //*table name
 
   static const String councilDetailString = 'councilDetail'; //*table name
 
@@ -58,5 +60,6 @@ class StringConst {
 
   static const String entityDetailsString = 'entityDetails'; //*table name
 
-  static const String pointOfContactAsStringArrayString = 'pointOfContactAsStringArray';
+  static const String pointOfContactAsStringArrayString =
+      'pointOfContactAsStringArray';
 }

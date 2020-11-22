@@ -16,10 +16,33 @@ ListView buildCurrentWorkshopPosts(
     itemCount: AppConstants.workshopFromDatabase.length,
     padding: EdgeInsets.all(8),
     itemBuilder: (context, index) {
-      return WorkshopCustomWidgets.getWorkshopCard(context,
-          w: AppConstants.workshopFromDatabase[index],
-          fabKey: fabKey,
-          reload: reload);
+      if (AppConstants.workshopFromDatabase[index].is_workshop)
+        return WorkshopCustomWidgets.getWorkshopOrEventCard(context,
+            isWorkshop: true,
+            w: AppConstants.workshopFromDatabase[index],
+            fabKey: fabKey,
+            reload: reload);
+      return Container();
+    },
+  );
+}
+
+ListView buildCurrentEventPosts(
+    BuildContext context, GlobalKey<FabCircularMenuState> fabKey,
+    {Function reload}) {
+  return ListView.builder(
+    physics: AlwaysScrollableScrollPhysics(),
+    scrollDirection: Axis.vertical,
+    itemCount: AppConstants.workshopFromDatabase.length,
+    padding: EdgeInsets.all(8),
+    itemBuilder: (context, index) {
+      if (!AppConstants.workshopFromDatabase[index].is_workshop)
+        return WorkshopCustomWidgets.getWorkshopOrEventCard(context,
+            isWorkshop: false,
+            w: AppConstants.workshopFromDatabase[index],
+            fabKey: fabKey,
+            reload: reload);
+      return Container();
     },
   );
 }
@@ -48,7 +71,7 @@ FutureBuilder<Response> buildInterestedWorkshopsBody(BuildContext context,
           itemCount: posts.length,
           padding: EdgeInsets.all(8),
           itemBuilder: (context, index) {
-            return WorkshopCustomWidgets.getWorkshopCard(context,
+            return WorkshopCustomWidgets.getWorkshopOrEventCard(context,
                 w: posts[index], reload: reload);
           },
         );
@@ -126,7 +149,7 @@ Widget _buildWorkshopsFromSearchPosts(
           itemCount: posts.active_workshops.length,
           padding: EdgeInsets.all(8),
           itemBuilder: (context, index) {
-            return WorkshopCustomWidgets.getWorkshopCard(context,
+            return WorkshopCustomWidgets.getWorkshopOrEventCard(context,
                 w: posts.active_workshops[index], reload: reload);
           },
         ),
@@ -150,7 +173,7 @@ Widget _buildWorkshopsFromSearchPosts(
           itemCount: posts.past_workshops.length,
           padding: EdgeInsets.all(8),
           itemBuilder: (context, index) {
-            return WorkshopCustomWidgets.getWorkshopCard(context,
+            return WorkshopCustomWidgets.getWorkshopOrEventCard(context,
                 w: posts.past_workshops[index], reload: reload);
           },
         ),
@@ -214,7 +237,7 @@ Widget _buildAllWorkshopsBodyPosts(
           itemCount: posts.active_workshops.length,
           padding: EdgeInsets.all(8),
           itemBuilder: (context, index) {
-            return WorkshopCustomWidgets.getWorkshopCard(context,
+            return WorkshopCustomWidgets.getWorkshopOrEventCard(context,
                 w: posts.active_workshops[index], reload: reload);
           },
         ),
@@ -237,7 +260,7 @@ Widget _buildAllWorkshopsBodyPosts(
           itemCount: posts.past_workshops.length,
           padding: EdgeInsets.all(8),
           itemBuilder: (context, index) {
-            return WorkshopCustomWidgets.getWorkshopCard(
+            return WorkshopCustomWidgets.getWorkshopOrEventCard(
               context,
               w: posts.past_workshops[index],
               reload: reload,

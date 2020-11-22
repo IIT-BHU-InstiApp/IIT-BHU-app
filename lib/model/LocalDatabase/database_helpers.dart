@@ -60,6 +60,7 @@ class DatabaseHelper {
 
     await db.execute('CREATE TABLE ${StringConst.workshopSummaryString} ('
         '       ${StringConst.idString} INTEGER NOT NULL, '
+        '       ${StringConst.isWorkshopString} INTEGER, '
         '       ${StringConst.clubIdString} INTEGER, '
         '       ${StringConst.clubString} DEFAULT "", '
         '       ${StringConst.councilIdString} INTEGER, '
