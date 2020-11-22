@@ -43,14 +43,14 @@ void main() async {
       // define the routes
       '/': (BuildContext context) => ConnectedMain(),
       '/home': (BuildContext context) => HomePage(),
+      '/mapPage': (BuildContext context) => MapPage(),
       '/mess': (BuildContext context) => MessScreen(),
       '/allWorkshops': (BuildContext context) => AllWorkshopsScreen(),
       '/account': (BuildContext context) => AccountPage(),
-      '/complaints': (BuildContext context) => ComplaintsScreen(),
       '/settings': (BuildContext context) => SettingsScreen(),
+      '/complaints': (BuildContext context) => ComplaintsScreen(),
       '/login': (BuildContext context) => LoginPage(),
       '/about': (BuildContext context) => AboutPage(),
-      '/mapPage': (BuildContext context) => MapPage(),
     },
   ));
 }
@@ -125,7 +125,9 @@ class _ConnectedMainState extends State<ConnectedMain> {
                   ),
                 ),
               )
-            : ((AppConstants.isLoggedIn || AppConstants.isGuest) ? HomePage() : LoginPage()));
+            : ((AppConstants.isLoggedIn || AppConstants.isGuest)
+                ? HomePage()
+                : LoginPage()));
   }
 }
 
@@ -137,7 +139,8 @@ Widget get connectionError {
       Text("Could not find active internet connection"),
       Text(
         'Try again',
-        style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold, fontSize: 20),
+        style: TextStyle(
+            color: Colors.green, fontWeight: FontWeight.bold, fontSize: 20),
       ),
     ],
   );

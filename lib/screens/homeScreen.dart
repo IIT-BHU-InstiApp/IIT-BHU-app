@@ -10,13 +10,15 @@ class HomeScreen extends StatefulWidget {
   final GlobalKey<FabCircularMenuState> fabKey;
   final Function reload;
 
-  const HomeScreen({Key key, this.context, this.fabKey, this.reload}) : super(key: key);
+  const HomeScreen({Key key, this.context, this.fabKey, this.reload})
+      : super(key: key);
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin {
+class _HomeScreenState extends State<HomeScreen>
+    with SingleTickerProviderStateMixin {
   TabController _tabController;
 
   void onRefresh() async {
@@ -43,8 +45,8 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
             }
           },
           tabs: [
-            Tab(text: 'Latest'),
-            Tab(text: 'Interested'),
+            Tab(text: 'Workshops'),
+            Tab(text: 'Events'),
           ],
           controller: _tabController,
         ),
@@ -58,24 +60,20 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                     : RefreshIndicator(
                         displacement: 60,
                         onRefresh: () async => onRefresh(),
-                        child: buildWorkhops.buildCurrentWorkshopPosts(context, widget.fabKey,
+                        child: buildWorkhops.buildCurrentWorkshopPosts(
+                            context, widget.fabKey,
                             reload: onRefresh),
                       ),
               ),
               Container(
-                child: AppConstants.isGuest
-                    ? Container(
-                        margin: EdgeInsets.symmetric(vertical: 70, horizontal: 20),
-                        padding: EdgeInsets.all(10),
-                        child: Text(
-                          'We value your interest, but first you have to trust us by logging in.   {Dear Guest, it can not be one sided.}',
-                          style: TextStyle(color: Colors.white, fontSize: 25),
-                        ),
-                      )
-                    : buildWorkhops.buildInterestedWorkshopsBody(
-                        context,
-                        widget.fabKey,
-                        reload: onRefresh,
+                child: AppConstants.firstTimeFetching
+                    ? WorkshopCustomWidgets.getPlaceholder()
+                    : RefreshIndicator(
+                        displacement: 60,
+                        onRefresh: () async => onRefresh(),
+                        child: buildWorkhops.buildCurrentWorkshopPosts(
+                            context, widget.fabKey,
+                            reload: onRefresh),
                       ),
               )
             ],
