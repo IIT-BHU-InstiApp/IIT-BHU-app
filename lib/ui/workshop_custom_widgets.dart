@@ -17,7 +17,6 @@ class WorkshopCustomWidgets {
 
   static Widget getWorkshopOrEventCard(BuildContext context,
       {BuiltWorkshopSummaryPost w,
-      bool isWorkshop = true,
       bool editMode = false,
       bool horizontal = true,
       bool isPast = false,

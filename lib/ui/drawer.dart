@@ -32,7 +32,8 @@ class SideBar extends Drawer {
                     width: 70.0,
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: (AppConstants.currentUser == null || AppConstants.isGuest == true)
+                        image: (AppConstants.currentUser == null ||
+                                AppConstants.isGuest == true)
                             ? AssetImage('assets/guest.png')
                             : NetworkImage(AppConstants.currentUser.photoUrl),
                         fit: BoxFit.fill,
@@ -58,11 +59,13 @@ class SideBar extends Drawer {
                     child: AppConstants.isGuest
                         ? Text(
                             'Guest User',
-                            style: Style.baseTextStyle.copyWith(color: Colors.white),
+                            style: Style.baseTextStyle
+                                .copyWith(color: Colors.white),
                           )
                         : Text(
                             AppConstants.currentUser.email,
-                            style: Style.baseTextStyle.copyWith(color: Colors.white),
+                            style: Style.baseTextStyle
+                                .copyWith(color: Colors.white),
                           ),
                   ),
                 ],
@@ -71,8 +74,9 @@ class SideBar extends Drawer {
           ),
           getNavItem(Icons.home, "Home", '/home', replacement: true),
           getNavItem(Icons.map, "Map", '/mapPage'),
-          getNavItem(Icons.local_dining, "Mess management", '/mess'),
-          getNavItem(Icons.group_work, "All Workshops", '/allWorkshops'),
+          // getNavItem(Icons.local_dining, "Mess management", '/mess'),
+          getNavItem(
+              Icons.group_work, "All workshops and events", '/allWorkshops'),
           AppConstants.isGuest
               ? ListTile(
                   title: Text("Account"),
@@ -89,7 +93,7 @@ class SideBar extends Drawer {
                   },
                 )
               : getNavItem(Icons.account_box, "Account", '/account'),
-          getNavItem(Icons.comment, "Complaints & Suggestions", '/complaints'),
+          // getNavItem(Icons.comment, "Complaints & Suggestions", '/complaints'),
           getNavItem(Icons.settings, "Settings", '/settings'),
           ListTile(
             leading: Icon(Icons.exit_to_app),
@@ -103,7 +107,8 @@ class SideBar extends Drawer {
                 if (result == true) {
                   await authentication.signOutGoogle();
                   await AppConstants.deleteLocalDatabaseOnly();
-                  SharedPreferences prefs = await SharedPreferences.getInstance();
+                  SharedPreferences prefs =
+                      await SharedPreferences.getInstance();
                   await prefs.clear();
                   AppConstants.isGuest = false;
                   Navigator.of(context).pushReplacementNamed('/login');
@@ -123,7 +128,8 @@ class SideBar extends Drawer {
     );
   }
 
-  ListTile getNavItem(IconData icon, String s, String routeName, {bool replacement = false}) {
+  ListTile getNavItem(IconData icon, String s, String routeName,
+      {bool replacement = false}) {
     return ListTile(
       leading: Icon(icon),
       title: Text(s),

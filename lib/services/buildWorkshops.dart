@@ -18,7 +18,6 @@ ListView buildCurrentWorkshopPosts(
     itemBuilder: (context, index) {
       if (AppConstants.workshopFromDatabase[index].is_workshop)
         return WorkshopCustomWidgets.getWorkshopOrEventCard(context,
-            isWorkshop: true,
             w: AppConstants.workshopFromDatabase[index],
             fabKey: fabKey,
             reload: reload);
@@ -38,7 +37,6 @@ ListView buildCurrentEventPosts(
     itemBuilder: (context, index) {
       if (!AppConstants.workshopFromDatabase[index].is_workshop)
         return WorkshopCustomWidgets.getWorkshopOrEventCard(context,
-            isWorkshop: false,
             w: AppConstants.workshopFromDatabase[index],
             fabKey: fabKey,
             reload: reload);
@@ -136,7 +134,7 @@ Widget _buildWorkshopsFromSearchPosts(
               padding: const EdgeInsets.all(15.0),
               child: Center(
                 child: Text(
-                  'Active Workshops',
+                  'Upcoming..',
                   style: TextStyle(fontSize: 25),
                 ),
               ),
@@ -160,7 +158,7 @@ Widget _buildWorkshopsFromSearchPosts(
               padding: const EdgeInsets.all(15.0),
               child: Center(
                 child: Text(
-                  'Past Workshops',
+                  'Past..',
                   style: TextStyle(fontSize: 25),
                 ),
               ),
@@ -223,7 +221,7 @@ Widget _buildAllWorkshopsBodyPosts(
         padding: const EdgeInsets.fromLTRB(15, 20, 15, 0),
         child: Center(
           child: Text(
-            'Active Workshops',
+            'Upcoming..',
             style: TextStyle(
                 fontSize: 25, color: Colors.white, fontWeight: FontWeight.bold),
           ),
@@ -246,7 +244,7 @@ Widget _buildAllWorkshopsBodyPosts(
         padding: const EdgeInsets.fromLTRB(15, 20, 15, 0),
         child: Center(
           child: Text(
-            'Past Workshops',
+            'Past..',
             style: TextStyle(
                 fontSize: 25, color: Colors.white, fontWeight: FontWeight.bold),
           ),
