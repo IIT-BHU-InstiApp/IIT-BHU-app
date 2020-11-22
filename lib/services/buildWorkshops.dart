@@ -7,7 +7,8 @@ import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/ui/workshop_custom_widgets.dart';
 import 'package:built_collection/built_collection.dart';
 
-ListView buildCurrentWorkshopPosts(BuildContext context, GlobalKey<FabCircularMenuState> fabKey,
+ListView buildCurrentWorkshopPosts(
+    BuildContext context, GlobalKey<FabCircularMenuState> fabKey,
     {Function reload}) {
   return ListView.builder(
     physics: AlwaysScrollableScrollPhysics(),
@@ -15,17 +16,42 @@ ListView buildCurrentWorkshopPosts(BuildContext context, GlobalKey<FabCircularMe
     itemCount: AppConstants.workshopFromDatabase.length,
     padding: EdgeInsets.all(8),
     itemBuilder: (context, index) {
-      return WorkshopCustomWidgets.getWorkshopCard(context,
-          w: AppConstants.workshopFromDatabase[index], fabKey: fabKey, reload: reload);
+      if (AppConstants.workshopFromDatabase[index].is_workshop)
+        return WorkshopCustomWidgets.getWorkshopOrEventCard(context,
+            isWorkshop: true,
+            w: AppConstants.workshopFromDatabase[index],
+            fabKey: fabKey,
+            reload: reload);
+      return Container();
     },
   );
 }
 
-FutureBuilder<Response> buildInterestedWorkshopsBody(
+ListView buildCurrentEventPosts(
     BuildContext context, GlobalKey<FabCircularMenuState> fabKey,
     {Function reload}) {
+  return ListView.builder(
+    physics: AlwaysScrollableScrollPhysics(),
+    scrollDirection: Axis.vertical,
+    itemCount: AppConstants.workshopFromDatabase.length,
+    padding: EdgeInsets.all(8),
+    itemBuilder: (context, index) {
+      if (!AppConstants.workshopFromDatabase[index].is_workshop)
+        return WorkshopCustomWidgets.getWorkshopOrEventCard(context,
+            isWorkshop: false,
+            w: AppConstants.workshopFromDatabase[index],
+            fabKey: fabKey,
+            reload: reload);
+      return Container();
+    },
+  );
+}
+
+FutureBuilder<Response> buildInterestedWorkshopsBody(BuildContext context,
+    {Function reload}) {
   return FutureBuilder<Response<BuiltList<BuiltWorkshopSummaryPost>>>(
-    future: AppConstants.service.getInterestedWorkshops(AppConstants.djangoToken),
+    future:
+        AppConstants.service.getInterestedWorkshops(AppConstants.djangoToken),
     builder: (context, snapshot) {
       if (snapshot.connectionState == ConnectionState.done) {
         if (snapshot.hasError) {
@@ -45,8 +71,8 @@ FutureBuilder<Response> buildInterestedWorkshopsBody(
           itemCount: posts.length,
           padding: EdgeInsets.all(8),
           itemBuilder: (context, index) {
-            return WorkshopCustomWidgets.getWorkshopCard(context,
-                w: posts[index], fabKey: fabKey, reload: reload);
+            return WorkshopCustomWidgets.getWorkshopOrEventCard(context,
+                w: posts[index], reload: reload);
           },
         );
       } else {
@@ -59,7 +85,9 @@ FutureBuilder<Response> buildInterestedWorkshopsBody(
 }
 
 FutureBuilder<Response> buildWorkshopsFromSearch(
-    {BuildContext context, BuiltWorkshopSearchByStringPost searchPost, Function reload}) {
+    {BuildContext context,
+    BuiltWorkshopSearchByStringPost searchPost,
+    Function reload}) {
   return FutureBuilder<Response<BuiltAllWorkshopsPost>>(
     future: AppConstants.service.searchWorkshop(searchPost),
     builder: (context, snapshot) {
@@ -121,7 +149,7 @@ Widget _buildWorkshopsFromSearchPosts(
           itemCount: posts.active_workshops.length,
           padding: EdgeInsets.all(8),
           itemBuilder: (context, index) {
-            return WorkshopCustomWidgets.getWorkshopCard(context,
+            return WorkshopCustomWidgets.getWorkshopOrEventCard(context,
                 w: posts.active_workshops[index], reload: reload);
           },
         ),
@@ -145,7 +173,7 @@ Widget _buildWorkshopsFromSearchPosts(
           itemCount: posts.past_workshops.length,
           padding: EdgeInsets.all(8),
           itemBuilder: (context, index) {
-            return WorkshopCustomWidgets.getWorkshopCard(context,
+            return WorkshopCustomWidgets.getWorkshopOrEventCard(context,
                 w: posts.past_workshops[index], reload: reload);
           },
         ),
@@ -154,7 +182,8 @@ Widget _buildWorkshopsFromSearchPosts(
   );
 }
 
-FutureBuilder<Response> buildAllWorkshopsBody(BuildContext context, {Function reload}) {
+FutureBuilder<Response> buildAllWorkshopsBody(BuildContext context,
+    {Function reload}) {
   return FutureBuilder<Response<BuiltAllWorkshopsPost>>(
     future: AppConstants.service.getAllWorkshops(),
     builder: (context, snapshot) {
@@ -185,7 +214,8 @@ FutureBuilder<Response> buildAllWorkshopsBody(BuildContext context, {Function re
   );
 }
 
-Widget _buildAllWorkshopsBodyPosts(BuildContext context, BuiltAllWorkshopsPost posts,
+Widget _buildAllWorkshopsBodyPosts(
+    BuildContext context, BuiltAllWorkshopsPost posts,
     {Function reload}) {
   return ListView(
     children: <Widget>[
@@ -194,7 +224,8 @@ Widget _buildAllWorkshopsBodyPosts(BuildContext context, BuiltAllWorkshopsPost p
         child: Center(
           child: Text(
             'Active Workshops',
-            style: TextStyle(fontSize: 25, color: Colors.white, fontWeight: FontWeight.bold),
+            style: TextStyle(
+                fontSize: 25, color: Colors.white, fontWeight: FontWeight.bold),
           ),
         ),
       ),
@@ -206,7 +237,7 @@ Widget _buildAllWorkshopsBodyPosts(BuildContext context, BuiltAllWorkshopsPost p
           itemCount: posts.active_workshops.length,
           padding: EdgeInsets.all(8),
           itemBuilder: (context, index) {
-            return WorkshopCustomWidgets.getWorkshopCard(context,
+            return WorkshopCustomWidgets.getWorkshopOrEventCard(context,
                 w: posts.active_workshops[index], reload: reload);
           },
         ),
@@ -216,7 +247,8 @@ Widget _buildAllWorkshopsBodyPosts(BuildContext context, BuiltAllWorkshopsPost p
         child: Center(
           child: Text(
             'Past Workshops',
-            style: TextStyle(fontSize: 25, color: Colors.white, fontWeight: FontWeight.bold),
+            style: TextStyle(
+                fontSize: 25, color: Colors.white, fontWeight: FontWeight.bold),
           ),
         ),
       ),
@@ -228,7 +260,7 @@ Widget _buildAllWorkshopsBodyPosts(BuildContext context, BuiltAllWorkshopsPost p
           itemCount: posts.past_workshops.length,
           padding: EdgeInsets.all(8),
           itemBuilder: (context, index) {
-            return WorkshopCustomWidgets.getWorkshopCard(
+            return WorkshopCustomWidgets.getWorkshopOrEventCard(
               context,
               w: posts.past_workshops[index],
               reload: reload,

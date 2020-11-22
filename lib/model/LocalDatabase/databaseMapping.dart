@@ -2,18 +2,22 @@ import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/LocalDatabase/stringConstants.dart';
 
 class DatabaseMapping {
-  static Map<String, dynamic> workshopInfoToMap(BuiltWorkshopSummaryPost workshop) {
+  static Map<String, dynamic> workshopInfoToMap(
+      BuiltWorkshopSummaryPost workshop) {
     Map<String, dynamic> map = {
       StringConst.idString: workshop.id,
+      StringConst.isWorkshopString: workshop.is_workshop ? 1 : 0,
       StringConst.clubIdString: workshop.club?.id,
       StringConst.clubString: workshop.club?.name ?? '',
       StringConst.councilIdString: workshop.club?.council?.id,
       StringConst.entityIdString: workshop.entity?.id,
       StringConst.entityString: workshop.entity?.name,
-      StringConst.smallImageUrlString:
-          workshop.club?.small_image_url ?? workshop.entity?.small_image_url ?? '',
-      StringConst.largeImageUrlString:
-          workshop.club?.large_image_url ?? workshop.entity?.large_image_url ?? '',
+      StringConst.smallImageUrlString: workshop.club?.small_image_url ??
+          workshop.entity?.small_image_url ??
+          '',
+      StringConst.largeImageUrlString: workshop.club?.large_image_url ??
+          workshop.entity?.large_image_url ??
+          '',
       StringConst.titleString: workshop.title == null ? '' : workshop.title,
       StringConst.dateString: workshop.date == null ? '' : workshop.date,
       StringConst.timeString: workshop.time == null ? '' : workshop.time,
@@ -21,7 +25,8 @@ class DatabaseMapping {
     return map;
   }
 
-  static Map<String, dynamic> councilSummaryInfoToMap(BuiltAllCouncilsPost councilSummary) {
+  static Map<String, dynamic> councilSummaryInfoToMap(
+      BuiltAllCouncilsPost councilSummary) {
     Map<String, dynamic> map = {
       StringConst.idString: councilSummary.id,
       StringConst.nameString: councilSummary.name ?? '',
@@ -37,14 +42,17 @@ class DatabaseMapping {
       StringConst.nameString: councilPost.name ?? '',
       StringConst.descriptionString: councilPost.description ?? '',
       StringConst.gensecIdString: councilPost.gensec?.id ?? -1,
-      StringConst.jointGensecId1String:
-          (councilPost.joint_gensec.isEmpty) ? -1 : councilPost.joint_gensec[0].id,
-      StringConst.jointGensecId2String:
-          (councilPost.joint_gensec.length < 2) ? -1 : councilPost.joint_gensec[1].id,
+      StringConst.jointGensecId1String: (councilPost.joint_gensec.isEmpty)
+          ? -1
+          : councilPost.joint_gensec[0].id,
+      StringConst.jointGensecId2String: (councilPost.joint_gensec.length < 2)
+          ? -1
+          : councilPost.joint_gensec[1].id,
       StringConst.smallImageUrlString: councilPost.small_image_url ?? '',
       StringConst.largeImageUrlString: councilPost.large_image_url ?? '',
-      StringConst.isPORHolderString:
-          councilPost.is_por_holder == null ? 0 : (councilPost.is_por_holder == true ? 1 : 0),
+      StringConst.isPORHolderString: councilPost.is_por_holder == null
+          ? 0
+          : (councilPost.is_por_holder == true ? 1 : 0),
       StringConst.websiteUrlString: councilPost.website_url ?? '',
       StringConst.facebookUrlString: councilPost.facebook_url ?? '',
       StringConst.twitterUrlString: councilPost.twitter_url ?? '',
@@ -74,16 +82,18 @@ class DatabaseMapping {
     Map<String, dynamic> map = {
       StringConst.idString: clubSummary.id,
       StringConst.nameString: clubSummary.name ?? '',
-      StringConst.councilIdString: (clubSummary.council == null || clubSummary.council.id == null)
-          ? 0
-          : clubSummary.council.id,
+      StringConst.councilIdString:
+          (clubSummary.council == null || clubSummary.council.id == null)
+              ? 0
+              : clubSummary.council.id,
       StringConst.smallImageUrlString: clubSummary.small_image_url ?? '',
       StringConst.largeImageUrlString: clubSummary.large_image_url ?? '',
     };
     return map;
   }
 
-  static Map<String, dynamic> entitySummaryInfoToMap(EntityListPost entitySummary) {
+  static Map<String, dynamic> entitySummaryInfoToMap(
+      EntityListPost entitySummary) {
     Map<String, dynamic> map = {
       StringConst.idString: entitySummary.id,
       StringConst.nameString: entitySummary.name ?? '',
@@ -111,8 +121,9 @@ class DatabaseMapping {
       StringConst.largeImageUrlString: clubPost.large_image_url ?? '',
       StringConst.isSubscribedString: clubPost.is_subscribed == true ? 1 : 0,
       StringConst.subscribedUsersString: clubPost.subscribed_users,
-      StringConst.isPORHolderString:
-          clubPost.is_por_holder == null ? 0 : (clubPost.is_por_holder == true ? 1 : 0),
+      StringConst.isPORHolderString: clubPost.is_por_holder == null
+          ? 0
+          : (clubPost.is_por_holder == true ? 1 : 0),
       StringConst.websiteUrlString: clubPost.website_url ?? '',
       StringConst.facebookUrlString: clubPost.facebook_url ?? '',
       StringConst.twitterUrlString: clubPost.twitter_url ?? '',
@@ -141,8 +152,9 @@ class DatabaseMapping {
       StringConst.largeImageUrlString: entityPost.large_image_url ?? '',
       StringConst.isSubscribedString: entityPost.is_subscribed == true ? 1 : 0,
       StringConst.subscribedUsersString: entityPost.subscribed_users,
-      StringConst.isPORHolderString:
-          entityPost.is_por_holder == null ? 0 : (entityPost.is_por_holder == true ? 1 : 0),
+      StringConst.isPORHolderString: entityPost.is_por_holder == null
+          ? 0
+          : (entityPost.is_por_holder == true ? 1 : 0),
       StringConst.websiteUrlString: entityPost.website_url ?? '',
       StringConst.facebookUrlString: entityPost.facebook_url ?? '',
       StringConst.twitterUrlString: entityPost.twitter_url ?? '',
@@ -162,9 +174,11 @@ class DatabaseMapping {
       ..id = map[StringConst.idString]
       ..title = map[StringConst.titleString]
       ..date = map[StringConst.dateString]
-      ..time = map[StringConst.timeString]);
+      ..time = map[StringConst.timeString]
+      ..is_workshop = map[StringConst.isWorkshopString] == 1 ? true : false);
 
-    if (map.containsKey(StringConst.clubIdString) && map[StringConst.clubIdString] != null) {
+    if (map.containsKey(StringConst.clubIdString) &&
+        map[StringConst.clubIdString] != null) {
       workshop = workshop.rebuild((b) => b
         ..club.id = map[StringConst.clubIdString]
         ..club.name = map[StringConst.clubString]
@@ -213,7 +227,8 @@ class DatabaseMapping {
     return porHolder;
   }
 
-  static ClubListPost clubSummaryFromMap(dynamic map, BuiltAllCouncilsPost councilSummary) {
+  static ClubListPost clubSummaryFromMap(
+      dynamic map, BuiltAllCouncilsPost councilSummary) {
     final clubSummary = ClubListPost((b) => b
       ..id = map[StringConst.idString]
       ..name = map[StringConst.nameString]

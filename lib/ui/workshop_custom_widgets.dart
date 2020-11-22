@@ -15,18 +15,21 @@ class WorkshopCustomWidgets {
   static final Color textPaleColor = Color(0xFFAFAFAF);
   static final Color textColor = Color(0xFF004681);
 
-  static Widget getWorkshopCard(BuildContext context,
+  static Widget getWorkshopOrEventCard(BuildContext context,
       {BuiltWorkshopSummaryPost w,
+      bool isWorkshop = true,
       bool editMode = false,
       bool horizontal = true,
       bool isPast = false,
       GlobalKey<FabCircularMenuState> fabKey,
       Function reload}) {
-    final File clubLogoFile = AppConstants.getImageFile(isSmall: true, id: w.club.id, isClub: true);
+    final File clubLogoFile =
+        AppConstants.getImageFile(isSmall: true, id: w.club.id, isClub: true);
 
     final workshopThumbnail = Container(
       margin: EdgeInsets.symmetric(vertical: 16.0),
-      alignment: horizontal ? FractionalOffset.centerLeft : FractionalOffset.center,
+      alignment:
+          horizontal ? FractionalOffset.centerLeft : FractionalOffset.center,
       child: Hero(
         tag: "w-hero-${w.id}",
         child: Container(
@@ -62,7 +65,8 @@ class WorkshopCustomWidgets {
       constraints: BoxConstraints.expand(),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: horizontal ? CrossAxisAlignment.start : CrossAxisAlignment.center,
+        crossAxisAlignment:
+            horizontal ? CrossAxisAlignment.start : CrossAxisAlignment.center,
         children: <Widget>[
           editMode
               ? Text("CLICK TO EDIT", style: TextStyle(color: Colors.green))
@@ -95,7 +99,8 @@ class WorkshopCustomWidgets {
     final workshopCard = Container(
       child: workshopCardContent,
       height: horizontal ? 140.0 : 154.0,
-      margin: horizontal ? EdgeInsets.only(left: 46.0) : EdgeInsets.only(top: 72.0),
+      margin:
+          horizontal ? EdgeInsets.only(left: 46.0) : EdgeInsets.only(top: 72.0),
       decoration: BoxDecoration(
         color: ColorConstants.workshopCardContainer,
         shape: BoxShape.rectangle,
@@ -118,7 +123,8 @@ class WorkshopCustomWidgets {
                       PageRouteBuilder(
                         pageBuilder: (_, __, ___) =>
                             WorkshopDetailPage(workshop: w, isPast: isPast),
-                        transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+                        transitionsBuilder: (context, animation,
+                                secondaryAnimation, child) =>
                             FadeTransition(opacity: animation, child: child),
                       ),
                     )
@@ -156,7 +162,8 @@ class WorkshopCustomWidgets {
           return Padding(
             padding: const EdgeInsets.all(10.0),
             child: Container(
-              decoration: BoxDecoration(borderRadius: borderRadius, color: Colors.transparent),
+              decoration: BoxDecoration(
+                  borderRadius: borderRadius, color: Colors.transparent),
               child: Container(
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -191,36 +198,38 @@ class WorkshopCustomWidgets {
                               child: Container(
                                 height: 20.0,
                                 width: MediaQuery.of(context).size.width * 0.5,
-                                decoration:
-                                    BoxDecoration(color: ColorConstants.shimmerSkeletonColor),
+                                decoration: BoxDecoration(
+                                    color: ColorConstants.shimmerSkeletonColor),
                               ),
                             ),
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(left: 15.0, right: 5.0, bottom: 15.0),
+                          padding: const EdgeInsets.only(
+                              left: 15.0, right: 5.0, bottom: 15.0),
                           child: ClipRRect(
                             borderRadius: borderRadius,
                             child: SkeletonAnimation(
                               child: Container(
                                 width: MediaQuery.of(context).size.width * 0.4,
                                 height: 20.0,
-                                decoration:
-                                    BoxDecoration(color: ColorConstants.shimmerSkeletonColor),
+                                decoration: BoxDecoration(
+                                    color: ColorConstants.shimmerSkeletonColor),
                               ),
                             ),
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(left: 15.0, right: 5.0, bottom: 15.0),
+                          padding: const EdgeInsets.only(
+                              left: 15.0, right: 5.0, bottom: 15.0),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(10.0),
                             child: SkeletonAnimation(
                               child: Container(
                                 width: MediaQuery.of(context).size.width * 0.3,
                                 height: 20.0,
-                                decoration:
-                                    BoxDecoration(color: ColorConstants.shimmerSkeletonColor),
+                                decoration: BoxDecoration(
+                                    color: ColorConstants.shimmerSkeletonColor),
                               ),
                             ),
                           ),

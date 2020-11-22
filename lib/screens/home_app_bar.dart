@@ -4,7 +4,7 @@ import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/colorConstants.dart';
 import 'package:iit_app/ui/search_workshop.dart';
 
-import 'notification.dart';
+import 'interestedScreen.dart';
 
 AppBar homeAppBar(context,
         {SearchBarWidget searchBarWidget,
@@ -50,7 +50,8 @@ AppBar homeAppBar(context,
                             image: DecorationImage(
                                 image: AppConstants.currentUser == null
                                     ? AssetImage('assets/guest.png')
-                                    : NetworkImage(AppConstants.currentUser.photoUrl),
+                                    : NetworkImage(
+                                        AppConstants.currentUser.photoUrl),
                                 fit: BoxFit.cover),
                             borderRadius: BorderRadius.circular(50.0),
                           ),
@@ -62,10 +63,15 @@ AppBar homeAppBar(context,
                     padding: const EdgeInsets.only(right: 8.0, left: 8),
                     child: Container(
                       child: InkWell(
-                        child: Icon(Icons.notifications_active, color: Colors.black),
+                        child: Icon(
+                          Icons.star_half_rounded,
+                          color: Colors.black,
+                          size: 35,
+                        ),
                         onTap: () {
                           Navigator.of(context).push(
-                            MaterialPageRoute(builder: (context) => NotificationScreen()),
+                            MaterialPageRoute(
+                                builder: (context) => InterestedScreen()),
                           );
                           if (fabKey.currentState.isOpen) {
                             fabKey.currentState.close();

@@ -14,6 +14,7 @@ class DatabaseQuery {
       StringConst.workshopSummaryString,
       columns: [
         StringConst.idString,
+        StringConst.isWorkshopString,
         StringConst.clubIdString,
         StringConst.clubString,
         StringConst.councilIdString,
@@ -31,14 +32,15 @@ class DatabaseQuery {
       return null;
     }
 
-    BuiltList<BuiltWorkshopSummaryPost> list = BuiltList<BuiltWorkshopSummaryPost>([]);
+    BuiltList<BuiltWorkshopSummaryPost> list =
+        BuiltList<BuiltWorkshopSummaryPost>([]);
     var builder = list.toBuilder();
 
     for (var map in maps) {
       // need to fetch council summary data
 
-      BuiltAllCouncilsPost councilSummary =
-          await getCouncilsSummaryById(db: db, councilId: map[StringConst.councilIdString]);
+      BuiltAllCouncilsPost councilSummary = await getCouncilsSummaryById(
+          db: db, councilId: map[StringConst.councilIdString]);
 
       BuiltWorkshopSummaryPost workshop =
           DatabaseMapping.workshopSummaryFromMap(map, councilSummary);
@@ -69,7 +71,8 @@ class DatabaseQuery {
 
     var map = maps[0];
 
-    BuiltAllCouncilsPost councilSummary = DatabaseMapping.councilSummaryFromMap(map);
+    BuiltAllCouncilsPost councilSummary =
+        DatabaseMapping.councilSummaryFromMap(map);
 
     return councilSummary;
   }
@@ -132,25 +135,29 @@ class DatabaseQuery {
 
     SecyPost gensec;
     if (map[StringConst.gensecIdString] != -1) {
-      gensec = await getPORHolderInfo(db: db, porId: map[StringConst.gensecIdString]);
+      gensec = await getPORHolderInfo(
+          db: db, porId: map[StringConst.gensecIdString]);
     }
 
     BuiltList<SecyPost> porList = BuiltList<SecyPost>([]);
     var porBuilder = porList.toBuilder();
 
     if (map[StringConst.jointGensecId1String] != -1) {
-      var jg1 = await getPORHolderInfo(db: db, porId: map[StringConst.jointGensecId1String]);
+      var jg1 = await getPORHolderInfo(
+          db: db, porId: map[StringConst.jointGensecId1String]);
       porBuilder.add(jg1);
     }
 
     if (map[StringConst.jointGensecId2String] != -1) {
-      var jg2 = await getPORHolderInfo(db: db, porId: map[StringConst.jointGensecId2String]);
+      var jg2 = await getPORHolderInfo(
+          db: db, porId: map[StringConst.jointGensecId2String]);
       porBuilder.add(jg2);
     }
 
     BuiltList<SecyPost> jointGensec = porBuilder.build();
 
-    BuiltList<ClubListPost> clubs = await getClubsSummary(db: db, councilId: councilId);
+    BuiltList<ClubListPost> clubs =
+        await getClubsSummary(db: db, councilId: councilId);
 
     final BuiltCouncilPost councilDetails = BuiltCouncilPost((b) => b
       ..id = map[StringConst.idString]
@@ -172,7 +179,8 @@ class DatabaseQuery {
     return councilDetails;
   }
 
-  static Future<SecyPost> getPORHolderInfo({@required Database db, @required int porId}) async {
+  static Future<SecyPost> getPORHolderInfo(
+      {@required Database db, @required int porId}) async {
     // it will return only 1 map as every POR Holder has unique id
 
     List<Map> maps = await db.query(
@@ -214,8 +222,8 @@ class DatabaseQuery {
     for (var map in maps) {
 // need to fetch council summary data
 
-      BuiltAllCouncilsPost councilSummary =
-          await getCouncilsSummaryById(db: db, councilId: map[StringConst.councilIdString]);
+      BuiltAllCouncilsPost councilSummary = await getCouncilsSummaryById(
+          db: db, councilId: map[StringConst.councilIdString]);
 
       builder.add(DatabaseMapping.clubSummaryFromMap(map, councilSummary));
     }
@@ -225,7 +233,8 @@ class DatabaseQuery {
   }
 
 // TODO; fetch club only when its required , do not store all clubs beforehand.
-  static Future<BuiltClubPost> getClubDetails({@required Database db, @required int clubId}) async {
+  static Future<BuiltClubPost> getClubDetails(
+      {@required Database db, @required int clubId}) async {
     // it will return only 1 map as every club  has unique id
 
     List<Map> maps = await db.query(
@@ -255,7 +264,8 @@ class DatabaseQuery {
       ],
       where: '${StringConst.idString}  = $clubId',
     );
-    print('club id = $clubId -----------------------------------------------------');
+    print(
+        'club id = $clubId -----------------------------------------------------');
     print(maps.length);
 
     if (maps.isEmpty) {
@@ -271,19 +281,22 @@ class DatabaseQuery {
 
     SecyPost secy;
     if (map[StringConst.secyIdString] != -1) {
-      secy = await getPORHolderInfo(db: db, porId: map[StringConst.secyIdString]);
+      secy =
+          await getPORHolderInfo(db: db, porId: map[StringConst.secyIdString]);
     }
 
     BuiltList<SecyPost> porList = BuiltList<SecyPost>([]);
     var porBuilder = porList.toBuilder();
 
     if (map[StringConst.jointSecyId1String] != -1) {
-      var js1 = await getPORHolderInfo(db: db, porId: map[StringConst.jointSecyId1String]);
+      var js1 = await getPORHolderInfo(
+          db: db, porId: map[StringConst.jointSecyId1String]);
       porBuilder.add(js1);
     }
 
     if (map[StringConst.jointSecyId2String] != -1) {
-      var js2 = await getPORHolderInfo(db: db, porId: map[StringConst.jointSecyId2String]);
+      var js2 = await getPORHolderInfo(
+          db: db, porId: map[StringConst.jointSecyId2String]);
       porBuilder.add(js2);
     }
     BuiltList<SecyPost> jointSecy = porBuilder.build();
@@ -310,7 +323,8 @@ class DatabaseQuery {
     return clubDetails;
   }
 
-  static Future<BuiltList<EntityListPost>> getAllEntitiesSummary({@required Database db}) async {
+  static Future<BuiltList<EntityListPost>> getAllEntitiesSummary(
+      {@required Database db}) async {
     List<Map> maps = await db.query(
       StringConst.entitySummaryString,
       columns: [
@@ -358,7 +372,8 @@ class DatabaseQuery {
       ],
       where: '${StringConst.idString}  = $entityId',
     );
-    print('entity id = $entityId -----------------------------------------------------');
+    print(
+        'entity id = $entityId -----------------------------------------------------');
     print(maps.length);
 
     if (maps.isEmpty) {
@@ -366,9 +381,10 @@ class DatabaseQuery {
     }
     var map = maps[0];
 
-    List<int> pocIds = (map[StringConst.pointOfContactAsStringArrayString] as List)
-        ?.map((element) => int.tryParse(element))
-        ?.toList();
+    List<int> pocIds =
+        (map[StringConst.pointOfContactAsStringArrayString] as List)
+            ?.map((element) => int.tryParse(element))
+            ?.toList();
 
     BuiltList<SecyPost> pocList = BuiltList<SecyPost>([]);
     var pocBuilder = pocList.toBuilder();

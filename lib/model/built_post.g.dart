@@ -711,6 +711,9 @@ class _$BuiltWorkshopSummaryPostSerializer
           specifiedType: const FullType(String)),
       'date',
       serializers.serialize(object.date, specifiedType: const FullType(String)),
+      'is_workshop',
+      serializers.serialize(object.is_workshop,
+          specifiedType: const FullType(bool)),
     ];
     if (object.id != null) {
       result
@@ -778,6 +781,10 @@ class _$BuiltWorkshopSummaryPostSerializer
           result.date = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
+        case 'is_workshop':
+          result.is_workshop = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
         case 'time':
           result.time = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
@@ -815,6 +822,9 @@ class _$BuiltWorkshopDetailPostSerializer
           specifiedType: const FullType(String)),
       'date',
       serializers.serialize(object.date, specifiedType: const FullType(String)),
+      'is_workshop',
+      serializers.serialize(object.is_workshop,
+          specifiedType: const FullType(bool)),
     ];
     if (object.id != null) {
       result
@@ -965,6 +975,10 @@ class _$BuiltWorkshopDetailPostSerializer
         case 'date':
           result.date = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
+          break;
+        case 'is_workshop':
+          result.is_workshop = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
           break;
         case 'time':
           result.time = serializers.deserialize(value,
@@ -1828,6 +1842,9 @@ class _$BuiltWorkshopCreatePostSerializer
           specifiedType: const FullType(String)),
       'date',
       serializers.serialize(object.date, specifiedType: const FullType(String)),
+      'is_workshop',
+      serializers.serialize(object.is_workshop,
+          specifiedType: const FullType(bool)),
     ];
     if (object.id != null) {
       result
@@ -1927,6 +1944,10 @@ class _$BuiltWorkshopCreatePostSerializer
         case 'date':
           result.date = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
+          break;
+        case 'is_workshop':
+          result.is_workshop = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
           break;
         case 'time':
           result.time = serializers.deserialize(value,
@@ -3589,6 +3610,8 @@ class _$BuiltWorkshopSummaryPost extends BuiltWorkshopSummaryPost {
   @override
   final String date;
   @override
+  final bool is_workshop;
+  @override
   final String time;
   @override
   final BuiltList<TagDetail> tags;
@@ -3603,6 +3626,7 @@ class _$BuiltWorkshopSummaryPost extends BuiltWorkshopSummaryPost {
       this.entity,
       this.title,
       this.date,
+      this.is_workshop,
       this.time,
       this.tags})
       : super._() {
@@ -3611,6 +3635,10 @@ class _$BuiltWorkshopSummaryPost extends BuiltWorkshopSummaryPost {
     }
     if (date == null) {
       throw new BuiltValueNullFieldError('BuiltWorkshopSummaryPost', 'date');
+    }
+    if (is_workshop == null) {
+      throw new BuiltValueNullFieldError(
+          'BuiltWorkshopSummaryPost', 'is_workshop');
     }
   }
 
@@ -3632,6 +3660,7 @@ class _$BuiltWorkshopSummaryPost extends BuiltWorkshopSummaryPost {
         entity == other.entity &&
         title == other.title &&
         date == other.date &&
+        is_workshop == other.is_workshop &&
         time == other.time &&
         tags == other.tags;
   }
@@ -3642,10 +3671,12 @@ class _$BuiltWorkshopSummaryPost extends BuiltWorkshopSummaryPost {
         $jc(
             $jc(
                 $jc(
-                    $jc($jc($jc(0, id.hashCode), club.hashCode),
-                        entity.hashCode),
-                    title.hashCode),
-                date.hashCode),
+                    $jc(
+                        $jc($jc($jc(0, id.hashCode), club.hashCode),
+                            entity.hashCode),
+                        title.hashCode),
+                    date.hashCode),
+                is_workshop.hashCode),
             time.hashCode),
         tags.hashCode));
   }
@@ -3658,6 +3689,7 @@ class _$BuiltWorkshopSummaryPost extends BuiltWorkshopSummaryPost {
           ..add('entity', entity)
           ..add('title', title)
           ..add('date', date)
+          ..add('is_workshop', is_workshop)
           ..add('time', time)
           ..add('tags', tags))
         .toString();
@@ -3690,6 +3722,10 @@ class BuiltWorkshopSummaryPostBuilder
   String get date => _$this._date;
   set date(String date) => _$this._date = date;
 
+  bool _is_workshop;
+  bool get is_workshop => _$this._is_workshop;
+  set is_workshop(bool is_workshop) => _$this._is_workshop = is_workshop;
+
   String _time;
   String get time => _$this._time;
   set time(String time) => _$this._time = time;
@@ -3708,6 +3744,7 @@ class BuiltWorkshopSummaryPostBuilder
       _entity = _$v.entity?.toBuilder();
       _title = _$v.title;
       _date = _$v.date;
+      _is_workshop = _$v.is_workshop;
       _time = _$v.time;
       _tags = _$v.tags?.toBuilder();
       _$v = null;
@@ -3739,6 +3776,7 @@ class BuiltWorkshopSummaryPostBuilder
               entity: _entity?.build(),
               title: title,
               date: date,
+              is_workshop: is_workshop,
               time: time,
               tags: _tags?.build());
     } catch (_) {
@@ -3775,6 +3813,8 @@ class _$BuiltWorkshopDetailPost extends BuiltWorkshopDetailPost {
   final EntityListPost entity;
   @override
   final String date;
+  @override
+  final bool is_workshop;
   @override
   final String time;
   @override
@@ -3815,6 +3855,7 @@ class _$BuiltWorkshopDetailPost extends BuiltWorkshopDetailPost {
       this.club,
       this.entity,
       this.date,
+      this.is_workshop,
       this.time,
       this.location,
       this.latitude,
@@ -3835,6 +3876,10 @@ class _$BuiltWorkshopDetailPost extends BuiltWorkshopDetailPost {
     }
     if (date == null) {
       throw new BuiltValueNullFieldError('BuiltWorkshopDetailPost', 'date');
+    }
+    if (is_workshop == null) {
+      throw new BuiltValueNullFieldError(
+          'BuiltWorkshopDetailPost', 'is_workshop');
     }
   }
 
@@ -3857,6 +3902,7 @@ class _$BuiltWorkshopDetailPost extends BuiltWorkshopDetailPost {
         club == other.club &&
         entity == other.entity &&
         date == other.date &&
+        is_workshop == other.is_workshop &&
         time == other.time &&
         location == other.location &&
         latitude == other.latitude &&
@@ -3893,12 +3939,12 @@ class _$BuiltWorkshopDetailPost extends BuiltWorkshopDetailPost {
                                                                 $jc(
                                                                     $jc(
                                                                         $jc(
-                                                                            $jc($jc(0, id.hashCode),
-                                                                                title.hashCode),
-                                                                            description.hashCode),
-                                                                        club.hashCode),
-                                                                    entity.hashCode),
-                                                                date.hashCode),
+                                                                            $jc($jc($jc(0, id.hashCode), title.hashCode),
+                                                                                description.hashCode),
+                                                                            club.hashCode),
+                                                                        entity.hashCode),
+                                                                    date.hashCode),
+                                                                is_workshop.hashCode),
                                                             time.hashCode),
                                                         location.hashCode),
                                                     latitude.hashCode),
@@ -3924,6 +3970,7 @@ class _$BuiltWorkshopDetailPost extends BuiltWorkshopDetailPost {
           ..add('club', club)
           ..add('entity', entity)
           ..add('date', date)
+          ..add('is_workshop', is_workshop)
           ..add('time', time)
           ..add('location', location)
           ..add('latitude', latitude)
@@ -3971,6 +4018,10 @@ class BuiltWorkshopDetailPostBuilder
   String _date;
   String get date => _$this._date;
   set date(String date) => _$this._date = date;
+
+  bool _is_workshop;
+  bool get is_workshop => _$this._is_workshop;
+  set is_workshop(bool is_workshop) => _$this._is_workshop = is_workshop;
 
   String _time;
   String get time => _$this._time;
@@ -4047,6 +4098,7 @@ class BuiltWorkshopDetailPostBuilder
       _club = _$v.club?.toBuilder();
       _entity = _$v.entity?.toBuilder();
       _date = _$v.date;
+      _is_workshop = _$v.is_workshop;
       _time = _$v.time;
       _location = _$v.location;
       _latitude = _$v.latitude;
@@ -4091,6 +4143,7 @@ class BuiltWorkshopDetailPostBuilder
               club: _club?.build(),
               entity: _entity?.build(),
               date: date,
+              is_workshop: is_workshop,
               time: time,
               location: location,
               latitude: latitude,
@@ -5339,6 +5392,8 @@ class _$BuiltWorkshopCreatePost extends BuiltWorkshopCreatePost {
   @override
   final String date;
   @override
+  final bool is_workshop;
+  @override
   final String time;
   @override
   final String location;
@@ -5366,6 +5421,7 @@ class _$BuiltWorkshopCreatePost extends BuiltWorkshopCreatePost {
       this.title,
       this.description,
       this.date,
+      this.is_workshop,
       this.time,
       this.location,
       this.latitude,
@@ -5381,6 +5437,10 @@ class _$BuiltWorkshopCreatePost extends BuiltWorkshopCreatePost {
     }
     if (date == null) {
       throw new BuiltValueNullFieldError('BuiltWorkshopCreatePost', 'date');
+    }
+    if (is_workshop == null) {
+      throw new BuiltValueNullFieldError(
+          'BuiltWorkshopCreatePost', 'is_workshop');
     }
   }
 
@@ -5401,6 +5461,7 @@ class _$BuiltWorkshopCreatePost extends BuiltWorkshopCreatePost {
         title == other.title &&
         description == other.description &&
         date == other.date &&
+        is_workshop == other.is_workshop &&
         time == other.time &&
         location == other.location &&
         latitude == other.latitude &&
@@ -5425,10 +5486,12 @@ class _$BuiltWorkshopCreatePost extends BuiltWorkshopCreatePost {
                                     $jc(
                                         $jc(
                                             $jc(
-                                                $jc($jc(0, id.hashCode),
-                                                    title.hashCode),
-                                                description.hashCode),
-                                            date.hashCode),
+                                                $jc(
+                                                    $jc($jc(0, id.hashCode),
+                                                        title.hashCode),
+                                                    description.hashCode),
+                                                date.hashCode),
+                                            is_workshop.hashCode),
                                         time.hashCode),
                                     location.hashCode),
                                 latitude.hashCode),
@@ -5447,6 +5510,7 @@ class _$BuiltWorkshopCreatePost extends BuiltWorkshopCreatePost {
           ..add('title', title)
           ..add('description', description)
           ..add('date', date)
+          ..add('is_workshop', is_workshop)
           ..add('time', time)
           ..add('location', location)
           ..add('latitude', latitude)
@@ -5480,6 +5544,10 @@ class BuiltWorkshopCreatePostBuilder
   String _date;
   String get date => _$this._date;
   set date(String date) => _$this._date = date;
+
+  bool _is_workshop;
+  bool get is_workshop => _$this._is_workshop;
+  set is_workshop(bool is_workshop) => _$this._is_workshop = is_workshop;
 
   String _time;
   String get time => _$this._time;
@@ -5525,6 +5593,7 @@ class BuiltWorkshopCreatePostBuilder
       _title = _$v.title;
       _description = _$v.description;
       _date = _$v.date;
+      _is_workshop = _$v.is_workshop;
       _time = _$v.time;
       _location = _$v.location;
       _latitude = _$v.latitude;
@@ -5562,6 +5631,7 @@ class BuiltWorkshopCreatePostBuilder
               title: title,
               description: description,
               date: date,
+              is_workshop: is_workshop,
               time: time,
               location: location,
               latitude: latitude,
