@@ -32,7 +32,7 @@ void main() async {
   AppConstants.connectionStatus.initialize();
 
 // TODO: populating the ColorConstants. Use sharedPreference here to find out the correct theme.
-  ColorConstants.dark();
+  ColorConstants.setDark();
 
   await AppConstants.setDeviceDirectoryForImages();
 
@@ -76,9 +76,9 @@ class _ConnectedMainState extends State<ConnectedMain> {
   _setTheme() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (prefs.getString(SharedPreferenceKeys.usertheme) == 'light') {
-      ColorConstants.light();
+      ColorConstants.setLight();
     } else {
-      ColorConstants.dark();
+      ColorConstants.setDark();
     }
   }
 

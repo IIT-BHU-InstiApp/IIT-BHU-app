@@ -171,7 +171,11 @@ class AppConstants {
     if (isClub) truthCount++;
     if (isEntity) truthCount++;
 
-    if (truthCount != 1 || isSmall == null || id == null || url == null) {
+    if (truthCount != 1 ||
+        isSmall == null ||
+        id == null ||
+        url == null ||
+        url == "") {
       return;
     }
 

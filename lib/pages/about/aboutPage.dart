@@ -5,6 +5,7 @@ import 'package:iit_app/external_libraries/url_launcher.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:built_collection/built_collection.dart';
+import 'package:iit_app/model/colorConstants.dart';
 import 'package:iit_app/ui/drawer.dart';
 import 'package:iit_app/ui/text_style.dart';
 
@@ -23,7 +24,8 @@ class _AboutPageState extends State<AboutPage> {
   }
 
   void fetchTeamDetails() async {
-    Response<BuiltList<BuiltTeamMemberPost>> snapshots = await AppConstants.service.getTeam();
+    Response<BuiltList<BuiltTeamMemberPost>> snapshots =
+        await AppConstants.service.getTeam();
     // print(snapshots.body);
     teamData = snapshots.body;
     setState(() {});
@@ -41,8 +43,9 @@ class _AboutPageState extends State<AboutPage> {
               space,
               Center(
                   child: CircleAvatar(
-                backgroundImage:
-                    imageUrl == null ? AssetImage('assets/AMC.png') : NetworkImage(imageUrl),
+                backgroundImage: imageUrl == null
+                    ? AssetImage('assets/AMC.png')
+                    : NetworkImage(imageUrl),
                 radius: 30.0,
                 backgroundColor: Colors.transparent,
               )),
@@ -63,14 +66,16 @@ class _AboutPageState extends State<AboutPage> {
     );
   }
 
-  final generalTextStyle = TextStyle(fontSize: 20.0, color: Colors.black);
-  final divide = Divider(height: 8.0, thickness: 2.0, color: Colors.blueGrey);
+  final divide = Divider(
+      height: 8.0,
+      thickness: 2.0,
+      color: ColorConstants.circularRingBackground);
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       minimum: const EdgeInsets.all(2.0),
       child: Scaffold(
-        backgroundColor: Color(0xFF736AB7),
+        backgroundColor: ColorConstants.backgroundThemeColor,
         drawer: SideBar(context: context),
         body: teamData == null
             ? Container(
@@ -86,7 +91,8 @@ class _AboutPageState extends State<AboutPage> {
                   return Container(
                     margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0.0),
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20), color: Colors.white70),
+                        borderRadius: BorderRadius.circular(20),
+                        color: ColorConstants.workshopContainerBackground),
                     padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -103,7 +109,8 @@ class _AboutPageState extends State<AboutPage> {
                                   children: <Widget>[
                                     Text(
                                       teamData[index].role,
-                                      style: Style.headingStyle.copyWith(color: Colors.black54),
+                                      style: Style.headingStyle.copyWith(
+                                          color: ColorConstants.textColor),
                                     ),
                                     divide,
                                   ],
@@ -120,13 +127,13 @@ class _AboutPageState extends State<AboutPage> {
                             itemBuilder: (context, index2) {
                               return ListTile(
                                 leading: GestureDetector(
-                                  onTap: () => openGithub(
-                                      teamData[index].team_members[index2].github_username),
+                                  onTap: () => openGithub(teamData[index]
+                                      .team_members[index2]
+                                      .github_username),
                                   child: Container(
                                     height: 50.0,
                                     width: 50.0,
                                     decoration: BoxDecoration(
-                                        //color: Colors.black,
                                         image: DecorationImage(
                                           image: teamData[index]
                                                       .team_members[index2]
@@ -138,26 +145,38 @@ class _AboutPageState extends State<AboutPage> {
                                                   .github_image_url),
                                           fit: BoxFit.fill,
                                         ),
-                                        borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                                        border: Border.all(color: Colors.blueGrey, width: 2.0)),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(30.0)),
+                                        border: Border.all(
+                                            color: ColorConstants
+                                                .circularRingBackground,
+                                            width: 2.0)),
                                   ),
                                 ),
                                 title: Container(
                                   child: GestureDetector(
-                                    onTap: () => openGithub(
-                                        teamData[index].team_members[index2].github_username),
+                                    onTap: () => openGithub(teamData[index]
+                                        .team_members[index2]
+                                        .github_username),
                                     child: Card(
                                       shape: RoundedRectangleBorder(
-                                        side: BorderSide(color: Colors.blueGrey, width: 2.0),
-                                        borderRadius: BorderRadius.circular(15.0),
+                                        side: BorderSide(
+                                            color: ColorConstants
+                                                .circularRingBackground,
+                                            width: 2.0),
+                                        borderRadius:
+                                            BorderRadius.circular(15.0),
                                       ),
-                                      color: Colors.blueGrey[200],
+                                      color:
+                                          ColorConstants.workshopCardContainer,
                                       child: Container(
                                         height: 50.0,
                                         child: Center(
-                                          child: Text(teamData[index].team_members[index2].name,
-                                              style:
-                                                  TextStyle(color: Colors.black, fontSize: 15.0)),
+                                          child: Text(
+                                              teamData[index]
+                                                  .team_members[index2]
+                                                  .name,
+                                              style: Style.titleTextStyle),
                                         ),
                                       ),
                                     ),
@@ -178,12 +197,7 @@ class _AboutPageState extends State<AboutPage> {
             color: Colors.grey[300],
             height: 50.0,
             child: Center(
-              child: Text(
-                'Made with ❤️ by COPS',
-                style: TextStyle(
-                  fontSize: 16.0,
-                ),
-              ),
+              child: Text('Made with ❤️ by COPS', style: Style.baseTextStyle),
             ),
           ),
         ),

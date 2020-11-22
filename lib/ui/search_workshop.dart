@@ -2,6 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:fab_circular_menu/fab_circular_menu.dart';
+import 'package:iit_app/model/colorConstants.dart';
+import 'package:iit_app/ui/text_style.dart';
 
 class SearchBarWidget {
   TextEditingController searchController = TextEditingController();
@@ -24,7 +26,9 @@ class SearchBarWidget {
         controller: searchController,
         decoration: InputDecoration(
             hintText: 'Search Workshops ...',
-            prefixIcon: Icon(Icons.search),
+            hintStyle:
+                Style.baseTextStyle.copyWith(color: ColorConstants.textColor),
+            prefixIcon: Icon(Icons.search, color: ColorConstants.textColor),
             suffixIcon: IconButton(
               icon: isSearching.value ? Icon(Icons.clear) : Container(),
               onPressed: () {

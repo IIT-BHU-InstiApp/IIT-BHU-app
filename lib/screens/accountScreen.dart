@@ -46,7 +46,8 @@ class AccountScreen extends StatelessWidget {
         child: Container(
           height: 45,
           width: 45,
-          decoration: BoxDecoration(color: backColor, borderRadius: BorderRadius.circular(15)),
+          decoration: BoxDecoration(
+              color: backColor, borderRadius: BorderRadius.circular(15)),
           child: Image.asset(
             imgAssetPath,
             width: 20,
@@ -65,8 +66,8 @@ class AccountScreen extends StatelessWidget {
         iconTheme: IconThemeData(color: Colors.black87),
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () =>
-              Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage())),
+          onPressed: () => Navigator.push(
+              context, MaterialPageRoute(builder: (context) => HomePage())),
         ),
       ),
       drawer: SideBar(context: context),
@@ -105,7 +106,8 @@ class AccountScreen extends StatelessWidget {
                               Row(
                                 children: <Widget>[
                                   Container(
-                                    width: MediaQuery.of(context).size.width - 200,
+                                    width:
+                                        MediaQuery.of(context).size.width - 200,
                                     child: Text(
                                       profileDetails.name,
                                       style: TextStyle(fontSize: 25),
@@ -117,14 +119,16 @@ class AccountScreen extends StatelessWidget {
                                       final name = await asyncInputDialog(
                                           context, 'Name', profileDetails.name);
                                       print(name);
-                                      updateProfileDetails(name, profileDetails.phone_number);
+                                      updateProfileDetails(
+                                          name, profileDetails.phone_number);
                                     },
                                   )
                                 ],
                               ),
                               Text(
                                 profileDetails.department,
-                                style: TextStyle(fontSize: 19, color: Colors.grey),
+                                style:
+                                    TextStyle(fontSize: 19, color: Colors.grey),
                               ),
                             ],
                           ),
@@ -166,10 +170,11 @@ class AccountScreen extends StatelessWidget {
                         IconButton(
                           icon: Icon(Icons.edit),
                           onPressed: () async {
-                            final phoneNumber = await asyncInputDialog(
-                                context, 'Phone No.', profileDetails.phone_number);
+                            final phoneNumber = await asyncInputDialog(context,
+                                'Phone No.', profileDetails.phone_number);
                             print(phoneNumber);
-                            updateProfileDetails(profileDetails.name, phoneNumber);
+                            updateProfileDetails(
+                                profileDetails.name, phoneNumber);
                           },
                         )
                       ],
@@ -178,9 +183,11 @@ class AccountScreen extends StatelessWidget {
                       height: 20,
                     ),
                     Text(
-                      "club_subscriptions",
+                      "Club Subscriptions",
                       style: TextStyle(
-                          color: Color(0xff242424), fontSize: 28, fontWeight: FontWeight.w600),
+                          color: Color(0xff242424),
+                          fontSize: 28,
+                          fontWeight: FontWeight.w600),
                     ),
                     profileDetails == null
                         ? Container(
@@ -190,7 +197,8 @@ class AccountScreen extends StatelessWidget {
                             ),
                           )
                         : profileDetails.club_subscriptions.length == 0
-                            ? Text('You haven\'t subscribed to any channels yet!')
+                            ? Text(
+                                'You haven\'t subscribed to any channels yet!')
                             : Container(child: subscribed("Club")),
                     SizedBox(
                       height: 22,
@@ -214,9 +222,11 @@ class AccountScreen extends StatelessWidget {
                               clubTypeForHero: 'Club Privileges',
                               context: context,
                               title: profileDetails.club_privileges[index].name,
-                              subtitle: profileDetails.club_privileges[index].council.name,
+                              subtitle: profileDetails
+                                  .club_privileges[index].council.name,
                               id: profileDetails.club_privileges[index].id,
-                              imageUrl: profileDetails.club_privileges[index].small_image_url,
+                              imageUrl: profileDetails
+                                  .club_privileges[index].small_image_url,
                               club: profileDetails.club_privileges[index],
                               isCouncil: false,
                               horizontal: true);

@@ -27,7 +27,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
     });
     await AppConstants.deleteAllLocalDataWithImages();
     Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => HomePage()), ModalRoute.withName('/'));
+        MaterialPageRoute(builder: (context) => HomePage()),
+        ModalRoute.withName('/'));
   }
 
 // TODO: Remove this dialog box, instead create buttons directly (like      Pick Theme:           Light   Dark)
@@ -50,10 +51,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   Container(
                     child: RaisedButton(
                       onPressed: () async {
-                        ColorConstants.dark();
-                        SharedPreferences prefs = await SharedPreferences.getInstance();
-                        await prefs.setString(SharedPreferenceKeys.usertheme, 'dark');
+                        ColorConstants.setDark();
+                        SharedPreferences prefs =
+                            await SharedPreferences.getInstance();
+                        await prefs.setString(
+                            SharedPreferenceKeys.usertheme, 'dark');
                         Navigator.pop(context);
+                        Navigator.pushNamed(context, '/home');
                       },
                       child: Text('dark'),
                     ),
@@ -64,10 +68,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   Container(
                     child: RaisedButton(
                       onPressed: () async {
-                        ColorConstants.light();
-                        SharedPreferences prefs = await SharedPreferences.getInstance();
-                        await prefs.setString(SharedPreferenceKeys.usertheme, 'light');
+                        ColorConstants.setLight();
+                        SharedPreferences prefs =
+                            await SharedPreferences.getInstance();
+                        await prefs.setString(
+                            SharedPreferenceKeys.usertheme, 'light');
                         Navigator.pop(context);
+                        Navigator.pushNamed(context, '/home');
                       },
                       child: Text('light'),
                     ),
@@ -106,12 +113,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
               child: Center(
                 child: this._refreshing
                     ? LoadingCircle
-                    : RaisedButton(onPressed: onResetDatabase, child: Text("Reset Saved Data")),
+                    : RaisedButton(
+                        onPressed: onResetDatabase,
+                        child: Text("Reset Saved Data")),
               ),
             ),
             Container(
               margin: EdgeInsets.all(20),
-              child: RaisedButton(onPressed: () => _chooseTheme(), child: Text('Pick theme')),
+              child: RaisedButton(
+                  onPressed: () => _chooseTheme(), child: Text('Pick theme')),
             ),
           ],
         ),

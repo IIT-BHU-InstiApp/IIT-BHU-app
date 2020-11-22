@@ -65,7 +65,7 @@ AppBar homeAppBar(context,
                       child: InkWell(
                         child: Icon(
                           Icons.star_half_rounded,
-                          color: Colors.black,
+                          color: ColorConstants.textColor,
                           size: 35,
                         ),
                         onTap: () {
