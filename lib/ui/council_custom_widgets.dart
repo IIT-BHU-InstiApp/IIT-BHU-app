@@ -17,7 +17,8 @@ class CouncilCustomWidgets {
   final divide = Divider(height: 8.0, thickness: 2.0, color: Colors.blue);
 
   Widget getPanel(
-      {@required ScrollController scrollController, @required BorderRadiusGeometry radius}) {
+      {@required ScrollController scrollController,
+      @required BorderRadiusGeometry radius}) {
     return Container(
       decoration: BoxDecoration(
         borderRadius: radius,
@@ -37,7 +38,10 @@ class CouncilCustomWidgets {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text('Clubs', style: Style.headingStyle, textAlign: TextAlign.left),
+                      Text('Clubs',
+                          style: Style.headingStyle
+                              .copyWith(color: ColorConstants.textColor),
+                          textAlign: TextAlign.left),
                       divide,
                     ],
                   ),
