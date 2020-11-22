@@ -59,15 +59,19 @@ class _AllWorkshopsScreenState extends State<AllWorkshopsScreen>
         child: Scaffold(
           backgroundColor: ColorConstants.homeBackground,
           appBar: AppBar(
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back, color: ColorConstants.textColor),
+              onPressed: () => Navigator.pop(context),
+            ),
             backgroundColor: ColorConstants.homeBackground,
             automaticallyImplyLeading: false,
             title: Text("All Workshops"),
             actions: <Widget>[
               Expanded(
                   child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child:
-                    searchBarWidget.getSearchTextField(context, searchFocusNode: searchFocusNode),
+                padding: const EdgeInsets.fromLTRB(50.0, 5.0, 20, 0),
+                child: searchBarWidget.getSearchTextField(context,
+                    searchFocusNode: searchFocusNode),
               )),
             ],
           ),
@@ -83,8 +87,11 @@ class _AllWorkshopsScreenState extends State<AllWorkshopsScreen>
                 builder: (context, isSearching, child) {
                   return (isSearching
                       ? buildWorkshop.buildWorkshopsFromSearch(
-                          context: context, searchPost: searchBarWidget.searchPost, reload: reload)
-                      : buildWorkshop.buildAllWorkshopsBody(context, reload: reload));
+                          context: context,
+                          searchPost: searchBarWidget.searchPost,
+                          reload: reload)
+                      : buildWorkshop.buildAllWorkshopsBody(context,
+                          reload: reload));
                 }),
           ),
         ),

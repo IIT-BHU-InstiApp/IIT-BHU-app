@@ -6,6 +6,7 @@ import 'package:iit_app/pages/Home/homePage.dart';
 import 'package:iit_app/pages/account/accountPage.dart';
 import 'package:iit_app/ui/drawer.dart';
 import 'package:iit_app/ui/club_council_common/club_&_council_widgets.dart';
+import 'package:iit_app/ui/text_style.dart';
 
 class AccountScreen extends StatelessWidget {
   const AccountScreen({
@@ -61,13 +62,13 @@ class AccountScreen extends StatelessWidget {
       backgroundColor: ColorConstants.homeBackground,
       appBar: AppBar(
         backgroundColor: ColorConstants.homeBackground,
-        elevation: 0.0,
-        brightness: Brightness.light,
-        iconTheme: IconThemeData(color: Colors.black87),
+        title: Text(
+          "Your Account",
+          style: Style.baseTextStyle.copyWith(color: ColorConstants.textColor),
+        ),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.push(
-              context, MaterialPageRoute(builder: (context) => HomePage())),
+          icon: Icon(Icons.arrow_back, color: ColorConstants.textColor),
+          onPressed: () => Navigator.pop(context),
         ),
       ),
       drawer: SideBar(context: context),
@@ -84,6 +85,7 @@ class AccountScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
+                    SizedBox(height: 20),
                     Row(
                       children: <Widget>[
                         Center(
@@ -110,7 +112,9 @@ class AccountScreen extends StatelessWidget {
                                         MediaQuery.of(context).size.width - 200,
                                     child: Text(
                                       profileDetails.name,
-                                      style: TextStyle(fontSize: 25),
+                                      style: Style.headerTextStyle.copyWith(
+                                          fontSize: 25,
+                                          color: ColorConstants.textColor),
                                     ),
                                   ),
                                   IconButton(
@@ -125,11 +129,9 @@ class AccountScreen extends StatelessWidget {
                                   )
                                 ],
                               ),
-                              Text(
-                                profileDetails.department,
-                                style:
-                                    TextStyle(fontSize: 19, color: Colors.grey),
-                              ),
+                              Text(profileDetails.department,
+                                  style: Style.commonTextStyle.copyWith(
+                                      color: ColorConstants.textColor)),
                             ],
                           ),
                         ),
@@ -147,7 +149,8 @@ class AccountScreen extends StatelessWidget {
                         Expanded(
                           child: Text(
                             profileDetails.email,
-                            style: TextStyle(fontSize: 15),
+                            style: Style.baseTextStyle
+                                .copyWith(color: ColorConstants.textColor),
                           ),
                         ),
                       ],
@@ -165,7 +168,8 @@ class AccountScreen extends StatelessWidget {
                           profileDetails.phone_number == null
                               ? 'not provided'
                               : profileDetails.phone_number,
-                          style: TextStyle(fontSize: 15),
+                          style: Style.baseTextStyle
+                              .copyWith(color: ColorConstants.textColor),
                         ),
                         IconButton(
                           icon: Icon(Icons.edit),
@@ -184,11 +188,10 @@ class AccountScreen extends StatelessWidget {
                     ),
                     Text(
                       "Club Subscriptions",
-                      style: TextStyle(
-                          color: Color(0xff242424),
-                          fontSize: 28,
-                          fontWeight: FontWeight.w600),
+                      style: Style.boldHeadingStyle
+                          .copyWith(color: ColorConstants.textColor),
                     ),
+                    SizedBox(height: 5),
                     profileDetails == null
                         ? Container(
                             height: MediaQuery.of(context).size.height / 4,
@@ -207,11 +210,10 @@ class AccountScreen extends StatelessWidget {
                         ? SizedBox(height: 5)
                         : Text(
                             "Club Privileges",
-                            style: TextStyle(
-                                color: Color(0xff242424),
-                                fontSize: 28,
-                                fontWeight: FontWeight.w600),
+                            style: Style.boldHeadingStyle
+                                .copyWith(color: ColorConstants.textColor),
                           ),
+                    SizedBox(height: 5),
                     Container(
                       child: ListView.builder(
                         shrinkWrap: true,

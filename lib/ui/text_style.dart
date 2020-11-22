@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 
 class Style {
+  static final boldHeadingStyle = TextStyle(
+      fontSize: 28.0,
+      color: Colors.black,
+      fontWeight: FontWeight.w700,
+      letterSpacing: 1.0);
   static final headingStyle = TextStyle(
-      fontSize: 30.0,
+      fontSize: 28.0,
       color: Colors.black,
       fontWeight: FontWeight.bold,
       letterSpacing: 1.0);

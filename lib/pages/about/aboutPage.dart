@@ -76,6 +76,18 @@ class _AboutPageState extends State<AboutPage> {
       minimum: const EdgeInsets.all(2.0),
       child: Scaffold(
         backgroundColor: ColorConstants.backgroundThemeColor,
+        appBar: AppBar(
+          backgroundColor: ColorConstants.homeBackground,
+          title: Text(
+            "About us",
+            style:
+                Style.baseTextStyle.copyWith(color: ColorConstants.textColor),
+          ),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: ColorConstants.textColor),
+            onPressed: () => Navigator.pop(context),
+          ),
+        ),
         drawer: SideBar(context: context),
         body: teamData == null
             ? Container(

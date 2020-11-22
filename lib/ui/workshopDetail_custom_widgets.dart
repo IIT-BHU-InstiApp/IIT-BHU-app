@@ -68,19 +68,12 @@ class WorkshopDetailCustomWidgets {
                 )
               : Text(
                   workshopDetail.location,
-                  style: TextStyle(color: Colors.white),
+                  style: Style.baseTextStyle
+                      .copyWith(color: ColorConstants.textColor),
                 ),
           SizedBox(height: 5.0),
           workshopDetail?.latitude != null && workshopDetail?.longitude != null
-              ? Row(
-                  children: [
-                    Text(
-                      '(${workshopDetail?.latitude}, ${workshopDetail?.longitude})',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    _getLocationOnMaps(),
-                  ],
-                )
+              ? _getLocationOnMaps()
               : Container(),
           SizedBox(height: 15.0),
           getHeading(icon: Icons.library_books, title: 'Resources'),
@@ -91,7 +84,11 @@ class WorkshopDetailCustomWidgets {
                   child: Center(child: LoadingCircle),
                 )
               : (workshopDetail.resources.length == 0)
-                  ? Text("No resources yet")
+                  ? Text(
+                      "No resources yet",
+                      style: Style.baseTextStyle
+                          .copyWith(color: ColorConstants.textColor),
+                    )
                   : SizedBox(
                       height: 100,
                       width: 400,
@@ -107,11 +104,20 @@ class WorkshopDetailCustomWidgets {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                        "Name: ${workshopDetail.resources[index].name}"),
+                                      "Name: ${workshopDetail.resources[index].name}",
+                                      style: Style.baseTextStyle.copyWith(
+                                          color: ColorConstants.textColor),
+                                    ),
                                     Text(
-                                        "Link: ${workshopDetail.resources[index].link}"),
+                                      "Link: ${workshopDetail.resources[index].link}",
+                                      style: Style.baseTextStyle.copyWith(
+                                          color: ColorConstants.textColor),
+                                    ),
                                     Text(
-                                        "Resource Type: ${workshopDetail.resources[index].resource_type}"),
+                                      "Resource Type: ${workshopDetail.resources[index].resource_type}",
+                                      style: Style.baseTextStyle.copyWith(
+                                          color: ColorConstants.textColor),
+                                    ),
                                     SizedBox(height: 7)
                                   ],
                                 ),
@@ -165,6 +171,8 @@ class WorkshopDetailCustomWidgets {
                 )
               : Text(
                   workshopDetail.audience,
+                  style: Style.baseTextStyle
+                      .copyWith(color: ColorConstants.textColor),
                   //'No Audience',
                 ),
           SizedBox(height: 15.0),
@@ -181,25 +189,26 @@ class WorkshopDetailCustomWidgets {
                     color: ColorConstants.porHolderBackground,
                   ),
                   //color:Colors.grey[300],
-                  padding: EdgeInsets.only(
-                    top: 20.0,
-                  ),
+                  padding: EdgeInsets.all(15.0),
                   height: 180.0,
-                  child: ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: workshopDetail.contacts.length,
-                    itemBuilder: (context, index) {
-                      return ClubAndCouncilWidgets.getPosHolder(
-                        imageUrl: workshopDetail.contacts[index].photo_url,
-                        name: workshopDetail.contacts[index].name,
-                        email: workshopDetail.contacts[index].email,
-                        context: context,
-                      );
-                    },
-                    separatorBuilder: (context, index) {
-                      return SizedBox(width: 15.0);
-                    },
-                  ),
+                  child: workshopDetail.contacts.length == 0
+                      ? Text('No Contacts added...')
+                      : ListView.separated(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: workshopDetail.contacts.length,
+                          itemBuilder: (context, index) {
+                            return ClubAndCouncilWidgets.getPosHolder(
+                              imageUrl:
+                                  workshopDetail.contacts[index].photo_url,
+                              name: workshopDetail.contacts[index].name,
+                              email: workshopDetail.contacts[index].email,
+                              context: context,
+                            );
+                          },
+                          separatorBuilder: (context, index) {
+                            return SizedBox(width: 15.0);
+                          },
+                        ),
                 ),
           SizedBox(height: 15.0),
           getHeading(icon: Icons.bookmark, title: 'Tags'),
@@ -438,9 +447,10 @@ class WorkshopDetailCustomWidgets {
 
   Row _getLocationOnMaps() {
     final mapButton = RaisedButton(
-      child: Icon(Icons.map),
+      child: Row(
+        children: [Icon(Icons.map), Text("see map")],
+      ),
       onPressed: () {
-        print('lol');
         Navigator.of(context).pushNamed('/mapPage', arguments: {
           'fromWorkshopDetails': true,
           'latitude': workshopDetail?.latitude,

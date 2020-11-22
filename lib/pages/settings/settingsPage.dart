@@ -98,10 +98,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
           backgroundColor: ColorConstants.homeBackground,
           title: Text(
             "Settings",
-            style: Style.baseTextStyle.copyWith(color: Colors.white),
+            style:
+                Style.baseTextStyle.copyWith(color: ColorConstants.textColor),
           ),
           leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Colors.white),
+            icon: Icon(Icons.arrow_back, color: ColorConstants.textColor),
             onPressed: () => Navigator.pop(context),
           ),
         ),
