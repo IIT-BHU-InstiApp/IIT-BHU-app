@@ -2,9 +2,14 @@ class StringConst {
   static const String workshopSummaryString = 'workshopSummary'; //*table name
 
   static const String idString = 'id';
+
   static const String clubIdString = 'clubId';
   static const String clubString = 'club';
   static const String councilIdString = 'councilId';
+
+  static const String entityIdString = 'entityId';
+  static const String entityString = 'entity';
+
   static const String smallImageUrlString = 'smallImageUrl';
   static const String largeImageUrlString = 'largeImageUrl';
   static const String titleString = 'title';
@@ -48,4 +53,10 @@ class StringConst {
   static const String jointSecyId2String = 'jointSecyId2';
   static const String isSubscribedString = 'isSubscribed';
   static const String subscribedUsersString = 'subscribedUsers';
+
+  static const String entitySummaryString = 'entitySummary'; //*table name
+
+  static const String entityDetailsString = 'entityDetails'; //*table name
+
+  static const String pointOfContactAsStringArrayString = 'pointOfContactAsStringArray';
 }

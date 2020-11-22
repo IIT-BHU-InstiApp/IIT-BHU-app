@@ -45,15 +45,26 @@ class WorkshopCreater {
     return (name[0] + ' ' + name[1]);
   }
 
+//one should be null between club and entity
   create({
     @required BuildContext context,
     @required ClubListPost club,
+    @required EntityListPost entity,
     MemoryImage image,
   }) async {
+    var nullCount = 0;
+    if (club == null) nullCount++;
+    if (entity == null) nullCount++;
+
+    assert(
+        nullCount == 1,
+        nullCount == 0
+            ? 'entity and club both should not be null'
+            : 'one should be null between club and entity');
+
     var newWorkshop = BuiltWorkshopCreatePost((b) => b
       ..title = title
       ..description = description
-      ..club = club.id
       ..date = date
       ..time = time
       ..location = location
@@ -64,33 +75,50 @@ class WorkshopCreater {
       ..tags = tagNameofId.keys.toList().build().toBuilder()
       ..link = link);
 
-    await AppConstants.service
-        .postNewWorkshop(AppConstants.djangoToken, newWorkshop)
-        .then((value) async {
-      if (value.isSuccessful) {
-        print('Created!');
-        print(value.body['id']);
-        final imageUrl = await _uploadImageToFirestore(image, value.body['id']);
-        if (imageUrl != null) {
-          await AppConstants.service
-              .updateWorkshopByPatch(
-                  value.body['id'],
-                  AppConstants.djangoToken,
-                  BuiltWorkshopDetailPost((b) => b
-                    ..title = title
-                    ..date = date
-                    ..image_url = imageUrl))
-              .then((value) {
-            print("image url updated successfully");
-          }).catchError((err) {
-            print('error in updating image url: $err');
-          });
+    if (club != null) {
+      await AppConstants.service
+          .createClubWorkshop(club.id, AppConstants.djangoToken, newWorkshop)
+          .then((value) async {
+        if (value.isSuccessful) {
+          print('Created!');
+          _updateWorkshopWithImage(value.body['id'], image);
+          CreatePageDialogBoxes.showSuccesfulDialog(context: context);
         }
-        CreatePageDialogBoxes.showSuccesfulDialog(context: context, club: club);
-      }
-    }).catchError((onError) {
-      print('Error printing CREATED workshop: ${onError.toString()}');
-    });
+      }).catchError((onError) {
+        print('Error printing CREATED workshop: ${onError.toString()}');
+      });
+    } else if (entity != null) {
+      await AppConstants.service
+          .createEntityWorkshop(entity.id, AppConstants.djangoToken, newWorkshop)
+          .then((value) async {
+        if (value.isSuccessful) {
+          print('Created!');
+          await _updateWorkshopWithImage(value.body['id'], image);
+          CreatePageDialogBoxes.showSuccesfulDialog(context: context);
+        }
+      }).catchError((onError) {
+        print('Error printing CREATED workshop: ${onError.toString()}');
+      });
+    }
+  }
+
+  Future _updateWorkshopWithImage(int workshopId, MemoryImage image) async {
+    final imageUrl = await _uploadImageToFirestore(image, workshopId);
+    if (imageUrl != null) {
+      await AppConstants.service
+          .updateWorkshopByPatch(
+              workshopId,
+              AppConstants.djangoToken,
+              BuiltWorkshopDetailPost((b) => b
+                ..title = title
+                ..date = date
+                ..image_url = imageUrl))
+          .then((value) {
+        print("image url updated successfully");
+      }).catchError((err) {
+        print('error in updating image url: $err');
+      });
+    }
   }
 
   static Future<String> _uploadImageToFirestore(MemoryImage memoryImage, int workshopId) async {
@@ -116,7 +144,6 @@ class WorkshopCreater {
 
   edit({
     @required BuildContext context,
-    @required ClubListPost club,
     @required BuiltWorkshopDetailPost widgetWorkshopData,
     NetworkImage oldImage,
     MemoryImage newImage,
@@ -131,7 +158,6 @@ class WorkshopCreater {
       ..longitude = longitude
       ..audience = audience
       ..link = link);
-
     await AppConstants.service
         .updateWorkshopByPatch(widgetWorkshopData.id, AppConstants.djangoToken, editedWorkshop)
         .catchError((onError) {
@@ -143,19 +169,10 @@ class WorkshopCreater {
         if (widgetWorkshopData.image_url != null && oldImage == null) {
           await deleteImageFromFirestore(widgetWorkshopData.image_url);
         }
-        if (newImage != null) {
-          final imageUrl = await _uploadImageToFirestore(newImage, widgetWorkshopData.id);
-          if (imageUrl != null) {
-            await AppConstants.service.updateWorkshopByPatch(
-                widgetWorkshopData.id,
-                AppConstants.djangoToken,
-                BuiltWorkshopDetailPost((b) => b
-                  ..title = title
-                  ..date = date
-                  ..image_url = imageUrl));
-          }
-        }
-        CreatePageDialogBoxes.showSuccesfulDialog(context: context, club: club, isEditing: true);
+
+        await _updateWorkshopWithImage(widgetWorkshopData.id, newImage);
+
+        CreatePageDialogBoxes.showSuccesfulDialog(context: context, isEditing: true);
       }
     }).catchError((onError) {
       print('Error printing EDITED workshop: ${onError.toString()}');

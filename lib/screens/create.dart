@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:ui';
 
 import 'package:chopper/chopper.dart';
@@ -15,9 +14,15 @@ import 'package:image_picker/image_picker.dart';
 
 class CreateScreen extends StatefulWidget {
   final ClubListPost club;
-  final String clubName;
+  final String title;
+  final EntityListPost entity;
   final BuiltWorkshopDetailPost workshopData;
-  const CreateScreen({Key key, @required this.club, @required this.clubName, this.workshopData})
+  const CreateScreen(
+      {Key key,
+      @required this.club,
+      @required this.title,
+      this.workshopData,
+      @required this.entity})
       : super(key: key);
   @override
   _CreateScreenState createState() => _CreateScreenState();
@@ -26,6 +31,8 @@ class CreateScreen extends StatefulWidget {
 class _CreateScreenState extends State<CreateScreen> {
   final _formKey = GlobalKey<FormState>();
   WorkshopCreater _workshop;
+
+  bool _isEntity = false;
 
   MemoryImage _newImage;
   NetworkImage _oldImage;
@@ -51,7 +58,6 @@ class _CreateScreenState extends State<CreateScreen> {
   String _searchByValue = 'name';
 
   TagSearch _tagSearchPost; // Tag to search for
-  TagDetail _createdTagResult; // Response of a created tag(may be null if the tag already exists)
   bool _tagDataFetched = false; // Has the created tag data been fetched?
   bool _isSearchingTags = false; // Has the user searched for the tag?
   bool _searchedDataFetched = false; // Have the searched tags been fetched?
@@ -90,6 +96,8 @@ class _CreateScreenState extends State<CreateScreen> {
 
   @override
   void initState() {
+    this._isEntity = widget.entity != null;
+
     this._titleController = TextEditingController();
     this._descriptionController = TextEditingController();
     this._locationController = TextEditingController();
@@ -171,17 +179,16 @@ class _CreateScreenState extends State<CreateScreen> {
                     ),
                     onPressed: () async {
                       print(this._tagCreateController.text);
-                      final newTag = TagCreate((b) => b
-                        ..tag_name = this._tagCreateController.text
-                        ..club = widget.club.id);
-                      await AppConstants.service
-                          .createTag(AppConstants.djangoToken, newTag)
+                      final newTag = TagCreate((b) => b..tag_name = this._tagCreateController.text);
+                      await (_isEntity
+                              ? AppConstants.service.createEntityTag(
+                                  widget.entity.id, AppConstants.djangoToken, newTag)
+                              : AppConstants.service
+                                  .createClubTag(widget.club.id, AppConstants.djangoToken, newTag))
                           .catchError((onError) {
                         final error = onError as Response<dynamic>;
                         print(error.body);
-                        if (error.body
-                            .toString()
-                            .contains('The tag already exists for this club')) {
+                        if (error.body.toString().contains('The tag already exists for this')) {
                           tagAlertDialog('Tag Exists',
                               'This tag already exists. Search for it if you wish to add it to the workshop.');
                           errorMessageShown = true;
@@ -191,7 +198,6 @@ class _CreateScreenState extends State<CreateScreen> {
                             'Error while creating Tag: ${onError.toString()} ${onError.runtimeType}');
                       }).then((value) {
                         if (value != null) {
-                          this._createdTagResult = value.body;
                           tagAlertDialog('Tag Created',
                               'The Tag has been created succesfully. Search for it again, and add it to the worshop if you wish.');
 
@@ -247,7 +253,7 @@ class _CreateScreenState extends State<CreateScreen> {
               child: ListView(
                 children: [
                   Text(
-                    widget.clubName,
+                    widget.title,
                     textAlign: TextAlign.center,
                     style: TextStyle(color: Colors.blue, fontSize: 24),
                   ),
@@ -543,9 +549,8 @@ class _CreateScreenState extends State<CreateScreen> {
                           print("Submitted");
                           if (value.isEmpty) return;
 
-                          this._tagSearchPost = TagSearch((b) => b
-                            ..club = widget.club.id
-                            ..tag_name = this._tagSearchController.text);
+                          this._tagSearchPost =
+                              TagSearch((b) => b..tag_name = this._tagSearchController.text);
 
                           if (!this.mounted) return;
                           setState(() {
@@ -554,8 +559,11 @@ class _CreateScreenState extends State<CreateScreen> {
                             this._searchedTagResult = null;
                             this._allTagDataShow = false;
                           });
-                          await AppConstants.service
-                              .searchTag(AppConstants.djangoToken, this._tagSearchPost)
+                          await (_isEntity
+                                  ? AppConstants.service.searchEntityTag(widget.entity.id,
+                                      AppConstants.djangoToken, this._tagSearchPost)
+                                  : AppConstants.service.searchClubTag(widget.club.id,
+                                      AppConstants.djangoToken, this._tagSearchPost))
                               .catchError((onError) {
                             print('Error while fetching tags $onError');
                           }).then((result) {
@@ -709,11 +717,13 @@ class _CreateScreenState extends State<CreateScreen> {
 
                           if (widget.workshopData == null) {
                             await _workshop.create(
-                                context: context, club: widget.club, image: _newImage);
+                                context: context,
+                                club: widget.club,
+                                entity: widget.entity,
+                                image: _newImage);
                           } else {
                             await _workshop.edit(
                               context: context,
-                              club: widget.club,
                               widgetWorkshopData: widget.workshopData,
                               oldImage: _oldImage,
                               newImage: _newImage,

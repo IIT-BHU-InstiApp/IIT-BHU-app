@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:iit_app/model/built_post.dart';
-import 'package:iit_app/pages/club/clubPage.dart';
 import 'package:iit_app/model/appConstants.dart';
 
 class CreatePageDialogBoxes {
   static showSuccesfulDialog({
     @required BuildContext context,
-    @required ClubListPost club,
     bool isEditing = false,
   }) {
     showDialog(

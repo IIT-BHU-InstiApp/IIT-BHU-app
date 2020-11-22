@@ -14,9 +14,11 @@ class DatabaseWrite {
   }
 
   static Future insertCouncilSummaryIntoDatabase(
-      {@required Database db, @required BuiltAllCouncilsPost councilSummary}) async {
-    await db.insert(StringConst.allCouncislSummaryString,
-        DatabaseMapping.councilSummaryInfoToMap(councilSummary));
+      {@required Database db, @required BuiltList<BuiltAllCouncilsPost> councils}) async {
+    for (var council in councils) {
+      await db.insert(
+          StringConst.allCouncislSummaryString, DatabaseMapping.councilSummaryInfoToMap(council));
+    }
   }
 
   static Future insertCouncilDetailsIntoDatabase(
@@ -44,15 +46,10 @@ class DatabaseWrite {
           DatabaseMapping.porInfoToMap(por: mainPOR, councilId: councilId, clubId: clubId));
     }
 
-    if (jointPOR.isEmpty != true) {
+    jointPOR?.forEach((joint) async {
       await db.insert(StringConst.porHoldersString,
-          DatabaseMapping.porInfoToMap(por: jointPOR[0], councilId: councilId, clubId: clubId));
-
-      if (jointPOR.length > 1) {
-        await db.insert(StringConst.porHoldersString,
-            DatabaseMapping.porInfoToMap(por: jointPOR[1], councilId: councilId, clubId: clubId));
-      }
-    }
+          DatabaseMapping.porInfoToMap(por: joint, councilId: councilId, clubId: clubId));
+    });
   }
 
   static Future insertClubsSummaryIntoDatabase(
@@ -68,6 +65,29 @@ class DatabaseWrite {
 
     await insertPORHoldersIntoDatabase(
         db: db, clubId: clubPost.id, mainPOR: clubPost.secy, jointPOR: clubPost.joint_secy);
+  }
+
+  static Future insertEntitiesSummaryIntoDatabase(
+      {@required Database db, @required BuiltList<EntityListPost> entities}) async {
+    for (var entity in entities) {
+      await db.insert(
+          StringConst.entitySummaryString, DatabaseMapping.entitySummaryInfoToMap(entity));
+    }
+  }
+
+  static Future insertEntityDetailsIntoDatabase(
+      {@required Database db, @required BuiltEntityPost entityPost}) async {
+    await db.insert(StringConst.entityDetailsString, DatabaseMapping.entityDetailToMap(entityPost));
+
+    await insertPointOfContactIntoDatabase(db: db, poc: entityPost.point_of_contact);
+  }
+
+  static Future insertPointOfContactIntoDatabase(
+      {@required Database db, int entityId = -1, @required BuiltList<SecyPost> poc}) async {
+    poc?.forEach((secy) async {
+      await db.insert(StringConst.porHoldersString,
+          DatabaseMapping.porInfoToMap(por: secy, entityId: entityId));
+    });
   }
 
   // Updating the data-------------------------------------------------------------------------------
@@ -87,6 +107,21 @@ class DatabaseWrite {
     );
   }
 
+  static Future updateEntitySubcription(
+      {@required Database db,
+      @required int entityId,
+      @required bool isSubscribed,
+      @required int subscribedUsers}) async {
+    await db.update(
+      StringConst.entityDetailsString,
+      {
+        StringConst.isSubscribedString: isSubscribed ? 1 : 0,
+        StringConst.subscribedUsersString: subscribedUsers
+      },
+      where: '${StringConst.idString}  = $entityId',
+    );
+  }
+
   // Deleting the data-----------------------------------------------------------------------
 
   static Future deleteEntryOfCouncilDetail({@required Database db, @required int councilId}) async {
@@ -103,6 +138,13 @@ class DatabaseWrite {
     await db.delete(StringConst.clubDetailsString, where: '${StringConst.idString} = $clubId');
 
     await db.delete(StringConst.porHoldersString, where: '${StringConst.clubIdString} = $clubId');
+  }
+
+  static Future deleteEntryOfEntityDetail({@required Database db, @required int entityId}) async {
+    await db.delete(StringConst.entityDetailsString, where: '${StringConst.idString} = $entityId');
+
+    await db.delete(StringConst.porHoldersString,
+        where: '${StringConst.entityIdString} = $entityId');
   }
 
   static Future deleteAllWorkshopsSummary({@required Database db}) async {
@@ -125,8 +167,16 @@ class DatabaseWrite {
     await db.delete(StringConst.clubSummaryString);
   }
 
+  static Future deleteAllEntitySummary({@required Database db}) async {
+    await db.delete(StringConst.entitySummaryString);
+  }
+
   static Future deleteAllClubDetails({@required Database db}) async {
     await db.delete(StringConst.clubDetailsString);
+  }
+
+  static Future deleteAllEntityDetails({@required Database db}) async {
+    await db.delete(StringConst.entityDetailsString);
   }
 
   static Future deleteWholeDatabase({@required Database db}) async {
@@ -136,5 +186,7 @@ class DatabaseWrite {
     await deleteAllPORHolders(db: db);
     await deleteAllClubSummary(db: db);
     await deleteAllClubDetails(db: db);
+    await deleteAllEntitySummary(db: db);
+    await deleteAllEntityDetails(db: db);
   }
 }

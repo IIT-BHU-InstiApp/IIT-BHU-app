@@ -60,9 +60,11 @@ class DatabaseHelper {
 
     await db.execute('CREATE TABLE ${StringConst.workshopSummaryString} ('
         '       ${StringConst.idString} INTEGER NOT NULL, '
-        '       ${StringConst.clubIdString} INTEGER NOT NULL, '
+        '       ${StringConst.clubIdString} INTEGER, '
         '       ${StringConst.clubString} DEFAULT "", '
-        '       ${StringConst.councilIdString} INTEGER NOT NULL, '
+        '       ${StringConst.councilIdString} INTEGER, '
+        '       ${StringConst.entityIdString} INTEGER, '
+        '       ${StringConst.entityString} DEFAULT "", '
         '       ${StringConst.smallImageUrlString} DEFAULT "", '
         '       ${StringConst.largeImageUrlString} DEFAULT "", '
         '       ${StringConst.titleString} DEFAULT "", '
@@ -100,10 +102,13 @@ class DatabaseHelper {
         '        ${StringConst.idString} INTEGER NOT NULL,'
 
         // councilId is only to ease the deletion while deleting coucil information
-        '        ${StringConst.councilIdString} INTEGER NOT NULL,'
+        '        ${StringConst.councilIdString} INTEGER ,'
 
         // clubId is only to ease the deletion while deleting club information
-        '        ${StringConst.clubIdString} INTEGER NOT NULL,'
+        '        ${StringConst.clubIdString} INTEGER,'
+
+        // entityId is only to ease the deletion while deleting entity information
+        '        ${StringConst.entityIdString} INTEGER,'
         //
         '        ${StringConst.nameString} DEFAULT "",'
         '        ${StringConst.emailString} DEFAULT "",'
@@ -141,9 +146,34 @@ class DatabaseHelper {
         '        ${StringConst.instagramUrlString} DEFAULT "",'
         '        ${StringConst.linkedinUrlString} DEFAULT "",'
         '        ${StringConst.youtubeUrlString} DEFAULT "")');
-  }
 
-  // Database helper methods:
+    // for entity buttons
+
+    await db.execute('CREATE TABLE ${StringConst.entitySummaryString} ('
+        '       ${StringConst.idString} INTEGER NOT NULL,'
+        '       ${StringConst.nameString} DEFAULT "",'
+        '       ${StringConst.smallImageUrlString} DEFAULT "",'
+        '       ${StringConst.largeImageUrlString} DEFAULT "")');
+
+    // for entity page
+
+    await db.execute('      CREATE TABLE ${StringConst.entityDetailsString} ('
+        '        ${StringConst.idString} INTEGER NOT NULL,'
+        '        ${StringConst.nameString} DEFAULT "",'
+        '        ${StringConst.descriptionString} DEFAULT "",'
+        '        ${StringConst.pointOfContactAsStringArrayString} DEFAULT "",'
+        '        ${StringConst.smallImageUrlString} DEFAULT "",'
+        '        ${StringConst.largeImageUrlString} DEFAULT "",'
+        '        ${StringConst.isSubscribedString} INTEGER,'
+        '        ${StringConst.subscribedUsersString} INTEGER,'
+        '        ${StringConst.isPORHolderString} INTEGER,'
+        '        ${StringConst.websiteUrlString} DEFAULT "",'
+        '        ${StringConst.facebookUrlString} DEFAULT "",'
+        '        ${StringConst.twitterUrlString} DEFAULT "",'
+        '        ${StringConst.instagramUrlString} DEFAULT "",'
+        '        ${StringConst.linkedinUrlString} DEFAULT "",'
+        '        ${StringConst.youtubeUrlString} DEFAULT "")');
+  }
 
   Future closeDatabase({@required Database db}) async => db.close();
 }

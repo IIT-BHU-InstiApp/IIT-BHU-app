@@ -41,6 +41,7 @@ class AppConstants {
 
   static BuiltList<BuiltWorkshopSummaryPost> workshopFromDatabase;
   static BuiltList<BuiltAllCouncilsPost> councilsSummaryfromDatabase;
+  static BuiltList<EntityListPost> entitiesSummaryFromDatabase;
 
   static int currentCouncilId;
 
@@ -55,38 +56,50 @@ class AppConstants {
     });
   }
 
-  static Future populateWorkshopsAndCouncilButtons() async {
+  static Future populateWorkshopsAndCouncilAndEntityButtons() async {
     DatabaseHelper helper = DatabaseHelper.instance;
     var database = await helper.database;
 
     councilsSummaryfromDatabase = await DatabaseQuery.getAllCouncilsSummary(db: database);
     workshopFromDatabase = await DatabaseQuery.getAllWorkshopsSummary(db: database);
-
+    entitiesSummaryFromDatabase = await DatabaseQuery.getAllEntitiesSummary(db: database);
     // print(' workshops is empty: ${(workshops.isEmpty == true).toString()}');
 
     if (workshopFromDatabase == null) {
       // insert all workshop information for the first time
       await DatabaseWrite.deleteAllWorkshopsSummary(db: database);
       await DatabaseWrite.deleteAllCouncilsSummary(db: database);
+      await DatabaseWrite.deleteAllEntitySummary(db: database);
 
-      print('fetching workshops and all councils summary from json');
+      print('fetching workshops and all councils and entites summary from json');
 
 // API calls to fetch the data
-      Response<BuiltList<BuiltWorkshopSummaryPost>> workshopSnapshots =
-          await service.getActiveWorkshops();
+      final workshopSnapshots = await service.getActiveWorkshops();
       final workshopPosts = workshopSnapshots.body;
 
-      Response<BuiltList<BuiltAllCouncilsPost>> councilSummarySnapshots =
-          await service.getAllCouncils();
+      final councilSummarySnapshots = await service.getAllCouncils();
       final councilSummaryPosts = councilSummarySnapshots.body;
+
+      final entitySummarySnapshots = await service.getAllEntity();
+      final entitySummaryPosts = entitySummarySnapshots.body;
 
 // storing the data fetched from json objects into local database
       // ? remember, we use council summary in database while fetching other data (most of time)
-      for (var post in councilSummaryPosts) {
-        await DatabaseWrite.insertCouncilSummaryIntoDatabase(councilSummary: post, db: database);
-      }
+      await DatabaseWrite.insertCouncilSummaryIntoDatabase(
+          councils: councilSummaryPosts, db: database);
 
-      await writeCouncilLogosIntoDisk(councilSummaryPosts);
+      councilSummaryPosts.forEach((council) async {
+        await writeImageFileIntoDisk(
+            isCouncil: true, isSmall: true, id: council.id, url: council.small_image_url);
+      });
+
+      await DatabaseWrite.insertEntitiesSummaryIntoDatabase(
+          db: database, entities: entitySummaryPosts);
+
+      entitySummaryPosts.forEach((entity) async {
+        await writeImageFileIntoDisk(
+            isEntity: true, isSmall: true, id: entity.id, url: entity.small_image_url);
+      });
 
       for (var post in workshopPosts) {
         await DatabaseWrite.insertWorkshopSummaryIntoDatabase(post: post, db: database);
@@ -101,31 +114,22 @@ class AppConstants {
       // await helper.getAllCouncilsSummary(db: database);
       workshopFromDatabase = workshopPosts;
       // await helper.getAllWorkshopsSummary(db: database);
-
+      entitiesSummaryFromDatabase = entitySummaryPosts;
     }
 
     // helper.closeDatabase(db: database);
-    print('workshops and all councils summary fetched ');
+    print('workshops and all councils and entities summary fetched ');
   }
 
-  static writeCouncilLogosIntoDisk(BuiltList<BuiltAllCouncilsPost> councils) async {
-    for (var council in councils) {
-      if (File('${AppConstants.deviceDirectoryPathImages}/council(small)_${council.id}')
-              .existsSync() ==
-          false) {
-        final url = council.small_image_url;
-        http.get(url).catchError((error) {
-          print('Error in downloading image : $error');
-        }).then((response) {
-          if (response.statusCode == 200) {
-            final imageData = response.bodyBytes.toList();
-            final File file =
-                File('${AppConstants.deviceDirectoryPathImages}/council(small)_${council.id}');
-            file.writeAsBytesSync(imageData);
-          }
-        });
-      }
-    }
+  static writeCouncilAndEntityLogoIntoDisk() async {
+    councilsSummaryfromDatabase?.forEach((council) async {
+      await writeImageFileIntoDisk(
+          isCouncil: true, isSmall: true, id: council.id, url: council.small_image_url);
+    });
+    entitiesSummaryFromDatabase?.forEach((entity) async {
+      await writeImageFileIntoDisk(
+          isEntity: true, isSmall: true, id: entity.id, url: entity.small_image_url);
+    });
   }
 
   /// if [isSmall] is false, then image will be considered as large
@@ -136,19 +140,25 @@ class AppConstants {
   static writeImageFileIntoDisk(
       {bool isCouncil = false,
       bool isClub = false,
+      bool isEntity = false,
       @required bool isSmall,
       @required int id,
       @required String url}) async {
-    if ((isCouncil == true && isClub == true) ||
-        (isCouncil == false && isClub == false) ||
-        isSmall == null ||
-        id == null ||
-        url == null) {
+    int truthCount = 0;
+    if (isCouncil) truthCount++;
+    if (isClub) truthCount++;
+    if (isEntity) truthCount++;
+
+    if (truthCount != 1 || isSmall == null || id == null || url == null) {
       return;
     }
 
     String size = isSmall ? 'small' : 'large';
     String host = isCouncil ? 'council' : 'club';
+
+    if (isEntity) {
+      host = 'entity';
+    }
 
     File file = File('${AppConstants.deviceDirectoryPathImages}/$host($size)_$id');
 
@@ -179,19 +189,25 @@ class AppConstants {
   static File getImageFile({
     bool isCouncil = false,
     bool isClub = false,
+    bool isEntity = false,
     @required bool isSmall,
     @required int id,
   }) {
-    if ((isCouncil == true && isClub == true) ||
-        (isCouncil == false && isClub == false) ||
-        isSmall == null ||
-        id == null) {
+    int truthCount = 0;
+    if (isCouncil) truthCount++;
+    if (isClub) truthCount++;
+    if (isEntity) truthCount++;
+
+    if (truthCount != 1 || isSmall == null || id == null) {
       return null;
     }
 
     String size = isSmall ? 'small' : 'large';
     File file;
     String host = isCouncil ? 'council' : 'club';
+    if (isEntity) {
+      host = 'entity';
+    }
     file = File('${AppConstants.deviceDirectoryPathImages}/$host($size)_$id');
 
     if (file.existsSync()) {
@@ -200,7 +216,7 @@ class AppConstants {
       return null;
   }
 
-// TODO: we fetch council summaries only once in while initializing empty database, make it refreshable.
+// TODO: we fetch council and entity summaries only once in while initializing empty database, make it refreshable.
 
   static Future updateAndPopulateWorkshops() async {
     DatabaseHelper helper = DatabaseHelper.instance;
@@ -291,6 +307,51 @@ class AppConstants {
         db: database, clubId: clubId, isSubscribed: isSubscribed, subscribedUsers: subscribedUsers);
   }
 
+  static Future getEntityDetailsFromDatabase({@required int entityId}) async {
+    DatabaseHelper helper = DatabaseHelper.instance;
+    var database = await helper.database;
+
+    BuiltEntityPost entityPost =
+        await DatabaseQuery.getEntityDetails(db: database, entityId: entityId);
+
+    if (entityPost == null) {
+      Response<BuiltEntityPost> entitySnapshots = await AppConstants.service
+          .getEntity(entityId, AppConstants.djangoToken)
+          .catchError((onError) {
+        print("Error in fetching entity: ${onError.toString()}");
+      });
+      entityPost = entitySnapshots.body;
+
+      await DatabaseWrite.insertEntityDetailsIntoDatabase(entityPost: entityPost, db: database);
+    }
+
+    return entityPost;
+  }
+
+  static Future refreshEntityInDatabase({@required int entityId}) async {
+    print('refreshing entity data ');
+    DatabaseHelper helper = DatabaseHelper.instance;
+    var database = await helper.database;
+    await DatabaseWrite.deleteEntryOfEntityDetail(db: database, entityId: entityId);
+    return await getEntityDetailsFromDatabase(entityId: entityId);
+  }
+
+  static Future updateEntitySubscriptionInDatabase(
+      {@required int entityId,
+      @required bool isSubscribed,
+      @required int currentSubscribedUsers}) async {
+    DatabaseHelper helper = DatabaseHelper.instance;
+    var database = await helper.database;
+
+    final subscribedUsers = currentSubscribedUsers + (isSubscribed ? 1 : -1);
+
+    await DatabaseWrite.updateEntitySubcription(
+        db: database,
+        entityId: entityId,
+        isSubscribed: isSubscribed,
+        subscribedUsers: subscribedUsers);
+  }
+
   /// All locally stored data will be deleted ( only database not images).
   static Future deleteLocalDatabaseOnly() async {
     DatabaseHelper helper = DatabaseHelper.instance;
@@ -313,12 +374,14 @@ class AppConstants {
     AppConstants.firstTimeFetching = true;
     AppConstants.workshopFromDatabase = null;
     AppConstants.councilsSummaryfromDatabase = null;
+    AppConstants.entitiesSummaryFromDatabase = null;
   }
 
   static String addEventToCalendarLink({@required BuiltWorkshopDetailPost workshop}) {
     final String initialUrlForCalendar = "https://www.google.com/calendar/render?action=TEMPLATE";
 
-    final String title = "${workshop.title} - (${workshop.club.name})";
+    final String title =
+        "${workshop.title} - (${workshop.club?.name ?? workshop.entity?.name ?? ''})";
 
     String date = workshop.date.substring(0, 4) +
         workshop.date.substring(5, 7) +

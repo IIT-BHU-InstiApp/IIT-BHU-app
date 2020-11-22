@@ -58,7 +58,7 @@ class _ResourceCreateScreenState extends State<ResourceCreateScreen> {
     print(resource.id);
     print(widget.workshop.id);
     await AppConstants.service
-        .postNewResource(widget.workshop.id, AppConstants.djangoToken, resource)
+        .createResource(widget.workshop.id, AppConstants.djangoToken, resource)
         .catchError((onError) {
       final error = onError as Response<dynamic>;
       print(error.body);

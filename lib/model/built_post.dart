@@ -4,13 +4,72 @@ import 'package:built_value/serializer.dart';
 
 part 'built_post.g.dart';
 
-abstract class TagCreate implements Built<TagCreate, TagCreateBuilder> {
+abstract class EntityListPost implements Built<EntityListPost, EntityListPostBuilder> {
   @nullable
   int get id;
   @nullable
-  String get tag_name;
+  String get name;
   @nullable
-  int get club;
+  String get small_image_url;
+  @nullable
+  String get large_image_url;
+
+  EntityListPost._();
+
+  factory EntityListPost([updates(EntityListPostBuilder b)]) = _$EntityListPost;
+
+  static Serializer<EntityListPost> get serializer => _$entityListPostSerializer;
+}
+
+abstract class BuiltEntityPost implements Built<BuiltEntityPost, BuiltEntityPostBuilder> {
+  @nullable
+  int get id;
+  @nullable
+  String get name;
+  @nullable
+  String get description;
+
+  @nullable
+  BuiltList<SecyPost> get point_of_contact;
+
+  @nullable
+  String get small_image_url;
+  @nullable
+  String get large_image_url;
+  @nullable
+  bool get is_subscribed;
+  @nullable
+  int get subscribed_users;
+
+  @nullable
+  bool get is_por_holder;
+  @nullable
+  String get website_url;
+  @nullable
+  String get facebook_url;
+  @nullable
+  String get twitter_url;
+  @nullable
+  String get instagram_url;
+  @nullable
+  String get linkedin_url;
+  @nullable
+  String get youtube_url;
+
+  BuiltEntityPost._();
+
+  factory BuiltEntityPost([updates(BuiltEntityPostBuilder b)]) = _$BuiltEntityPost;
+
+  static Serializer<BuiltEntityPost> get serializer => _$builtEntityPostSerializer;
+}
+
+// !--------------------------------------------------------------------------------------------------------------------
+
+abstract class TagCreate implements Built<TagCreate, TagCreateBuilder> {
+  @nullable
+  int get id;
+
+  String get tag_name;
 
   TagCreate._();
   factory TagCreate([updates(TagCreateBuilder b)]) = _$TagCreate;
@@ -20,10 +79,8 @@ abstract class TagCreate implements Built<TagCreate, TagCreateBuilder> {
 abstract class TagSearch implements Built<TagSearch, TagSearchBuilder> {
   @nullable
   int get id;
-  @nullable
+
   String get tag_name;
-  @nullable
-  int get club;
 
   TagSearch._();
   factory TagSearch([updates(TagSearchBuilder b)]) = _$TagSearch;
@@ -33,10 +90,13 @@ abstract class TagSearch implements Built<TagSearch, TagSearchBuilder> {
 abstract class TagDetail implements Built<TagDetail, TagDetailBuilder> {
   @nullable
   int get id;
-  @nullable
+
   String get tag_name;
+
   @nullable
   ClubListPost get club;
+  @nullable
+  EntityListPost get entity;
 
   TagDetail._();
   factory TagDetail([updates(TagDetailBuilder b)]) = _$TagDetail;
@@ -52,14 +112,21 @@ abstract class ClubTags implements Built<ClubTags, ClubTagsBuilder> {
   static Serializer<ClubTags> get serializer => _$clubTagsSerializer;
 }
 
+abstract class EntityTags implements Built<EntityTags, EntityTagsBuilder> {
+  @nullable
+  BuiltList<TagDetail> get entity_tags;
+
+  EntityTags._();
+  factory EntityTags([updates(EntityTagsBuilder b)]) = _$EntityTags;
+  static Serializer<EntityTags> get serializer => _$entityTagsSerializer;
+}
+
 abstract class WorkshopResources implements Built<WorkshopResources, WorkshopResourcesBuilder> {
   @nullable
   int get id;
-  @nullable
+
   String get name;
-  @nullable
   String get link;
-  @nullable
   String get resource_type;
 
   WorkshopResources._();
@@ -88,14 +155,18 @@ abstract class BuiltWorkshopSummaryPost
     implements Built<BuiltWorkshopSummaryPost, BuiltWorkshopSummaryPostBuilder> {
   @nullable
   int get id;
+
   @nullable
   ClubListPost get club;
   @nullable
+  EntityListPost get entity;
+
   String get title;
-  @nullable
   String get date;
+
   @nullable
   String get time;
+
   @nullable
   BuiltList<TagDetail> get tags;
 
@@ -112,14 +183,19 @@ abstract class BuiltWorkshopDetailPost
     implements Built<BuiltWorkshopDetailPost, BuiltWorkshopDetailPostBuilder> {
   @nullable
   int get id;
-  @nullable
+
   String get title;
+
   @nullable
   String get description;
+
   @nullable
   ClubListPost get club;
   @nullable
+  EntityListPost get entity;
+
   String get date;
+
   @nullable
   String get time;
   @nullable
@@ -360,11 +436,12 @@ abstract class BuiltWorkshopCreatePost
   int get id;
 
   String get title;
-  int get club;
-  String get date;
 
   @nullable
   String get description;
+
+  String get date;
+
   @nullable
   String get time;
   @nullable

@@ -36,19 +36,20 @@ abstract class PostApiService extends ChopperService {
 
   //? ----------------------------------- Post -------------------------------
 
-  @Post(path: '/workshops/create/')
-  Future<Response<dynamic>> postNewWorkshop(
-      @Header('Authorization') String token, @Body() BuiltWorkshopCreatePost body);
-
-  @Post(path: '/workshops/{id}/resources/')
-  Future<Response> postNewResource(@Path('id') int id, @Header('Authorization') String token,
-      @Body() WorkshopResources resources);
-
+  ///searches workshop only according to title
   @Post(path: '/workshops/search/')
   Future<Response<BuiltAllWorkshopsPost>> searchWorkshop(
       @Body() BuiltWorkshopSearchByStringPost body);
 
+  @Post(path: '/workshops/{id}/resources/')
+  Future<Response> createResource(@Path('id') int id, @Header('Authorization') String token,
+      @Body() WorkshopResources resources);
+
   //? ----------------------------------- Put -------------------------------
+
+  @Put(path: '/workshops/{id}/')
+  Future<Response> updateWorkshopByPut(@Path('id') int id, @Header('Authorization') String token,
+      @Body() BuiltWorkshopDetailPost body);
 
   @Put(path: '/workshops/{id}/update-contacts/')
   Future<Response> updateContacts(
@@ -57,10 +58,6 @@ abstract class PostApiService extends ChopperService {
   @Put(path: '/workshops/{id}/update-tags/')
   Future<Response> updateTags(
       @Path('id') int id, @Header('Authorization') String token, @Body() BuiltTags body);
-
-  @Put(path: '/workshops/{id}/')
-  Future<Response> updateWorkshopByPut(@Path('id') int id, @Header('Authorization') String token,
-      @Body() BuiltWorkshopDetailPost body);
 
   //? ----------------------------------- Patch -------------------------------
 
@@ -141,6 +138,9 @@ abstract class PostApiService extends ChopperService {
   Future<Response<BuiltClubPost>> getClub(
       @Path('id') int id, @Header('Authorization') String token);
 
+  @Get(path: '/clubs/{id}/tags/')
+  Future<Response<ClubTags>> getClubTags(@Path('id') int id, @Header('Authorization') String token);
+
   @Get(path: '/clubs/{id}/toggle-subscribed/')
   Future<Response> toggleClubSubscription(
       @Path('id') int id, @Header('Authorization') String token);
@@ -149,8 +149,19 @@ abstract class PostApiService extends ChopperService {
   Future<Response<BuiltAllWorkshopsPost>> getClubWorkshops(
       @Path('id') int id, @Header('Authorization') String token);
 
-  @Get(path: '/clubs/{id}/tags/')
-  Future<Response<ClubTags>> getClubTags(@Path('id') int id, @Header('Authorization') String token);
+  //? ----------------------------------- Post -------------------------------
+
+  @Post(path: '/clubs/{id}/tags/create/')
+  Future<Response<TagDetail>> createClubTag(
+      @Path('id') int id, @Header('Authorization') String token, @Body() TagCreate body);
+
+  @Post(path: '/clubs/{id}/tags/search/')
+  Future<Response<BuiltList<TagDetail>>> searchClubTag(
+      @Path('id') int id, @Header('Authorization') String token, @Body() TagSearch body);
+
+  @Post(path: '/clubs/{id}/workshops/create/')
+  Future<Response<dynamic>> createClubWorkshop(@Path('id') int id,
+      @Header('Authorization') String token, @Body() BuiltWorkshopCreatePost body);
 
   //? ----------------------------------- Put -------------------------------
   @Put(path: '/clubs/{id}/')
@@ -164,6 +175,59 @@ abstract class PostApiService extends ChopperService {
       @Path('id') int id, @Header('Authorization') String token, @Body() BuiltClubPost body);
 
 //! ------------------------------------------ Club end point APIs --------------------------------------------------------------
+
+//? --------------------------------------------------------------------------------------------------------------------
+//? --------------------------------------------------------------------------------------------------------------------
+
+//! ------------------------------------------ Entity end point APIs --------------------------------------------------------------
+
+  //? ----------------------------------- Get -------------------------------
+
+  @Get(path: '/entities/')
+  Future<Response<BuiltList<EntityListPost>>> getAllEntity();
+
+  @Get(path: '/entities/{id}/')
+  Future<Response<BuiltEntityPost>> getEntity(
+      @Path('id') int id, @Header('Authorization') String token);
+
+  @Get(path: '/entities/{id}/tags/')
+  Future<Response<EntityTags>> getEntityTags(
+      @Path('id') int id, @Header('Authorization') String token);
+
+  @Get(path: '/entities/{id}/toggle-subscribed/')
+  Future<Response> toggleEntitySubscription(
+      @Path('id') int id, @Header('Authorization') String token);
+
+  @Get(path: '/entities/{id}/workshops/')
+  Future<Response<BuiltAllWorkshopsPost>> getEntityWorkshops(
+      @Path('id') int id, @Header('Authorization') String token);
+
+  //? ----------------------------------- Post -------------------------------
+
+  @Post(path: '/entities/{id}/tags/create/')
+  Future<Response<TagDetail>> createEntityTag(
+      @Path('id') int id, @Header('Authorization') String token, @Body() TagCreate body);
+
+  @Post(path: '/entities/{id}/tags/search/')
+  Future<Response<BuiltList<TagDetail>>> searchEntityTag(
+      @Path('id') int id, @Header('Authorization') String token, @Body() TagSearch body);
+
+  @Post(path: '/entities/{id}/workshops/create/')
+  Future<Response<dynamic>> createEntityWorkshop(@Path('id') int id,
+      @Header('Authorization') String token, @Body() BuiltWorkshopCreatePost body);
+
+  //? ----------------------------------- Put -------------------------------
+  @Put(path: '/entities/{id}/')
+  Future<Response> updateEntityByPut(
+      @Path('id') int id, @Header('Authorization') String token, @Body() BuiltEntityPost body);
+
+  //? ----------------------------------- Patch -------------------------------
+
+  @Patch(path: '/entities/{id}/')
+  Future<Response> updateEntityByPatch(
+      @Path('id') int id, @Header('Authorization') String token, @Body() BuiltEntityPost body);
+
+//! ------------------------------------------ Entity end point APIs --------------------------------------------------------------
 
 //? --------------------------------------------------------------------------------------------------------------------
 //? --------------------------------------------------------------------------------------------------------------------
@@ -197,7 +261,7 @@ abstract class PostApiService extends ChopperService {
 //? --------------------------------------------------------------------------------------------------------------------
 //? --------------------------------------------------------------------------------------------------------------------
 
-//! ------------------------------------------ Other (Team,Tags,Login) end point APIs --------------------------------------------------------------
+//! ------------------------------------------ Other (Team,Login) end point APIs --------------------------------------------------------------
 
   //? ----------------------------------- Get -------------------------------
 
@@ -206,19 +270,10 @@ abstract class PostApiService extends ChopperService {
 
   //? ----------------------------------- Post -------------------------------
 
-  @Post(path: '/tags/create/')
-  Future<Response<TagDetail>> createTag(
-      @Header('Authorization') String token, @Body() TagCreate body);
-
-// TODO: what is the return response body of searchTag ?
-  @Post(path: '/tags/search/')
-  Future<Response<BuiltList<TagDetail>>> searchTag(
-      @Header('Authorization') String token, @Body() TagSearch body);
-
   @Post(path: '/login/')
   Future<Response<Token>> logInPost(@Body() LoginPost body);
 
-//! ------------------------------------------ Other (Team,Tags,Login) end point APIs --------------------------------------------------------------
+//! ------------------------------------------ Other (Team,Login) end point APIs --------------------------------------------------------------
 
   static PostApiService create() {
     final client = ChopperClient(

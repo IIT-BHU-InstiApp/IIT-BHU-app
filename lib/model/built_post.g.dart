@@ -6,10 +6,15 @@ part of 'built_post.dart';
 // BuiltValueGenerator
 // **************************************************************************
 
+Serializer<EntityListPost> _$entityListPostSerializer =
+    new _$EntityListPostSerializer();
+Serializer<BuiltEntityPost> _$builtEntityPostSerializer =
+    new _$BuiltEntityPostSerializer();
 Serializer<TagCreate> _$tagCreateSerializer = new _$TagCreateSerializer();
 Serializer<TagSearch> _$tagSearchSerializer = new _$TagSearchSerializer();
 Serializer<TagDetail> _$tagDetailSerializer = new _$TagDetailSerializer();
 Serializer<ClubTags> _$clubTagsSerializer = new _$ClubTagsSerializer();
+Serializer<EntityTags> _$entityTagsSerializer = new _$EntityTagsSerializer();
 Serializer<WorkshopResources> _$workshopResourcesSerializer =
     new _$WorkshopResourcesSerializer();
 Serializer<BuiltAllWorkshopsPost> _$builtAllWorkshopsPostSerializer =
@@ -46,6 +51,265 @@ Serializer<BuiltTags> _$builtTagsSerializer = new _$BuiltTagsSerializer();
 Serializer<LoginPost> _$loginPostSerializer = new _$LoginPostSerializer();
 Serializer<Token> _$tokenSerializer = new _$TokenSerializer();
 
+class _$EntityListPostSerializer
+    implements StructuredSerializer<EntityListPost> {
+  @override
+  final Iterable<Type> types = const [EntityListPost, _$EntityListPost];
+  @override
+  final String wireName = 'EntityListPost';
+
+  @override
+  Iterable<Object> serialize(Serializers serializers, EntityListPost object,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = <Object>[];
+    if (object.id != null) {
+      result
+        ..add('id')
+        ..add(serializers.serialize(object.id,
+            specifiedType: const FullType(int)));
+    }
+    if (object.name != null) {
+      result
+        ..add('name')
+        ..add(serializers.serialize(object.name,
+            specifiedType: const FullType(String)));
+    }
+    if (object.small_image_url != null) {
+      result
+        ..add('small_image_url')
+        ..add(serializers.serialize(object.small_image_url,
+            specifiedType: const FullType(String)));
+    }
+    if (object.large_image_url != null) {
+      result
+        ..add('large_image_url')
+        ..add(serializers.serialize(object.large_image_url,
+            specifiedType: const FullType(String)));
+    }
+    return result;
+  }
+
+  @override
+  EntityListPost deserialize(
+      Serializers serializers, Iterable<Object> serialized,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = new EntityListPostBuilder();
+
+    final iterator = serialized.iterator;
+    while (iterator.moveNext()) {
+      final key = iterator.current as String;
+      iterator.moveNext();
+      final dynamic value = iterator.current;
+      switch (key) {
+        case 'id':
+          result.id = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+        case 'name':
+          result.name = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'small_image_url':
+          result.small_image_url = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'large_image_url':
+          result.large_image_url = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+      }
+    }
+
+    return result.build();
+  }
+}
+
+class _$BuiltEntityPostSerializer
+    implements StructuredSerializer<BuiltEntityPost> {
+  @override
+  final Iterable<Type> types = const [BuiltEntityPost, _$BuiltEntityPost];
+  @override
+  final String wireName = 'BuiltEntityPost';
+
+  @override
+  Iterable<Object> serialize(Serializers serializers, BuiltEntityPost object,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = <Object>[];
+    if (object.id != null) {
+      result
+        ..add('id')
+        ..add(serializers.serialize(object.id,
+            specifiedType: const FullType(int)));
+    }
+    if (object.name != null) {
+      result
+        ..add('name')
+        ..add(serializers.serialize(object.name,
+            specifiedType: const FullType(String)));
+    }
+    if (object.description != null) {
+      result
+        ..add('description')
+        ..add(serializers.serialize(object.description,
+            specifiedType: const FullType(String)));
+    }
+    if (object.point_of_contact != null) {
+      result
+        ..add('point_of_contact')
+        ..add(serializers.serialize(object.point_of_contact,
+            specifiedType:
+                const FullType(BuiltList, const [const FullType(SecyPost)])));
+    }
+    if (object.small_image_url != null) {
+      result
+        ..add('small_image_url')
+        ..add(serializers.serialize(object.small_image_url,
+            specifiedType: const FullType(String)));
+    }
+    if (object.large_image_url != null) {
+      result
+        ..add('large_image_url')
+        ..add(serializers.serialize(object.large_image_url,
+            specifiedType: const FullType(String)));
+    }
+    if (object.is_subscribed != null) {
+      result
+        ..add('is_subscribed')
+        ..add(serializers.serialize(object.is_subscribed,
+            specifiedType: const FullType(bool)));
+    }
+    if (object.subscribed_users != null) {
+      result
+        ..add('subscribed_users')
+        ..add(serializers.serialize(object.subscribed_users,
+            specifiedType: const FullType(int)));
+    }
+    if (object.is_por_holder != null) {
+      result
+        ..add('is_por_holder')
+        ..add(serializers.serialize(object.is_por_holder,
+            specifiedType: const FullType(bool)));
+    }
+    if (object.website_url != null) {
+      result
+        ..add('website_url')
+        ..add(serializers.serialize(object.website_url,
+            specifiedType: const FullType(String)));
+    }
+    if (object.facebook_url != null) {
+      result
+        ..add('facebook_url')
+        ..add(serializers.serialize(object.facebook_url,
+            specifiedType: const FullType(String)));
+    }
+    if (object.twitter_url != null) {
+      result
+        ..add('twitter_url')
+        ..add(serializers.serialize(object.twitter_url,
+            specifiedType: const FullType(String)));
+    }
+    if (object.instagram_url != null) {
+      result
+        ..add('instagram_url')
+        ..add(serializers.serialize(object.instagram_url,
+            specifiedType: const FullType(String)));
+    }
+    if (object.linkedin_url != null) {
+      result
+        ..add('linkedin_url')
+        ..add(serializers.serialize(object.linkedin_url,
+            specifiedType: const FullType(String)));
+    }
+    if (object.youtube_url != null) {
+      result
+        ..add('youtube_url')
+        ..add(serializers.serialize(object.youtube_url,
+            specifiedType: const FullType(String)));
+    }
+    return result;
+  }
+
+  @override
+  BuiltEntityPost deserialize(
+      Serializers serializers, Iterable<Object> serialized,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = new BuiltEntityPostBuilder();
+
+    final iterator = serialized.iterator;
+    while (iterator.moveNext()) {
+      final key = iterator.current as String;
+      iterator.moveNext();
+      final dynamic value = iterator.current;
+      switch (key) {
+        case 'id':
+          result.id = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+        case 'name':
+          result.name = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'description':
+          result.description = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'point_of_contact':
+          result.point_of_contact.replace(serializers.deserialize(value,
+                  specifiedType: const FullType(
+                      BuiltList, const [const FullType(SecyPost)]))
+              as BuiltList<dynamic>);
+          break;
+        case 'small_image_url':
+          result.small_image_url = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'large_image_url':
+          result.large_image_url = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'is_subscribed':
+          result.is_subscribed = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
+        case 'subscribed_users':
+          result.subscribed_users = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+        case 'is_por_holder':
+          result.is_por_holder = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
+        case 'website_url':
+          result.website_url = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'facebook_url':
+          result.facebook_url = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'twitter_url':
+          result.twitter_url = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'instagram_url':
+          result.instagram_url = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'linkedin_url':
+          result.linkedin_url = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'youtube_url':
+          result.youtube_url = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+      }
+    }
+
+    return result.build();
+  }
+}
+
 class _$TagCreateSerializer implements StructuredSerializer<TagCreate> {
   @override
   final Iterable<Type> types = const [TagCreate, _$TagCreate];
@@ -55,23 +319,15 @@ class _$TagCreateSerializer implements StructuredSerializer<TagCreate> {
   @override
   Iterable<Object> serialize(Serializers serializers, TagCreate object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[];
+    final result = <Object>[
+      'tag_name',
+      serializers.serialize(object.tag_name,
+          specifiedType: const FullType(String)),
+    ];
     if (object.id != null) {
       result
         ..add('id')
         ..add(serializers.serialize(object.id,
-            specifiedType: const FullType(int)));
-    }
-    if (object.tag_name != null) {
-      result
-        ..add('tag_name')
-        ..add(serializers.serialize(object.tag_name,
-            specifiedType: const FullType(String)));
-    }
-    if (object.club != null) {
-      result
-        ..add('club')
-        ..add(serializers.serialize(object.club,
             specifiedType: const FullType(int)));
     }
     return result;
@@ -96,10 +352,6 @@ class _$TagCreateSerializer implements StructuredSerializer<TagCreate> {
           result.tag_name = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
-        case 'club':
-          result.club = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
-          break;
       }
     }
 
@@ -116,23 +368,15 @@ class _$TagSearchSerializer implements StructuredSerializer<TagSearch> {
   @override
   Iterable<Object> serialize(Serializers serializers, TagSearch object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[];
+    final result = <Object>[
+      'tag_name',
+      serializers.serialize(object.tag_name,
+          specifiedType: const FullType(String)),
+    ];
     if (object.id != null) {
       result
         ..add('id')
         ..add(serializers.serialize(object.id,
-            specifiedType: const FullType(int)));
-    }
-    if (object.tag_name != null) {
-      result
-        ..add('tag_name')
-        ..add(serializers.serialize(object.tag_name,
-            specifiedType: const FullType(String)));
-    }
-    if (object.club != null) {
-      result
-        ..add('club')
-        ..add(serializers.serialize(object.club,
             specifiedType: const FullType(int)));
     }
     return result;
@@ -157,10 +401,6 @@ class _$TagSearchSerializer implements StructuredSerializer<TagSearch> {
           result.tag_name = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
-        case 'club':
-          result.club = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
-          break;
       }
     }
 
@@ -177,24 +417,28 @@ class _$TagDetailSerializer implements StructuredSerializer<TagDetail> {
   @override
   Iterable<Object> serialize(Serializers serializers, TagDetail object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[];
+    final result = <Object>[
+      'tag_name',
+      serializers.serialize(object.tag_name,
+          specifiedType: const FullType(String)),
+    ];
     if (object.id != null) {
       result
         ..add('id')
         ..add(serializers.serialize(object.id,
             specifiedType: const FullType(int)));
     }
-    if (object.tag_name != null) {
-      result
-        ..add('tag_name')
-        ..add(serializers.serialize(object.tag_name,
-            specifiedType: const FullType(String)));
-    }
     if (object.club != null) {
       result
         ..add('club')
         ..add(serializers.serialize(object.club,
             specifiedType: const FullType(ClubListPost)));
+    }
+    if (object.entity != null) {
+      result
+        ..add('entity')
+        ..add(serializers.serialize(object.entity,
+            specifiedType: const FullType(EntityListPost)));
     }
     return result;
   }
@@ -221,6 +465,10 @@ class _$TagDetailSerializer implements StructuredSerializer<TagDetail> {
         case 'club':
           result.club.replace(serializers.deserialize(value,
               specifiedType: const FullType(ClubListPost)) as ClubListPost);
+          break;
+        case 'entity':
+          result.entity.replace(serializers.deserialize(value,
+              specifiedType: const FullType(EntityListPost)) as EntityListPost);
           break;
       }
     }
@@ -273,6 +521,50 @@ class _$ClubTagsSerializer implements StructuredSerializer<ClubTags> {
   }
 }
 
+class _$EntityTagsSerializer implements StructuredSerializer<EntityTags> {
+  @override
+  final Iterable<Type> types = const [EntityTags, _$EntityTags];
+  @override
+  final String wireName = 'EntityTags';
+
+  @override
+  Iterable<Object> serialize(Serializers serializers, EntityTags object,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = <Object>[];
+    if (object.entity_tags != null) {
+      result
+        ..add('entity_tags')
+        ..add(serializers.serialize(object.entity_tags,
+            specifiedType:
+                const FullType(BuiltList, const [const FullType(TagDetail)])));
+    }
+    return result;
+  }
+
+  @override
+  EntityTags deserialize(Serializers serializers, Iterable<Object> serialized,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = new EntityTagsBuilder();
+
+    final iterator = serialized.iterator;
+    while (iterator.moveNext()) {
+      final key = iterator.current as String;
+      iterator.moveNext();
+      final dynamic value = iterator.current;
+      switch (key) {
+        case 'entity_tags':
+          result.entity_tags.replace(serializers.deserialize(value,
+                  specifiedType: const FullType(
+                      BuiltList, const [const FullType(TagDetail)]))
+              as BuiltList<dynamic>);
+          break;
+      }
+    }
+
+    return result.build();
+  }
+}
+
 class _$WorkshopResourcesSerializer
     implements StructuredSerializer<WorkshopResources> {
   @override
@@ -283,30 +575,20 @@ class _$WorkshopResourcesSerializer
   @override
   Iterable<Object> serialize(Serializers serializers, WorkshopResources object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[];
+    final result = <Object>[
+      'name',
+      serializers.serialize(object.name, specifiedType: const FullType(String)),
+      'link',
+      serializers.serialize(object.link, specifiedType: const FullType(String)),
+      'resource_type',
+      serializers.serialize(object.resource_type,
+          specifiedType: const FullType(String)),
+    ];
     if (object.id != null) {
       result
         ..add('id')
         ..add(serializers.serialize(object.id,
             specifiedType: const FullType(int)));
-    }
-    if (object.name != null) {
-      result
-        ..add('name')
-        ..add(serializers.serialize(object.name,
-            specifiedType: const FullType(String)));
-    }
-    if (object.link != null) {
-      result
-        ..add('link')
-        ..add(serializers.serialize(object.link,
-            specifiedType: const FullType(String)));
-    }
-    if (object.resource_type != null) {
-      result
-        ..add('resource_type')
-        ..add(serializers.serialize(object.resource_type,
-            specifiedType: const FullType(String)));
     }
     return result;
   }
@@ -423,7 +705,13 @@ class _$BuiltWorkshopSummaryPostSerializer
   Iterable<Object> serialize(
       Serializers serializers, BuiltWorkshopSummaryPost object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[];
+    final result = <Object>[
+      'title',
+      serializers.serialize(object.title,
+          specifiedType: const FullType(String)),
+      'date',
+      serializers.serialize(object.date, specifiedType: const FullType(String)),
+    ];
     if (object.id != null) {
       result
         ..add('id')
@@ -436,17 +724,11 @@ class _$BuiltWorkshopSummaryPostSerializer
         ..add(serializers.serialize(object.club,
             specifiedType: const FullType(ClubListPost)));
     }
-    if (object.title != null) {
+    if (object.entity != null) {
       result
-        ..add('title')
-        ..add(serializers.serialize(object.title,
-            specifiedType: const FullType(String)));
-    }
-    if (object.date != null) {
-      result
-        ..add('date')
-        ..add(serializers.serialize(object.date,
-            specifiedType: const FullType(String)));
+        ..add('entity')
+        ..add(serializers.serialize(object.entity,
+            specifiedType: const FullType(EntityListPost)));
     }
     if (object.time != null) {
       result
@@ -483,6 +765,10 @@ class _$BuiltWorkshopSummaryPostSerializer
         case 'club':
           result.club.replace(serializers.deserialize(value,
               specifiedType: const FullType(ClubListPost)) as ClubListPost);
+          break;
+        case 'entity':
+          result.entity.replace(serializers.deserialize(value,
+              specifiedType: const FullType(EntityListPost)) as EntityListPost);
           break;
         case 'title':
           result.title = serializers.deserialize(value,
@@ -523,18 +809,18 @@ class _$BuiltWorkshopDetailPostSerializer
   Iterable<Object> serialize(
       Serializers serializers, BuiltWorkshopDetailPost object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[];
+    final result = <Object>[
+      'title',
+      serializers.serialize(object.title,
+          specifiedType: const FullType(String)),
+      'date',
+      serializers.serialize(object.date, specifiedType: const FullType(String)),
+    ];
     if (object.id != null) {
       result
         ..add('id')
         ..add(serializers.serialize(object.id,
             specifiedType: const FullType(int)));
-    }
-    if (object.title != null) {
-      result
-        ..add('title')
-        ..add(serializers.serialize(object.title,
-            specifiedType: const FullType(String)));
     }
     if (object.description != null) {
       result
@@ -548,11 +834,11 @@ class _$BuiltWorkshopDetailPostSerializer
         ..add(serializers.serialize(object.club,
             specifiedType: const FullType(ClubListPost)));
     }
-    if (object.date != null) {
+    if (object.entity != null) {
       result
-        ..add('date')
-        ..add(serializers.serialize(object.date,
-            specifiedType: const FullType(String)));
+        ..add('entity')
+        ..add(serializers.serialize(object.entity,
+            specifiedType: const FullType(EntityListPost)));
     }
     if (object.time != null) {
       result
@@ -671,6 +957,10 @@ class _$BuiltWorkshopDetailPostSerializer
         case 'club':
           result.club.replace(serializers.deserialize(value,
               specifiedType: const FullType(ClubListPost)) as ClubListPost);
+          break;
+        case 'entity':
+          result.entity.replace(serializers.deserialize(value,
+              specifiedType: const FullType(EntityListPost)) as EntityListPost);
           break;
         case 'date':
           result.date = serializers.deserialize(value,
@@ -1536,8 +1826,6 @@ class _$BuiltWorkshopCreatePostSerializer
       'title',
       serializers.serialize(object.title,
           specifiedType: const FullType(String)),
-      'club',
-      serializers.serialize(object.club, specifiedType: const FullType(int)),
       'date',
       serializers.serialize(object.date, specifiedType: const FullType(String)),
     ];
@@ -1632,16 +1920,12 @@ class _$BuiltWorkshopCreatePostSerializer
           result.title = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
-        case 'club':
-          result.club = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+        case 'description':
+          result.description = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
           break;
         case 'date':
           result.date = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
-          break;
-        case 'description':
-          result.description = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
         case 'time':
@@ -2167,18 +2451,416 @@ class _$TokenSerializer implements StructuredSerializer<Token> {
   }
 }
 
+class _$EntityListPost extends EntityListPost {
+  @override
+  final int id;
+  @override
+  final String name;
+  @override
+  final String small_image_url;
+  @override
+  final String large_image_url;
+
+  factory _$EntityListPost([void Function(EntityListPostBuilder) updates]) =>
+      (new EntityListPostBuilder()..update(updates)).build();
+
+  _$EntityListPost._(
+      {this.id, this.name, this.small_image_url, this.large_image_url})
+      : super._();
+
+  @override
+  EntityListPost rebuild(void Function(EntityListPostBuilder) updates) =>
+      (toBuilder()..update(updates)).build();
+
+  @override
+  EntityListPostBuilder toBuilder() =>
+      new EntityListPostBuilder()..replace(this);
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(other, this)) return true;
+    return other is EntityListPost &&
+        id == other.id &&
+        name == other.name &&
+        small_image_url == other.small_image_url &&
+        large_image_url == other.large_image_url;
+  }
+
+  @override
+  int get hashCode {
+    return $jf($jc(
+        $jc($jc($jc(0, id.hashCode), name.hashCode), small_image_url.hashCode),
+        large_image_url.hashCode));
+  }
+
+  @override
+  String toString() {
+    return (newBuiltValueToStringHelper('EntityListPost')
+          ..add('id', id)
+          ..add('name', name)
+          ..add('small_image_url', small_image_url)
+          ..add('large_image_url', large_image_url))
+        .toString();
+  }
+}
+
+class EntityListPostBuilder
+    implements Builder<EntityListPost, EntityListPostBuilder> {
+  _$EntityListPost _$v;
+
+  int _id;
+  int get id => _$this._id;
+  set id(int id) => _$this._id = id;
+
+  String _name;
+  String get name => _$this._name;
+  set name(String name) => _$this._name = name;
+
+  String _small_image_url;
+  String get small_image_url => _$this._small_image_url;
+  set small_image_url(String small_image_url) =>
+      _$this._small_image_url = small_image_url;
+
+  String _large_image_url;
+  String get large_image_url => _$this._large_image_url;
+  set large_image_url(String large_image_url) =>
+      _$this._large_image_url = large_image_url;
+
+  EntityListPostBuilder();
+
+  EntityListPostBuilder get _$this {
+    if (_$v != null) {
+      _id = _$v.id;
+      _name = _$v.name;
+      _small_image_url = _$v.small_image_url;
+      _large_image_url = _$v.large_image_url;
+      _$v = null;
+    }
+    return this;
+  }
+
+  @override
+  void replace(EntityListPost other) {
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
+    _$v = other as _$EntityListPost;
+  }
+
+  @override
+  void update(void Function(EntityListPostBuilder) updates) {
+    if (updates != null) updates(this);
+  }
+
+  @override
+  _$EntityListPost build() {
+    final _$result = _$v ??
+        new _$EntityListPost._(
+            id: id,
+            name: name,
+            small_image_url: small_image_url,
+            large_image_url: large_image_url);
+    replace(_$result);
+    return _$result;
+  }
+}
+
+class _$BuiltEntityPost extends BuiltEntityPost {
+  @override
+  final int id;
+  @override
+  final String name;
+  @override
+  final String description;
+  @override
+  final BuiltList<SecyPost> point_of_contact;
+  @override
+  final String small_image_url;
+  @override
+  final String large_image_url;
+  @override
+  final bool is_subscribed;
+  @override
+  final int subscribed_users;
+  @override
+  final bool is_por_holder;
+  @override
+  final String website_url;
+  @override
+  final String facebook_url;
+  @override
+  final String twitter_url;
+  @override
+  final String instagram_url;
+  @override
+  final String linkedin_url;
+  @override
+  final String youtube_url;
+
+  factory _$BuiltEntityPost([void Function(BuiltEntityPostBuilder) updates]) =>
+      (new BuiltEntityPostBuilder()..update(updates)).build();
+
+  _$BuiltEntityPost._(
+      {this.id,
+      this.name,
+      this.description,
+      this.point_of_contact,
+      this.small_image_url,
+      this.large_image_url,
+      this.is_subscribed,
+      this.subscribed_users,
+      this.is_por_holder,
+      this.website_url,
+      this.facebook_url,
+      this.twitter_url,
+      this.instagram_url,
+      this.linkedin_url,
+      this.youtube_url})
+      : super._();
+
+  @override
+  BuiltEntityPost rebuild(void Function(BuiltEntityPostBuilder) updates) =>
+      (toBuilder()..update(updates)).build();
+
+  @override
+  BuiltEntityPostBuilder toBuilder() =>
+      new BuiltEntityPostBuilder()..replace(this);
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(other, this)) return true;
+    return other is BuiltEntityPost &&
+        id == other.id &&
+        name == other.name &&
+        description == other.description &&
+        point_of_contact == other.point_of_contact &&
+        small_image_url == other.small_image_url &&
+        large_image_url == other.large_image_url &&
+        is_subscribed == other.is_subscribed &&
+        subscribed_users == other.subscribed_users &&
+        is_por_holder == other.is_por_holder &&
+        website_url == other.website_url &&
+        facebook_url == other.facebook_url &&
+        twitter_url == other.twitter_url &&
+        instagram_url == other.instagram_url &&
+        linkedin_url == other.linkedin_url &&
+        youtube_url == other.youtube_url;
+  }
+
+  @override
+  int get hashCode {
+    return $jf($jc(
+        $jc(
+            $jc(
+                $jc(
+                    $jc(
+                        $jc(
+                            $jc(
+                                $jc(
+                                    $jc(
+                                        $jc(
+                                            $jc(
+                                                $jc(
+                                                    $jc(
+                                                        $jc($jc(0, id.hashCode),
+                                                            name.hashCode),
+                                                        description.hashCode),
+                                                    point_of_contact.hashCode),
+                                                small_image_url.hashCode),
+                                            large_image_url.hashCode),
+                                        is_subscribed.hashCode),
+                                    subscribed_users.hashCode),
+                                is_por_holder.hashCode),
+                            website_url.hashCode),
+                        facebook_url.hashCode),
+                    twitter_url.hashCode),
+                instagram_url.hashCode),
+            linkedin_url.hashCode),
+        youtube_url.hashCode));
+  }
+
+  @override
+  String toString() {
+    return (newBuiltValueToStringHelper('BuiltEntityPost')
+          ..add('id', id)
+          ..add('name', name)
+          ..add('description', description)
+          ..add('point_of_contact', point_of_contact)
+          ..add('small_image_url', small_image_url)
+          ..add('large_image_url', large_image_url)
+          ..add('is_subscribed', is_subscribed)
+          ..add('subscribed_users', subscribed_users)
+          ..add('is_por_holder', is_por_holder)
+          ..add('website_url', website_url)
+          ..add('facebook_url', facebook_url)
+          ..add('twitter_url', twitter_url)
+          ..add('instagram_url', instagram_url)
+          ..add('linkedin_url', linkedin_url)
+          ..add('youtube_url', youtube_url))
+        .toString();
+  }
+}
+
+class BuiltEntityPostBuilder
+    implements Builder<BuiltEntityPost, BuiltEntityPostBuilder> {
+  _$BuiltEntityPost _$v;
+
+  int _id;
+  int get id => _$this._id;
+  set id(int id) => _$this._id = id;
+
+  String _name;
+  String get name => _$this._name;
+  set name(String name) => _$this._name = name;
+
+  String _description;
+  String get description => _$this._description;
+  set description(String description) => _$this._description = description;
+
+  ListBuilder<SecyPost> _point_of_contact;
+  ListBuilder<SecyPost> get point_of_contact =>
+      _$this._point_of_contact ??= new ListBuilder<SecyPost>();
+  set point_of_contact(ListBuilder<SecyPost> point_of_contact) =>
+      _$this._point_of_contact = point_of_contact;
+
+  String _small_image_url;
+  String get small_image_url => _$this._small_image_url;
+  set small_image_url(String small_image_url) =>
+      _$this._small_image_url = small_image_url;
+
+  String _large_image_url;
+  String get large_image_url => _$this._large_image_url;
+  set large_image_url(String large_image_url) =>
+      _$this._large_image_url = large_image_url;
+
+  bool _is_subscribed;
+  bool get is_subscribed => _$this._is_subscribed;
+  set is_subscribed(bool is_subscribed) =>
+      _$this._is_subscribed = is_subscribed;
+
+  int _subscribed_users;
+  int get subscribed_users => _$this._subscribed_users;
+  set subscribed_users(int subscribed_users) =>
+      _$this._subscribed_users = subscribed_users;
+
+  bool _is_por_holder;
+  bool get is_por_holder => _$this._is_por_holder;
+  set is_por_holder(bool is_por_holder) =>
+      _$this._is_por_holder = is_por_holder;
+
+  String _website_url;
+  String get website_url => _$this._website_url;
+  set website_url(String website_url) => _$this._website_url = website_url;
+
+  String _facebook_url;
+  String get facebook_url => _$this._facebook_url;
+  set facebook_url(String facebook_url) => _$this._facebook_url = facebook_url;
+
+  String _twitter_url;
+  String get twitter_url => _$this._twitter_url;
+  set twitter_url(String twitter_url) => _$this._twitter_url = twitter_url;
+
+  String _instagram_url;
+  String get instagram_url => _$this._instagram_url;
+  set instagram_url(String instagram_url) =>
+      _$this._instagram_url = instagram_url;
+
+  String _linkedin_url;
+  String get linkedin_url => _$this._linkedin_url;
+  set linkedin_url(String linkedin_url) => _$this._linkedin_url = linkedin_url;
+
+  String _youtube_url;
+  String get youtube_url => _$this._youtube_url;
+  set youtube_url(String youtube_url) => _$this._youtube_url = youtube_url;
+
+  BuiltEntityPostBuilder();
+
+  BuiltEntityPostBuilder get _$this {
+    if (_$v != null) {
+      _id = _$v.id;
+      _name = _$v.name;
+      _description = _$v.description;
+      _point_of_contact = _$v.point_of_contact?.toBuilder();
+      _small_image_url = _$v.small_image_url;
+      _large_image_url = _$v.large_image_url;
+      _is_subscribed = _$v.is_subscribed;
+      _subscribed_users = _$v.subscribed_users;
+      _is_por_holder = _$v.is_por_holder;
+      _website_url = _$v.website_url;
+      _facebook_url = _$v.facebook_url;
+      _twitter_url = _$v.twitter_url;
+      _instagram_url = _$v.instagram_url;
+      _linkedin_url = _$v.linkedin_url;
+      _youtube_url = _$v.youtube_url;
+      _$v = null;
+    }
+    return this;
+  }
+
+  @override
+  void replace(BuiltEntityPost other) {
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
+    _$v = other as _$BuiltEntityPost;
+  }
+
+  @override
+  void update(void Function(BuiltEntityPostBuilder) updates) {
+    if (updates != null) updates(this);
+  }
+
+  @override
+  _$BuiltEntityPost build() {
+    _$BuiltEntityPost _$result;
+    try {
+      _$result = _$v ??
+          new _$BuiltEntityPost._(
+              id: id,
+              name: name,
+              description: description,
+              point_of_contact: _point_of_contact?.build(),
+              small_image_url: small_image_url,
+              large_image_url: large_image_url,
+              is_subscribed: is_subscribed,
+              subscribed_users: subscribed_users,
+              is_por_holder: is_por_holder,
+              website_url: website_url,
+              facebook_url: facebook_url,
+              twitter_url: twitter_url,
+              instagram_url: instagram_url,
+              linkedin_url: linkedin_url,
+              youtube_url: youtube_url);
+    } catch (_) {
+      String _$failedField;
+      try {
+        _$failedField = 'point_of_contact';
+        _point_of_contact?.build();
+      } catch (e) {
+        throw new BuiltValueNestedFieldError(
+            'BuiltEntityPost', _$failedField, e.toString());
+      }
+      rethrow;
+    }
+    replace(_$result);
+    return _$result;
+  }
+}
+
 class _$TagCreate extends TagCreate {
   @override
   final int id;
   @override
   final String tag_name;
-  @override
-  final int club;
 
   factory _$TagCreate([void Function(TagCreateBuilder) updates]) =>
       (new TagCreateBuilder()..update(updates)).build();
 
-  _$TagCreate._({this.id, this.tag_name, this.club}) : super._();
+  _$TagCreate._({this.id, this.tag_name}) : super._() {
+    if (tag_name == null) {
+      throw new BuiltValueNullFieldError('TagCreate', 'tag_name');
+    }
+  }
 
   @override
   TagCreate rebuild(void Function(TagCreateBuilder) updates) =>
@@ -2190,23 +2872,19 @@ class _$TagCreate extends TagCreate {
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is TagCreate &&
-        id == other.id &&
-        tag_name == other.tag_name &&
-        club == other.club;
+    return other is TagCreate && id == other.id && tag_name == other.tag_name;
   }
 
   @override
   int get hashCode {
-    return $jf($jc($jc($jc(0, id.hashCode), tag_name.hashCode), club.hashCode));
+    return $jf($jc($jc(0, id.hashCode), tag_name.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper('TagCreate')
           ..add('id', id)
-          ..add('tag_name', tag_name)
-          ..add('club', club))
+          ..add('tag_name', tag_name))
         .toString();
   }
 }
@@ -2222,17 +2900,12 @@ class TagCreateBuilder implements Builder<TagCreate, TagCreateBuilder> {
   String get tag_name => _$this._tag_name;
   set tag_name(String tag_name) => _$this._tag_name = tag_name;
 
-  int _club;
-  int get club => _$this._club;
-  set club(int club) => _$this._club = club;
-
   TagCreateBuilder();
 
   TagCreateBuilder get _$this {
     if (_$v != null) {
       _id = _$v.id;
       _tag_name = _$v.tag_name;
-      _club = _$v.club;
       _$v = null;
     }
     return this;
@@ -2253,8 +2926,7 @@ class TagCreateBuilder implements Builder<TagCreate, TagCreateBuilder> {
 
   @override
   _$TagCreate build() {
-    final _$result =
-        _$v ?? new _$TagCreate._(id: id, tag_name: tag_name, club: club);
+    final _$result = _$v ?? new _$TagCreate._(id: id, tag_name: tag_name);
     replace(_$result);
     return _$result;
   }
@@ -2265,13 +2937,15 @@ class _$TagSearch extends TagSearch {
   final int id;
   @override
   final String tag_name;
-  @override
-  final int club;
 
   factory _$TagSearch([void Function(TagSearchBuilder) updates]) =>
       (new TagSearchBuilder()..update(updates)).build();
 
-  _$TagSearch._({this.id, this.tag_name, this.club}) : super._();
+  _$TagSearch._({this.id, this.tag_name}) : super._() {
+    if (tag_name == null) {
+      throw new BuiltValueNullFieldError('TagSearch', 'tag_name');
+    }
+  }
 
   @override
   TagSearch rebuild(void Function(TagSearchBuilder) updates) =>
@@ -2283,23 +2957,19 @@ class _$TagSearch extends TagSearch {
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is TagSearch &&
-        id == other.id &&
-        tag_name == other.tag_name &&
-        club == other.club;
+    return other is TagSearch && id == other.id && tag_name == other.tag_name;
   }
 
   @override
   int get hashCode {
-    return $jf($jc($jc($jc(0, id.hashCode), tag_name.hashCode), club.hashCode));
+    return $jf($jc($jc(0, id.hashCode), tag_name.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper('TagSearch')
           ..add('id', id)
-          ..add('tag_name', tag_name)
-          ..add('club', club))
+          ..add('tag_name', tag_name))
         .toString();
   }
 }
@@ -2315,17 +2985,12 @@ class TagSearchBuilder implements Builder<TagSearch, TagSearchBuilder> {
   String get tag_name => _$this._tag_name;
   set tag_name(String tag_name) => _$this._tag_name = tag_name;
 
-  int _club;
-  int get club => _$this._club;
-  set club(int club) => _$this._club = club;
-
   TagSearchBuilder();
 
   TagSearchBuilder get _$this {
     if (_$v != null) {
       _id = _$v.id;
       _tag_name = _$v.tag_name;
-      _club = _$v.club;
       _$v = null;
     }
     return this;
@@ -2346,8 +3011,7 @@ class TagSearchBuilder implements Builder<TagSearch, TagSearchBuilder> {
 
   @override
   _$TagSearch build() {
-    final _$result =
-        _$v ?? new _$TagSearch._(id: id, tag_name: tag_name, club: club);
+    final _$result = _$v ?? new _$TagSearch._(id: id, tag_name: tag_name);
     replace(_$result);
     return _$result;
   }
@@ -2360,11 +3024,17 @@ class _$TagDetail extends TagDetail {
   final String tag_name;
   @override
   final ClubListPost club;
+  @override
+  final EntityListPost entity;
 
   factory _$TagDetail([void Function(TagDetailBuilder) updates]) =>
       (new TagDetailBuilder()..update(updates)).build();
 
-  _$TagDetail._({this.id, this.tag_name, this.club}) : super._();
+  _$TagDetail._({this.id, this.tag_name, this.club, this.entity}) : super._() {
+    if (tag_name == null) {
+      throw new BuiltValueNullFieldError('TagDetail', 'tag_name');
+    }
+  }
 
   @override
   TagDetail rebuild(void Function(TagDetailBuilder) updates) =>
@@ -2379,12 +3049,15 @@ class _$TagDetail extends TagDetail {
     return other is TagDetail &&
         id == other.id &&
         tag_name == other.tag_name &&
-        club == other.club;
+        club == other.club &&
+        entity == other.entity;
   }
 
   @override
   int get hashCode {
-    return $jf($jc($jc($jc(0, id.hashCode), tag_name.hashCode), club.hashCode));
+    return $jf($jc(
+        $jc($jc($jc(0, id.hashCode), tag_name.hashCode), club.hashCode),
+        entity.hashCode));
   }
 
   @override
@@ -2392,7 +3065,8 @@ class _$TagDetail extends TagDetail {
     return (newBuiltValueToStringHelper('TagDetail')
           ..add('id', id)
           ..add('tag_name', tag_name)
-          ..add('club', club))
+          ..add('club', club)
+          ..add('entity', entity))
         .toString();
   }
 }
@@ -2412,6 +3086,11 @@ class TagDetailBuilder implements Builder<TagDetail, TagDetailBuilder> {
   ClubListPostBuilder get club => _$this._club ??= new ClubListPostBuilder();
   set club(ClubListPostBuilder club) => _$this._club = club;
 
+  EntityListPostBuilder _entity;
+  EntityListPostBuilder get entity =>
+      _$this._entity ??= new EntityListPostBuilder();
+  set entity(EntityListPostBuilder entity) => _$this._entity = entity;
+
   TagDetailBuilder();
 
   TagDetailBuilder get _$this {
@@ -2419,6 +3098,7 @@ class TagDetailBuilder implements Builder<TagDetail, TagDetailBuilder> {
       _id = _$v.id;
       _tag_name = _$v.tag_name;
       _club = _$v.club?.toBuilder();
+      _entity = _$v.entity?.toBuilder();
       _$v = null;
     }
     return this;
@@ -2442,12 +3122,18 @@ class TagDetailBuilder implements Builder<TagDetail, TagDetailBuilder> {
     _$TagDetail _$result;
     try {
       _$result = _$v ??
-          new _$TagDetail._(id: id, tag_name: tag_name, club: _club?.build());
+          new _$TagDetail._(
+              id: id,
+              tag_name: tag_name,
+              club: _club?.build(),
+              entity: _entity?.build());
     } catch (_) {
       String _$failedField;
       try {
         _$failedField = 'club';
         _club?.build();
+        _$failedField = 'entity';
+        _entity?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             'TagDetail', _$failedField, e.toString());
@@ -2547,6 +3233,94 @@ class ClubTagsBuilder implements Builder<ClubTags, ClubTagsBuilder> {
   }
 }
 
+class _$EntityTags extends EntityTags {
+  @override
+  final BuiltList<TagDetail> entity_tags;
+
+  factory _$EntityTags([void Function(EntityTagsBuilder) updates]) =>
+      (new EntityTagsBuilder()..update(updates)).build();
+
+  _$EntityTags._({this.entity_tags}) : super._();
+
+  @override
+  EntityTags rebuild(void Function(EntityTagsBuilder) updates) =>
+      (toBuilder()..update(updates)).build();
+
+  @override
+  EntityTagsBuilder toBuilder() => new EntityTagsBuilder()..replace(this);
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(other, this)) return true;
+    return other is EntityTags && entity_tags == other.entity_tags;
+  }
+
+  @override
+  int get hashCode {
+    return $jf($jc(0, entity_tags.hashCode));
+  }
+
+  @override
+  String toString() {
+    return (newBuiltValueToStringHelper('EntityTags')
+          ..add('entity_tags', entity_tags))
+        .toString();
+  }
+}
+
+class EntityTagsBuilder implements Builder<EntityTags, EntityTagsBuilder> {
+  _$EntityTags _$v;
+
+  ListBuilder<TagDetail> _entity_tags;
+  ListBuilder<TagDetail> get entity_tags =>
+      _$this._entity_tags ??= new ListBuilder<TagDetail>();
+  set entity_tags(ListBuilder<TagDetail> entity_tags) =>
+      _$this._entity_tags = entity_tags;
+
+  EntityTagsBuilder();
+
+  EntityTagsBuilder get _$this {
+    if (_$v != null) {
+      _entity_tags = _$v.entity_tags?.toBuilder();
+      _$v = null;
+    }
+    return this;
+  }
+
+  @override
+  void replace(EntityTags other) {
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
+    _$v = other as _$EntityTags;
+  }
+
+  @override
+  void update(void Function(EntityTagsBuilder) updates) {
+    if (updates != null) updates(this);
+  }
+
+  @override
+  _$EntityTags build() {
+    _$EntityTags _$result;
+    try {
+      _$result = _$v ?? new _$EntityTags._(entity_tags: _entity_tags?.build());
+    } catch (_) {
+      String _$failedField;
+      try {
+        _$failedField = 'entity_tags';
+        _entity_tags?.build();
+      } catch (e) {
+        throw new BuiltValueNestedFieldError(
+            'EntityTags', _$failedField, e.toString());
+      }
+      rethrow;
+    }
+    replace(_$result);
+    return _$result;
+  }
+}
+
 class _$WorkshopResources extends WorkshopResources {
   @override
   final int id;
@@ -2562,7 +3336,17 @@ class _$WorkshopResources extends WorkshopResources {
       (new WorkshopResourcesBuilder()..update(updates)).build();
 
   _$WorkshopResources._({this.id, this.name, this.link, this.resource_type})
-      : super._();
+      : super._() {
+    if (name == null) {
+      throw new BuiltValueNullFieldError('WorkshopResources', 'name');
+    }
+    if (link == null) {
+      throw new BuiltValueNullFieldError('WorkshopResources', 'link');
+    }
+    if (resource_type == null) {
+      throw new BuiltValueNullFieldError('WorkshopResources', 'resource_type');
+    }
+  }
 
   @override
   WorkshopResources rebuild(void Function(WorkshopResourcesBuilder) updates) =>
@@ -2773,6 +3557,8 @@ class _$BuiltWorkshopSummaryPost extends BuiltWorkshopSummaryPost {
   @override
   final ClubListPost club;
   @override
+  final EntityListPost entity;
+  @override
   final String title;
   @override
   final String date;
@@ -2786,8 +3572,21 @@ class _$BuiltWorkshopSummaryPost extends BuiltWorkshopSummaryPost {
       (new BuiltWorkshopSummaryPostBuilder()..update(updates)).build();
 
   _$BuiltWorkshopSummaryPost._(
-      {this.id, this.club, this.title, this.date, this.time, this.tags})
-      : super._();
+      {this.id,
+      this.club,
+      this.entity,
+      this.title,
+      this.date,
+      this.time,
+      this.tags})
+      : super._() {
+    if (title == null) {
+      throw new BuiltValueNullFieldError('BuiltWorkshopSummaryPost', 'title');
+    }
+    if (date == null) {
+      throw new BuiltValueNullFieldError('BuiltWorkshopSummaryPost', 'date');
+    }
+  }
 
   @override
   BuiltWorkshopSummaryPost rebuild(
@@ -2804,6 +3603,7 @@ class _$BuiltWorkshopSummaryPost extends BuiltWorkshopSummaryPost {
     return other is BuiltWorkshopSummaryPost &&
         id == other.id &&
         club == other.club &&
+        entity == other.entity &&
         title == other.title &&
         date == other.date &&
         time == other.time &&
@@ -2814,7 +3614,11 @@ class _$BuiltWorkshopSummaryPost extends BuiltWorkshopSummaryPost {
   int get hashCode {
     return $jf($jc(
         $jc(
-            $jc($jc($jc($jc(0, id.hashCode), club.hashCode), title.hashCode),
+            $jc(
+                $jc(
+                    $jc($jc($jc(0, id.hashCode), club.hashCode),
+                        entity.hashCode),
+                    title.hashCode),
                 date.hashCode),
             time.hashCode),
         tags.hashCode));
@@ -2825,6 +3629,7 @@ class _$BuiltWorkshopSummaryPost extends BuiltWorkshopSummaryPost {
     return (newBuiltValueToStringHelper('BuiltWorkshopSummaryPost')
           ..add('id', id)
           ..add('club', club)
+          ..add('entity', entity)
           ..add('title', title)
           ..add('date', date)
           ..add('time', time)
@@ -2845,6 +3650,11 @@ class BuiltWorkshopSummaryPostBuilder
   ClubListPostBuilder _club;
   ClubListPostBuilder get club => _$this._club ??= new ClubListPostBuilder();
   set club(ClubListPostBuilder club) => _$this._club = club;
+
+  EntityListPostBuilder _entity;
+  EntityListPostBuilder get entity =>
+      _$this._entity ??= new EntityListPostBuilder();
+  set entity(EntityListPostBuilder entity) => _$this._entity = entity;
 
   String _title;
   String get title => _$this._title;
@@ -2869,6 +3679,7 @@ class BuiltWorkshopSummaryPostBuilder
     if (_$v != null) {
       _id = _$v.id;
       _club = _$v.club?.toBuilder();
+      _entity = _$v.entity?.toBuilder();
       _title = _$v.title;
       _date = _$v.date;
       _time = _$v.time;
@@ -2899,6 +3710,7 @@ class BuiltWorkshopSummaryPostBuilder
           new _$BuiltWorkshopSummaryPost._(
               id: id,
               club: _club?.build(),
+              entity: _entity?.build(),
               title: title,
               date: date,
               time: time,
@@ -2908,6 +3720,8 @@ class BuiltWorkshopSummaryPostBuilder
       try {
         _$failedField = 'club';
         _club?.build();
+        _$failedField = 'entity';
+        _entity?.build();
 
         _$failedField = 'tags';
         _tags?.build();
@@ -2931,6 +3745,8 @@ class _$BuiltWorkshopDetailPost extends BuiltWorkshopDetailPost {
   final String description;
   @override
   final ClubListPost club;
+  @override
+  final EntityListPost entity;
   @override
   final String date;
   @override
@@ -2971,6 +3787,7 @@ class _$BuiltWorkshopDetailPost extends BuiltWorkshopDetailPost {
       this.title,
       this.description,
       this.club,
+      this.entity,
       this.date,
       this.time,
       this.location,
@@ -2986,7 +3803,14 @@ class _$BuiltWorkshopDetailPost extends BuiltWorkshopDetailPost {
       this.is_por_holder,
       this.tags,
       this.link})
-      : super._();
+      : super._() {
+    if (title == null) {
+      throw new BuiltValueNullFieldError('BuiltWorkshopDetailPost', 'title');
+    }
+    if (date == null) {
+      throw new BuiltValueNullFieldError('BuiltWorkshopDetailPost', 'date');
+    }
+  }
 
   @override
   BuiltWorkshopDetailPost rebuild(
@@ -3005,6 +3829,7 @@ class _$BuiltWorkshopDetailPost extends BuiltWorkshopDetailPost {
         title == other.title &&
         description == other.description &&
         club == other.club &&
+        entity == other.entity &&
         date == other.date &&
         time == other.time &&
         location == other.location &&
@@ -3042,11 +3867,11 @@ class _$BuiltWorkshopDetailPost extends BuiltWorkshopDetailPost {
                                                                 $jc(
                                                                     $jc(
                                                                         $jc(
-                                                                            $jc(0,
-                                                                                id.hashCode),
-                                                                            title.hashCode),
-                                                                        description.hashCode),
-                                                                    club.hashCode),
+                                                                            $jc($jc(0, id.hashCode),
+                                                                                title.hashCode),
+                                                                            description.hashCode),
+                                                                        club.hashCode),
+                                                                    entity.hashCode),
                                                                 date.hashCode),
                                                             time.hashCode),
                                                         location.hashCode),
@@ -3071,6 +3896,7 @@ class _$BuiltWorkshopDetailPost extends BuiltWorkshopDetailPost {
           ..add('title', title)
           ..add('description', description)
           ..add('club', club)
+          ..add('entity', entity)
           ..add('date', date)
           ..add('time', time)
           ..add('location', location)
@@ -3110,6 +3936,11 @@ class BuiltWorkshopDetailPostBuilder
   ClubListPostBuilder _club;
   ClubListPostBuilder get club => _$this._club ??= new ClubListPostBuilder();
   set club(ClubListPostBuilder club) => _$this._club = club;
+
+  EntityListPostBuilder _entity;
+  EntityListPostBuilder get entity =>
+      _$this._entity ??= new EntityListPostBuilder();
+  set entity(EntityListPostBuilder entity) => _$this._entity = entity;
 
   String _date;
   String get date => _$this._date;
@@ -3188,6 +4019,7 @@ class BuiltWorkshopDetailPostBuilder
       _title = _$v.title;
       _description = _$v.description;
       _club = _$v.club?.toBuilder();
+      _entity = _$v.entity?.toBuilder();
       _date = _$v.date;
       _time = _$v.time;
       _location = _$v.location;
@@ -3231,6 +4063,7 @@ class BuiltWorkshopDetailPostBuilder
               title: title,
               description: description,
               club: _club?.build(),
+              entity: _entity?.build(),
               date: date,
               time: time,
               location: location,
@@ -3251,6 +4084,8 @@ class BuiltWorkshopDetailPostBuilder
       try {
         _$failedField = 'club';
         _club?.build();
+        _$failedField = 'entity';
+        _entity?.build();
 
         _$failedField = 'resources';
         _resources?.build();
@@ -4474,11 +5309,9 @@ class _$BuiltWorkshopCreatePost extends BuiltWorkshopCreatePost {
   @override
   final String title;
   @override
-  final int club;
+  final String description;
   @override
   final String date;
-  @override
-  final String description;
   @override
   final String time;
   @override
@@ -4505,9 +5338,8 @@ class _$BuiltWorkshopCreatePost extends BuiltWorkshopCreatePost {
   _$BuiltWorkshopCreatePost._(
       {this.id,
       this.title,
-      this.club,
-      this.date,
       this.description,
+      this.date,
       this.time,
       this.location,
       this.latitude,
@@ -4520,9 +5352,6 @@ class _$BuiltWorkshopCreatePost extends BuiltWorkshopCreatePost {
       : super._() {
     if (title == null) {
       throw new BuiltValueNullFieldError('BuiltWorkshopCreatePost', 'title');
-    }
-    if (club == null) {
-      throw new BuiltValueNullFieldError('BuiltWorkshopCreatePost', 'club');
     }
     if (date == null) {
       throw new BuiltValueNullFieldError('BuiltWorkshopCreatePost', 'date');
@@ -4544,9 +5373,8 @@ class _$BuiltWorkshopCreatePost extends BuiltWorkshopCreatePost {
     return other is BuiltWorkshopCreatePost &&
         id == other.id &&
         title == other.title &&
-        club == other.club &&
-        date == other.date &&
         description == other.description &&
+        date == other.date &&
         time == other.time &&
         location == other.location &&
         latitude == other.latitude &&
@@ -4571,12 +5399,10 @@ class _$BuiltWorkshopCreatePost extends BuiltWorkshopCreatePost {
                                     $jc(
                                         $jc(
                                             $jc(
-                                                $jc(
-                                                    $jc($jc(0, id.hashCode),
-                                                        title.hashCode),
-                                                    club.hashCode),
-                                                date.hashCode),
-                                            description.hashCode),
+                                                $jc($jc(0, id.hashCode),
+                                                    title.hashCode),
+                                                description.hashCode),
+                                            date.hashCode),
                                         time.hashCode),
                                     location.hashCode),
                                 latitude.hashCode),
@@ -4593,9 +5419,8 @@ class _$BuiltWorkshopCreatePost extends BuiltWorkshopCreatePost {
     return (newBuiltValueToStringHelper('BuiltWorkshopCreatePost')
           ..add('id', id)
           ..add('title', title)
-          ..add('club', club)
-          ..add('date', date)
           ..add('description', description)
+          ..add('date', date)
           ..add('time', time)
           ..add('location', location)
           ..add('latitude', latitude)
@@ -4622,17 +5447,13 @@ class BuiltWorkshopCreatePostBuilder
   String get title => _$this._title;
   set title(String title) => _$this._title = title;
 
-  int _club;
-  int get club => _$this._club;
-  set club(int club) => _$this._club = club;
+  String _description;
+  String get description => _$this._description;
+  set description(String description) => _$this._description = description;
 
   String _date;
   String get date => _$this._date;
   set date(String date) => _$this._date = date;
-
-  String _description;
-  String get description => _$this._description;
-  set description(String description) => _$this._description = description;
 
   String _time;
   String get time => _$this._time;
@@ -4676,9 +5497,8 @@ class BuiltWorkshopCreatePostBuilder
     if (_$v != null) {
       _id = _$v.id;
       _title = _$v.title;
-      _club = _$v.club;
-      _date = _$v.date;
       _description = _$v.description;
+      _date = _$v.date;
       _time = _$v.time;
       _location = _$v.location;
       _latitude = _$v.latitude;
@@ -4714,9 +5534,8 @@ class BuiltWorkshopCreatePostBuilder
           new _$BuiltWorkshopCreatePost._(
               id: id,
               title: title,
-              club: club,
-              date: date,
               description: description,
+              date: date,
               time: time,
               location: location,
               latitude: latitude,

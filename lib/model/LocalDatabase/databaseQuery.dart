@@ -17,6 +17,8 @@ class DatabaseQuery {
         StringConst.clubIdString,
         StringConst.clubString,
         StringConst.councilIdString,
+        StringConst.entityIdString,
+        StringConst.entityString,
         StringConst.smallImageUrlString,
         StringConst.largeImageUrlString,
         StringConst.titleString,
@@ -48,6 +50,8 @@ class DatabaseQuery {
 
   static Future<BuiltAllCouncilsPost> getCouncilsSummaryById(
       {@required Database db, @required int councilId}) async {
+    if (councilId == null) return null;
+
     List<Map> maps = await db.query(
       StringConst.allCouncislSummaryString,
       columns: [
@@ -152,9 +156,9 @@ class DatabaseQuery {
       ..id = map[StringConst.idString]
       ..name = map[StringConst.nameString]
       ..description = map[StringConst.descriptionString]
-      ..gensec = gensec == null ? null : (gensec.toBuilder())
-      ..joint_gensec = jointGensec == null ? null : (jointGensec.toBuilder())
-      ..clubs = clubs == null ? null : (clubs.toBuilder())
+      ..gensec = (gensec?.toBuilder())
+      ..joint_gensec = (jointGensec?.toBuilder())
+      ..clubs = (clubs?.toBuilder())
       ..small_image_url = map[StringConst.smallImageUrlString]
       ..large_image_url = map[StringConst.largeImageUrlString]
       ..is_por_holder = map[StringConst.isPORHolderString] == 1 ? true : false
@@ -222,7 +226,7 @@ class DatabaseQuery {
 
 // TODO; fetch club only when its required , do not store all clubs beforehand.
   static Future<BuiltClubPost> getClubDetails({@required Database db, @required int clubId}) async {
-    // it will return only 1 map as every POR Holder has unique id
+    // it will return only 1 map as every club  has unique id
 
     List<Map> maps = await db.query(
       StringConst.clubDetailsString,
@@ -288,9 +292,9 @@ class DatabaseQuery {
       ..id = map[StringConst.idString]
       ..name = map[StringConst.nameString]
       ..description = map[StringConst.descriptionString]
-      ..council = council == null ? null : (council.toBuilder())
-      ..secy = secy == null ? null : (secy.toBuilder())
-      ..joint_secy = jointSecy == null ? null : (jointSecy.toBuilder())
+      ..council = (council?.toBuilder())
+      ..secy = (secy?.toBuilder())
+      ..joint_secy = (jointSecy?.toBuilder())
       ..small_image_url = map[StringConst.smallImageUrlString]
       ..large_image_url = map[StringConst.largeImageUrlString]
       ..is_subscribed = map[StringConst.isSubscribedString] == 1 ? true : false
@@ -304,5 +308,93 @@ class DatabaseQuery {
       ..youtube_url = map[StringConst.youtubeUrlString]);
 
     return clubDetails;
+  }
+
+  static Future<BuiltList<EntityListPost>> getAllEntitiesSummary({@required Database db}) async {
+    List<Map> maps = await db.query(
+      StringConst.entitySummaryString,
+      columns: [
+        StringConst.idString,
+        StringConst.nameString,
+        StringConst.smallImageUrlString,
+        StringConst.largeImageUrlString,
+      ],
+      orderBy: StringConst.idString,
+    );
+
+    BuiltList<EntityListPost> list = BuiltList<EntityListPost>([]);
+    var builder = list.toBuilder();
+
+    for (var map in maps) {
+      builder.add(DatabaseMapping.entitySummaryFromMap(map));
+    }
+
+    var entitiesSummary = builder.build();
+    return entitiesSummary;
+  }
+
+  static Future<BuiltEntityPost> getEntityDetails(
+      {@required Database db, @required int entityId}) async {
+    // it will return only 1 map as every entity  has unique id
+
+    List<Map> maps = await db.query(
+      StringConst.entityDetailsString,
+      columns: [
+        StringConst.idString,
+        StringConst.nameString,
+        StringConst.descriptionString,
+        StringConst.pointOfContactAsStringArrayString,
+        StringConst.smallImageUrlString,
+        StringConst.largeImageUrlString,
+        StringConst.isSubscribedString,
+        StringConst.subscribedUsersString,
+        StringConst.isPORHolderString,
+        StringConst.websiteUrlString,
+        StringConst.facebookUrlString,
+        StringConst.twitterUrlString,
+        StringConst.instagramUrlString,
+        StringConst.linkedinUrlString,
+        StringConst.youtubeUrlString,
+      ],
+      where: '${StringConst.idString}  = $entityId',
+    );
+    print('entity id = $entityId -----------------------------------------------------');
+    print(maps.length);
+
+    if (maps.isEmpty) {
+      return null;
+    }
+    var map = maps[0];
+
+    List<int> pocIds = (map[StringConst.pointOfContactAsStringArrayString] as List)
+        ?.map((element) => int.tryParse(element))
+        ?.toList();
+
+    BuiltList<SecyPost> pocList = BuiltList<SecyPost>([]);
+    var pocBuilder = pocList.toBuilder();
+
+    pocIds?.forEach((element) async {
+      final secy = await getPORHolderInfo(db: db, porId: element);
+      pocBuilder.add(secy);
+    });
+
+    final BuiltEntityPost entityDetails = BuiltEntityPost((b) => b
+      ..id = map[StringConst.idString]
+      ..name = map[StringConst.nameString]
+      ..description = map[StringConst.descriptionString]
+      ..point_of_contact = pocBuilder
+      ..small_image_url = map[StringConst.smallImageUrlString]
+      ..large_image_url = map[StringConst.largeImageUrlString]
+      ..is_subscribed = map[StringConst.isSubscribedString] == 1 ? true : false
+      ..subscribed_users = map[StringConst.subscribedUsersString]
+      ..is_por_holder = map[StringConst.isPORHolderString] == 1 ? true : false
+      ..website_url = map[StringConst.websiteUrlString]
+      ..facebook_url = map[StringConst.facebookUrlString]
+      ..twitter_url = map[StringConst.twitterUrlString]
+      ..instagram_url = map[StringConst.instagramUrlString]
+      ..linkedin_url = map[StringConst.linkedinUrlString]
+      ..youtube_url = map[StringConst.youtubeUrlString]);
+
+    return entityDetails;
   }
 }

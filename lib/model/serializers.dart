@@ -7,6 +7,9 @@ import 'built_post.dart';
 part 'serializers.g.dart';
 
 @SerializersFor(const [
+  EntityListPost,
+  BuiltEntityPost,
+  EntityTags,
   TagCreate,
   TagSearch,
   TagDetail,

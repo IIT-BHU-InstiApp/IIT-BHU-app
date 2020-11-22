@@ -34,12 +34,13 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   }
 
   fetchWorkshopsAndCouncilButtons() async {
-    await AppConstants.populateWorkshopsAndCouncilButtons();
+    await AppConstants.populateWorkshopsAndCouncilAndEntityButtons();
     setState(() {
       AppConstants.firstTimeFetching = false;
     });
     await AppConstants.updateAndPopulateWorkshops();
-    await AppConstants.writeCouncilLogosIntoDisk(AppConstants.councilsSummaryfromDatabase);
+
+    await AppConstants.writeCouncilAndEntityLogoIntoDisk();
     setState(() {});
   }
 

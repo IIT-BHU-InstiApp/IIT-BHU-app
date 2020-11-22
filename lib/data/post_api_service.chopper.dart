@@ -59,16 +59,15 @@ class _$PostApiService extends PostApiService {
     return client.send<dynamic, dynamic>($request);
   }
 
-  Future<Response> postNewWorkshop(String token, BuiltWorkshopCreatePost body) {
-    final $url = '/workshops/create/';
-    final $headers = {'Authorization': token};
+  Future<Response<BuiltAllWorkshopsPost>> searchWorkshop(
+      BuiltWorkshopSearchByStringPost body) {
+    final $url = '/workshops/search/';
     final $body = body;
-    final $request =
-        Request('POST', $url, client.baseUrl, body: $body, headers: $headers);
-    return client.send<dynamic, dynamic>($request);
+    final $request = Request('POST', $url, client.baseUrl, body: $body);
+    return client.send<BuiltAllWorkshopsPost, BuiltAllWorkshopsPost>($request);
   }
 
-  Future<Response> postNewResource(
+  Future<Response> createResource(
       int id, String token, WorkshopResources resources) {
     final $url = '/workshops/${id}/resources/';
     final $headers = {'Authorization': token};
@@ -78,12 +77,14 @@ class _$PostApiService extends PostApiService {
     return client.send<dynamic, dynamic>($request);
   }
 
-  Future<Response<BuiltAllWorkshopsPost>> searchWorkshop(
-      BuiltWorkshopSearchByStringPost body) {
-    final $url = '/workshops/search/';
+  Future<Response> updateWorkshopByPut(
+      int id, String token, BuiltWorkshopDetailPost body) {
+    final $url = '/workshops/${id}/';
+    final $headers = {'Authorization': token};
     final $body = body;
-    final $request = Request('POST', $url, client.baseUrl, body: $body);
-    return client.send<BuiltAllWorkshopsPost, BuiltAllWorkshopsPost>($request);
+    final $request =
+        Request('PUT', $url, client.baseUrl, body: $body, headers: $headers);
+    return client.send<dynamic, dynamic>($request);
   }
 
   Future<Response> updateContacts(int id, String token, BuiltContacts body) {
@@ -97,16 +98,6 @@ class _$PostApiService extends PostApiService {
 
   Future<Response> updateTags(int id, String token, BuiltTags body) {
     final $url = '/workshops/${id}/update-tags/';
-    final $headers = {'Authorization': token};
-    final $body = body;
-    final $request =
-        Request('PUT', $url, client.baseUrl, body: $body, headers: $headers);
-    return client.send<dynamic, dynamic>($request);
-  }
-
-  Future<Response> updateWorkshopByPut(
-      int id, String token, BuiltWorkshopDetailPost body) {
-    final $url = '/workshops/${id}/';
     final $headers = {'Authorization': token};
     final $body = body;
     final $request =
@@ -205,6 +196,13 @@ class _$PostApiService extends PostApiService {
     return client.send<BuiltClubPost, BuiltClubPost>($request);
   }
 
+  Future<Response<ClubTags>> getClubTags(int id, String token) {
+    final $url = '/clubs/${id}/tags/';
+    final $headers = {'Authorization': token};
+    final $request = Request('GET', $url, client.baseUrl, headers: $headers);
+    return client.send<ClubTags, ClubTags>($request);
+  }
+
   Future<Response> toggleClubSubscription(int id, String token) {
     final $url = '/clubs/${id}/toggle-subscribed/';
     final $headers = {'Authorization': token};
@@ -220,11 +218,34 @@ class _$PostApiService extends PostApiService {
     return client.send<BuiltAllWorkshopsPost, BuiltAllWorkshopsPost>($request);
   }
 
-  Future<Response<ClubTags>> getClubTags(int id, String token) {
-    final $url = '/clubs/${id}/tags/';
+  Future<Response<TagDetail>> createClubTag(
+      int id, String token, TagCreate body) {
+    final $url = '/clubs/${id}/tags/create/';
     final $headers = {'Authorization': token};
-    final $request = Request('GET', $url, client.baseUrl, headers: $headers);
-    return client.send<ClubTags, ClubTags>($request);
+    final $body = body;
+    final $request =
+        Request('POST', $url, client.baseUrl, body: $body, headers: $headers);
+    return client.send<TagDetail, TagDetail>($request);
+  }
+
+  Future<Response<BuiltList<TagDetail>>> searchClubTag(
+      int id, String token, TagSearch body) {
+    final $url = '/clubs/${id}/tags/search/';
+    final $headers = {'Authorization': token};
+    final $body = body;
+    final $request =
+        Request('POST', $url, client.baseUrl, body: $body, headers: $headers);
+    return client.send<BuiltList<TagDetail>, TagDetail>($request);
+  }
+
+  Future<Response> createClubWorkshop(
+      int id, String token, BuiltWorkshopCreatePost body) {
+    final $url = '/clubs/${id}/workshops/create/';
+    final $headers = {'Authorization': token};
+    final $body = body;
+    final $request =
+        Request('POST', $url, client.baseUrl, body: $body, headers: $headers);
+    return client.send<dynamic, dynamic>($request);
   }
 
   Future<Response> updateClubByPut(int id, String token, BuiltClubPost body) {
@@ -238,6 +259,91 @@ class _$PostApiService extends PostApiService {
 
   Future<Response> updateClubByPatch(int id, String token, BuiltClubPost body) {
     final $url = '/clubs/${id}/';
+    final $headers = {'Authorization': token};
+    final $body = body;
+    final $request =
+        Request('PATCH', $url, client.baseUrl, body: $body, headers: $headers);
+    return client.send<dynamic, dynamic>($request);
+  }
+
+  Future<Response<BuiltList<EntityListPost>>> getAllEntity() {
+    final $url = '/entities/';
+    final $request = Request('GET', $url, client.baseUrl);
+    return client.send<BuiltList<EntityListPost>, EntityListPost>($request);
+  }
+
+  Future<Response<BuiltEntityPost>> getEntity(int id, String token) {
+    final $url = '/entities/${id}/';
+    final $headers = {'Authorization': token};
+    final $request = Request('GET', $url, client.baseUrl, headers: $headers);
+    return client.send<BuiltEntityPost, BuiltEntityPost>($request);
+  }
+
+  Future<Response<EntityTags>> getEntityTags(int id, String token) {
+    final $url = '/entities/${id}/tags/';
+    final $headers = {'Authorization': token};
+    final $request = Request('GET', $url, client.baseUrl, headers: $headers);
+    return client.send<EntityTags, EntityTags>($request);
+  }
+
+  Future<Response> toggleEntitySubscription(int id, String token) {
+    final $url = '/entities/${id}/toggle-subscribed/';
+    final $headers = {'Authorization': token};
+    final $request = Request('GET', $url, client.baseUrl, headers: $headers);
+    return client.send<dynamic, dynamic>($request);
+  }
+
+  Future<Response<BuiltAllWorkshopsPost>> getEntityWorkshops(
+      int id, String token) {
+    final $url = '/entities/${id}/workshops/';
+    final $headers = {'Authorization': token};
+    final $request = Request('GET', $url, client.baseUrl, headers: $headers);
+    return client.send<BuiltAllWorkshopsPost, BuiltAllWorkshopsPost>($request);
+  }
+
+  Future<Response<TagDetail>> createEntityTag(
+      int id, String token, TagCreate body) {
+    final $url = '/entities/${id}/tags/create/';
+    final $headers = {'Authorization': token};
+    final $body = body;
+    final $request =
+        Request('POST', $url, client.baseUrl, body: $body, headers: $headers);
+    return client.send<TagDetail, TagDetail>($request);
+  }
+
+  Future<Response<BuiltList<TagDetail>>> searchEntityTag(
+      int id, String token, TagSearch body) {
+    final $url = '/entities/${id}/tags/search/';
+    final $headers = {'Authorization': token};
+    final $body = body;
+    final $request =
+        Request('POST', $url, client.baseUrl, body: $body, headers: $headers);
+    return client.send<BuiltList<TagDetail>, TagDetail>($request);
+  }
+
+  Future<Response> createEntityWorkshop(
+      int id, String token, BuiltWorkshopCreatePost body) {
+    final $url = '/entities/${id}/workshops/create/';
+    final $headers = {'Authorization': token};
+    final $body = body;
+    final $request =
+        Request('POST', $url, client.baseUrl, body: $body, headers: $headers);
+    return client.send<dynamic, dynamic>($request);
+  }
+
+  Future<Response> updateEntityByPut(
+      int id, String token, BuiltEntityPost body) {
+    final $url = '/entities/${id}/';
+    final $headers = {'Authorization': token};
+    final $body = body;
+    final $request =
+        Request('PUT', $url, client.baseUrl, body: $body, headers: $headers);
+    return client.send<dynamic, dynamic>($request);
+  }
+
+  Future<Response> updateEntityByPatch(
+      int id, String token, BuiltEntityPost body) {
+    final $url = '/entities/${id}/';
     final $headers = {'Authorization': token};
     final $body = body;
     final $request =
@@ -287,25 +393,6 @@ class _$PostApiService extends PostApiService {
     final $request = Request('GET', $url, client.baseUrl);
     return client
         .send<BuiltList<BuiltTeamMemberPost>, BuiltTeamMemberPost>($request);
-  }
-
-  Future<Response<TagDetail>> createTag(String token, TagCreate body) {
-    final $url = '/tags/create/';
-    final $headers = {'Authorization': token};
-    final $body = body;
-    final $request =
-        Request('POST', $url, client.baseUrl, body: $body, headers: $headers);
-    return client.send<TagDetail, TagDetail>($request);
-  }
-
-  Future<Response<BuiltList<TagDetail>>> searchTag(
-      String token, TagSearch body) {
-    final $url = '/tags/search/';
-    final $headers = {'Authorization': token};
-    final $body = body;
-    final $request =
-        Request('POST', $url, client.baseUrl, body: $body, headers: $headers);
-    return client.send<BuiltList<TagDetail>, TagDetail>($request);
   }
 
   Future<Response<Token>> logInPost(LoginPost body) {

@@ -467,7 +467,8 @@ class WorkshopDetailCustomWidgets {
                     MaterialPageRoute(
                       builder: (context) => CreateScreen(
                         club: workshopDetail.club,
-                        clubName: workshopDetail.club.name,
+                        entity: null,
+                        title: workshopDetail.club.name,
                         workshopData: workshopDetail,
                       ),
                     ),

@@ -12,6 +12,7 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..add(BuiltClubPost.serializer)
       ..add(BuiltContacts.serializer)
       ..add(BuiltCouncilPost.serializer)
+      ..add(BuiltEntityPost.serializer)
       ..add(BuiltProfilePost.serializer)
       ..add(BuiltProfileSearchPost.serializer)
       ..add(BuiltTags.serializer)
@@ -23,6 +24,8 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..add(ClubListPost.serializer)
       ..add(ClubTags.serializer)
       ..add(ContactPost.serializer)
+      ..add(EntityListPost.serializer)
+      ..add(EntityTags.serializer)
       ..add(LoginPost.serializer)
       ..add(SecyPost.serializer)
       ..add(TagCreate.serializer)
@@ -52,8 +55,14 @@ Serializers _$serializers = (new Serializers().toBuilder()
           const FullType(BuiltList, const [const FullType(SecyPost)]),
           () => new ListBuilder<SecyPost>())
       ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(SecyPost)]),
+          () => new ListBuilder<SecyPost>())
+      ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(ClubListPost)]),
           () => new ListBuilder<ClubListPost>())
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(TagDetail)]),
+          () => new ListBuilder<TagDetail>())
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(TagDetail)]),
           () => new ListBuilder<TagDetail>())

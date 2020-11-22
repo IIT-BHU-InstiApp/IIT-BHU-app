@@ -43,7 +43,8 @@ class ClubCustomWidgets {
                       onPressed: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => CreateScreen(club: club, clubName: clubMap.name),
+                            builder: (context) =>
+                                CreateScreen(club: club, title: clubMap.name, entity: null),
                           ),
                         );
                       })
