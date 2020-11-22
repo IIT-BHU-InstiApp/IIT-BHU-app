@@ -488,9 +488,15 @@ abstract class BuiltProfilePost implements Built<BuiltProfilePost, BuiltProfileP
   @nullable
   String get year_of_joining;
   @nullable
-  BuiltList<ClubListPost> get subscriptions;
+  BuiltList<ClubListPost> get club_subscriptions;
+  @nullable
+  BuiltList<EntityListPost> get entity_subscriptions;
+
   @nullable
   BuiltList<ClubListPost> get club_privileges;
+  @nullable
+  BuiltList<EntityListPost> get entity_privileges;
+
   @nullable
   String get photo_url;
 

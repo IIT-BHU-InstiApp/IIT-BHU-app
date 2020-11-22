@@ -2022,12 +2022,19 @@ class _$BuiltProfilePostSerializer
         ..add(serializers.serialize(object.year_of_joining,
             specifiedType: const FullType(String)));
     }
-    if (object.subscriptions != null) {
+    if (object.club_subscriptions != null) {
       result
-        ..add('subscriptions')
-        ..add(serializers.serialize(object.subscriptions,
+        ..add('club_subscriptions')
+        ..add(serializers.serialize(object.club_subscriptions,
             specifiedType: const FullType(
                 BuiltList, const [const FullType(ClubListPost)])));
+    }
+    if (object.entity_subscriptions != null) {
+      result
+        ..add('entity_subscriptions')
+        ..add(serializers.serialize(object.entity_subscriptions,
+            specifiedType: const FullType(
+                BuiltList, const [const FullType(EntityListPost)])));
     }
     if (object.club_privileges != null) {
       result
@@ -2035,6 +2042,13 @@ class _$BuiltProfilePostSerializer
         ..add(serializers.serialize(object.club_privileges,
             specifiedType: const FullType(
                 BuiltList, const [const FullType(ClubListPost)])));
+    }
+    if (object.entity_privileges != null) {
+      result
+        ..add('entity_privileges')
+        ..add(serializers.serialize(object.entity_privileges,
+            specifiedType: const FullType(
+                BuiltList, const [const FullType(EntityListPost)])));
     }
     if (object.photo_url != null) {
       result
@@ -2081,16 +2095,28 @@ class _$BuiltProfilePostSerializer
           result.year_of_joining = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
-        case 'subscriptions':
-          result.subscriptions.replace(serializers.deserialize(value,
+        case 'club_subscriptions':
+          result.club_subscriptions.replace(serializers.deserialize(value,
                   specifiedType: const FullType(
                       BuiltList, const [const FullType(ClubListPost)]))
+              as BuiltList<dynamic>);
+          break;
+        case 'entity_subscriptions':
+          result.entity_subscriptions.replace(serializers.deserialize(value,
+                  specifiedType: const FullType(
+                      BuiltList, const [const FullType(EntityListPost)]))
               as BuiltList<dynamic>);
           break;
         case 'club_privileges':
           result.club_privileges.replace(serializers.deserialize(value,
                   specifiedType: const FullType(
                       BuiltList, const [const FullType(ClubListPost)]))
+              as BuiltList<dynamic>);
+          break;
+        case 'entity_privileges':
+          result.entity_privileges.replace(serializers.deserialize(value,
+                  specifiedType: const FullType(
+                      BuiltList, const [const FullType(EntityListPost)]))
               as BuiltList<dynamic>);
           break;
         case 'photo_url':
@@ -5578,9 +5604,13 @@ class _$BuiltProfilePost extends BuiltProfilePost {
   @override
   final String year_of_joining;
   @override
-  final BuiltList<ClubListPost> subscriptions;
+  final BuiltList<ClubListPost> club_subscriptions;
+  @override
+  final BuiltList<EntityListPost> entity_subscriptions;
   @override
   final BuiltList<ClubListPost> club_privileges;
+  @override
+  final BuiltList<EntityListPost> entity_privileges;
   @override
   final String photo_url;
 
@@ -5595,8 +5625,10 @@ class _$BuiltProfilePost extends BuiltProfilePost {
       this.phone_number,
       this.department,
       this.year_of_joining,
-      this.subscriptions,
+      this.club_subscriptions,
+      this.entity_subscriptions,
       this.club_privileges,
+      this.entity_privileges,
       this.photo_url})
       : super._();
 
@@ -5618,8 +5650,10 @@ class _$BuiltProfilePost extends BuiltProfilePost {
         phone_number == other.phone_number &&
         department == other.department &&
         year_of_joining == other.year_of_joining &&
-        subscriptions == other.subscriptions &&
+        club_subscriptions == other.club_subscriptions &&
+        entity_subscriptions == other.entity_subscriptions &&
         club_privileges == other.club_privileges &&
+        entity_privileges == other.entity_privileges &&
         photo_url == other.photo_url;
   }
 
@@ -5631,13 +5665,17 @@ class _$BuiltProfilePost extends BuiltProfilePost {
                 $jc(
                     $jc(
                         $jc(
-                            $jc($jc($jc(0, id.hashCode), name.hashCode),
-                                email.hashCode),
-                            phone_number.hashCode),
-                        department.hashCode),
-                    year_of_joining.hashCode),
-                subscriptions.hashCode),
-            club_privileges.hashCode),
+                            $jc(
+                                $jc(
+                                    $jc($jc($jc(0, id.hashCode), name.hashCode),
+                                        email.hashCode),
+                                    phone_number.hashCode),
+                                department.hashCode),
+                            year_of_joining.hashCode),
+                        club_subscriptions.hashCode),
+                    entity_subscriptions.hashCode),
+                club_privileges.hashCode),
+            entity_privileges.hashCode),
         photo_url.hashCode));
   }
 
@@ -5650,8 +5688,10 @@ class _$BuiltProfilePost extends BuiltProfilePost {
           ..add('phone_number', phone_number)
           ..add('department', department)
           ..add('year_of_joining', year_of_joining)
-          ..add('subscriptions', subscriptions)
+          ..add('club_subscriptions', club_subscriptions)
+          ..add('entity_subscriptions', entity_subscriptions)
           ..add('club_privileges', club_privileges)
+          ..add('entity_privileges', entity_privileges)
           ..add('photo_url', photo_url))
         .toString();
   }
@@ -5686,17 +5726,29 @@ class BuiltProfilePostBuilder
   set year_of_joining(String year_of_joining) =>
       _$this._year_of_joining = year_of_joining;
 
-  ListBuilder<ClubListPost> _subscriptions;
-  ListBuilder<ClubListPost> get subscriptions =>
-      _$this._subscriptions ??= new ListBuilder<ClubListPost>();
-  set subscriptions(ListBuilder<ClubListPost> subscriptions) =>
-      _$this._subscriptions = subscriptions;
+  ListBuilder<ClubListPost> _club_subscriptions;
+  ListBuilder<ClubListPost> get club_subscriptions =>
+      _$this._club_subscriptions ??= new ListBuilder<ClubListPost>();
+  set club_subscriptions(ListBuilder<ClubListPost> club_subscriptions) =>
+      _$this._club_subscriptions = club_subscriptions;
+
+  ListBuilder<EntityListPost> _entity_subscriptions;
+  ListBuilder<EntityListPost> get entity_subscriptions =>
+      _$this._entity_subscriptions ??= new ListBuilder<EntityListPost>();
+  set entity_subscriptions(ListBuilder<EntityListPost> entity_subscriptions) =>
+      _$this._entity_subscriptions = entity_subscriptions;
 
   ListBuilder<ClubListPost> _club_privileges;
   ListBuilder<ClubListPost> get club_privileges =>
       _$this._club_privileges ??= new ListBuilder<ClubListPost>();
   set club_privileges(ListBuilder<ClubListPost> club_privileges) =>
       _$this._club_privileges = club_privileges;
+
+  ListBuilder<EntityListPost> _entity_privileges;
+  ListBuilder<EntityListPost> get entity_privileges =>
+      _$this._entity_privileges ??= new ListBuilder<EntityListPost>();
+  set entity_privileges(ListBuilder<EntityListPost> entity_privileges) =>
+      _$this._entity_privileges = entity_privileges;
 
   String _photo_url;
   String get photo_url => _$this._photo_url;
@@ -5712,8 +5764,10 @@ class BuiltProfilePostBuilder
       _phone_number = _$v.phone_number;
       _department = _$v.department;
       _year_of_joining = _$v.year_of_joining;
-      _subscriptions = _$v.subscriptions?.toBuilder();
+      _club_subscriptions = _$v.club_subscriptions?.toBuilder();
+      _entity_subscriptions = _$v.entity_subscriptions?.toBuilder();
       _club_privileges = _$v.club_privileges?.toBuilder();
+      _entity_privileges = _$v.entity_privileges?.toBuilder();
       _photo_url = _$v.photo_url;
       _$v = null;
     }
@@ -5745,16 +5799,22 @@ class BuiltProfilePostBuilder
               phone_number: phone_number,
               department: department,
               year_of_joining: year_of_joining,
-              subscriptions: _subscriptions?.build(),
+              club_subscriptions: _club_subscriptions?.build(),
+              entity_subscriptions: _entity_subscriptions?.build(),
               club_privileges: _club_privileges?.build(),
+              entity_privileges: _entity_privileges?.build(),
               photo_url: photo_url);
     } catch (_) {
       String _$failedField;
       try {
-        _$failedField = 'subscriptions';
-        _subscriptions?.build();
+        _$failedField = 'club_subscriptions';
+        _club_subscriptions?.build();
+        _$failedField = 'entity_subscriptions';
+        _entity_subscriptions?.build();
         _$failedField = 'club_privileges';
         _club_privileges?.build();
+        _$failedField = 'entity_privileges';
+        _entity_privileges?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             'BuiltProfilePost', _$failedField, e.toString());

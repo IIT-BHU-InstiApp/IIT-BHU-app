@@ -46,8 +46,14 @@ Serializers _$serializers = (new Serializers().toBuilder()
           const FullType(BuiltList, const [const FullType(ClubListPost)]),
           () => new ListBuilder<ClubListPost>())
       ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(EntityListPost)]),
+          () => new ListBuilder<EntityListPost>())
+      ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(ClubListPost)]),
           () => new ListBuilder<ClubListPost>())
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(EntityListPost)]),
+          () => new ListBuilder<EntityListPost>())
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(SecyPost)]),
           () => new ListBuilder<SecyPost>())

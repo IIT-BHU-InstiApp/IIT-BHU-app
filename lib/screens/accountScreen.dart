@@ -25,16 +25,16 @@ class AccountScreen extends StatelessWidget {
     return ListView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      itemCount: profileDetails.subscriptions.length,
+      itemCount: profileDetails.club_subscriptions.length,
       itemBuilder: (context, index) {
         return ClubAndCouncilWidgets.getTitleCard(
-            clubTypeForHero: 'Subscriptions',
+            clubTypeForHero: 'club_subscriptions',
             context: context,
-            title: profileDetails.subscriptions[index].name,
-            subtitle: profileDetails.subscriptions[index].council.name,
-            id: profileDetails.subscriptions[index].id,
-            imageUrl: profileDetails.subscriptions[index].small_image_url,
-            club: profileDetails.subscriptions[index],
+            title: profileDetails.club_subscriptions[index].name,
+            subtitle: profileDetails.club_subscriptions[index].council.name,
+            id: profileDetails.club_subscriptions[index].id,
+            imageUrl: profileDetails.club_subscriptions[index].small_image_url,
+            club: profileDetails.club_subscriptions[index],
             isCouncil: false,
             horizontal: true);
       },
@@ -178,7 +178,7 @@ class AccountScreen extends StatelessWidget {
                       height: 20,
                     ),
                     Text(
-                      "Subscriptions",
+                      "club_subscriptions",
                       style: TextStyle(
                           color: Color(0xff242424), fontSize: 28, fontWeight: FontWeight.w600),
                     ),
@@ -189,7 +189,7 @@ class AccountScreen extends StatelessWidget {
                               child: LoadingCircle,
                             ),
                           )
-                        : profileDetails.subscriptions.length == 0
+                        : profileDetails.club_subscriptions.length == 0
                             ? Text('You haven\'t subscribed to any channels yet!')
                             : Container(child: subscribed("Club")),
                     SizedBox(
