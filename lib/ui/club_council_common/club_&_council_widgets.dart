@@ -5,6 +5,7 @@ import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/colorConstants.dart';
 import 'package:iit_app/pages/club/clubPage.dart';
+import 'package:iit_app/screens/create.dart';
 import 'package:iit_app/ui/club_council_common/description.dart';
 import 'package:iit_app/ui/separator.dart';
 import 'package:iit_app/ui/text_style.dart';
@@ -20,14 +21,17 @@ class ClubAndCouncilWidgets {
     BuiltCouncilPost councilDetail,
     bool isClub = false,
     BuiltClubPost clubDetail,
+    ClubListPost club,
   }) {
-    assert((isCouncil == true && isClub == false) || (isCouncil == false && isClub == true));
+    assert((isCouncil == true && isClub == false) ||
+        (isCouncil == false && isClub == true));
 
     final bottom = MediaQuery.of(context).viewInsets.bottom;
     dynamic _data = isCouncil ? councilDetail : clubDetail;
 
     final _secy = isCouncil ? councilDetail?.gensec : clubDetail?.secy;
-    final _jointSecy = isCouncil ? councilDetail?.joint_gensec : clubDetail?.joint_secy;
+    final _jointSecy =
+        isCouncil ? councilDetail?.joint_gensec : clubDetail?.joint_secy;
 
     return Container(
       color: ColorConstants.workshopContainerBackground,
@@ -46,8 +50,10 @@ class ClubAndCouncilWidgets {
                   children: [
                     Container(
                       child: largeLogoFile == null
-                          ? Image.network(_data.large_image_url, fit: BoxFit.cover, height: 300.0)
-                          : Image.file(largeLogoFile, fit: BoxFit.cover, height: 300.0),
+                          ? Image.network(_data.large_image_url,
+                              fit: BoxFit.cover, height: 300.0)
+                          : Image.file(largeLogoFile,
+                              fit: BoxFit.cover, height: 300.0),
                       constraints: BoxConstraints.expand(height: 295.0),
                     ),
                     ClubAndCouncilWidgets.getGradient(),
@@ -64,14 +70,55 @@ class ClubAndCouncilWidgets {
                   ],
                 ),
                 SizedBox(height: 8.0),
+                isClub && clubDetail.is_por_holder
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          RaisedButton(
+                              child: Text('Create workshop'),
+                              onPressed: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => CreateScreen(
+                                        club: club,
+                                        title: clubDetail.name,
+                                        entity: null,
+                                        isWorkshopOrEvent: 'workshop'),
+                                  ),
+                                );
+                              }),
+                          isClub && clubDetail.is_por_holder
+                              ? RaisedButton(
+                                  child: Text('Create event'),
+                                  onPressed: () {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) => CreateScreen(
+                                            club: club,
+                                            title: clubDetail.name,
+                                            entity: null,
+                                            isWorkshopOrEvent: 'event'),
+                                      ),
+                                    );
+                                  })
+                              : Container(),
+                        ],
+                      )
+                    : Container(),
                 Padding(
                   padding: EdgeInsets.only(bottom: bottom),
-                  child: Description(map: _data, isCouncil: isCouncil, isClub: isClub),
+                  child: Description(
+                      map: _data, isCouncil: isCouncil, isClub: isClub),
                 ),
                 SizedBox(height: 15.0),
-                ClubAndCouncilWidgets.getSecies(context, secy: _secy, jointSecy: _jointSecy),
-                _data == null ? Container() : ClubAndCouncilWidgets.getSocialLinks(_data),
-                SizedBox(height: 2 * ClubAndCouncilWidgets.getMinPanelHeight(context)),
+                ClubAndCouncilWidgets.getSecies(context,
+                    secy: _secy, jointSecy: _jointSecy),
+                _data == null
+                    ? Container()
+                    : ClubAndCouncilWidgets.getSocialLinks(_data),
+                SizedBox(
+                    height:
+                        2 * ClubAndCouncilWidgets.getMinPanelHeight(context)),
               ],
             ),
     );
@@ -130,22 +177,27 @@ class ClubAndCouncilWidgets {
         children: <Widget>[
           map.youtube_url == null || map.youtube_url.length == 0
               ? Container()
-              : _buildButtonColumn(FontAwesomeIcons.youtube, 'YouTube', map.youtube_url),
+              : _buildButtonColumn(
+                  FontAwesomeIcons.youtube, 'YouTube', map.youtube_url),
           map.website_url == null || map.website_url.length == 0
               ? Container()
               : _buildButtonColumn(Icons.web, 'Website', map.website_url),
           map.linkedin_url == null || map.linkedin_url.length == 0
               ? Container()
-              : _buildButtonColumn(FontAwesomeIcons.linkedin, 'LinkedIn', map.linkedin_url),
+              : _buildButtonColumn(
+                  FontAwesomeIcons.linkedin, 'LinkedIn', map.linkedin_url),
           map.instagram_url == null || map.instagram_url.length == 0
               ? Container()
-              : _buildButtonColumn(FontAwesomeIcons.instagram, 'Instagram', map.instagram_url),
+              : _buildButtonColumn(
+                  FontAwesomeIcons.instagram, 'Instagram', map.instagram_url),
           map.facebook_url == null || map.facebook_url.length == 0
               ? Container()
-              : _buildButtonColumn(FontAwesomeIcons.facebook, 'Facebook', map.facebook_url),
+              : _buildButtonColumn(
+                  FontAwesomeIcons.facebook, 'Facebook', map.facebook_url),
           map.twitter_url == null || map.twitter_url.length == 0
               ? Container()
-              : _buildButtonColumn(FontAwesomeIcons.twitter, 'Twitter', map.twitter_url),
+              : _buildButtonColumn(
+                  FontAwesomeIcons.twitter, 'Twitter', map.twitter_url),
         ],
       ),
     );
@@ -213,7 +265,9 @@ class ClubAndCouncilWidgets {
                       print(AccountPage.flag),
                       if (AccountPage.flag == "Account")
                         Navigator.push(
-                            context, MaterialPageRoute(builder: (context) => AccountPage()))
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AccountPage()))
                       else
                         Navigator.pop(context),
                     }),
@@ -261,8 +315,9 @@ class ClubAndCouncilWidgets {
           SizedBox(height: 4.0),
           Center(
             child: CircleAvatar(
-              backgroundImage:
-                  imageUrl == null ? AssetImage('assets/iitbhu.jpeg') : NetworkImage(imageUrl),
+              backgroundImage: imageUrl == null
+                  ? AssetImage('assets/iitbhu.jpeg')
+                  : NetworkImage(imageUrl),
               radius: 30.0,
               backgroundColor: Colors.transparent,
             ),
@@ -275,7 +330,9 @@ class ClubAndCouncilWidgets {
             ),
             width: 100,
           ),
-          desg == '' ? SizedBox(height: 1.0) : Text(desg, textAlign: TextAlign.center),
+          desg == ''
+              ? SizedBox(height: 1.0)
+              : Text(desg, textAlign: TextAlign.center),
           SizedBox(height: 4.0),
         ],
       ),
@@ -292,17 +349,20 @@ class ClubAndCouncilWidgets {
       horizontal = false,
       ClubListPost club,
       String clubTypeForHero = 'default'}) {
-    final File clubLogoFile = AppConstants.getImageFile(isSmall: true, id: id, isClub: true);
+    final File clubLogoFile =
+        AppConstants.getImageFile(isSmall: true, id: id, isClub: true);
 
     if (clubLogoFile == null) {
-      AppConstants.writeImageFileIntoDisk(isClub: true, isSmall: true, id: id, url: imageUrl);
+      AppConstants.writeImageFileIntoDisk(
+          isClub: true, isSmall: true, id: id, url: imageUrl);
     }
-    final File _largeLogofile =
-        AppConstants.getImageFile(isCouncil: isCouncil, isClub: !isCouncil, isSmall: false, id: id);
+    final File _largeLogofile = AppConstants.getImageFile(
+        isCouncil: isCouncil, isClub: !isCouncil, isSmall: false, id: id);
 
     final clubThumbnail = Container(
       margin: EdgeInsets.symmetric(vertical: 16.0),
-      alignment: horizontal ? FractionalOffset.centerLeft : FractionalOffset.center,
+      alignment:
+          horizontal ? FractionalOffset.centerLeft : FractionalOffset.center,
       child: Hero(
         tag: "club-hero-$id-$clubTypeForHero",
         child: Container(
@@ -348,12 +408,15 @@ class ClubAndCouncilWidgets {
       constraints: BoxConstraints.expand(),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: horizontal ? CrossAxisAlignment.start : CrossAxisAlignment.center,
+        crossAxisAlignment:
+            horizontal ? CrossAxisAlignment.start : CrossAxisAlignment.center,
         children: <Widget>[
           horizontal ? Container() : SizedBox(height: 4.0),
           Text(title, style: Style.titleTextStyle),
           Container(height: horizontal ? 4 : 10),
-          subtitle == null ? Container() : Text(subtitle, style: Style.commonTextStyle),
+          subtitle == null
+              ? Container()
+              : Text(subtitle, style: Style.commonTextStyle),
           horizontal ? Container() : Separator(),
         ],
       ),
@@ -362,7 +425,8 @@ class ClubAndCouncilWidgets {
     final clubCard = Container(
       child: clubCardContent,
       height: horizontal ? 75.0 : 154.0,
-      margin: horizontal ? EdgeInsets.only(left: 30.0) : EdgeInsets.only(top: 72.0),
+      margin:
+          horizontal ? EdgeInsets.only(left: 30.0) : EdgeInsets.only(top: 72.0),
       decoration: BoxDecoration(
         color: ColorConstants.workshopCardContainer,
         shape: BoxShape.rectangle,
@@ -381,9 +445,11 @@ class ClubAndCouncilWidgets {
         onTap: horizontal
             ? () => Navigator.of(context).push(
                   PageRouteBuilder(
-                    pageBuilder: (_, __, ___) => ClubPage(club: club, editMode: true),
-                    transitionsBuilder: (context, animation, secondaryAnimation, child) =>
-                        FadeTransition(opacity: animation, child: child),
+                    pageBuilder: (_, __, ___) =>
+                        ClubPage(club: club, editMode: true),
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) =>
+                            FadeTransition(opacity: animation, child: child),
                   ),
                 )
             : null,
@@ -402,7 +468,11 @@ class ClubAndCouncilWidgets {
   }
 
   static Future detailsDialog(
-          {BuildContext context, String name, String imageUrl, String email, String phone}) =>
+          {BuildContext context,
+          String name,
+          String imageUrl,
+          String email,
+          String phone}) =>
       showDialog(
         context: context,
         barrierDismissible: true,
@@ -521,7 +591,8 @@ class ClubAndCouncilWidgets {
             color: Color(0xff00c6ff),
             borderRadius: BorderRadius.circular(2.0),
           ),
-          margin: EdgeInsets.fromLTRB(MediaQuery.of(context).size.width / 2 - 12.0, 10.0, 0.0, 0.0),
+          margin: EdgeInsets.fromLTRB(
+              MediaQuery.of(context).size.width / 2 - 12.0, 10.0, 0.0, 0.0),
           height: 4.0,
           width: 24.0,
           //color:   Color(0xff00c6ff)

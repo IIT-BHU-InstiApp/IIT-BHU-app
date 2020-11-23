@@ -116,7 +116,8 @@ class _MyAppState extends State<TheMap> {
             tilt: 0.0,
           )
         : CameraPosition(
-            target: LatLng(double.parse(workshopLatitude), double.parse(workshopLongitude)),
+            target: LatLng(double.parse(workshopLatitude),
+                double.parse(workshopLongitude)),
             zoom: 18,
             tilt: 75,
             bearing: Random().nextDouble() * 90);
@@ -168,16 +169,19 @@ class _MyAppState extends State<TheMap> {
     int i = 0;
     for (var coord in coords['Hostels']) {
       i += 1;
-      Marker newMarker =
-          _getMarker(category: 'Hostel', coord: coord, i: i, hue: BitmapDescriptor.hueRed);
+      Marker newMarker = _getMarker(
+          category: 'Hostel', coord: coord, i: i, hue: BitmapDescriptor.hueRed);
       this._hostelMarkers.add(newMarker);
       this._allMarkers.add(newMarker);
     }
     i = 0;
     for (var coord in coords['Departments']) {
       i += 1;
-      Marker newMarker =
-          _getMarker(category: 'Department', coord: coord, i: i, hue: BitmapDescriptor.hueGreen);
+      Marker newMarker = _getMarker(
+          category: 'Department',
+          coord: coord,
+          i: i,
+          hue: BitmapDescriptor.hueGreen);
 
       this._departmentMarkers.add(newMarker);
       this._allMarkers.add(newMarker);
@@ -186,8 +190,8 @@ class _MyAppState extends State<TheMap> {
 
     for (var coord in coords['Lecture Halls']) {
       i += 1;
-      Marker newMarker =
-          _getMarker(category: 'LT', coord: coord, i: i, hue: BitmapDescriptor.hueOrange);
+      Marker newMarker = _getMarker(
+          category: 'LT', coord: coord, i: i, hue: BitmapDescriptor.hueOrange);
 
       this._lectureHallMarkers.add(newMarker);
       this._allMarkers.add(newMarker);
@@ -196,8 +200,11 @@ class _MyAppState extends State<TheMap> {
     i = 0;
     for (var coord in coords['Others']) {
       i += 1;
-      Marker newMarker =
-          _getMarker(category: 'Other', coord: coord, i: i, hue: BitmapDescriptor.hueViolet);
+      Marker newMarker = _getMarker(
+          category: 'Other',
+          coord: coord,
+          i: i,
+          hue: BitmapDescriptor.hueViolet);
 
       this._otherMarkers.add(newMarker);
       this._allMarkers.add(newMarker);
@@ -248,7 +255,8 @@ class _MyAppState extends State<TheMap> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               container('Hostels', () => {_displayMarkers = _hostelMarkers}),
-              container('Departments', () => {_displayMarkers = _departmentMarkers}),
+              container(
+                  'Departments', () => {_displayMarkers = _departmentMarkers}),
               container('LTs', () => {_displayMarkers = _lectureHallMarkers}),
               container('Others', () => {_displayMarkers = _otherMarkers}),
             ],
@@ -302,7 +310,8 @@ class _MyAppState extends State<TheMap> {
       backgroundColor: ColorConstants.homeBackground,
       appBar: AppBar(
         backgroundColor: ColorConstants.homeBackground,
-        title: Text((widget.fromCreateWorkshop ? 'Workshop Location-' : '') + 'IIT BHU Map'),
+        title: Text((widget.fromCreateWorkshop ? 'Workshop Location-' : '') +
+            'IIT BHU Map'),
         centerTitle: true,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.white),
@@ -323,7 +332,8 @@ class _MyAppState extends State<TheMap> {
           GoogleMap(
             onMapCreated: _onMapCreated,
             initialCameraPosition: widget.fromWorkshopDetails
-                ? _initialCameraPosition(widget.workshopLatitude, widget.workshopLongitude)
+                ? _initialCameraPosition(
+                    widget.workshopLatitude, widget.workshopLongitude)
                 : _initialCameraPosition(),
             mapType: MapType.terrain,
             mapToolbarEnabled: true,
@@ -344,14 +354,16 @@ class _MyAppState extends State<TheMap> {
                         _displayMarkers = _allMarkers;
                       });
 
-                      final GoogleMapController controller = await mapController.future;
-                      controller
-                          .animateCamera(CameraUpdate.newCameraPosition(_initialCameraPosition()));
+                      final GoogleMapController controller =
+                          await mapController.future;
+                      controller.animateCamera(CameraUpdate.newCameraPosition(
+                          _initialCameraPosition()));
                     },
                     child: Container(
                       padding: EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(50), color: Colors.black),
+                          borderRadius: BorderRadius.circular(50),
+                          color: Colors.black),
                       child: Text(
                         'Clear X',
                         style: TextStyle(color: Colors.red),
@@ -387,13 +399,16 @@ class _MyAppState extends State<TheMap> {
                           Marker _tappableMarker = _displayMarkers[index];
                           List<Text> textList = [];
 
-                          for (var text in _tappableMarker.infoWindow.title.split(' ')) {
-                            textList.add(Text(text, style: TextStyle(color: Colors.white)));
+                          for (var text
+                              in _tappableMarker.infoWindow.title.split(' ')) {
+                            textList.add(Text(text,
+                                style: TextStyle(color: Colors.white)));
                           }
 
                           return InkWell(
                             onTap: () async {
-                              final GoogleMapController controller = await mapController.future;
+                              final GoogleMapController controller =
+                                  await mapController.future;
                               controller.animateCamera(
                                 CameraUpdate.newCameraPosition(
                                   CameraPosition(
@@ -409,12 +424,21 @@ class _MyAppState extends State<TheMap> {
                                 bool shouldLocationbeSet = await locationSetDialog(
                                     context,
                                     'Location Set',
-                                    'Do you want to set ${_displayMarkers[index].infoWindow.title} as the location for the workshop?');
+                                    'Do you want to set ${_displayMarkers[index].infoWindow.title} as the location for the workshop/event?');
                                 if (shouldLocationbeSet == true) {
                                   Navigator.pop(context, [
-                                    _displayMarkers[index].position.latitude.toString(),
-                                    _displayMarkers[index].position.longitude.toString(),
-                                    _displayMarkers[index].infoWindow.title.toString(),
+                                    _displayMarkers[index]
+                                        .position
+                                        .latitude
+                                        .toString(),
+                                    _displayMarkers[index]
+                                        .position
+                                        .longitude
+                                        .toString(),
+                                    _displayMarkers[index]
+                                        .infoWindow
+                                        .title
+                                        .toString(),
                                   ]);
                                 }
                               }

@@ -11,6 +11,8 @@ class WorkshopCreater {
   int clubId;
   String date;
   String time;
+  // ignore: non_constant_identifier_names
+  bool is_workshop;
   String location;
   String latitude;
   String longitude;
@@ -67,6 +69,7 @@ class WorkshopCreater {
       ..description = description
       ..date = date
       ..time = time
+      ..is_workshop = is_workshop
       ..location = location
       ..latitude = latitude
       ..longitude = longitude
@@ -89,7 +92,8 @@ class WorkshopCreater {
       });
     } else if (entity != null) {
       await AppConstants.service
-          .createEntityWorkshop(entity.id, AppConstants.djangoToken, newWorkshop)
+          .createEntityWorkshop(
+              entity.id, AppConstants.djangoToken, newWorkshop)
           .then((value) async {
         if (value.isSuccessful) {
           print('Created!');
@@ -121,13 +125,16 @@ class WorkshopCreater {
     }
   }
 
-  static Future<String> _uploadImageToFirestore(MemoryImage memoryImage, int workshopId) async {
+  static Future<String> _uploadImageToFirestore(
+      MemoryImage memoryImage, int workshopId) async {
     if (memoryImage == null) return null;
 
     final storageRef = FirebaseStorage.instance.ref().child('workshops');
-    final uploadTask = storageRef.child('$workshopId').putData(memoryImage.bytes);
+    final uploadTask =
+        storageRef.child('$workshopId').putData(memoryImage.bytes);
 
-    return await uploadTask.then((val) async => await val.ref.getDownloadURL(), onError: (err) {
+    return await uploadTask.then((val) async => await val.ref.getDownloadURL(),
+        onError: (err) {
       print('image could not be uploaded : $err');
       return null;
     });
@@ -153,13 +160,15 @@ class WorkshopCreater {
       ..description = description
       ..date = date
       ..time = time
+      ..is_workshop = is_workshop
       ..location = location
       ..latitude = latitude
       ..longitude = longitude
       ..audience = audience
       ..link = link);
     await AppConstants.service
-        .updateWorkshopByPatch(widgetWorkshopData.id, AppConstants.djangoToken, editedWorkshop)
+        .updateWorkshopByPatch(
+            widgetWorkshopData.id, AppConstants.djangoToken, editedWorkshop)
         .catchError((onError) {
       print('Error editing workshop: ${onError.toString()}');
       CreatePageDialogBoxes.showUnsuccessfulDialog(context: context);
@@ -172,7 +181,8 @@ class WorkshopCreater {
 
         await _updateWorkshopWithImage(widgetWorkshopData.id, newImage);
 
-        CreatePageDialogBoxes.showSuccesfulDialog(context: context, isEditing: true);
+        CreatePageDialogBoxes.showSuccesfulDialog(
+            context: context, isEditing: true);
       }
     }).catchError((onError) {
       print('Error printing EDITED workshop: ${onError.toString()}');

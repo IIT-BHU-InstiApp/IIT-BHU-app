@@ -13,12 +13,14 @@ import 'package:iit_app/pages/account/accountPage.dart';
 class ClubPage extends StatefulWidget {
   final ClubListPost club;
   final bool editMode;
-  const ClubPage({Key key, @required this.club, this.editMode = false}) : super(key: key);
+  const ClubPage({Key key, @required this.club, this.editMode = false})
+      : super(key: key);
   @override
   _ClubPageState createState() => _ClubPageState();
 }
 
-class _ClubPageState extends State<ClubPage> with SingleTickerProviderStateMixin {
+class _ClubPageState extends State<ClubPage>
+    with SingleTickerProviderStateMixin {
   BuiltClubPost clubMap;
   BuiltAllWorkshopsPost clubWorkshops;
   bool _toggling = false;
@@ -40,14 +42,19 @@ class _ClubPageState extends State<ClubPage> with SingleTickerProviderStateMixin
 
   _fetchClubDataById() async {
     if (clubMap == null) {
-      clubMap = await AppConstants.getClubDetailsFromDatabase(clubId: widget.club.id);
+      clubMap =
+          await AppConstants.getClubDetailsFromDatabase(clubId: widget.club.id);
     }
     if (clubMap != null) {
-      _clubLargeLogoFile = AppConstants.getImageFile(isClub: true, isSmall: false, id: clubMap.id);
+      _clubLargeLogoFile = AppConstants.getImageFile(
+          isClub: true, isSmall: false, id: clubMap.id);
 
       if (_clubLargeLogoFile == null) {
         AppConstants.writeImageFileIntoDisk(
-            isClub: true, isSmall: false, id: clubMap.id, url: clubMap.large_image_url);
+            isClub: true,
+            isSmall: false,
+            id: clubMap.id,
+            url: clubMap.large_image_url);
       }
     }
     if (!this.mounted) {
@@ -91,7 +98,8 @@ class _ClubPageState extends State<ClubPage> with SingleTickerProviderStateMixin
             isSubscribed: !clubMap.is_subscribed,
             currentSubscribedUsers: clubMap.subscribed_users);
 
-        clubMap = await AppConstants.getClubDetailsFromDatabase(clubId: widget.club.id);
+        clubMap = await AppConstants.getClubDetailsFromDatabase(
+            clubId: widget.club.id);
 
         if (clubMap.is_subscribed == true) {
           await FirebaseMessaging()
@@ -116,7 +124,8 @@ class _ClubPageState extends State<ClubPage> with SingleTickerProviderStateMixin
   Future<bool> _onWillPop() {
     print("Clubscreen:${AccountPage.flag}");
     if (AccountPage.flag == "Account")
-      Navigator.push(context, MaterialPageRoute(builder: (context) => AccountPage()));
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => AccountPage()));
     else
       Navigator.pop(context);
     return Future.value(false);
@@ -160,17 +169,21 @@ class _ClubPageState extends State<ClubPage> with SingleTickerProviderStateMixin
                       ? CircularProgressIndicator()
                       : Icon(
                           Icons.subscriptions,
-                          color: clubMap.is_subscribed ? Colors.red : Colors.black26,
+                          color: clubMap.is_subscribed
+                              ? Colors.red
+                              : Colors.black26,
                         ),
                 ),
           body: RefreshIndicator(
             onRefresh: () async {
-              clubMap = await AppConstants.refreshClubInDatabase(clubId: widget.club.id);
+              clubMap = await AppConstants.refreshClubInDatabase(
+                  clubId: widget.club.id);
               setState(() {});
             },
             child: SlidingUpPanel(
-              body: ClubAndCouncilWidgets.getPanelBackground(context, _clubLargeLogoFile,
-                  isClub: true, clubDetail: clubMap),
+              body: ClubAndCouncilWidgets.getPanelBackground(
+                  context, _clubLargeLogoFile,
+                  isClub: true, clubDetail: clubMap, club: widget.club),
               parallaxEnabled: true,
               controller: _pc,
               borderRadius: radius,
