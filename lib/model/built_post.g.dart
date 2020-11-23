@@ -575,20 +575,30 @@ class _$WorkshopResourcesSerializer
   @override
   Iterable<Object> serialize(Serializers serializers, WorkshopResources object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
-      'name',
-      serializers.serialize(object.name, specifiedType: const FullType(String)),
-      'link',
-      serializers.serialize(object.link, specifiedType: const FullType(String)),
-      'resource_type',
-      serializers.serialize(object.resource_type,
-          specifiedType: const FullType(String)),
-    ];
+    final result = <Object>[];
     if (object.id != null) {
       result
         ..add('id')
         ..add(serializers.serialize(object.id,
             specifiedType: const FullType(int)));
+    }
+    if (object.name != null) {
+      result
+        ..add('name')
+        ..add(serializers.serialize(object.name,
+            specifiedType: const FullType(String)));
+    }
+    if (object.link != null) {
+      result
+        ..add('link')
+        ..add(serializers.serialize(object.link,
+            specifiedType: const FullType(String)));
+    }
+    if (object.resource_type != null) {
+      result
+        ..add('resource_type')
+        ..add(serializers.serialize(object.resource_type,
+            specifiedType: const FullType(String)));
     }
     return result;
   }
@@ -3383,17 +3393,7 @@ class _$WorkshopResources extends WorkshopResources {
       (new WorkshopResourcesBuilder()..update(updates)).build();
 
   _$WorkshopResources._({this.id, this.name, this.link, this.resource_type})
-      : super._() {
-    if (name == null) {
-      throw new BuiltValueNullFieldError('WorkshopResources', 'name');
-    }
-    if (link == null) {
-      throw new BuiltValueNullFieldError('WorkshopResources', 'link');
-    }
-    if (resource_type == null) {
-      throw new BuiltValueNullFieldError('WorkshopResources', 'resource_type');
-    }
-  }
+      : super._();
 
   @override
   WorkshopResources rebuild(void Function(WorkshopResourcesBuilder) updates) =>

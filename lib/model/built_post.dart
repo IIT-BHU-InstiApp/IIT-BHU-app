@@ -130,9 +130,11 @@ abstract class WorkshopResources
     implements Built<WorkshopResources, WorkshopResourcesBuilder> {
   @nullable
   int get id;
-
+  @nullable
   String get name;
+  @nullable
   String get link;
+  @nullable
   String get resource_type;
 
   WorkshopResources._();
