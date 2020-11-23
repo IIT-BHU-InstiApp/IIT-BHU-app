@@ -1,6 +1,12 @@
 *(This README might contains various TODO comments like this one as this file is under development. So if you are helping with the development of the app, be sure to look for comments like this one. Also, feel free to make a PR if you find features integrated in the app, but not mentioned here. Once all work is done, we can remove this comment 😀)*
 
-Some clean code guidelines : -
+**Note: We prefer not more than `80` characters per line, for better code readability. So if you are using VSCode, do make sure to include the following in your global settings for dart.**
+
+```json
+"editor.rulers": [80],
+```
+
+## Some clean code guidelines : -
 
 1. All the constructor of stateless or stateful widget will be const and therefore all the fields will be "final".
    (so that they are always immutable within the class, for mutable objects use stateful classes)
