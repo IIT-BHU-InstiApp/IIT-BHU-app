@@ -198,8 +198,8 @@ FutureBuilder<Response> buildAllWorkshopsBody(BuildContext context,
 
         final posts = snapshot.data.body;
 
-        print(posts);
-        print('-------------------------------------');
+        // print(posts);
+        // print('-------------------------------------');
 
         return _buildAllWorkshopsBodyPosts(context, posts, reload: reload);
       } else {
