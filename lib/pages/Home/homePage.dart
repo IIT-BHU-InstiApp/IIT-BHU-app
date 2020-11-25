@@ -1,5 +1,5 @@
-import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:flutter/material.dart';
+import 'package:iit_app/external_libraries/fab_circular_menu.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/colorConstants.dart';
 import 'package:iit_app/screens/homeScreen.dart';
@@ -15,13 +15,15 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
+class _HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
   SearchBarWidget searchBarWidget;
   ValueNotifier<bool> searchListener;
 
   FocusNode searchFocusNode;
 
-  final GlobalKey<FabCircularMenuState> fabKey = GlobalKey<FabCircularMenuState>();
+  final GlobalKey<FabCircularMenuState> fabKey =
+      GlobalKey<FabCircularMenuState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -68,7 +70,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     return showDialog(
         context: context,
         builder: (context) => AlertDialog(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0)),
               title: Text('Do you really want to exit?'),
               actions: <Widget>[
                 FlatButton(
@@ -77,7 +80,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                 ),
                 FlatButton(
                   child: Text('Yes'),
-                  onPressed: () => SystemChannels.platform.invokeMethod('SystemNavigator.pop'),
+                  onPressed: () => SystemChannels.platform
+                      .invokeMethod('SystemNavigator.pop'),
                 )
               ],
             ));
@@ -95,7 +99,9 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             drawer: SideBar(context: context),
             floatingActionButton: homeFAB(context, fabKey: fabKey),
             appBar: homeAppBar(context,
-                searchBarWidget: searchBarWidget, fabKey: fabKey, searchFocusNode: searchFocusNode),
+                searchBarWidget: searchBarWidget,
+                fabKey: fabKey,
+                searchFocusNode: searchFocusNode),
             body: GestureDetector(
               onTap: () {
                 if (fabKey.currentState.isOpen) {
@@ -117,7 +123,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                   builder: (context, isSearching, child) {
                     return isSearching
                         ? buildWorkhops.buildWorkshopsFromSearch(
-                            context: context, searchPost: searchBarWidget.searchPost)
+                            context: context,
+                            searchPost: searchBarWidget.searchPost)
                         : HomeScreen(
                             context: context,
                             fabKey: fabKey,
