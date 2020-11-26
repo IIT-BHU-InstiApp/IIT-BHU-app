@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:iit_app/external_libraries/spin_kit.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/colorConstants.dart';
-import 'package:iit_app/screens/create.dart';
-import 'package:iit_app/ui/club_council_common/club_&_council_widgets.dart';
+import 'package:iit_app/ui/club_council_entity_common/club_council_entity_widgets.dart';
 import 'package:iit_app/ui/workshop_custom_widgets.dart';
 
 class ClubCustomWidgets {

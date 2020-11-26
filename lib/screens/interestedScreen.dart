@@ -3,8 +3,6 @@ import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/colorConstants.dart';
 import 'package:iit_app/pages/Home/homePage.dart';
 import 'package:iit_app/ui/drawer.dart';
-import 'package:iit_app/services/buildWorkshops.dart' as buildWorkshop;
-import 'package:iit_app/ui/search_workshop.dart';
 import 'package:iit_app/ui/text_style.dart';
 import '../services/buildWorkshops.dart' as buildWorkhops;
 

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/colorConstants.dart';
-import 'package:iit_app/ui/club_council_common/club_&_council_widgets.dart';
+import 'package:iit_app/ui/club_council_entity_common/club_council_entity_widgets.dart';
 import 'package:iit_app/ui/council_custom_widgets.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:iit_app/pages/account/accountPage.dart';

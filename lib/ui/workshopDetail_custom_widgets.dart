@@ -7,7 +7,7 @@ import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/colorConstants.dart';
 import 'package:iit_app/screens/create.dart';
 import 'package:iit_app/screens/resource_create.dart';
-import 'package:iit_app/ui/club_council_common/club_&_council_widgets.dart';
+import 'package:iit_app/ui/club_council_entity_common/club_council_entity_widgets.dart';
 import 'package:iit_app/ui/dialogBoxes.dart';
 import 'package:iit_app/ui/separator.dart';
 import 'package:iit_app/ui/text_style.dart';

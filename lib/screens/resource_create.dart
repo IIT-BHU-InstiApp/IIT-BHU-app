@@ -62,7 +62,8 @@ class _ResourceCreateScreenState extends State<ResourceCreateScreen> {
         .catchError((onError) {
       final error = onError as Response<dynamic>;
       print(error.body);
-      print('Error creating resource: ${onError.toString()} ${onError.runtimeType}');
+      print(
+          'Error creating resource: ${onError.toString()} ${onError.runtimeType}');
     }).then((value) {
       if (value.isSuccessful) {
         done = true;
@@ -74,7 +75,9 @@ class _ResourceCreateScreenState extends State<ResourceCreateScreen> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-              content: done ? Text("Succesfully added") : Text("Unsuccessful. Please try again"),
+              content: done
+                  ? Text("Succesfully added")
+                  : Text("Unsuccessful. Please try again"),
               actions: <Widget>[
                 FlatButton(
                   child: Text("Okay"),
@@ -100,11 +103,13 @@ class _ResourceCreateScreenState extends State<ResourceCreateScreen> {
   }) async {
     bool done = false;
     await AppConstants.service
-        .updateWorkshopResourcesByPatch(widget.id, AppConstants.djangoToken, resource)
+        .updateWorkshopResourcesByPatch(
+            widget.id, AppConstants.djangoToken, resource)
         .catchError((onError) {
       final error = onError as Response<dynamic>;
       print(error.body);
-      print('Error editing resource: ${onError.toString()} ${onError.runtimeType}');
+      print(
+          'Error editing resource: ${onError.toString()} ${onError.runtimeType}');
     }).then((value) {
       if (value.isSuccessful) {
         done = true;
@@ -116,7 +121,9 @@ class _ResourceCreateScreenState extends State<ResourceCreateScreen> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-              content: done ? Text("Succesfully edited") : Text("Unsuccessful! Please try again"),
+              content: done
+                  ? Text("Succesfully edited")
+                  : Text("Unsuccessful! Please try again"),
               actions: <Widget>[
                 FlatButton(
                   child: Text("Okay"),
@@ -148,8 +155,8 @@ class _ResourceCreateScreenState extends State<ResourceCreateScreen> {
               child: ListView(
                 children: [
                   TextFormField(
-                    autovalidate: true,
-                    decoration: InputDecoration(labelText: 'Name of the resource'),
+                    decoration:
+                        InputDecoration(labelText: 'Name of the resource'),
                     controller: this._nameController,
                     validator: (value) {
                       if (value.isEmpty) {
@@ -160,7 +167,6 @@ class _ResourceCreateScreenState extends State<ResourceCreateScreen> {
                     onSaved: (val) => setState(() => name = val),
                   ),
                   TextFormField(
-                    autovalidate: true,
                     decoration: InputDecoration(labelText: 'Link'),
                     controller: this._linkController,
                     validator: (value) {
@@ -176,7 +182,8 @@ class _ResourceCreateScreenState extends State<ResourceCreateScreen> {
                   ),
                   resource_type == null
                       ? Container()
-                      : Text("Resource type", style: TextStyle(color: Colors.grey, fontSize: 12)),
+                      : Text("Resource type",
+                          style: TextStyle(color: Colors.grey, fontSize: 12)),
                   Container(
                     height: 75,
                     child: Column(
@@ -189,7 +196,9 @@ class _ResourceCreateScreenState extends State<ResourceCreateScreen> {
                             iconSize: 30,
                             underline: Container(
                               height: 1,
-                              color: resource_type == null ? Colors.red : Colors.grey,
+                              color: resource_type == null
+                                  ? Colors.red
+                                  : Colors.grey,
                             ),
                             items: [
                               DropdownMenuItem(
@@ -209,16 +218,19 @@ class _ResourceCreateScreenState extends State<ResourceCreateScreen> {
                         resource_type == null
                             ? Text(
                                 "Please choose a resource type",
-                                style: TextStyle(color: Colors.red, fontSize: 12),
+                                style:
+                                    TextStyle(color: Colors.red, fontSize: 12),
                               )
                             : Container(),
                       ],
                     ),
                   ),
                   Container(
-                    padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 16.0, horizontal: 16.0),
                     child: RaisedButton(
-                        child: Text(editMode ? "Edit Resource" : "Add Resource"),
+                        child:
+                            Text(editMode ? "Edit Resource" : "Add Resource"),
                         onPressed: () async {
                           final form = _resourceFormKey.currentState;
                           if (form.validate()) {
@@ -230,9 +242,13 @@ class _ResourceCreateScreenState extends State<ResourceCreateScreen> {
                               ..resource_type = resource_type);
 
                             if (editMode) {
-                              editResource(context: context, resource: _resources, id: widget.id);
+                              editResource(
+                                  context: context,
+                                  resource: _resources,
+                                  id: widget.id);
                             } else {
-                              createResource(context: context, resource: _resources);
+                              createResource(
+                                  context: context, resource: _resources);
                             }
                             Scaffold.of(context).showSnackBar(SnackBar(
                                 content: editMode
