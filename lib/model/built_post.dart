@@ -15,6 +15,12 @@ abstract class EntityListPost
   @nullable
   String get large_image_url;
 
+  @nullable
+  bool get is_permanent;
+
+  @nullable
+  bool get is_highlighted;
+
   EntityListPost._();
 
   factory EntityListPost([updates(EntityListPostBuilder b)]) = _$EntityListPost;
@@ -43,6 +49,12 @@ abstract class BuiltEntityPost
   bool get is_subscribed;
   @nullable
   int get subscribed_users;
+
+  @nullable
+  bool get is_permanent;
+
+  @nullable
+  bool get is_highlighted;
 
   @nullable
   bool get is_por_holder;

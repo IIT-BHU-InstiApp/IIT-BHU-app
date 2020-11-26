@@ -86,6 +86,18 @@ class _$EntityListPostSerializer
         ..add(serializers.serialize(object.large_image_url,
             specifiedType: const FullType(String)));
     }
+    if (object.is_permanent != null) {
+      result
+        ..add('is_permanent')
+        ..add(serializers.serialize(object.is_permanent,
+            specifiedType: const FullType(bool)));
+    }
+    if (object.is_highlighted != null) {
+      result
+        ..add('is_highlighted')
+        ..add(serializers.serialize(object.is_highlighted,
+            specifiedType: const FullType(bool)));
+    }
     return result;
   }
 
@@ -116,6 +128,14 @@ class _$EntityListPostSerializer
         case 'large_image_url':
           result.large_image_url = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
+          break;
+        case 'is_permanent':
+          result.is_permanent = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
+        case 'is_highlighted':
+          result.is_highlighted = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
           break;
       }
     }
@@ -183,6 +203,18 @@ class _$BuiltEntityPostSerializer
         ..add('subscribed_users')
         ..add(serializers.serialize(object.subscribed_users,
             specifiedType: const FullType(int)));
+    }
+    if (object.is_permanent != null) {
+      result
+        ..add('is_permanent')
+        ..add(serializers.serialize(object.is_permanent,
+            specifiedType: const FullType(bool)));
+    }
+    if (object.is_highlighted != null) {
+      result
+        ..add('is_highlighted')
+        ..add(serializers.serialize(object.is_highlighted,
+            specifiedType: const FullType(bool)));
     }
     if (object.is_por_holder != null) {
       result
@@ -274,6 +306,14 @@ class _$BuiltEntityPostSerializer
         case 'subscribed_users':
           result.subscribed_users = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
+          break;
+        case 'is_permanent':
+          result.is_permanent = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
+        case 'is_highlighted':
+          result.is_highlighted = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
           break;
         case 'is_por_holder':
           result.is_por_holder = serializers.deserialize(value,
@@ -2517,12 +2557,21 @@ class _$EntityListPost extends EntityListPost {
   final String small_image_url;
   @override
   final String large_image_url;
+  @override
+  final bool is_permanent;
+  @override
+  final bool is_highlighted;
 
   factory _$EntityListPost([void Function(EntityListPostBuilder) updates]) =>
       (new EntityListPostBuilder()..update(updates)).build();
 
   _$EntityListPost._(
-      {this.id, this.name, this.small_image_url, this.large_image_url})
+      {this.id,
+      this.name,
+      this.small_image_url,
+      this.large_image_url,
+      this.is_permanent,
+      this.is_highlighted})
       : super._();
 
   @override
@@ -2540,14 +2589,21 @@ class _$EntityListPost extends EntityListPost {
         id == other.id &&
         name == other.name &&
         small_image_url == other.small_image_url &&
-        large_image_url == other.large_image_url;
+        large_image_url == other.large_image_url &&
+        is_permanent == other.is_permanent &&
+        is_highlighted == other.is_highlighted;
   }
 
   @override
   int get hashCode {
     return $jf($jc(
-        $jc($jc($jc(0, id.hashCode), name.hashCode), small_image_url.hashCode),
-        large_image_url.hashCode));
+        $jc(
+            $jc(
+                $jc($jc($jc(0, id.hashCode), name.hashCode),
+                    small_image_url.hashCode),
+                large_image_url.hashCode),
+            is_permanent.hashCode),
+        is_highlighted.hashCode));
   }
 
   @override
@@ -2556,7 +2612,9 @@ class _$EntityListPost extends EntityListPost {
           ..add('id', id)
           ..add('name', name)
           ..add('small_image_url', small_image_url)
-          ..add('large_image_url', large_image_url))
+          ..add('large_image_url', large_image_url)
+          ..add('is_permanent', is_permanent)
+          ..add('is_highlighted', is_highlighted))
         .toString();
   }
 }
@@ -2583,6 +2641,15 @@ class EntityListPostBuilder
   set large_image_url(String large_image_url) =>
       _$this._large_image_url = large_image_url;
 
+  bool _is_permanent;
+  bool get is_permanent => _$this._is_permanent;
+  set is_permanent(bool is_permanent) => _$this._is_permanent = is_permanent;
+
+  bool _is_highlighted;
+  bool get is_highlighted => _$this._is_highlighted;
+  set is_highlighted(bool is_highlighted) =>
+      _$this._is_highlighted = is_highlighted;
+
   EntityListPostBuilder();
 
   EntityListPostBuilder get _$this {
@@ -2591,6 +2658,8 @@ class EntityListPostBuilder
       _name = _$v.name;
       _small_image_url = _$v.small_image_url;
       _large_image_url = _$v.large_image_url;
+      _is_permanent = _$v.is_permanent;
+      _is_highlighted = _$v.is_highlighted;
       _$v = null;
     }
     return this;
@@ -2616,7 +2685,9 @@ class EntityListPostBuilder
             id: id,
             name: name,
             small_image_url: small_image_url,
-            large_image_url: large_image_url);
+            large_image_url: large_image_url,
+            is_permanent: is_permanent,
+            is_highlighted: is_highlighted);
     replace(_$result);
     return _$result;
   }
@@ -2639,6 +2710,10 @@ class _$BuiltEntityPost extends BuiltEntityPost {
   final bool is_subscribed;
   @override
   final int subscribed_users;
+  @override
+  final bool is_permanent;
+  @override
+  final bool is_highlighted;
   @override
   final bool is_por_holder;
   @override
@@ -2666,6 +2741,8 @@ class _$BuiltEntityPost extends BuiltEntityPost {
       this.large_image_url,
       this.is_subscribed,
       this.subscribed_users,
+      this.is_permanent,
+      this.is_highlighted,
       this.is_por_holder,
       this.website_url,
       this.facebook_url,
@@ -2695,6 +2772,8 @@ class _$BuiltEntityPost extends BuiltEntityPost {
         large_image_url == other.large_image_url &&
         is_subscribed == other.is_subscribed &&
         subscribed_users == other.subscribed_users &&
+        is_permanent == other.is_permanent &&
+        is_highlighted == other.is_highlighted &&
         is_por_holder == other.is_por_holder &&
         website_url == other.website_url &&
         facebook_url == other.facebook_url &&
@@ -2719,14 +2798,26 @@ class _$BuiltEntityPost extends BuiltEntityPost {
                                             $jc(
                                                 $jc(
                                                     $jc(
-                                                        $jc($jc(0, id.hashCode),
-                                                            name.hashCode),
-                                                        description.hashCode),
-                                                    point_of_contact.hashCode),
-                                                small_image_url.hashCode),
-                                            large_image_url.hashCode),
-                                        is_subscribed.hashCode),
-                                    subscribed_users.hashCode),
+                                                        $jc(
+                                                            $jc(
+                                                                $jc(
+                                                                    $jc(
+                                                                        0,
+                                                                        id
+                                                                            .hashCode),
+                                                                    name
+                                                                        .hashCode),
+                                                                description
+                                                                    .hashCode),
+                                                            point_of_contact
+                                                                .hashCode),
+                                                        small_image_url
+                                                            .hashCode),
+                                                    large_image_url.hashCode),
+                                                is_subscribed.hashCode),
+                                            subscribed_users.hashCode),
+                                        is_permanent.hashCode),
+                                    is_highlighted.hashCode),
                                 is_por_holder.hashCode),
                             website_url.hashCode),
                         facebook_url.hashCode),
@@ -2747,6 +2838,8 @@ class _$BuiltEntityPost extends BuiltEntityPost {
           ..add('large_image_url', large_image_url)
           ..add('is_subscribed', is_subscribed)
           ..add('subscribed_users', subscribed_users)
+          ..add('is_permanent', is_permanent)
+          ..add('is_highlighted', is_highlighted)
           ..add('is_por_holder', is_por_holder)
           ..add('website_url', website_url)
           ..add('facebook_url', facebook_url)
@@ -2800,6 +2893,15 @@ class BuiltEntityPostBuilder
   set subscribed_users(int subscribed_users) =>
       _$this._subscribed_users = subscribed_users;
 
+  bool _is_permanent;
+  bool get is_permanent => _$this._is_permanent;
+  set is_permanent(bool is_permanent) => _$this._is_permanent = is_permanent;
+
+  bool _is_highlighted;
+  bool get is_highlighted => _$this._is_highlighted;
+  set is_highlighted(bool is_highlighted) =>
+      _$this._is_highlighted = is_highlighted;
+
   bool _is_por_holder;
   bool get is_por_holder => _$this._is_por_holder;
   set is_por_holder(bool is_por_holder) =>
@@ -2842,6 +2944,8 @@ class BuiltEntityPostBuilder
       _large_image_url = _$v.large_image_url;
       _is_subscribed = _$v.is_subscribed;
       _subscribed_users = _$v.subscribed_users;
+      _is_permanent = _$v.is_permanent;
+      _is_highlighted = _$v.is_highlighted;
       _is_por_holder = _$v.is_por_holder;
       _website_url = _$v.website_url;
       _facebook_url = _$v.facebook_url;
@@ -2881,6 +2985,8 @@ class BuiltEntityPostBuilder
               large_image_url: large_image_url,
               is_subscribed: is_subscribed,
               subscribed_users: subscribed_users,
+              is_permanent: is_permanent,
+              is_highlighted: is_highlighted,
               is_por_holder: is_por_holder,
               website_url: website_url,
               facebook_url: facebook_url,
