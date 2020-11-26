@@ -328,34 +328,55 @@ class WorkshopDetailCustomWidgets {
   }
 
   Widget _getBackground() {
-    if (workshopDetail?.image_url != null) {
-      return GestureDetector(
-        onTap: () {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (ctx) => PhotoView(
-              imageProvider: workshopDetail.image_url == null ||
-                      workshopDetail.image_url == ''
-                  ? AssetImage('assets/iitbhu.jpeg')
-                  : NetworkImage(workshopDetail.image_url),
-            ),
-          ));
-        },
-        child: Container(
-          child: Image.network(workshopDetail.image_url),
-          constraints: BoxConstraints.expand(height: 360.0),
-        ),
-      );
+    String imageUrl = workshopDetail?.image_url;
+    if (imageUrl?.isEmpty == true) imageUrl = null;
+
+    var _image;
+    var _providerImage;
+    double height = 295;
+
+    if (imageUrl != null) {
+      _image = Image.network(imageUrl);
+      _providerImage = NetworkImage(imageUrl);
+      height = 360;
+    } else {
+      final isClub = workshopSummary.club != null;
+      final id = isClub ? workshopSummary.club.id : workshopSummary.entity.id;
+
+      final File logoFile = AppConstants.getImageFile(
+          isSmall: true, id: id, isClub: isClub, isEntity: !isClub);
+
+      String logoImageUrl;
+      if (logoFile == null) {
+        logoImageUrl = isClub
+            ? workshopSummary.club.small_image_url
+            : workshopSummary.entity.small_image_url;
+        if (logoImageUrl?.isEmpty == true) logoImageUrl = null;
+      }
+      _image = logoFile == null
+          ? (logoImageUrl == null
+              ? Image.asset('assets/iitbhu.jpeg',
+                  fit: BoxFit.cover, height: 300.0)
+              : Image.network(logoImageUrl, fit: BoxFit.cover, height: 300.0))
+          : Image.file(logoFile, fit: BoxFit.cover, height: 300);
+      _providerImage = logoFile == null
+          ? (logoImageUrl == null
+              ? AssetImage('assets/iitbhu.jpeg')
+              : NetworkImage(logoImageUrl))
+          : FileImage(logoFile);
+      height = 295;
     }
 
-    final File clubLogoFile = AppConstants.getImageFile(
-        isSmall: true, id: workshopSummary.club.id, isClub: true);
-
-    return Container(
-      child: clubLogoFile == null
-          ? Image.network(workshopSummary.club.small_image_url,
-              fit: BoxFit.cover, height: 300.0)
-          : Image.file(clubLogoFile, fit: BoxFit.cover, height: 300),
-      constraints: BoxConstraints.expand(height: 295.0),
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (ctx) => PhotoView(imageProvider: _providerImage),
+        ));
+      },
+      child: Container(
+        child: _image,
+        constraints: BoxConstraints.expand(height: height),
+      ),
     );
   }
 
