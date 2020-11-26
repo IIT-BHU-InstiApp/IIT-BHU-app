@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:iit_app/external_libraries/fab_circular_menu.dart';
 import 'package:iit_app/model/built_post.dart';
-import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:iit_app/model/colorConstants.dart';
 import 'package:iit_app/ui/text_style.dart';
 
