@@ -101,10 +101,10 @@ class ClubCouncilAndEntityWidgets {
                                   MaterialPageRoute(
                                     builder: (context) => CreateScreen(
                                         club: club,
-                                        title: club != null
-                                            ? clubDetail.name
-                                            : entityDetail.name,
                                         entity: entity,
+                                        title: clubDetail?.name ??
+                                            entityDetail?.name ??
+                                            '',
                                         isWorkshopOrEvent: 'workshop'),
                                   ),
                                 );
@@ -118,9 +118,9 @@ class ClubCouncilAndEntityWidgets {
                                       MaterialPageRoute(
                                         builder: (context) => CreateScreen(
                                             club: club,
-                                            title: club != null
-                                                ? clubDetail.name
-                                                : entityDetail.name,
+                                            title: clubDetail?.name ??
+                                                entityDetail?.name ??
+                                                '',
                                             entity: entity,
                                             isWorkshopOrEvent: 'event'),
                                       ),

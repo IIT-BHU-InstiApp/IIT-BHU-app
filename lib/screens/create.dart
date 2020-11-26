@@ -191,11 +191,11 @@ class _CreateScreenState extends State<CreateScreen> {
                           (b) => b..tag_name = this._tagCreateController.text);
                       await (_isEntity
                               ? AppConstants.service.createEntityTag(
-                                  widget.workshopData.entity.id,
+                                  widget.entity.id,
                                   AppConstants.djangoToken,
                                   newTag)
                               : AppConstants.service.createClubTag(
-                                  widget.workshopData.club.id,
+                                  widget.club.id,
                                   AppConstants.djangoToken,
                                   newTag))
                           .catchError((onError) {
@@ -300,7 +300,7 @@ class _CreateScreenState extends State<CreateScreen> {
                                     Center(child: Icon(Icons.add, size: 40)),
                                     _newImage == null
                                         ? Text(
-                                            'By default, club/entity image will be shown')
+                                            'By default, club/entity logo will be shown')
                                         : Container(),
                                   ],
                                 )),
@@ -613,11 +613,11 @@ class _CreateScreenState extends State<CreateScreen> {
                           });
                           await (_isEntity
                                   ? AppConstants.service.searchEntityTag(
-                                      widget.workshopData.entity.id,
+                                      widget.entity.id,
                                       AppConstants.djangoToken,
                                       this._tagSearchPost)
                                   : AppConstants.service.searchClubTag(
-                                      widget.workshopData.club.id,
+                                      widget.club.id,
                                       AppConstants.djangoToken,
                                       this._tagSearchPost))
                               .catchError((onError) {
@@ -671,7 +671,7 @@ class _CreateScreenState extends State<CreateScreen> {
                               FocusScope.of(context).unfocus();
                               if (!_isEntity) {
                                 await AppConstants.service
-                                    .getClubTags(widget.workshopData.club.id,
+                                    .getClubTags(widget.club.id,
                                         AppConstants.djangoToken)
                                     .catchError((onError) {
                                   print(
@@ -687,8 +687,7 @@ class _CreateScreenState extends State<CreateScreen> {
                                 });
                               } else {
                                 await AppConstants.service
-                                    .getEntityTags(
-                                        widget.workshopData.entity.id,
+                                    .getEntityTags(widget.entity.id,
                                         AppConstants.djangoToken)
                                     .catchError((onError) {
                                   print(

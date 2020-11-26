@@ -523,11 +523,13 @@ class WorkshopDetailCustomWidgets {
                     MaterialPageRoute(
                       builder: (context) => CreateScreen(
                         club: workshopDetail.club,
-                        entity: null,
-                        title: workshopDetail.club != null
-                            ? workshopDetail.club.name
-                            : workshopDetail.entity.name,
+                        entity: workshopDetail.entity,
+                        title: workshopDetail.club?.name ??
+                            workshopDetail.entity?.name ??
+                            '',
                         workshopData: workshopDetail,
+                        isWorkshopOrEvent:
+                            workshopDetail.is_workshop ? 'workshop' : 'event',
                       ),
                     ),
                   ).then((_) => fetchWorkshopDetails());
