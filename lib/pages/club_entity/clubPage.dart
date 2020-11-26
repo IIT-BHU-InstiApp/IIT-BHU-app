@@ -1,11 +1,10 @@
 import 'dart:io';
-import 'package:chopper/chopper.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/colorConstants.dart';
-import 'package:iit_app/ui/club_council_common/club_&_council_widgets.dart';
+import 'package:iit_app/ui/club_council_entity_common/club_council_entity_widgets.dart';
 import 'package:iit_app/ui/club_custom_widgets.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:iit_app/pages/account/accountPage.dart';
@@ -37,14 +36,12 @@ class _ClubPageState extends State<ClubPage>
   }
 
   void _reload() {
-    _fetchClubDataById();
+    _fetchClubDataById(refresh: true);
   }
 
-  _fetchClubDataById() async {
-    if (clubMap == null) {
-      clubMap =
-          await AppConstants.getClubDetailsFromDatabase(clubId: widget.club.id);
-    }
+  _fetchClubDataById({bool refresh = false}) async {
+    clubMap = await AppConstants.getClubDetailsFromDatabase(
+        clubId: widget.club.id, refresh: refresh);
     if (clubMap != null) {
       _clubLargeLogoFile = AppConstants.getImageFile(
           isClub: true, isSmall: false, id: clubMap.id);
@@ -61,8 +58,7 @@ class _ClubPageState extends State<ClubPage>
       return;
     }
     setState(() {});
-
-    Response<BuiltAllWorkshopsPost> snapshots = await AppConstants.service
+    final snapshots = await AppConstants.service
         .getClubWorkshops(widget.club.id, AppConstants.djangoToken)
         .catchError((onError) {
       print("Error in fetching workshops: ${onError.toString()}");
@@ -175,13 +171,9 @@ class _ClubPageState extends State<ClubPage>
                         ),
                 ),
           body: RefreshIndicator(
-            onRefresh: () async {
-              clubMap = await AppConstants.refreshClubInDatabase(
-                  clubId: widget.club.id);
-              setState(() {});
-            },
+            onRefresh: () async => _reload(),
             child: SlidingUpPanel(
-              body: ClubAndCouncilWidgets.getPanelBackground(
+              body: ClubCouncilAndEntityWidgets.getPanelBackground(
                   context, _clubLargeLogoFile,
                   isClub: true, clubDetail: clubMap, club: widget.club),
               parallaxEnabled: true,
@@ -195,9 +187,9 @@ class _ClubPageState extends State<ClubPage>
               backdropEnabled: true,
               panelBuilder: (ScrollController sc) =>
                   clubCustomWidgets.getPanel(sc: sc, club: widget.club),
-              minHeight: ClubAndCouncilWidgets.getMinPanelHeight(context),
-              maxHeight: ClubAndCouncilWidgets.getMaxPanelHeight(context),
-              header: ClubAndCouncilWidgets.getHeader(context),
+              minHeight: ClubCouncilAndEntityWidgets.getMinPanelHeight(context),
+              maxHeight: ClubCouncilAndEntityWidgets.getMaxPanelHeight(context),
+              header: ClubCouncilAndEntityWidgets.getHeader(context),
             ),
           ),
         ),

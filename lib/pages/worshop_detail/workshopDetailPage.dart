@@ -6,8 +6,8 @@ import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/colorConstants.dart';
 import 'package:iit_app/model/workshopCreator.dart';
-import 'package:iit_app/pages/club/clubPage.dart';
-import 'package:iit_app/ui/club_council_common/club_&_council_widgets.dart';
+import 'package:iit_app/pages/club_entity/clubPage.dart';
+import 'package:iit_app/ui/club_council_entity_common/club_council_entity_widgets.dart';
 import 'package:iit_app/ui/dialogBoxes.dart';
 import 'package:iit_app/ui/workshopDetail_custom_widgets.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -15,7 +15,8 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 class WorkshopDetailPage extends StatefulWidget {
   final BuiltWorkshopSummaryPost workshop;
   final bool isPast;
-  WorkshopDetailPage({Key key, this.workshop, this.isPast = false}) : super(key: key);
+  WorkshopDetailPage({Key key, this.workshop, this.isPast = false})
+      : super(key: key);
   @override
   _WorkshopDetailPage createState() => _WorkshopDetailPage();
 }
@@ -57,7 +58,8 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => ClubPage(club: _workshop.club, editMode: true)));
+                        builder: (context) =>
+                            ClubPage(club: _workshop.club, editMode: true)));
               },
             ),
           ],
@@ -166,8 +168,8 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
   }
 
   void deleteWorkshop() async {
-    bool isConfirmed =
-        await CreatePageDialogBoxes.confirmDialog(context: context, action: 'Delete');
+    bool isConfirmed = await CreatePageDialogBoxes.confirmDialog(
+        context: context, action: 'Delete');
     if (isConfirmed == true) {
       AppConstants.service
           .removeWorkshop(workshopSummary.id, AppConstants.djangoToken)
@@ -194,15 +196,17 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
             showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return AlertDialog(content: Text("Resource deleted"), actions: <Widget>[
-                    FlatButton(
-                      child: Text("yay"),
-                      onPressed: () {
-                        Navigator.pop(context);
-                        Navigator.pop(context);
-                      },
-                    )
-                  ]);
+                  return AlertDialog(
+                      content: Text("Resource deleted"),
+                      actions: <Widget>[
+                        FlatButton(
+                          child: Text("yay"),
+                          onPressed: () {
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                          },
+                        )
+                      ]);
                 });
           }).catchError((onError) {
             final error = onError as Response<dynamic>;
@@ -231,8 +235,8 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
           FirebaseMessaging().unsubscribeFromTopic('W_${_workshop.id}');
         }
 
-        _workshop
-            .rebuild((b) => b..interested_users = _workshop.interested_users + _newInterestedUser);
+        _workshop.rebuild((b) => b
+          ..interested_users = _workshop.interested_users + _newInterestedUser);
       }
     }).catchError((onError) {
       print("Error in toggleing: ${onError.toString()}");
@@ -275,10 +279,11 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
               borderRadius: radius,
             ),
           ),
-          minHeight: ClubAndCouncilWidgets.getMinPanelHeight(context),
-          maxHeight: ClubAndCouncilWidgets.getMaxPanelHeight(context),
+          minHeight: ClubCouncilAndEntityWidgets.getMinPanelHeight(context),
+          maxHeight: ClubCouncilAndEntityWidgets.getMaxPanelHeight(context),
           header: workshopDetailCustomWidgets.getPanelHeader(context),
-          panelBuilder: (ScrollController sc) => workshopDetailCustomWidgets.getPanel(sc: sc),
+          panelBuilder: (ScrollController sc) =>
+              workshopDetailCustomWidgets.getPanel(sc: sc),
         ),
       ),
     );

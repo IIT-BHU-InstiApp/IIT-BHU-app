@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
+import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/colorConstants.dart';
 import 'package:iit_app/ui/dialogBoxes.dart';
+import 'package:iit_app/pages/club_entity/entityPage.dart';
 import 'package:iit_app/ui/text_style.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:built_collection/built_collection.dart';
 import 'package:iit_app/services/authentication.dart' as authentication;
 
 // TODO: when user click on list tile, navigation stack keeps filling,
@@ -101,6 +104,8 @@ class SideBar extends Drawer {
             // getNavItem(Icons.local_dining, "Mess management", '/mess'),
             getNavItem(
                 Icons.group_work, "All workshops and events", '/allWorkshops'),
+            getNavItem(Icons.work_rounded, 'All Entities', '/allEntities'),
+            _getActiveEntities(),
             AppConstants.isGuest
                 ? ListTile(
                     title: Text("Account"),
@@ -158,5 +163,34 @@ class SideBar extends Drawer {
         ),
       ),
     );
+  }
+
+  Widget _getActiveEntities() {
+    BuiltList<EntityListPost> entities =
+        AppConstants.entitiesSummaryFromDatabase;
+    return ListView.builder(
+        physics: NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        itemCount: entities.length,
+        itemBuilder: (context, index) {
+          // if (!entities[index].is_permanent && entities[index].is_active){
+          return ListTile(
+            leading: Icon(
+              Icons.new_releases,
+              color: ColorConstants.textColor,
+            ),
+            title: Text(
+              entities[index].name,
+              style:
+                  Style.baseTextStyle.copyWith(color: ColorConstants.textColor),
+            ),
+            onTap: () {
+              Navigator.of(context).push(PageRouteBuilder(
+                  pageBuilder: (_, __, ___) =>
+                      EntityPage(entity: entities[index])));
+            },
+          );
+          // }
+        });
   }
 }

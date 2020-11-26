@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:iit_app/external_libraries/spin_kit.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/colorConstants.dart';
-import 'package:iit_app/ui/club_council_common/club_&_council_widgets.dart';
+import 'package:iit_app/ui/club_council_entity_common/club_council_entity_widgets.dart';
 import 'package:iit_app/ui/text_style.dart';
 
 class CouncilCustomWidgets {
@@ -69,7 +69,7 @@ class CouncilCustomWidgets {
               physics: const NeverScrollableScrollPhysics(),
               itemCount: councilData.clubs.length,
               itemBuilder: (context, index) {
-                return ClubAndCouncilWidgets.getTitleCard(
+                return ClubCouncilAndEntityWidgets.getTitleCard(
                   context: context,
                   title: councilData.clubs[index].name,
                   subtitle: councilData.name,

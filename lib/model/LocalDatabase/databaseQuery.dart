@@ -381,10 +381,14 @@ class DatabaseQuery {
     }
     var map = maps[0];
 
-    List<int> pocIds =
-        (map[StringConst.pointOfContactAsStringArrayString] as List)
-            ?.map((element) => int.tryParse(element))
-            ?.toList();
+    List<int> pocIds = [];
+    (map[StringConst.pointOfContactAsStringArrayString] as String)
+        ?.split(' ')
+        ?.forEach((poc) {
+      final id = int.tryParse(poc);
+      if (id != null) pocIds.add(id);
+    });
+    print('pocIds: $pocIds');
 
     BuiltList<SecyPost> pocList = BuiltList<SecyPost>([]);
     var pocBuilder = pocList.toBuilder();

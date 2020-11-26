@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:iit_app/external_libraries/spin_kit.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/colorConstants.dart';
-import 'package:iit_app/screens/create.dart';
-import 'package:iit_app/ui/club_council_common/club_&_council_widgets.dart';
+import 'package:iit_app/ui/club_council_entity_common/club_council_entity_widgets.dart';
 import 'package:iit_app/ui/workshop_custom_widgets.dart';
 
 class ClubCustomWidgets {
@@ -38,22 +37,8 @@ class ClubCustomWidgets {
         controller: sc,
         children: [
           space,
-          // clubMap != null
-          //     ? clubMap.is_por_holder == true
-          //         ? RaisedButton(
-          //             child: Text('Create workshop'),
-          //             onPressed: () {
-          //               Navigator.of(context).push(
-          //                 MaterialPageRoute(
-          //                   builder: (context) => CreateScreen(
-          //                       club: club, title: clubMap.name, entity: null),
-          //                 ),
-          //               );
-          //             })
-          //         : Container()
-          //     : Container(),
           SizedBox(
-            height: ClubAndCouncilWidgets.getMinPanelHeight(context),
+            height: ClubCouncilAndEntityWidgets.getMinPanelHeight(context),
           ),
           _getActiveAndPastTabBarForClub(
               clubWorkshops: clubWorkshops,

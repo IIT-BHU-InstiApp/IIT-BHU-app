@@ -12,11 +12,13 @@ class Description extends StatefulWidget {
   final dynamic map;
   final bool isClub;
   final bool isCouncil;
+  final bool isEntity;
   const Description(
       {Key key,
       @required this.map,
       this.isClub = false,
-      this.isCouncil = false})
+      this.isCouncil = false,
+      this.isEntity = false})
       : super(key: key);
   @override
   _DescriptionState createState() => _DescriptionState();
@@ -113,6 +115,27 @@ class _DescriptionState extends State<Description> {
     });
   }
 
+  Future editEntityDescription(
+      {@required BuildContext context,
+      @required BuiltEntityPost entity,
+      @required String description}) async {
+    final editedEntity = BuiltEntityPost((b) => b..description = description);
+
+    await AppConstants.service
+        .updateEntityByPatch(entity.id, AppConstants.djangoToken, editedEntity)
+        .catchError((onError) {
+      print('Error editing entity description: ${onError.toString()}');
+      this.showUnsuccessfulDialog(context: context);
+    }).then((value) {
+      if (value.isSuccessful) {
+        print('Edited!');
+        this.showSuccesfulDialog(context: context);
+      }
+    }).catchError((onError) {
+      print('Error printing EDITED entity: ${onError.toString()}');
+    });
+  }
+
   Widget build(context) {
     return widget.map == null
         ? Container(
@@ -169,6 +192,12 @@ class _DescriptionState extends State<Description> {
                                     await this.editCouncilDescription(
                                         context: context,
                                         council: widget.map,
+                                        description:
+                                            descriptionController.text);
+                                  } else if (widget.isEntity) {
+                                    await this.editEntityDescription(
+                                        context: context,
+                                        entity: widget.map,
                                         description:
                                             descriptionController.text);
                                   }

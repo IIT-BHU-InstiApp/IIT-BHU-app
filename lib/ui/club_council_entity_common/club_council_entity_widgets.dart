@@ -4,16 +4,17 @@ import 'package:iit_app/external_libraries/spin_kit.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/colorConstants.dart';
-import 'package:iit_app/pages/club/clubPage.dart';
+import 'package:iit_app/pages/club_entity/clubPage.dart';
 import 'package:iit_app/screens/create.dart';
-import 'package:iit_app/ui/club_council_common/description.dart';
+import 'package:iit_app/ui/club_council_entity_common/description.dart';
+import 'package:iit_app/pages/club_entity/entityPage.dart';
 import 'package:iit_app/ui/separator.dart';
 import 'package:iit_app/ui/text_style.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:iit_app/pages/account/accountPage.dart';
 
-class ClubAndCouncilWidgets {
+class ClubCouncilAndEntityWidgets {
   static Widget getPanelBackground(
     BuildContext context,
     File largeLogoFile, {
@@ -22,16 +23,31 @@ class ClubAndCouncilWidgets {
     bool isClub = false,
     BuiltClubPost clubDetail,
     ClubListPost club,
+    bool isEntity = false,
+    BuiltEntityPost entityDetail,
+    EntityListPost entity,
   }) {
-    assert((isCouncil == true && isClub == false) ||
-        (isCouncil == false && isClub == true));
+    assert((isCouncil == true && isClub == false && isEntity == false) ||
+        (isCouncil == false && isClub == true && isEntity == false) ||
+        (isCouncil == false && isClub == false && isEntity == true));
 
     final bottom = MediaQuery.of(context).viewInsets.bottom;
-    dynamic _data = isCouncil ? councilDetail : clubDetail;
+    dynamic _data = isCouncil
+        ? councilDetail
+        : isClub
+            ? clubDetail
+            : entityDetail;
 
-    final _secy = isCouncil ? councilDetail?.gensec : clubDetail?.secy;
-    final _jointSecy =
-        isCouncil ? councilDetail?.joint_gensec : clubDetail?.joint_secy;
+    final _secy = isCouncil
+        ? councilDetail?.gensec
+        : isClub
+            ? clubDetail?.secy
+            : null;
+    final _jointSecyOrPoC = isCouncil
+        ? councilDetail?.joint_gensec
+        : isClub
+            ? clubDetail?.joint_secy
+            : entityDetail?.point_of_contact;
 
     return Container(
       color: ColorConstants.workshopContainerBackground,
@@ -49,28 +65,32 @@ class ClubAndCouncilWidgets {
                 Stack(
                   children: [
                     Container(
-                      child: largeLogoFile == null
-                          ? Image.network(_data.large_image_url,
+                      child: largeLogoFile != null
+                          ? Image.file(largeLogoFile,
                               fit: BoxFit.cover, height: 300.0)
-                          : Image.file(largeLogoFile,
-                              fit: BoxFit.cover, height: 300.0),
+                          : _data.large_image_url != null
+                              ? Image.network(_data.large_image_url,
+                                  fit: BoxFit.cover, height: 300.0)
+                              : Image(image: AssetImage('assets/iitbhu.jpeg')),
                       constraints: BoxConstraints.expand(height: 295.0),
                     ),
-                    ClubAndCouncilWidgets.getGradient(),
+                    ClubCouncilAndEntityWidgets.getGradient(),
                     Container(
                       padding: EdgeInsets.fromLTRB(0.0, 72.0, 0.0, 0.0),
-                      child: ClubAndCouncilWidgets.getTitleCard(
+                      child: ClubCouncilAndEntityWidgets.getTitleCard(
                           title: _data.name,
                           id: _data.id,
                           imageUrl: _data.large_image_url,
                           isCouncil: isCouncil,
+                          isEntity: isEntity,
                           context: context),
                     ),
-                    ClubAndCouncilWidgets.getToolbar(context),
+                    ClubCouncilAndEntityWidgets.getToolbar(context),
                   ],
                 ),
                 SizedBox(height: 8.0),
-                isClub && clubDetail.is_por_holder
+                (isClub && clubDetail.is_por_holder) ||
+                        (isEntity && entityDetail.is_por_holder)
                     ? Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
@@ -81,13 +101,16 @@ class ClubAndCouncilWidgets {
                                   MaterialPageRoute(
                                     builder: (context) => CreateScreen(
                                         club: club,
-                                        title: clubDetail.name,
-                                        entity: null,
+                                        entity: entity,
+                                        title: clubDetail?.name ??
+                                            entityDetail?.name ??
+                                            '',
                                         isWorkshopOrEvent: 'workshop'),
                                   ),
                                 );
                               }),
-                          isClub && clubDetail.is_por_holder
+                          (isClub && clubDetail.is_por_holder) ||
+                                  (isEntity && entityDetail.is_por_holder)
                               ? RaisedButton(
                                   child: Text('Create event'),
                                   onPressed: () {
@@ -95,8 +118,10 @@ class ClubAndCouncilWidgets {
                                       MaterialPageRoute(
                                         builder: (context) => CreateScreen(
                                             club: club,
-                                            title: clubDetail.name,
-                                            entity: null,
+                                            title: clubDetail?.name ??
+                                                entityDetail?.name ??
+                                                '',
+                                            entity: entity,
                                             isWorkshopOrEvent: 'event'),
                                       ),
                                     );
@@ -108,17 +133,25 @@ class ClubAndCouncilWidgets {
                 Padding(
                   padding: EdgeInsets.only(bottom: bottom),
                   child: Description(
-                      map: _data, isCouncil: isCouncil, isClub: isClub),
+                    map: _data,
+                    isCouncil: isCouncil,
+                    isClub: isClub,
+                    isEntity: isEntity,
+                  ),
                 ),
                 SizedBox(height: 15.0),
-                ClubAndCouncilWidgets.getSecies(context,
-                    secy: _secy, jointSecy: _jointSecy),
+                ClubCouncilAndEntityWidgets.getSecies(
+                  context,
+                  secy: _secy,
+                  jointSecy: _jointSecyOrPoC,
+                  isEntity: isEntity,
+                ),
                 _data == null
                     ? Container()
-                    : ClubAndCouncilWidgets.getSocialLinks(_data),
+                    : ClubCouncilAndEntityWidgets.getSocialLinks(_data),
                 SizedBox(
-                    height:
-                        2 * ClubAndCouncilWidgets.getMinPanelHeight(context)),
+                    height: 2 *
+                        ClubCouncilAndEntityWidgets.getMinPanelHeight(context)),
               ],
             ),
     );
@@ -203,7 +236,8 @@ class ClubAndCouncilWidgets {
     );
   }
 
-  static Container getSecies(BuildContext context, {secy, jointSecy}) {
+  static Container getSecies(BuildContext context,
+      {secy, jointSecy, isEntity = false}) {
     return Container(
       margin: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
       decoration: BoxDecoration(
@@ -212,15 +246,15 @@ class ClubAndCouncilWidgets {
       ),
       child: Column(
         children: [
-          Center(child: Text('Secys:', style: Style.headingStyle)),
+          Center(child: Text('PoR Holders', style: Style.headingStyle)),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               jointSecy.length > 0
-                  ? ClubAndCouncilWidgets.getPosHolder(
+                  ? ClubCouncilAndEntityWidgets.getPosHolder(
                       context: context,
                       imageUrl: jointSecy[0].photo_url,
-                      desg: 'Joint-Secy',
+                      desg: isEntity ? 'PoR Holder' : 'Joint-Secy',
                       name: jointSecy[0].name,
                       email: jointSecy[0].email,
                       phone: jointSecy[0].phone_number,
@@ -228,7 +262,7 @@ class ClubAndCouncilWidgets {
                   : SizedBox(width: 1),
               secy == null
                   ? SizedBox(width: 1)
-                  : ClubAndCouncilWidgets.getPosHolder(
+                  : ClubCouncilAndEntityWidgets.getPosHolder(
                       context: context,
                       imageUrl: secy.photo_url,
                       desg: 'Secy',
@@ -237,10 +271,10 @@ class ClubAndCouncilWidgets {
                       phone: secy.phone_number,
                     ),
               jointSecy.length > 1
-                  ? ClubAndCouncilWidgets.getPosHolder(
+                  ? ClubCouncilAndEntityWidgets.getPosHolder(
                       context: context,
                       imageUrl: jointSecy[1].photo_url,
-                      desg: 'Joint Secy',
+                      desg: isEntity ? 'PoR Holder' : 'Joint-Secy',
                       name: jointSecy[1].name,
                       email: jointSecy[1].email,
                       phone: jointSecy[1].phone_number,
@@ -315,7 +349,7 @@ class ClubAndCouncilWidgets {
           SizedBox(height: 4.0),
           Center(
             child: CircleAvatar(
-              backgroundImage: imageUrl == null
+              backgroundImage: imageUrl == null || imageUrl == ''
                   ? AssetImage('assets/iitbhu.jpeg')
                   : NetworkImage(imageUrl),
               radius: 30.0,
@@ -339,25 +373,47 @@ class ClubAndCouncilWidgets {
     );
   }
 
-  static Widget getTitleCard(
-      {BuildContext context,
-      String title,
-      String subtitle,
-      int id,
-      String imageUrl,
-      bool isCouncil,
-      horizontal = false,
-      ClubListPost club,
-      String clubTypeForHero = 'default'}) {
-    final File clubLogoFile =
-        AppConstants.getImageFile(isSmall: true, id: id, isClub: true);
-
-    if (clubLogoFile == null) {
-      AppConstants.writeImageFileIntoDisk(
-          isClub: true, isSmall: true, id: id, url: imageUrl);
+  static Widget getTitleCard({
+    BuildContext context,
+    String title,
+    String subtitle,
+    int id,
+    String imageUrl,
+    bool isCouncil = false,
+    bool isEntity = false,
+    horizontal = false,
+    ClubListPost club,
+    EntityListPost entity,
+    String clubTypeForHero = 'default',
+    String entityTypeForHero = 'default',
+  }) {
+    if (isCouncil == false) {
+      final File clubLogoFile =
+          AppConstants.getImageFile(isSmall: true, id: id, isClub: true);
+      if (clubLogoFile == null) {
+        AppConstants.writeImageFileIntoDisk(
+            isClub: true, isSmall: true, id: id, url: imageUrl);
+      }
     }
+
+    if (isEntity) {
+      final File entityLogoFile = AppConstants.getImageFile(
+        isSmall: true,
+        id: id,
+        isEntity: true,
+      );
+      if (entityLogoFile == null) {
+        AppConstants.writeImageFileIntoDisk(
+            isEntity: true, isSmall: true, id: id, url: imageUrl);
+      }
+    }
+
     final File _largeLogofile = AppConstants.getImageFile(
-        isCouncil: isCouncil, isClub: !isCouncil, isSmall: false, id: id);
+        isCouncil: isCouncil,
+        isClub: !isCouncil,
+        isEntity: isEntity,
+        isSmall: false,
+        id: id);
 
     final clubThumbnail = Container(
       margin: EdgeInsets.symmetric(vertical: 16.0),
@@ -370,7 +426,7 @@ class ClubAndCouncilWidgets {
             borderRadius: BorderRadius.circular(20),
             child: Image(
               fit: BoxFit.contain,
-              image: imageUrl == null
+              image: imageUrl == null || imageUrl == ''
                   ? AssetImage('assets/iitbhu.jpeg')
                   : _largeLogofile == null
                       ? NetworkImage(imageUrl)
@@ -391,7 +447,7 @@ class ClubAndCouncilWidgets {
           borderRadius: BorderRadius.circular(20),
           child: Image(
             fit: BoxFit.contain,
-            image: imageUrl == null
+            image: imageUrl == null || imageUrl == ''
                 ? AssetImage('assets/iitbhu.jpeg')
                 : _largeLogofile == null
                     ? NetworkImage(imageUrl)
@@ -400,6 +456,30 @@ class ClubAndCouncilWidgets {
         ),
         height: 92.0,
         width: 92.0,
+      ),
+    );
+
+    final entityThumbnail = Container(
+      margin: EdgeInsets.symmetric(vertical: 16.0),
+      alignment:
+          horizontal ? FractionalOffset.centerLeft : FractionalOffset.center,
+      child: Hero(
+        tag: "entity-hero-$id-$entityTypeForHero",
+        child: Container(
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: Image(
+              fit: BoxFit.contain,
+              image: imageUrl == null || imageUrl == ''
+                  ? AssetImage('assets/iitbhu.jpeg')
+                  : _largeLogofile == null
+                      ? NetworkImage(imageUrl)
+                      : FileImage(_largeLogofile),
+            ),
+          ),
+          height: horizontal ? 50 : 82,
+          width: horizontal ? 50 : 82,
+        ),
       ),
     );
 
@@ -442,17 +522,30 @@ class ClubAndCouncilWidgets {
     );
 
     return GestureDetector(
-        onTap: horizontal
-            ? () => Navigator.of(context).push(
-                  PageRouteBuilder(
-                    pageBuilder: (_, __, ___) =>
-                        ClubPage(club: club, editMode: true),
-                    transitionsBuilder:
-                        (context, animation, secondaryAnimation, child) =>
+        onTap: () {
+          print(isEntity);
+          return horizontal
+              ? (isEntity
+                  ? Navigator.of(context).push(
+                      PageRouteBuilder(
+                        pageBuilder: (_, __, ___) =>
+                            EntityPage(entity: entity, editMode: true),
+                        transitionsBuilder: (context, animation,
+                                secondaryAnimation, child) =>
                             FadeTransition(opacity: animation, child: child),
-                  ),
-                )
-            : null,
+                      ),
+                    )
+                  : Navigator.of(context).push(
+                      PageRouteBuilder(
+                        pageBuilder: (_, __, ___) =>
+                            ClubPage(club: club, editMode: true),
+                        transitionsBuilder: (context, animation,
+                                secondaryAnimation, child) =>
+                            FadeTransition(opacity: animation, child: child),
+                      ),
+                    ))
+              : null;
+        },
         child: Container(
           margin: const EdgeInsets.symmetric(
             vertical: 1.0,
@@ -461,7 +554,11 @@ class ClubAndCouncilWidgets {
           child: Stack(
             children: <Widget>[
               clubCard,
-              isCouncil == true ? councilThumbnail : clubThumbnail,
+              isCouncil == true
+                  ? councilThumbnail
+                  : isEntity == true
+                      ? entityThumbnail
+                      : clubThumbnail,
             ],
           ),
         ));
@@ -559,7 +656,9 @@ class ClubAndCouncilWidgets {
                   child: CircleAvatar(
                     backgroundColor: Colors.transparent,
                     radius: 35.0,
-                    backgroundImage: NetworkImage(imageUrl),
+                    backgroundImage: imageUrl == null || imageUrl == ''
+                        ? AssetImage('assets/iitbhu.jpeg')
+                        : NetworkImage(imageUrl),
                   ),
                 ),
               ],

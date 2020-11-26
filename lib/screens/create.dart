@@ -64,11 +64,12 @@ class _CreateScreenState extends State<CreateScreen> {
   bool _isSearchingTags = false; // Has the user searched for the tag?
   bool _searchedDataFetched = false; // Have the searched tags been fetched?
   bool _allTagDataFetched =
-      false; // Have all the tags of this club been fetched?
-  bool _allTagDataShow = false; // Should all the tags of the club be shown?
+      false; // Have all the tags of this club/entity been fetched?
+  bool _allTagDataShow =
+      false; // Should all the tags of the club/entity be shown?
 
   BuiltList<TagDetail> _searchedTagResult;
-  BuiltList<TagDetail> _allTagsOfClub;
+  BuiltList<TagDetail> _allTagsOfClubOrEntity;
 
   final dropDownButtonTextStyle = TextStyle(fontSize: 12);
   DropdownButton _searchCategoryDropDown() => DropdownButton<String>(
@@ -299,7 +300,7 @@ class _CreateScreenState extends State<CreateScreen> {
                                     Center(child: Icon(Icons.add, size: 40)),
                                     _newImage == null
                                         ? Text(
-                                            'By default, club image will be shown')
+                                            'By default, club/entity logo will be shown')
                                         : Container(),
                                   ],
                                 )),
@@ -654,7 +655,7 @@ class _CreateScreenState extends State<CreateScreen> {
                               FocusScope.of(context).unfocus();
                               this._tagSearchController.text = '';
                               this._isSearchingTags = false;
-                              this._allTagsOfClub = null;
+                              this._allTagsOfClubOrEntity = null;
                               this._allTagDataShow = false;
                               this._allTagDataFetched = false;
                               if (!this.mounted) return;
@@ -668,19 +669,39 @@ class _CreateScreenState extends State<CreateScreen> {
                             ),
                             onPressed: () async {
                               FocusScope.of(context).unfocus();
-                              await AppConstants.service
-                                  .getClubTags(
-                                      widget.club.id, AppConstants.djangoToken)
-                                  .catchError((onError) {
-                                print('Error while fetching all tags $onError');
-                              }).then((result) {
-                                if (result != null) {
-                                  this._allTagsOfClub = result.body.club_tags;
-                                  this._allTagDataShow = true;
-                                  this._allTagDataFetched = true;
-                                  setState(() {});
-                                }
-                              });
+                              if (!_isEntity) {
+                                await AppConstants.service
+                                    .getClubTags(widget.club.id,
+                                        AppConstants.djangoToken)
+                                    .catchError((onError) {
+                                  print(
+                                      'Error while fetching all tags $onError');
+                                }).then((result) {
+                                  if (result != null) {
+                                    this._allTagsOfClubOrEntity =
+                                        result.body.club_tags;
+                                    this._allTagDataShow = true;
+                                    this._allTagDataFetched = true;
+                                    setState(() {});
+                                  }
+                                });
+                              } else {
+                                await AppConstants.service
+                                    .getEntityTags(widget.entity.id,
+                                        AppConstants.djangoToken)
+                                    .catchError((onError) {
+                                  print(
+                                      'Error while fetching all tags $onError');
+                                }).then((result) {
+                                  if (result != null) {
+                                    this._allTagsOfClubOrEntity =
+                                        result.body.entity_tags;
+                                    this._allTagDataShow = true;
+                                    this._allTagDataFetched = true;
+                                    setState(() {});
+                                  }
+                                });
+                              }
                             },
                           ),
                   ]),
@@ -699,7 +720,7 @@ class _CreateScreenState extends State<CreateScreen> {
                               child: this._isSearchingTags
                                   ? _buildTagsFromSearchPosts(context)
                                   : this._allTagDataShow
-                                      ? _buildAllTagsOfClub(context)
+                                      ? _buildAllTagsOfClubOrEntity(context)
                                       : Container(),
                             ),
                             Divider(
@@ -995,15 +1016,16 @@ class _CreateScreenState extends State<CreateScreen> {
         : Container();
   }
 
-  Widget _buildAllTagsOfClub(
+  Widget _buildAllTagsOfClubOrEntity(
     BuildContext context,
   ) {
     return this._allTagDataFetched
         ? Container(
-            child: (this._allTagsOfClub == null || this._allTagsOfClub.isEmpty)
+            child: (this._allTagsOfClubOrEntity == null ||
+                    this._allTagsOfClubOrEntity.isEmpty)
                 ? Center(
                     child: Text(
-                      'No Tags of this club available',
+                      'No Tags of this club/entity available',
                       textAlign: TextAlign.center,
                       textScaleFactor: 1.5,
                     ),
@@ -1014,16 +1036,16 @@ class _CreateScreenState extends State<CreateScreen> {
                     physics: ScrollPhysics(),
                     shrinkWrap: true,
                     scrollDirection: Axis.vertical,
-                    itemCount: this._allTagsOfClub.length,
+                    itemCount: this._allTagsOfClubOrEntity.length,
                     padding: EdgeInsets.all(2),
                     itemBuilder: (context, index) {
-                      int _id = this._allTagsOfClub[index].id;
+                      int _id = this._allTagsOfClubOrEntity[index].id;
                       return Container(
                         padding: EdgeInsets.all(2),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            Text(this._allTagsOfClub[index].tag_name),
+                            Text(this._allTagsOfClubOrEntity[index].tag_name),
                             InkWell(
                               child: (this
                                       ._workshop
@@ -1048,8 +1070,9 @@ class _CreateScreenState extends State<CreateScreen> {
                                       .contains(_id))
                                     this._workshop.tagNameofId.remove(_id);
                                   else
-                                    this._workshop.tagNameofId[_id] =
-                                        this._allTagsOfClub[index].tag_name;
+                                    this._workshop.tagNameofId[_id] = this
+                                        ._allTagsOfClubOrEntity[index]
+                                        .tag_name;
                                 });
                               },
                             ),

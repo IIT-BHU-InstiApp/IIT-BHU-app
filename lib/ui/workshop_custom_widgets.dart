@@ -22,8 +22,14 @@ class WorkshopCustomWidgets {
       bool isPast = false,
       GlobalKey<FabCircularMenuState> fabKey,
       Function reload}) {
-    final File clubLogoFile =
-        AppConstants.getImageFile(isSmall: true, id: w.club.id, isClub: true);
+    final bool isClub = w.club != null;
+    File logoFile;
+    if (isClub)
+      logoFile =
+          AppConstants.getImageFile(isSmall: true, id: w.club.id, isClub: true);
+    else
+      logoFile = AppConstants.getImageFile(
+          isSmall: true, id: w.entity.id, isEntity: true);
 
     final workshopThumbnail = Container(
       margin: EdgeInsets.symmetric(vertical: 16.0),
@@ -36,11 +42,19 @@ class WorkshopCustomWidgets {
             borderRadius: BorderRadius.circular(20),
             child: Image(
               fit: BoxFit.contain,
-              image: w.club.small_image_url == null
-                  ? AssetImage('assets/iitbhu.jpeg')
-                  : clubLogoFile == null
-                      ? NetworkImage(w.club.small_image_url)
-                      : FileImage(clubLogoFile),
+              image: isClub
+                  ? (w.club.small_image_url == null ||
+                          w.club.small_image_url == ''
+                      ? AssetImage('assets/iitbhu.jpeg')
+                      : logoFile == null
+                          ? NetworkImage(w.club.small_image_url)
+                          : FileImage(logoFile))
+                  : (w.entity.small_image_url == null ||
+                          w.entity.small_image_url == ''
+                      ? AssetImage('assets/iitbhu.jpeg')
+                      : logoFile == null
+                          ? NetworkImage(w.entity.small_image_url)
+                          : FileImage(logoFile)),
             ),
           ),
           height: 92.0,
@@ -73,7 +87,8 @@ class WorkshopCustomWidgets {
           Container(height: 4.0),
           Text(w.title, style: Style.titleTextStyle),
           Container(height: 10.0),
-          Text('${w.club.name}', style: Style.commonTextStyle),
+          Text('${isClub ? w.club.name : w.entity.name}',
+              style: Style.commonTextStyle),
           Separator(),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/colorConstants.dart';
-import 'package:iit_app/ui/club_council_common/club_&_council_widgets.dart';
+import 'package:iit_app/ui/club_council_entity_common/club_council_entity_widgets.dart';
 import 'package:iit_app/ui/council_custom_widgets.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:iit_app/pages/account/accountPage.dart';
@@ -24,21 +24,28 @@ class _CouncilPageState extends State<CouncilPage> {
   @override
   void initState() {
     flag();
-    fetchCouncilById();
+    _fetchCouncilById();
     super.initState();
   }
 
-  void fetchCouncilById() async {
-    print('fetching council data ');
-    councilData =
-        await AppConstants.getCouncilDetailsFromDatabase(councilId: AppConstants.currentCouncilId);
+  void _reload() {
+    _fetchCouncilById(refresh: true);
+  }
 
-    _councilLargeLogoFile =
-        AppConstants.getImageFile(isCouncil: true, isSmall: false, id: councilData.id);
+  void _fetchCouncilById({bool refresh = false}) async {
+    print('fetching council data ');
+    councilData = await AppConstants.getCouncilDetailsFromDatabase(
+        councilId: AppConstants.currentCouncilId, refresh: refresh);
+
+    _councilLargeLogoFile = AppConstants.getImageFile(
+        isCouncil: true, isSmall: false, id: councilData.id);
 
     if (_councilLargeLogoFile == null) {
       AppConstants.writeImageFileIntoDisk(
-          isCouncil: true, isSmall: false, id: councilData.id, url: councilData.large_image_url);
+          isCouncil: true,
+          isSmall: false,
+          id: councilData.id,
+          url: councilData.large_image_url);
     }
 
     if (!this.mounted) {
@@ -56,7 +63,8 @@ class _CouncilPageState extends State<CouncilPage> {
 
   @override
   Widget build(BuildContext context) {
-    final councilCustomWidgets = CouncilCustomWidgets(context: context, councilData: councilData);
+    final councilCustomWidgets =
+        CouncilCustomWidgets(context: context, councilData: councilData);
     return SafeArea(
         minimum: const EdgeInsets.all(2.0),
         child: Scaffold(
@@ -64,16 +72,11 @@ class _CouncilPageState extends State<CouncilPage> {
           resizeToAvoidBottomPadding: false,
           backgroundColor: ColorConstants.backgroundThemeColor,
           body: RefreshIndicator(
-            onRefresh: () async {
-              if (councilData != null) {
-                councilData =
-                    await AppConstants.refreshCouncilInDatabase(councilId: councilData.id);
-              }
-              setState(() {});
-            },
+            onRefresh: () async => _reload(),
             child: SlidingUpPanel(
               parallaxEnabled: true,
-              body: ClubAndCouncilWidgets.getPanelBackground(context, _councilLargeLogoFile,
+              body: ClubCouncilAndEntityWidgets.getPanelBackground(
+                  context, _councilLargeLogoFile,
                   isCouncil: true, councilDetail: councilData),
               controller: _pc,
               borderRadius: radius,
@@ -83,11 +86,11 @@ class _CouncilPageState extends State<CouncilPage> {
                 ),
               ),
               backdropEnabled: true,
-              panelBuilder: (ScrollController sc) =>
-                  councilCustomWidgets.getPanel(scrollController: sc, radius: radius),
-              minHeight: ClubAndCouncilWidgets.getMinPanelHeight(context),
-              maxHeight: ClubAndCouncilWidgets.getMaxPanelHeight(context),
-              header: ClubAndCouncilWidgets.getHeader(context),
+              panelBuilder: (ScrollController sc) => councilCustomWidgets
+                  .getPanel(scrollController: sc, radius: radius),
+              minHeight: ClubCouncilAndEntityWidgets.getMinPanelHeight(context),
+              maxHeight: ClubCouncilAndEntityWidgets.getMaxPanelHeight(context),
+              header: ClubCouncilAndEntityWidgets.getHeader(context),
             ),
           ),
         ));
