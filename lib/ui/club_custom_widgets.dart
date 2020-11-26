@@ -38,20 +38,6 @@ class ClubCustomWidgets {
         controller: sc,
         children: [
           space,
-          // clubMap != null
-          //     ? clubMap.is_por_holder == true
-          //         ? RaisedButton(
-          //             child: Text('Create workshop'),
-          //             onPressed: () {
-          //               Navigator.of(context).push(
-          //                 MaterialPageRoute(
-          //                   builder: (context) => CreateScreen(
-          //                       club: club, title: clubMap.name, entity: null),
-          //                 ),
-          //               );
-          //             })
-          //         : Container()
-          //     : Container(),
           SizedBox(
             height: ClubCouncilAndEntityWidgets.getMinPanelHeight(context),
           ),

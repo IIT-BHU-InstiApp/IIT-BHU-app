@@ -503,7 +503,9 @@ class WorkshopDetailCustomWidgets {
                       builder: (context) => CreateScreen(
                         club: workshopDetail.club,
                         entity: null,
-                        title: workshopDetail.club.name,
+                        title: workshopDetail.club != null
+                            ? workshopDetail.club.name
+                            : workshopDetail.entity.name,
                         workshopData: workshopDetail,
                       ),
                     ),

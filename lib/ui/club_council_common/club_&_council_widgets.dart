@@ -99,10 +99,11 @@ class ClubCouncilAndEntityWidgets {
                               onPressed: () {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
-                                    // TODO: Add option in create for entities
                                     builder: (context) => CreateScreen(
                                         club: club,
-                                        title: clubDetail.name,
+                                        title: club != null
+                                            ? clubDetail.name
+                                            : entityDetail.name,
                                         entity: entity,
                                         isWorkshopOrEvent: 'workshop'),
                                   ),
@@ -117,7 +118,9 @@ class ClubCouncilAndEntityWidgets {
                                       MaterialPageRoute(
                                         builder: (context) => CreateScreen(
                                             club: club,
-                                            title: clubDetail.name,
+                                            title: club != null
+                                                ? clubDetail.name
+                                                : entityDetail.name,
                                             entity: entity,
                                             isWorkshopOrEvent: 'event'),
                                       ),

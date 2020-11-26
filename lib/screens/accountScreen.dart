@@ -271,7 +271,7 @@ class AccountScreen extends StatelessWidget {
                         },
                       ),
                     ),
-                    SizedBox(height: 50),
+                    SizedBox(height: 22),
                     profileDetails.entity_privileges.length == 0
                         ? SizedBox(height: 5)
                         : Text(
@@ -301,6 +301,7 @@ class AccountScreen extends StatelessWidget {
                         },
                       ),
                     ),
+                    SizedBox(height: 50),
                   ],
                 ),
               ),
