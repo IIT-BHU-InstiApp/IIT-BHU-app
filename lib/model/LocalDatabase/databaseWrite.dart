@@ -100,15 +100,8 @@ class DatabaseWrite {
       {@required Database db,
       int entityId = -1,
       @required BuiltList<SecyPost> poc}) async {
-    debugPrint('------------------------------------------------------------');
-    debugPrint('------------------------------------------------------------');
-    debugPrint(poc.toString());
-    debugPrint('------------------------------------------------------------');
-
     poc?.forEach((secy) async {
-      debugPrint('************************************************');
       if (secy == null) return;
-      debugPrint(secy.toString());
       await db.insert(StringConst.porHoldersString,
           DatabaseMapping.porInfoToMap(por: secy, entityId: entityId));
     });

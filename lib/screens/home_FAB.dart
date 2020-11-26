@@ -6,6 +6,7 @@ import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/colorConstants.dart';
 import 'package:iit_app/pages/council/councilPage.dart';
+import 'package:iit_app/ui/entity_detail.dart';
 
 Widget homeFAB(context, {fabKey}) =>
     AppConstants.councilsSummaryfromDatabase == null
@@ -58,10 +59,14 @@ Widget _fabButtons(BuildContext context, double size,
     onTap: () {
       // setting councilId in AppConstnts
 
-      AppConstants.currentCouncilId = council.id;
+      if (council != null) {
+        AppConstants.currentCouncilId = council.id;
+      }
+
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) => CouncilPage(),
+          builder: (context) =>
+              council != null ? CouncilPage() : EntityPage(entity: entity),
         ),
       );
     },
