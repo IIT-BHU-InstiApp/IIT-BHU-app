@@ -24,14 +24,18 @@ class _CouncilPageState extends State<CouncilPage> {
   @override
   void initState() {
     flag();
-    fetchCouncilById();
+    _fetchCouncilById();
     super.initState();
   }
 
-  void fetchCouncilById() async {
+  void _reload() {
+    _fetchCouncilById(refresh: true);
+  }
+
+  void _fetchCouncilById({bool refresh = false}) async {
     print('fetching council data ');
     councilData = await AppConstants.getCouncilDetailsFromDatabase(
-        councilId: AppConstants.currentCouncilId);
+        councilId: AppConstants.currentCouncilId, refresh: refresh);
 
     _councilLargeLogoFile = AppConstants.getImageFile(
         isCouncil: true, isSmall: false, id: councilData.id);
@@ -68,13 +72,7 @@ class _CouncilPageState extends State<CouncilPage> {
           resizeToAvoidBottomPadding: false,
           backgroundColor: ColorConstants.backgroundThemeColor,
           body: RefreshIndicator(
-            onRefresh: () async {
-              if (councilData != null) {
-                councilData = await AppConstants.refreshCouncilInDatabase(
-                    councilId: councilData.id);
-              }
-              setState(() {});
-            },
+            onRefresh: () async => _reload(),
             child: SlidingUpPanel(
               parallaxEnabled: true,
               body: ClubCouncilAndEntityWidgets.getPanelBackground(

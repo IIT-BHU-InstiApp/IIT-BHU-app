@@ -137,7 +137,7 @@ class DatabaseMapping {
   static Map<String, dynamic> entityDetailToMap(BuiltEntityPost entityPost) {
     String pocString = '';
     entityPost.point_of_contact?.forEach((secy) {
-      if (secy == null) return;
+      if (secy?.id == null) return;
       pocString += '${secy.id}' ' ';
     });
 

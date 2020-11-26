@@ -102,13 +102,9 @@ class DatabaseHelper {
     await db.execute('      CREATE TABLE ${StringConst.porHoldersString} ('
         '        ${StringConst.idString} INTEGER NOT NULL,'
 
-        // councilId is only to ease the deletion while deleting coucil information
+//storing club/council/entity ids to ease the deletion and also if a person has por in two different fields (only possible in dummy data though)
         '        ${StringConst.councilIdString} INTEGER ,'
-
-        // clubId is only to ease the deletion while deleting club information
         '        ${StringConst.clubIdString} INTEGER,'
-
-        // entityId is only to ease the deletion while deleting entity information
         '        ${StringConst.entityIdString} INTEGER,'
         //
         '        ${StringConst.nameString} DEFAULT "",'

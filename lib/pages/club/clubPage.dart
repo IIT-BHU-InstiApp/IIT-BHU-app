@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:chopper/chopper.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
@@ -37,14 +36,12 @@ class _ClubPageState extends State<ClubPage>
   }
 
   void _reload() {
-    _fetchClubDataById();
+    _fetchClubDataById(refresh: true);
   }
 
-  _fetchClubDataById() async {
-    if (clubMap == null) {
-      clubMap =
-          await AppConstants.getClubDetailsFromDatabase(clubId: widget.club.id);
-    }
+  _fetchClubDataById({bool refresh = false}) async {
+    clubMap = await AppConstants.getClubDetailsFromDatabase(
+        clubId: widget.club.id, refresh: refresh);
     if (clubMap != null) {
       _clubLargeLogoFile = AppConstants.getImageFile(
           isClub: true, isSmall: false, id: clubMap.id);
@@ -61,8 +58,7 @@ class _ClubPageState extends State<ClubPage>
       return;
     }
     setState(() {});
-
-    Response<BuiltAllWorkshopsPost> snapshots = await AppConstants.service
+    final snapshots = await AppConstants.service
         .getClubWorkshops(widget.club.id, AppConstants.djangoToken)
         .catchError((onError) {
       print("Error in fetching workshops: ${onError.toString()}");
@@ -175,11 +171,7 @@ class _ClubPageState extends State<ClubPage>
                         ),
                 ),
           body: RefreshIndicator(
-            onRefresh: () async {
-              clubMap = await AppConstants.refreshClubInDatabase(
-                  clubId: widget.club.id);
-              setState(() {});
-            },
+            onRefresh: () async => _reload(),
             child: SlidingUpPanel(
               body: ClubCouncilAndEntityWidgets.getPanelBackground(
                   context, _clubLargeLogoFile,

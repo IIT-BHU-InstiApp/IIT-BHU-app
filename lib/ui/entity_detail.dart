@@ -36,14 +36,9 @@ class _EntityPageState extends State<EntityPage>
     super.initState();
   }
 
-  _fetchEntityDataByID() async {
-    if (entityMap == null) {
-      // TODO: Fix the error in databaseQuery and uncomment the statement below
-      // entityMap = await AppConstants.getEntityDetailsFromDatabase(
-      //     entityId: widget.entity.id);
-      entityMap = await AppConstants.refreshEntityInDatabase(
-          entityId: widget.entity.id);
-    }
+  _fetchEntityDataByID({bool refresh = false}) async {
+    entityMap = await AppConstants.getEntityDetailsFromDatabase(
+        entityId: widget.entity.id, refresh: refresh);
     if (entityMap != null) {
       _entityLargeLogoFile = AppConstants.getImageFile(
           isEntity: true, isSmall: false, id: entityMap.id);
@@ -78,7 +73,7 @@ class _EntityPageState extends State<EntityPage>
   }
 
   void _reload() {
-    _fetchEntityDataByID();
+    _fetchEntityDataByID(refresh: true);
   }
 
   void toggleSubscription() async {
@@ -177,11 +172,7 @@ class _EntityPageState extends State<EntityPage>
                             ),
                     ),
               body: RefreshIndicator(
-                  onRefresh: () async {
-                    entityMap = await AppConstants.refreshEntityInDatabase(
-                        entityId: widget.entity.id);
-                    setState(() {});
-                  },
+                  onRefresh: () async => _reload(),
                   child: SlidingUpPanel(
                     body: ClubCouncilAndEntityWidgets.getPanelBackground(
                         context, _entityLargeLogoFile,

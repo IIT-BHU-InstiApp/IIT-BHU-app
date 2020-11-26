@@ -249,81 +249,71 @@ class AppConstants {
     DatabaseHelper helper = DatabaseHelper.instance;
     var database = await helper.database;
 
-    await DatabaseWrite.deleteAllWorkshopsSummary(db: database);
-
     print('fetching workshops infos from json for updation');
 
     Response<BuiltList<BuiltWorkshopSummaryPost>> workshopSnapshots =
         await service.getActiveWorkshops();
 
-    final workshopPosts = workshopSnapshots.body;
+    if (workshopSnapshots.body != null) {
+      await DatabaseWrite.deleteAllWorkshopsSummary(db: database);
+      final workshopPosts = workshopSnapshots.body;
 
-    for (var post in workshopPosts) {
-      await DatabaseWrite.insertWorkshopSummaryIntoDatabase(
-          post: post, db: database);
+      for (var post in workshopPosts) {
+        await DatabaseWrite.insertWorkshopSummaryIntoDatabase(
+            post: post, db: database);
+      }
+      workshopFromDatabase = workshopPosts;
     }
-    workshopFromDatabase = workshopPosts;
-
     print('workshops fetched and updated ');
   }
 
-  static Future getCouncilDetailsFromDatabase({@required int councilId}) async {
+  static Future getCouncilDetailsFromDatabase(
+      {@required int councilId, bool refresh = false}) async {
     DatabaseHelper helper = DatabaseHelper.instance;
     var database = await helper.database;
 
     BuiltCouncilPost councilPost = await DatabaseQuery.getCouncilDetail(
         db: database, councilId: councilId);
 
-    if (councilPost == null) {
+    if (councilPost == null || refresh == true) {
       Response<BuiltCouncilPost> councilSnapshots = await AppConstants.service
           .getCouncil(AppConstants.djangoToken, councilId);
 
-      councilPost = councilSnapshots.body;
+      if (councilSnapshots.body != null) {
+        councilPost = councilSnapshots.body;
 
-      await DatabaseWrite.insertCouncilDetailsIntoDatabase(
-          councilPost: councilPost, db: database);
+        await DatabaseWrite.insertCouncilDetailsIntoDatabase(
+            councilPost: councilPost, db: database);
+      }
     }
 
     return councilPost;
   }
 
-  static Future refreshCouncilInDatabase({@required int councilId}) async {
-    print('refreshing council data ');
-    DatabaseHelper helper = DatabaseHelper.instance;
-    var database = await helper.database;
-    await DatabaseWrite.deleteEntryOfCouncilDetail(
-        db: database, councilId: councilId);
-    return await getCouncilDetailsFromDatabase(councilId: councilId);
-  }
-
-  static Future getClubDetailsFromDatabase({@required int clubId}) async {
+  static Future<BuiltClubPost> getClubDetailsFromDatabase(
+      {@required int clubId, bool refresh = false}) async {
     DatabaseHelper helper = DatabaseHelper.instance;
     var database = await helper.database;
 
     BuiltClubPost clubPost =
         await DatabaseQuery.getClubDetails(db: database, clubId: clubId);
 
-    if (clubPost == null) {
+    if (clubPost == null || refresh == true) {
       Response<BuiltClubPost> clubSnapshots = await AppConstants.service
           .getClub(clubId, AppConstants.djangoToken)
           .catchError((onError) {
         print("Error in fetching clubs: ${onError.toString()}");
       });
-      clubPost = clubSnapshots.body;
 
-      await DatabaseWrite.insertClubDetailsIntoDatabase(
-          clubPost: clubPost, db: database);
+      if (clubSnapshots.body != null) {
+        clubPost = clubSnapshots.body;
+
+        await DatabaseWrite.insertClubDetailsIntoDatabase(
+            clubPost: clubPost, db: database);
+      }
     }
 
     return clubPost;
-  }
-
-  static Future refreshClubInDatabase({@required int clubId}) async {
-    print('refreshing club data ');
-    DatabaseHelper helper = DatabaseHelper.instance;
-    var database = await helper.database;
-    await DatabaseWrite.deleteEntryOfClubDetail(db: database, clubId: clubId);
-    return await getClubDetailsFromDatabase(clubId: clubId);
   }
 
   static Future updateClubSubscriptionInDatabase(
@@ -342,35 +332,29 @@ class AppConstants {
         subscribedUsers: subscribedUsers);
   }
 
-  static Future getEntityDetailsFromDatabase({@required int entityId}) async {
+  static Future getEntityDetailsFromDatabase(
+      {@required int entityId, bool refresh = false}) async {
     DatabaseHelper helper = DatabaseHelper.instance;
     var database = await helper.database;
 
-    BuiltEntityPost entityPost =
-        await DatabaseQuery.getEntityDetails(db: database, entityId: entityId);
+    BuiltEntityPost entityPost;
+    await DatabaseQuery.getEntityDetails(db: database, entityId: entityId);
 
-    if (entityPost == null) {
+    if (entityPost == null || refresh == true) {
       Response<BuiltEntityPost> entitySnapshots = await AppConstants.service
           .getEntity(entityId, AppConstants.djangoToken)
           .catchError((onError) {
         print("Error in fetching entity: ${onError.toString()}");
       });
-      entityPost = entitySnapshots.body;
+      if (entitySnapshots.body != null) {
+        entityPost = entitySnapshots.body;
 
-      await DatabaseWrite.insertEntityDetailsIntoDatabase(
-          entityPost: entityPost, db: database);
+        await DatabaseWrite.insertEntityDetailsIntoDatabase(
+            entityPost: entityPost, db: database);
+      }
     }
 
     return entityPost;
-  }
-
-  static Future refreshEntityInDatabase({@required int entityId}) async {
-    print('refreshing entity data ');
-    DatabaseHelper helper = DatabaseHelper.instance;
-    var database = await helper.database;
-    await DatabaseWrite.deleteEntryOfEntityDetail(
-        db: database, entityId: entityId);
-    return await getEntityDetailsFromDatabase(entityId: entityId);
   }
 
   static Future updateEntitySubscriptionInDatabase(
