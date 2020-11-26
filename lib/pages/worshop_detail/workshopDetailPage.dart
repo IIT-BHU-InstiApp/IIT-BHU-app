@@ -6,7 +6,7 @@ import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/colorConstants.dart';
 import 'package:iit_app/model/workshopCreator.dart';
-import 'package:iit_app/pages/club/clubPage.dart';
+import 'package:iit_app/pages/club_entity/clubPage.dart';
 import 'package:iit_app/ui/club_council_common/club_&_council_widgets.dart';
 import 'package:iit_app/ui/dialogBoxes.dart';
 import 'package:iit_app/ui/workshopDetail_custom_widgets.dart';
