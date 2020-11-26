@@ -299,7 +299,7 @@ class _CreateScreenState extends State<CreateScreen> {
                                     Center(child: Icon(Icons.add, size: 40)),
                                     _newImage == null
                                         ? Text(
-                                            'By default, club image will be shown')
+                                            'By default, club/entity image will be shown')
                                         : Container(),
                                   ],
                                 )),

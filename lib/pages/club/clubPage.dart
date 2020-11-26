@@ -181,7 +181,7 @@ class _ClubPageState extends State<ClubPage>
               setState(() {});
             },
             child: SlidingUpPanel(
-              body: ClubAndCouncilWidgets.getPanelBackground(
+              body: ClubCouncilAndEntityWidgets.getPanelBackground(
                   context, _clubLargeLogoFile,
                   isClub: true, clubDetail: clubMap, club: widget.club),
               parallaxEnabled: true,
@@ -195,9 +195,9 @@ class _ClubPageState extends State<ClubPage>
               backdropEnabled: true,
               panelBuilder: (ScrollController sc) =>
                   clubCustomWidgets.getPanel(sc: sc, club: widget.club),
-              minHeight: ClubAndCouncilWidgets.getMinPanelHeight(context),
-              maxHeight: ClubAndCouncilWidgets.getMaxPanelHeight(context),
-              header: ClubAndCouncilWidgets.getHeader(context),
+              minHeight: ClubCouncilAndEntityWidgets.getMinPanelHeight(context),
+              maxHeight: ClubCouncilAndEntityWidgets.getMaxPanelHeight(context),
+              header: ClubCouncilAndEntityWidgets.getHeader(context),
             ),
           ),
         ),

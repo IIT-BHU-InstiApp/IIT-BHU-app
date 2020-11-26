@@ -197,7 +197,7 @@ class WorkshopDetailCustomWidgets {
                           scrollDirection: Axis.horizontal,
                           itemCount: workshopDetail.contacts.length,
                           itemBuilder: (context, index) {
-                            return ClubAndCouncilWidgets.getPosHolder(
+                            return ClubCouncilAndEntityWidgets.getPosHolder(
                               imageUrl:
                                   workshopDetail.contacts[index].photo_url,
                               name: workshopDetail.contacts[index].name,
@@ -316,8 +316,8 @@ class WorkshopDetailCustomWidgets {
                 _getPeopleGoing(),
                 Separator(),
                 SizedBox(
-                    height:
-                        2 * ClubAndCouncilWidgets.getMinPanelHeight(context)),
+                    height: 2 *
+                        ClubCouncilAndEntityWidgets.getMinPanelHeight(context)),
               ],
             ),
           ),
@@ -333,7 +333,10 @@ class WorkshopDetailCustomWidgets {
         onTap: () {
           Navigator.of(context).push(MaterialPageRoute(
             builder: (ctx) => PhotoView(
-              imageProvider: NetworkImage(workshopDetail.image_url),
+              imageProvider: workshopDetail.image_url == null ||
+                      workshopDetail.image_url == ''
+                  ? AssetImage('assets/iitbhu.jpeg')
+                  : NetworkImage(workshopDetail.image_url),
             ),
           ));
         },

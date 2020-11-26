@@ -69,7 +69,7 @@ class CouncilCustomWidgets {
               physics: const NeverScrollableScrollPhysics(),
               itemCount: councilData.clubs.length,
               itemBuilder: (context, index) {
-                return ClubAndCouncilWidgets.getTitleCard(
+                return ClubCouncilAndEntityWidgets.getTitleCard(
                   context: context,
                   title: councilData.clubs[index].name,
                   subtitle: councilData.name,

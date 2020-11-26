@@ -382,9 +382,11 @@ class DatabaseQuery {
     var map = maps[0];
 
     List<int> pocIds =
-        (map[StringConst.pointOfContactAsStringArrayString] as List)
+        (map[StringConst.pointOfContactAsStringArrayString] as String)
+            .split('')
             ?.map((element) => int.tryParse(element))
             ?.toList();
+    print('pocIds: $pocIds');
 
     BuiltList<SecyPost> pocList = BuiltList<SecyPost>([]);
     var pocBuilder = pocList.toBuilder();

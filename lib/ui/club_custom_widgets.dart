@@ -53,7 +53,7 @@ class ClubCustomWidgets {
           //         : Container()
           //     : Container(),
           SizedBox(
-            height: ClubAndCouncilWidgets.getMinPanelHeight(context),
+            height: ClubCouncilAndEntityWidgets.getMinPanelHeight(context),
           ),
           _getActiveAndPastTabBarForClub(
               clubWorkshops: clubWorkshops,

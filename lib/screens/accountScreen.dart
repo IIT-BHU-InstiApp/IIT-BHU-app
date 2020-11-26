@@ -21,25 +21,45 @@ class AccountScreen extends StatelessWidget {
   final Function(String, String) updateProfileDetails;
 
   Widget subscribed(String v) {
-    print("Subscribed: $v");
-    print("Flag:${AccountPage.flag}");
-    return ListView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: profileDetails.club_subscriptions.length,
-      itemBuilder: (context, index) {
-        return ClubAndCouncilWidgets.getTitleCard(
-            clubTypeForHero: 'club_subscriptions',
-            context: context,
-            title: profileDetails.club_subscriptions[index].name,
-            subtitle: profileDetails.club_subscriptions[index].council.name,
-            id: profileDetails.club_subscriptions[index].id,
-            imageUrl: profileDetails.club_subscriptions[index].small_image_url,
-            club: profileDetails.club_subscriptions[index],
-            isCouncil: false,
-            horizontal: true);
-      },
-    );
+    if (v == 'Club') {
+      return ListView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: profileDetails.club_subscriptions.length,
+        itemBuilder: (context, index) {
+          return ClubCouncilAndEntityWidgets.getTitleCard(
+              clubTypeForHero: 'club_subscriptions',
+              context: context,
+              title: profileDetails.club_subscriptions[index].name,
+              subtitle: profileDetails.club_subscriptions[index].council.name,
+              id: profileDetails.club_subscriptions[index].id,
+              imageUrl:
+                  profileDetails.club_subscriptions[index].small_image_url,
+              club: profileDetails.club_subscriptions[index],
+              isCouncil: false,
+              horizontal: true);
+        },
+      );
+    } else {
+      return ListView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: profileDetails.entity_subscriptions.length,
+        itemBuilder: (context, index) {
+          return ClubCouncilAndEntityWidgets.getTitleCard(
+              entityTypeForHero: 'entity_subscriptions',
+              context: context,
+              title: profileDetails.entity_subscriptions[index].name,
+              id: profileDetails.entity_subscriptions[index].id,
+              imageUrl:
+                  profileDetails.entity_subscriptions[index].small_image_url,
+              entity: profileDetails.entity_subscriptions[index],
+              isCouncil: false,
+              isEntity: true,
+              horizontal: true);
+        },
+      );
+    }
   }
 
   Container iconTile({String imgAssetPath, Color backColor}) => Container(
@@ -203,9 +223,25 @@ class AccountScreen extends StatelessWidget {
                             ? Text(
                                 'You haven\'t subscribed to any channels yet!')
                             : Container(child: subscribed("Club")),
-                    SizedBox(
-                      height: 22,
+                    SizedBox(height: 22),
+                    Text(
+                      "Entity Subscriptions",
+                      style: Style.boldHeadingStyle
+                          .copyWith(color: ColorConstants.textColor),
                     ),
+                    SizedBox(height: 5),
+                    profileDetails == null
+                        ? Container(
+                            height: MediaQuery.of(context).size.height / 4,
+                            child: Center(
+                              child: LoadingCircle,
+                            ),
+                          )
+                        : profileDetails.entity_subscriptions.length == 0
+                            ? Text(
+                                'You haven\'t subscribed to any entities yet!')
+                            : Container(child: subscribed("Entity")),
+                    SizedBox(height: 22),
                     profileDetails.club_privileges.length == 0
                         ? SizedBox(height: 5)
                         : Text(
@@ -220,7 +256,7 @@ class AccountScreen extends StatelessWidget {
                         physics: const NeverScrollableScrollPhysics(),
                         itemCount: profileDetails.club_privileges.length,
                         itemBuilder: (context, index) {
-                          return ClubAndCouncilWidgets.getTitleCard(
+                          return ClubCouncilAndEntityWidgets.getTitleCard(
                               clubTypeForHero: 'Club Privileges',
                               context: context,
                               title: profileDetails.club_privileges[index].name,
@@ -236,6 +272,35 @@ class AccountScreen extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: 50),
+                    profileDetails.entity_privileges.length == 0
+                        ? SizedBox(height: 5)
+                        : Text(
+                            "Entity Privileges",
+                            style: Style.boldHeadingStyle
+                                .copyWith(color: ColorConstants.textColor),
+                          ),
+                    SizedBox(height: 5),
+                    Container(
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: profileDetails.entity_privileges.length,
+                        itemBuilder: (context, index) {
+                          return ClubCouncilAndEntityWidgets.getTitleCard(
+                              entityTypeForHero: 'Entity Privileges',
+                              context: context,
+                              title:
+                                  profileDetails.entity_privileges[index].name,
+                              id: profileDetails.entity_privileges[index].id,
+                              imageUrl: profileDetails
+                                  .entity_privileges[index].small_image_url,
+                              entity: profileDetails.entity_privileges[index],
+                              isCouncil: false,
+                              isEntity: true,
+                              horizontal: true);
+                        },
+                      ),
+                    ),
                   ],
                 ),
               ),

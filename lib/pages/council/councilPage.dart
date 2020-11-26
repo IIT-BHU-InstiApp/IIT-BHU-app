@@ -30,15 +30,18 @@ class _CouncilPageState extends State<CouncilPage> {
 
   void fetchCouncilById() async {
     print('fetching council data ');
-    councilData =
-        await AppConstants.getCouncilDetailsFromDatabase(councilId: AppConstants.currentCouncilId);
+    councilData = await AppConstants.getCouncilDetailsFromDatabase(
+        councilId: AppConstants.currentCouncilId);
 
-    _councilLargeLogoFile =
-        AppConstants.getImageFile(isCouncil: true, isSmall: false, id: councilData.id);
+    _councilLargeLogoFile = AppConstants.getImageFile(
+        isCouncil: true, isSmall: false, id: councilData.id);
 
     if (_councilLargeLogoFile == null) {
       AppConstants.writeImageFileIntoDisk(
-          isCouncil: true, isSmall: false, id: councilData.id, url: councilData.large_image_url);
+          isCouncil: true,
+          isSmall: false,
+          id: councilData.id,
+          url: councilData.large_image_url);
     }
 
     if (!this.mounted) {
@@ -56,7 +59,8 @@ class _CouncilPageState extends State<CouncilPage> {
 
   @override
   Widget build(BuildContext context) {
-    final councilCustomWidgets = CouncilCustomWidgets(context: context, councilData: councilData);
+    final councilCustomWidgets =
+        CouncilCustomWidgets(context: context, councilData: councilData);
     return SafeArea(
         minimum: const EdgeInsets.all(2.0),
         child: Scaffold(
@@ -66,14 +70,15 @@ class _CouncilPageState extends State<CouncilPage> {
           body: RefreshIndicator(
             onRefresh: () async {
               if (councilData != null) {
-                councilData =
-                    await AppConstants.refreshCouncilInDatabase(councilId: councilData.id);
+                councilData = await AppConstants.refreshCouncilInDatabase(
+                    councilId: councilData.id);
               }
               setState(() {});
             },
             child: SlidingUpPanel(
               parallaxEnabled: true,
-              body: ClubAndCouncilWidgets.getPanelBackground(context, _councilLargeLogoFile,
+              body: ClubCouncilAndEntityWidgets.getPanelBackground(
+                  context, _councilLargeLogoFile,
                   isCouncil: true, councilDetail: councilData),
               controller: _pc,
               borderRadius: radius,
@@ -83,11 +88,11 @@ class _CouncilPageState extends State<CouncilPage> {
                 ),
               ),
               backdropEnabled: true,
-              panelBuilder: (ScrollController sc) =>
-                  councilCustomWidgets.getPanel(scrollController: sc, radius: radius),
-              minHeight: ClubAndCouncilWidgets.getMinPanelHeight(context),
-              maxHeight: ClubAndCouncilWidgets.getMaxPanelHeight(context),
-              header: ClubAndCouncilWidgets.getHeader(context),
+              panelBuilder: (ScrollController sc) => councilCustomWidgets
+                  .getPanel(scrollController: sc, radius: radius),
+              minHeight: ClubCouncilAndEntityWidgets.getMinPanelHeight(context),
+              maxHeight: ClubCouncilAndEntityWidgets.getMaxPanelHeight(context),
+              header: ClubCouncilAndEntityWidgets.getHeader(context),
             ),
           ),
         ));
