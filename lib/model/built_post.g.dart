@@ -11,6 +11,7 @@ Serializer<EntityListPost> _$entityListPostSerializer =
 Serializer<BuiltEntityPost> _$builtEntityPostSerializer =
     new _$BuiltEntityPostSerializer();
 Serializer<TagCreate> _$tagCreateSerializer = new _$TagCreateSerializer();
+Serializer<TagDelete> _$tagDeleteSerializer = new _$TagDeleteSerializer();
 Serializer<TagSearch> _$tagSearchSerializer = new _$TagSearchSerializer();
 Serializer<TagDetail> _$tagDetailSerializer = new _$TagDetailSerializer();
 Serializer<ClubTags> _$clubTagsSerializer = new _$ClubTagsSerializer();
@@ -388,6 +389,46 @@ class _$TagCreateSerializer implements StructuredSerializer<TagCreate> {
           result.id = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
           break;
+        case 'tag_name':
+          result.tag_name = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+      }
+    }
+
+    return result.build();
+  }
+}
+
+class _$TagDeleteSerializer implements StructuredSerializer<TagDelete> {
+  @override
+  final Iterable<Type> types = const [TagDelete, _$TagDelete];
+  @override
+  final String wireName = 'TagDelete';
+
+  @override
+  Iterable<Object> serialize(Serializers serializers, TagDelete object,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = <Object>[
+      'tag_name',
+      serializers.serialize(object.tag_name,
+          specifiedType: const FullType(String)),
+    ];
+
+    return result;
+  }
+
+  @override
+  TagDelete deserialize(Serializers serializers, Iterable<Object> serialized,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = new TagDeleteBuilder();
+
+    final iterator = serialized.iterator;
+    while (iterator.moveNext()) {
+      final key = iterator.current as String;
+      iterator.moveNext();
+      final dynamic value = iterator.current;
+      switch (key) {
         case 'tag_name':
           result.tag_name = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
@@ -3090,6 +3131,82 @@ class TagCreateBuilder implements Builder<TagCreate, TagCreateBuilder> {
   @override
   _$TagCreate build() {
     final _$result = _$v ?? new _$TagCreate._(id: id, tag_name: tag_name);
+    replace(_$result);
+    return _$result;
+  }
+}
+
+class _$TagDelete extends TagDelete {
+  @override
+  final String tag_name;
+
+  factory _$TagDelete([void Function(TagDeleteBuilder) updates]) =>
+      (new TagDeleteBuilder()..update(updates)).build();
+
+  _$TagDelete._({this.tag_name}) : super._() {
+    if (tag_name == null) {
+      throw new BuiltValueNullFieldError('TagDelete', 'tag_name');
+    }
+  }
+
+  @override
+  TagDelete rebuild(void Function(TagDeleteBuilder) updates) =>
+      (toBuilder()..update(updates)).build();
+
+  @override
+  TagDeleteBuilder toBuilder() => new TagDeleteBuilder()..replace(this);
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(other, this)) return true;
+    return other is TagDelete && tag_name == other.tag_name;
+  }
+
+  @override
+  int get hashCode {
+    return $jf($jc(0, tag_name.hashCode));
+  }
+
+  @override
+  String toString() {
+    return (newBuiltValueToStringHelper('TagDelete')..add('tag_name', tag_name))
+        .toString();
+  }
+}
+
+class TagDeleteBuilder implements Builder<TagDelete, TagDeleteBuilder> {
+  _$TagDelete _$v;
+
+  String _tag_name;
+  String get tag_name => _$this._tag_name;
+  set tag_name(String tag_name) => _$this._tag_name = tag_name;
+
+  TagDeleteBuilder();
+
+  TagDeleteBuilder get _$this {
+    if (_$v != null) {
+      _tag_name = _$v.tag_name;
+      _$v = null;
+    }
+    return this;
+  }
+
+  @override
+  void replace(TagDelete other) {
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
+    _$v = other as _$TagDelete;
+  }
+
+  @override
+  void update(void Function(TagDeleteBuilder) updates) {
+    if (updates != null) updates(this);
+  }
+
+  @override
+  _$TagDelete build() {
+    final _$result = _$v ?? new _$TagDelete._(tag_name: tag_name);
     replace(_$result);
     return _$result;
   }

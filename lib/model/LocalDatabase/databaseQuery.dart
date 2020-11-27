@@ -266,7 +266,7 @@ class DatabaseQuery {
     );
     print(
         'club id = $clubId -----------------------------------------------------');
-    print(maps.length);
+    print('map length: ${maps.length}');
 
     if (maps.isEmpty) {
       return null;
@@ -376,7 +376,7 @@ class DatabaseQuery {
     );
     print(
         'entity id = $entityId -----------------------------------------------------');
-    print(maps.length);
+    print('map length: ${maps.length}');
 
     if (maps.isEmpty) {
       return null;
@@ -390,7 +390,6 @@ class DatabaseQuery {
       final id = int.tryParse(poc);
       if (id != null) pocIds.add(id);
     });
-    print('pocIds: $pocIds');
 
     BuiltList<SecyPost> pocList = BuiltList<SecyPost>([]);
     var pocBuilder = pocList.toBuilder();
