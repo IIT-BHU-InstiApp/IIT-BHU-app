@@ -171,7 +171,8 @@ class SideBar extends Drawer {
   Widget _getActiveEntities() {
     BuiltList<EntityListPost> entities = AppConstants
         .entitiesSummaryFromDatabase
-        ?.where((entity) => entity.is_highlighted == true);
+        ?.where((entity) => entity.is_highlighted == true)
+        .toBuiltList();
     return ListView.builder(
         physics: NeverScrollableScrollPhysics(),
         shrinkWrap: true,

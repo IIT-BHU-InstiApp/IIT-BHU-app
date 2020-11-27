@@ -62,7 +62,8 @@ class _EntitiesPageState extends State<EntitiesPage> {
             );
           }
           final posts = snapshot.data.body
-              ?.where((entity) => entity.is_permanent != true);
+              ?.where((entity) => entity.is_permanent != true)
+              ?.toBuiltList();
           return _buildAllEntitiesBodyPosts(context, posts);
         } else {
           return Center(
@@ -86,7 +87,7 @@ class _EntitiesPageState extends State<EntitiesPage> {
           padding: EdgeInsets.all(8),
           itemBuilder: (context, index) {
             return EntityCustomWidgets.getEntityCard(context,
-                entity: posts[index]);
+                entity: posts[index], horizontal: true);
           }),
     );
   }

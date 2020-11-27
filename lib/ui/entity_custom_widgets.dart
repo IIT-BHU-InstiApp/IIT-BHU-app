@@ -120,13 +120,15 @@ class EntityCustomWidgets {
   static Widget getEntityCard(
     BuildContext context, {
     EntityListPost entity,
+    bool horizontal = false,
   }) {
     final File entityLogoFile =
         AppConstants.getImageFile(isSmall: true, id: entity.id, isEntity: true);
 
     final entityThumbnail = Container(
       margin: EdgeInsets.symmetric(vertical: 16.0),
-      alignment: FractionalOffset.center,
+      alignment:
+          horizontal ? FractionalOffset.centerLeft : FractionalOffset.center,
       child: Hero(
         tag: "e-hero-${entity.id}",
         child: Container(
@@ -142,32 +144,32 @@ class EntityCustomWidgets {
                           : FileImage(entityLogoFile),
             ),
           ),
-          height: 92.0,
-          width: 92.0,
+          height: horizontal ? 50 : 82,
+          width: horizontal ? 50 : 82,
         ),
       ),
     );
 
     final entityCardContent = Container(
-        margin: EdgeInsets.only(left: 16.0, right: 16.0),
+        margin: EdgeInsets.only(left: horizontal ? 40.0 : 10.0, right: 10.0),
         constraints: BoxConstraints.expand(),
         child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: horizontal
+                ? CrossAxisAlignment.start
+                : CrossAxisAlignment.center,
             children: <Widget>[
-              SizedBox(
-                height: 4.0,
-              ),
-              Container(height: 4.0),
+              horizontal ? Container() : SizedBox(height: 4.0),
               Text(entity.name, style: Style.titleTextStyle),
-              Container(height: 10.0),
-              Separator(),
+              Container(height: horizontal ? 4 : 10),
+              horizontal ? Container() : Separator(),
             ]));
 
     final entityCard = Container(
       child: entityCardContent,
-      height: 154.0,
-      margin: EdgeInsets.only(top: 72.0),
+      height: horizontal ? 75.0 : 154.0,
+      margin:
+          horizontal ? EdgeInsets.only(left: 30.0) : EdgeInsets.only(top: 72.0),
       decoration: BoxDecoration(
         color: ColorConstants.workshopCardContainer,
         shape: BoxShape.rectangle,
@@ -184,12 +186,13 @@ class EntityCustomWidgets {
 
     return GestureDetector(
         onTap: () {
-          Navigator.of(context).push(PageRouteBuilder(
-            pageBuilder: (_, __, ___) => EntityPage(entity: entity),
-            transitionsBuilder:
-                (context, animation, secondaryAnimation, child) =>
-                    FadeTransition(opacity: animation, child: child),
-          ));
+          if (horizontal)
+            Navigator.of(context).push(PageRouteBuilder(
+              pageBuilder: (_, __, ___) => EntityPage(entity: entity),
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) =>
+                      FadeTransition(opacity: animation, child: child),
+            ));
         },
         child: Container(
           margin: const EdgeInsets.symmetric(
