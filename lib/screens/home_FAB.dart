@@ -22,19 +22,21 @@ Widget homeFAB(context, {fabKey}) =>
             // animationDuration: Duration(milliseconds: 500),
             fabOpenColor: Colors.red,
             children: AppConstants.councilsSummaryfromDatabase
-                .map((council) => _fabButtons(context, 52,
-                    council: council,
-                    entity: null,
-                    imageUrl: council.small_image_url))
-                .toList(),
+                    ?.map((council) => _fabButtons(context, 52,
+                        council: council,
+                        entity: null,
+                        imageUrl: council.small_image_url))
+                    ?.toList() ??
+                [],
 
             innerRingChildren: AppConstants.entitiesSummaryFromDatabase
-                .where((entity) => entity.is_permanent == true)
-                .map((entity) => _fabButtons(context, 52,
-                    council: null,
-                    entity: entity,
-                    imageUrl: entity.small_image_url))
-                .toList(),
+                    ?.where((entity) => entity.is_permanent == true)
+                    ?.map((entity) => _fabButtons(context, 52,
+                        council: null,
+                        entity: entity,
+                        imageUrl: entity.small_image_url))
+                    ?.toList() ??
+                [],
           );
 
 Widget _fabButtons(BuildContext context, double size,
