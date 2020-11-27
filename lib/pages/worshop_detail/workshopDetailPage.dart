@@ -168,7 +168,7 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
         await CreatePageDialogBoxes.showUnsuccessfulDialog(context: context);
       });
     }
-    setState(() {});
+    if (this.mounted) setState(() {});
   }
 
   void deleteResource(int id) async {

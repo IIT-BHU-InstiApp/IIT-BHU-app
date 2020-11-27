@@ -17,13 +17,8 @@ class _CouncilPageState extends State<CouncilPage> {
   BuiltCouncilPost councilData;
   File _councilLargeLogoFile;
 
-  flag() {
-    AccountPage.flag = "Council";
-  }
-
   @override
   void initState() {
-    flag();
     _fetchCouncilById();
     super.initState();
   }

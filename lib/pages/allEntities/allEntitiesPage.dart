@@ -4,7 +4,6 @@ import 'package:iit_app/external_libraries/spin_kit.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/colorConstants.dart';
-import 'package:iit_app/pages/account/accountPage.dart';
 import 'package:iit_app/ui/drawer.dart';
 import 'package:iit_app/ui/entity_custom_widgets.dart';
 import 'package:built_collection/built_collection.dart';
@@ -14,14 +13,8 @@ class EntitiesPage extends StatefulWidget {
   _EntitiesPageState createState() => _EntitiesPageState();
 }
 
-class _EntitiesPageState extends State<EntitiesPage>
-    with SingleTickerProviderStateMixin {
-  flag() {
-    AccountPage.flag = "Council";
-  }
-
+class _EntitiesPageState extends State<EntitiesPage> {
   void initState() {
-    flag();
     super.initState();
   }
 

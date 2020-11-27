@@ -4,7 +4,6 @@ import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/screens/accountScreen.dart';
 
 class AccountPage extends StatefulWidget {
-  static String flag = "Account";
   @override
   _AccountPageState createState() => _AccountPageState();
 }
@@ -15,7 +14,6 @@ class _AccountPageState extends State<AccountPage> {
   @override
   void initState() {
     fetchProfileDetails();
-    flagmarker();
     super.initState();
   }
 
@@ -109,11 +107,6 @@ class _AccountPageState extends State<AccountPage> {
     Navigator.pushNamedAndRemoveUntil(
         context, '/home', ModalRoute.withName('/'));
     return Future.value(false);
-  }
-
-  flagmarker() {
-    AccountPage.flag = "Account";
-    print(AccountPage.flag);
   }
 
   @override
