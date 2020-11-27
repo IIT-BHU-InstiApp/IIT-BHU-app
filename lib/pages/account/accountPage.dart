@@ -4,7 +4,6 @@ import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/screens/accountScreen.dart';
 
 class AccountPage extends StatefulWidget {
-  static String flag = "Account";
   @override
   _AccountPageState createState() => _AccountPageState();
 }
@@ -15,7 +14,6 @@ class _AccountPageState extends State<AccountPage> {
   @override
   void initState() {
     fetchProfileDetails();
-    flagmarker();
     super.initState();
   }
 
@@ -27,7 +25,8 @@ class _AccountPageState extends State<AccountPage> {
     final controller = TextEditingController(text: data);
     return showDialog<String>(
       context: context,
-      barrierDismissible: false, // dialog is dismissible with a tap on the barrier
+      barrierDismissible:
+          false, // dialog is dismissible with a tap on the barrier
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Enter $queryName'),
@@ -39,7 +38,9 @@ class _AccountPageState extends State<AccountPage> {
                 controller: controller,
                 decoration: InputDecoration(
                     labelText: queryName,
-                    hintText: queryName == 'Phone No.' ? '+91987654321' : 'Sheldon Cooper'),
+                    hintText: queryName == 'Phone No.'
+                        ? '+91987654321'
+                        : 'Sheldon Cooper'),
               ))
             ],
           ),
@@ -77,7 +78,9 @@ class _AccountPageState extends State<AccountPage> {
   }
 
   void fetchProfileDetails() async {
-    await AppConstants.service.getProfile(AppConstants.djangoToken).catchError((onError) {
+    await AppConstants.service
+        .getProfile(AppConstants.djangoToken)
+        .catchError((onError) {
       print("Error in fetching profile: ${onError.toString()}");
     }).then((value) {
       profileDetails = value.body;
@@ -101,13 +104,9 @@ class _AccountPageState extends State<AccountPage> {
   }
 
   Future<bool> onPop() {
-    Navigator.pushNamedAndRemoveUntil(context, '/home', ModalRoute.withName('/'));
+    Navigator.pushNamedAndRemoveUntil(
+        context, '/home', ModalRoute.withName('/'));
     return Future.value(false);
-  }
-
-  flagmarker() {
-    AccountPage.flag = "Account";
-    print(AccountPage.flag);
   }
 
   @override

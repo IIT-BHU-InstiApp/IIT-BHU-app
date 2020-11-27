@@ -117,16 +117,6 @@ class _ClubPageState extends State<ClubPage>
     });
   }
 
-  Future<bool> _onWillPop() {
-    print("Clubscreen:${AccountPage.flag}");
-    if (AccountPage.flag == "Account")
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => AccountPage()));
-    else
-      Navigator.pop(context);
-    return Future.value(false);
-  }
-
   final BorderRadiusGeometry radius = BorderRadius.only(
     topLeft: Radius.circular(24.0),
     topRight: Radius.circular(24.0),
@@ -144,53 +134,49 @@ class _ClubPageState extends State<ClubPage>
       reload: _reload,
     );
 
-    return WillPopScope(
-      onWillPop: _onWillPop,
-      child: SafeArea(
-        minimum: const EdgeInsets.all(2.0),
-        child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          resizeToAvoidBottomPadding: false,
-          backgroundColor: ColorConstants.backgroundThemeColor,
-          floatingActionButton: AppConstants.isGuest
-              ? null
-              : FloatingActionButton(
-                  backgroundColor: Colors.white,
-                  onPressed: () {
-                    if (this._toggling == false) {
-                      toggleSubscription();
-                    }
-                  },
-                  child: this._toggling || clubMap == null
-                      ? CircularProgressIndicator()
-                      : Icon(
-                          Icons.subscriptions,
-                          color: clubMap.is_subscribed
-                              ? Colors.red
-                              : Colors.black26,
-                        ),
-                ),
-          body: RefreshIndicator(
-            onRefresh: () async => _reload(),
-            child: SlidingUpPanel(
-              body: ClubCouncilAndEntityWidgets.getPanelBackground(
-                  context, _clubLargeLogoFile,
-                  isClub: true, clubDetail: clubMap, club: widget.club),
-              parallaxEnabled: true,
-              controller: _pc,
-              borderRadius: radius,
-              collapsed: Container(
-                decoration: BoxDecoration(
-                  borderRadius: radius,
-                ),
+    return SafeArea(
+      minimum: const EdgeInsets.all(2.0),
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomPadding: false,
+        backgroundColor: ColorConstants.backgroundThemeColor,
+        floatingActionButton: AppConstants.isGuest
+            ? null
+            : FloatingActionButton(
+                backgroundColor: Colors.white,
+                onPressed: () {
+                  if (this._toggling == false) {
+                    toggleSubscription();
+                  }
+                },
+                child: this._toggling || clubMap == null
+                    ? CircularProgressIndicator()
+                    : Icon(
+                        Icons.subscriptions,
+                        color:
+                            clubMap.is_subscribed ? Colors.red : Colors.black26,
+                      ),
               ),
-              backdropEnabled: true,
-              panelBuilder: (ScrollController sc) =>
-                  clubCustomWidgets.getPanel(sc: sc, club: widget.club),
-              minHeight: ClubCouncilAndEntityWidgets.getMinPanelHeight(context),
-              maxHeight: ClubCouncilAndEntityWidgets.getMaxPanelHeight(context),
-              header: ClubCouncilAndEntityWidgets.getHeader(context),
+        body: RefreshIndicator(
+          onRefresh: () async => _reload(),
+          child: SlidingUpPanel(
+            body: ClubCouncilAndEntityWidgets.getPanelBackground(
+                context, _clubLargeLogoFile,
+                isClub: true, clubDetail: clubMap, club: widget.club),
+            parallaxEnabled: true,
+            controller: _pc,
+            borderRadius: radius,
+            collapsed: Container(
+              decoration: BoxDecoration(
+                borderRadius: radius,
+              ),
             ),
+            backdropEnabled: true,
+            panelBuilder: (ScrollController sc) =>
+                clubCustomWidgets.getPanel(sc: sc, club: widget.club),
+            minHeight: ClubCouncilAndEntityWidgets.getMinPanelHeight(context),
+            maxHeight: ClubCouncilAndEntityWidgets.getMaxPanelHeight(context),
+            header: ClubCouncilAndEntityWidgets.getHeader(context),
           ),
         ),
       ),

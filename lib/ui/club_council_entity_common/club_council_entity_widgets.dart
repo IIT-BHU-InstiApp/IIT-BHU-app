@@ -12,7 +12,6 @@ import 'package:iit_app/ui/separator.dart';
 import 'package:iit_app/ui/text_style.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:iit_app/pages/account/accountPage.dart';
 
 class ClubCouncilAndEntityWidgets {
   static Widget getPanelBackground(
@@ -96,10 +95,10 @@ class ClubCouncilAndEntityWidgets {
                         children: [
                           RaisedButton(
                               child: Text('Create workshop'),
-                              onPressed: () {
-                                Navigator.of(context).push(
+                              onPressed: () async {
+                                await Navigator.of(context).push(
                                   MaterialPageRoute(
-                                    builder: (context) => CreateScreen(
+                                    builder: (context) => CreateEditScreen(
                                         club: club,
                                         entity: entity,
                                         title: clubDetail?.name ??
@@ -113,10 +112,10 @@ class ClubCouncilAndEntityWidgets {
                                   (isEntity && entityDetail.is_por_holder)
                               ? RaisedButton(
                                   child: Text('Create event'),
-                                  onPressed: () {
-                                    Navigator.of(context).push(
+                                  onPressed: () async {
+                                    await Navigator.of(context).push(
                                       MaterialPageRoute(
-                                        builder: (context) => CreateScreen(
+                                        builder: (context) => CreateEditScreen(
                                             club: club,
                                             title: clubDetail?.name ??
                                                 entityDetail?.name ??
@@ -296,14 +295,7 @@ class ClubCouncilAndEntityWidgets {
             BackButton(
                 color: Colors.lightGreen,
                 onPressed: () => {
-                      print(AccountPage.flag),
-                      if (AccountPage.flag == "Account")
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => AccountPage()))
-                      else
-                        Navigator.pop(context),
+                      Navigator.pop(context),
                     }),
           ],
         ));

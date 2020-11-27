@@ -6,9 +6,10 @@ import 'package:iit_app/model/colorConstants.dart';
 import 'package:iit_app/ui/club_council_entity_common/club_council_entity_widgets.dart';
 import 'package:iit_app/ui/council_custom_widgets.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:iit_app/pages/account/accountPage.dart';
 
 class CouncilPage extends StatefulWidget {
+  final int councilId;
+  const CouncilPage(this.councilId);
   @override
   _CouncilPageState createState() => _CouncilPageState();
 }
@@ -17,13 +18,8 @@ class _CouncilPageState extends State<CouncilPage> {
   BuiltCouncilPost councilData;
   File _councilLargeLogoFile;
 
-  flag() {
-    AccountPage.flag = "Council";
-  }
-
   @override
   void initState() {
-    flag();
     _fetchCouncilById();
     super.initState();
   }
@@ -35,7 +31,7 @@ class _CouncilPageState extends State<CouncilPage> {
   void _fetchCouncilById({bool refresh = false}) async {
     print('fetching council data ');
     councilData = await AppConstants.getCouncilDetailsFromDatabase(
-        councilId: AppConstants.currentCouncilId, refresh: refresh);
+        councilId: widget.councilId, refresh: refresh);
 
     _councilLargeLogoFile = AppConstants.getImageFile(
         isCouncil: true, isSmall: false, id: councilData.id);

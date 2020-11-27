@@ -118,16 +118,6 @@ class _EntityPageState extends State<EntityPage>
     });
   }
 
-  Future<bool> _onWillPop() {
-    print("Entityscreen:${AccountPage.flag}");
-    if (AccountPage.flag == "Account")
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => AccountPage()));
-    else
-      Navigator.pop(context);
-    return Future.value(false);
-  }
-
   final BorderRadiusGeometry radius = BorderRadius.only(
     topLeft: Radius.circular(24.0),
     topRight: Radius.circular(24.0),
@@ -145,57 +135,55 @@ class _EntityPageState extends State<EntityPage>
       tabController: _tabController,
       reload: _reload,
     );
-    return WillPopScope(
-        onWillPop: _onWillPop,
-        child: SafeArea(
-            minimum: const EdgeInsets.all(2.0),
-            child: Scaffold(
-              resizeToAvoidBottomInset: false,
-              resizeToAvoidBottomPadding: false,
-              backgroundColor: ColorConstants.backgroundThemeColor,
-              floatingActionButton: AppConstants.isGuest
-                  ? null
-                  : FloatingActionButton(
-                      backgroundColor: Colors.white,
-                      onPressed: () {
-                        if (this._toggling == false) {
-                          toggleSubscription();
-                        }
-                      },
-                      child: this._toggling || entityMap == null
-                          ? CircularProgressIndicator()
-                          : Icon(
-                              Icons.subscriptions,
-                              color: entityMap.is_subscribed
-                                  ? Colors.red
-                                  : Colors.black26,
-                            ),
-                    ),
-              body: RefreshIndicator(
-                  onRefresh: () async => _reload(),
-                  child: SlidingUpPanel(
-                    body: ClubCouncilAndEntityWidgets.getPanelBackground(
-                        context, _entityLargeLogoFile,
-                        isEntity: true,
-                        entityDetail: entityMap,
-                        entity: widget.entity),
-                    parallaxEnabled: true,
-                    controller: _pc,
+    return SafeArea(
+        minimum: const EdgeInsets.all(2.0),
+        child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          resizeToAvoidBottomPadding: false,
+          backgroundColor: ColorConstants.backgroundThemeColor,
+          floatingActionButton: AppConstants.isGuest
+              ? null
+              : FloatingActionButton(
+                  backgroundColor: Colors.white,
+                  onPressed: () {
+                    if (this._toggling == false) {
+                      toggleSubscription();
+                    }
+                  },
+                  child: this._toggling || entityMap == null
+                      ? CircularProgressIndicator()
+                      : Icon(
+                          Icons.subscriptions,
+                          color: entityMap.is_subscribed
+                              ? Colors.red
+                              : Colors.black26,
+                        ),
+                ),
+          body: RefreshIndicator(
+              onRefresh: () async => _reload(),
+              child: SlidingUpPanel(
+                body: ClubCouncilAndEntityWidgets.getPanelBackground(
+                    context, _entityLargeLogoFile,
+                    isEntity: true,
+                    entityDetail: entityMap,
+                    entity: widget.entity),
+                parallaxEnabled: true,
+                controller: _pc,
+                borderRadius: radius,
+                collapsed: Container(
+                  decoration: BoxDecoration(
                     borderRadius: radius,
-                    collapsed: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: radius,
-                      ),
-                    ),
-                    backdropEnabled: true,
-                    panelBuilder: (ScrollController sc) => entityCustomWidgets
-                        .getPanel(sc: sc, entity: widget.entity),
-                    minHeight:
-                        ClubCouncilAndEntityWidgets.getMinPanelHeight(context),
-                    maxHeight:
-                        ClubCouncilAndEntityWidgets.getMaxPanelHeight(context),
-                    header: ClubCouncilAndEntityWidgets.getHeader(context),
-                  )),
-            )));
+                  ),
+                ),
+                backdropEnabled: true,
+                panelBuilder: (ScrollController sc) =>
+                    entityCustomWidgets.getPanel(sc: sc, entity: widget.entity),
+                minHeight:
+                    ClubCouncilAndEntityWidgets.getMinPanelHeight(context),
+                maxHeight:
+                    ClubCouncilAndEntityWidgets.getMaxPanelHeight(context),
+                header: ClubCouncilAndEntityWidgets.getHeader(context),
+              )),
+        ));
   }
 }

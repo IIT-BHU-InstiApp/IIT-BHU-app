@@ -48,7 +48,7 @@ class WorkshopCreater {
   }
 
 //one should be null between club and entity
-  create({
+  Future create({
     @required BuildContext context,
     @required ClubListPost club,
     @required EntityListPost entity,
@@ -63,6 +63,8 @@ class WorkshopCreater {
         nullCount == 0
             ? 'entity and club both should not be null'
             : 'one should be null between club and entity');
+
+    bool _created = false;
 
     var newWorkshop = BuiltWorkshopCreatePost((b) => b
       ..title = title
@@ -85,7 +87,8 @@ class WorkshopCreater {
         if (value.isSuccessful) {
           print('Created!');
           _updateWorkshopWithImage(value.body['id'], image);
-          CreatePageDialogBoxes.showSuccesfulDialog(context: context);
+          await CreatePageDialogBoxes.showSuccesfulDialog(context: context);
+          _created = true;
         }
       }).catchError((onError) {
         print('Error printing CREATED workshop: ${onError.toString()}');
@@ -98,11 +101,17 @@ class WorkshopCreater {
         if (value.isSuccessful) {
           print('Created!');
           await _updateWorkshopWithImage(value.body['id'], image);
-          CreatePageDialogBoxes.showSuccesfulDialog(context: context);
+          await CreatePageDialogBoxes.showSuccesfulDialog(context: context);
+          _created = true;
         }
       }).catchError((onError) {
         print('Error printing CREATED workshop: ${onError.toString()}');
       });
+    }
+
+    if (_created) {
+      Navigator.of(context)
+          .pushNamedAndRemoveUntil('/home', ModalRoute.withName('/'));
     }
   }
 
@@ -149,12 +158,14 @@ class WorkshopCreater {
     }
   }
 
-  edit({
+  Future<bool> edit({
     @required BuildContext context,
     @required BuiltWorkshopDetailPost widgetWorkshopData,
     NetworkImage oldImage,
     MemoryImage newImage,
   }) async {
+    bool _edited = false;
+
     final editedWorkshop = BuiltWorkshopDetailPost((b) => b
       ..title = title
       ..description = description
@@ -181,8 +192,9 @@ class WorkshopCreater {
 
         await _updateWorkshopWithImage(widgetWorkshopData.id, newImage);
 
-        CreatePageDialogBoxes.showSuccesfulDialog(
+        await CreatePageDialogBoxes.showSuccesfulDialog(
             context: context, isEditing: true);
+        _edited = true;
       }
     }).catchError((onError) {
       print('Error printing EDITED workshop: ${onError.toString()}');
@@ -210,5 +222,6 @@ class WorkshopCreater {
         .catchError((onError) {
       print('Error editing tags in edited workshop: ${onError.toString()}');
     });
+    return _edited;
   }
 }

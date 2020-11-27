@@ -1,31 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:iit_app/model/appConstants.dart';
 
 class CreatePageDialogBoxes {
   static showSuccesfulDialog({
     @required BuildContext context,
     bool isEditing = false,
-  }) {
-    showDialog(
+  }) async {
+    return showDialog(
       context: context,
+      barrierDismissible: true,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text("Successful!"),
           content: isEditing
-              ? Text("Workshop edited succesfully!")
-              : Text("Workshop succesfully created!"),
+              ? Text("Edited succesfully!")
+              : Text("Succesfully created!"),
           actions: <Widget>[
             FlatButton(
               child: Text("yay"),
-              onPressed: () async {
-                await AppConstants.updateAndPopulateWorkshops();
-                Navigator.pop(context);
-                if (isEditing) {
-                  Navigator.pop(context);
-                  return;
-                }
-                Navigator.pop(context);
-              },
+              onPressed: () => Navigator.pop(context),
             ),
           ],
         );
@@ -34,8 +26,9 @@ class CreatePageDialogBoxes {
   }
 
   static Future showUnsuccessfulDialog({@required BuildContext context}) async {
-    showDialog(
+    await showDialog(
       context: context,
+      barrierDismissible: true,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text("Unsuccessful :("),
@@ -43,9 +36,7 @@ class CreatePageDialogBoxes {
           actions: <Widget>[
             FlatButton(
               child: Text("Ok"),
-              onPressed: () {
-                Navigator.pop(context);
-              },
+              onPressed: () => Navigator.pop(context),
             ),
           ],
         );
@@ -83,7 +74,8 @@ class CreatePageDialogBoxes {
     );
   }
 
-  static Future<bool> confirmCalendarOpenDialog({@required BuildContext context}) async {
+  static Future<bool> confirmCalendarOpenDialog(
+      {@required BuildContext context}) async {
     return showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -117,11 +109,13 @@ Future<bool> getLogoutDialog(context, details) => showDialog(
     barrierDismissible: true,
     builder: (BuildContext context) {
       return Dialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
           child: Container(
               height: 350.0,
               width: 200.0,
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(20.0)),
+              decoration:
+                  BoxDecoration(borderRadius: BorderRadius.circular(20.0)),
               child: Column(
                 children: <Widget>[
                   Stack(
@@ -145,8 +139,11 @@ Future<bool> getLogoutDialog(context, details) => showDialog(
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(45.0),
                                 border: Border.all(
-                                    color: Colors.white, style: BorderStyle.solid, width: 2.0),
-                                image: DecorationImage(image: details[0], fit: BoxFit.cover)),
+                                    color: Colors.white,
+                                    style: BorderStyle.solid,
+                                    width: 2.0),
+                                image: DecorationImage(
+                                    image: details[0], fit: BoxFit.cover)),
                           ))
                     ],
                   ),
@@ -167,7 +164,9 @@ Future<bool> getLogoutDialog(context, details) => showDialog(
                         child: Text(
                           'Log Out',
                           style: TextStyle(
-                              fontFamily: 'Montserrat', fontSize: 14.0, color: Colors.teal),
+                              fontFamily: 'Montserrat',
+                              fontSize: 14.0,
+                              color: Colors.teal),
                         ),
                       ),
                       onPressed: () {
