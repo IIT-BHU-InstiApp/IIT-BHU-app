@@ -155,9 +155,7 @@ class AccountScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(
-                      height: 20,
-                    ),
+                    SizedBox(height: 20),
                     Row(
                       children: <Widget>[
                         iconTile(
@@ -173,9 +171,7 @@ class AccountScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(
-                      height: 5,
-                    ),
+                    SizedBox(height: 5),
                     Row(
                       children: <Widget>[
                         iconTile(
@@ -201,9 +197,7 @@ class AccountScreen extends StatelessWidget {
                         )
                       ],
                     ),
-                    SizedBox(
-                      height: 20,
-                    ),
+                    SizedBox(height: 20),
                     Text(
                       "Club Subscriptions",
                       style: Style.boldHeadingStyle
@@ -239,7 +233,9 @@ class AccountScreen extends StatelessWidget {
                             ? Text(
                                 'You haven\'t subscribed to any entities yet!')
                             : Container(child: subscribed("Entity")),
-                    SizedBox(height: 22),
+                    profileDetails.club_privileges.length == 0
+                        ? Container()
+                        : SizedBox(height: 22),
                     profileDetails.club_privileges.length == 0
                         ? SizedBox(height: 5)
                         : Text(
@@ -247,7 +243,9 @@ class AccountScreen extends StatelessWidget {
                             style: Style.boldHeadingStyle
                                 .copyWith(color: ColorConstants.textColor),
                           ),
-                    SizedBox(height: 5),
+                    profileDetails.club_privileges.length == 0
+                        ? Container()
+                        : SizedBox(height: 5),
                     Container(
                       child: ListView.builder(
                         shrinkWrap: true,
