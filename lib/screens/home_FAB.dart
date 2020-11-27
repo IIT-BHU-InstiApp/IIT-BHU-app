@@ -29,7 +29,7 @@ Widget homeFAB(context, {fabKey}) =>
                 .toList(),
 
             innerRingChildren: AppConstants.entitiesSummaryFromDatabase
-                // .where((entity) =>entity.is_permanent == true ) //TODO: uncomment this line when appropriate fields are added to model
+                .where((entity) => entity.is_permanent == true)
                 .map((entity) => _fabButtons(context, 52,
                     council: null,
                     entity: entity,

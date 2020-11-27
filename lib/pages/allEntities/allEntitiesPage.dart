@@ -61,7 +61,8 @@ class _EntitiesPageState extends State<EntitiesPage> {
               ),
             );
           }
-          final posts = snapshot.data.body;
+          final posts = snapshot.data.body
+              ?.where((entity) => entity.is_permanent != true);
           return _buildAllEntitiesBodyPosts(context, posts);
         } else {
           return Center(
