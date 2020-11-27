@@ -43,8 +43,6 @@ class AppConstants {
   static BuiltList<BuiltAllCouncilsPost> councilsSummaryfromDatabase;
   static BuiltList<EntityListPost> entitiesSummaryFromDatabase;
 
-  static int currentCouncilId;
-
   static Future setDeviceDirectoryForImages() async {
     String path = (await getApplicationDocumentsDirectory()).path + '/Images';
 

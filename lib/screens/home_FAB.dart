@@ -57,16 +57,11 @@ Widget _fabButtons(BuildContext context, double size,
 
   return GestureDetector(
     onTap: () {
-      // setting councilId in AppConstnts
-
-      if (council != null) {
-        AppConstants.currentCouncilId = council.id;
-      }
-
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) =>
-              council != null ? CouncilPage() : EntityPage(entity: entity),
+          builder: (context) => council != null
+              ? CouncilPage(council.id)
+              : EntityPage(entity: entity),
         ),
       );
     },
