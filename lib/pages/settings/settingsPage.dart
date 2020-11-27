@@ -47,6 +47,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             child: Padding(
               padding: EdgeInsets.all(20),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Container(
                     child: RaisedButton(
@@ -59,7 +60,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         Navigator.pop(context);
                         Navigator.pushNamed(context, '/home');
                       },
-                      child: Text('dark'),
+                      child: Text('Dark Theme'),
                     ),
                   ),
                   SizedBox(
@@ -76,7 +77,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         Navigator.pop(context);
                         Navigator.pushNamed(context, '/home');
                       },
-                      child: Text('light'),
+                      child: Text('Light Theme'),
                     ),
                   )
                 ],
@@ -122,7 +123,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             Container(
               margin: EdgeInsets.all(20),
               child: RaisedButton(
-                  onPressed: () => _chooseTheme(), child: Text('Pick theme')),
+                  onPressed: () => _chooseTheme(), child: Text('Pick Theme')),
             ),
           ],
         ),
