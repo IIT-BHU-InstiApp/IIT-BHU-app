@@ -17,6 +17,8 @@ class StringConst {
   static const String timeString = 'time';
   static const String interestedString = 'interested';
   static const String isWorkshopString = 'isWorkshop';
+  static const String isPermanentString = 'isPermanent';
+  static const String isHighlightedString = 'isHighlighted';
 
   static const String allCouncislSummaryString =
       'allCouncilsSummary'; //*table name

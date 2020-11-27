@@ -97,6 +97,8 @@ class DatabaseMapping {
     Map<String, dynamic> map = {
       StringConst.idString: entitySummary.id,
       StringConst.nameString: entitySummary.name ?? '',
+      StringConst.isPermanentString: entitySummary.is_permanent ? 1 : 0,
+      StringConst.isHighlightedString: entitySummary.is_highlighted ? 1 : 0,
       StringConst.smallImageUrlString: entitySummary.small_image_url ?? '',
       StringConst.largeImageUrlString: entitySummary.large_image_url ?? '',
     };
@@ -212,6 +214,9 @@ class DatabaseMapping {
     final entity = EntityListPost((b) => b
       ..id = map[StringConst.idString]
       ..name = map[StringConst.nameString]
+      ..is_permanent = map[StringConst.isPermanentString] == 1 ? true : false
+      ..is_highlighted =
+          map[StringConst.isHighlightedString] == 1 ? true : false
       ..small_image_url = map[StringConst.smallImageUrlString]
       ..large_image_url = map[StringConst.largeImageUrlString]);
     return entity;
