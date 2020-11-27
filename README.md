@@ -1,6 +1,6 @@
 # IIT-BHU-app
 
-<img src="assets/screenshots/home.jpeg" width="24%" /> <img src="assets/screenshots/workshop_detail.jpeg" width="24%" /> <img src="assets/screenshots/panel.jpeg" width="24%" /> <img src="assets/screenshots/using_app.gif" width="24%" />
+<img src="screenshots/home.jpeg" width="24%" /> <img src="screenshots/workshop_detail.jpeg" width="24%" /> <img src="screenshots/panel.jpeg" width="24%" /> <img src="screenshots/using_app.gif" width="24%" />
 
 *(This README might contains various TODO comments like this one as this file is under development. So if you are helping with the development of the app, be sure to look for comments like this one. Also, feel free to make a PR if you find features integrated in the app, but not mentioned here. Once all work is done, we can remove this comment 😀)*
 

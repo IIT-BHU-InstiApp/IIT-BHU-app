@@ -149,6 +149,8 @@ class DatabaseHelper {
     await db.execute('CREATE TABLE ${StringConst.entitySummaryString} ('
         '       ${StringConst.idString} INTEGER NOT NULL,'
         '       ${StringConst.nameString} DEFAULT "",'
+        '       ${StringConst.isPermanentString} INTEGER,'
+        '       ${StringConst.isHighlightedString} INTEGER,'
         '       ${StringConst.smallImageUrlString} DEFAULT "",'
         '       ${StringConst.largeImageUrlString} DEFAULT "")');
 

@@ -330,6 +330,8 @@ class DatabaseQuery {
       columns: [
         StringConst.idString,
         StringConst.nameString,
+        StringConst.isPermanentString,
+        StringConst.isHighlightedString,
         StringConst.smallImageUrlString,
         StringConst.largeImageUrlString,
       ],
