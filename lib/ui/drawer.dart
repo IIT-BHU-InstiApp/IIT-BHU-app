@@ -103,8 +103,9 @@ class SideBar extends Drawer {
             getNavItem(Icons.map, "Map", '/mapPage'),
             // getNavItem(Icons.local_dining, "Mess management", '/mess'),
             getNavItem(
-                Icons.group_work, "All workshops and events", '/allWorkshops'),
-            getNavItem(Icons.work_rounded, 'All Entities', '/allEntities'),
+                Icons.group_work, "All Workshops and Evensts", '/allWorkshops'),
+            getNavItem(
+                Icons.work_rounded, 'All Entities and Fests', '/allEntities'),
             _getActiveEntities(),
             AppConstants.isGuest
                 ? ListTile(

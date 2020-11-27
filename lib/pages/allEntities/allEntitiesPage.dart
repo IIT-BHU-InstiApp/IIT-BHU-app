@@ -38,7 +38,7 @@ class _EntitiesPageState extends State<EntitiesPage> {
               ),
               backgroundColor: ColorConstants.homeBackground,
               automaticallyImplyLeading: false,
-              title: Text("All Entities"),
+              title: Text("All Entities and Fests"),
             ),
             drawer: SideBar(context: context),
             body: _getAllEntities(),
