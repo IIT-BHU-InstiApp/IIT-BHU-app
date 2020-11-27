@@ -17,6 +17,10 @@ class _AccountPageState extends State<AccountPage> {
     super.initState();
   }
 
+  void _reload() {
+    fetchProfileDetails();
+  }
+
   Future<String> _asyncInputDialog(
     BuildContext context,
     String queryName,
@@ -115,10 +119,13 @@ class _AccountPageState extends State<AccountPage> {
       onWillPop: onPop,
       child: SafeArea(
           minimum: const EdgeInsets.all(2.0),
-          child: AccountScreen(
-            profileDetails: profileDetails,
-            asyncInputDialog: _asyncInputDialog,
-            updateProfileDetails: updateProfileDetails,
+          child: RefreshIndicator(
+            onRefresh: () async => _reload(),
+            child: AccountScreen(
+              profileDetails: profileDetails,
+              asyncInputDialog: _asyncInputDialog,
+              updateProfileDetails: updateProfileDetails,
+            ),
           )),
     );
   }
