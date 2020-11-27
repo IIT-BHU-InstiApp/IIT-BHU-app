@@ -8,7 +8,7 @@ import 'package:iit_app/pages/map/mapPage.dart';
 import 'package:iit_app/pages/mess/mess.dart';
 import 'package:iit_app/pages/account/accountPage.dart';
 import 'package:iit_app/pages/allWorkshops/allWorkshopsPage.dart';
-import 'package:iit_app/screens/complaints.dart';
+import 'package:iit_app/pages/complaints/complaints.dart';
 import 'package:iit_app/pages/Home/homePage.dart';
 import 'package:iit_app/pages/login/loginPage.dart';
 import 'package:iit_app/pages/about/aboutPage.dart';

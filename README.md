@@ -1,3 +1,7 @@
+# IIT-BHU-app
+
+<img src="assets/screenshots/home.jpeg" width="24%" /> <img src="assets/screenshots/workshop_detail.jpeg" width="24%" /> <img src="assets/screenshots/panel.jpeg" width="24%" /> <img src="assets/screenshots/using_app.gif" width="24%" />
+
 *(This README might contains various TODO comments like this one as this file is under development. So if you are helping with the development of the app, be sure to look for comments like this one. Also, feel free to make a PR if you find features integrated in the app, but not mentioned here. Once all work is done, we can remove this comment 😀)*
 
 **Note: We prefer not more than `80` characters per line, for better code readability. So if you are using VSCode, do make sure to include the following in your global settings for dart.**
@@ -5,6 +9,25 @@
 ```json
 "editor.rulers": [80],
 ```
+
+## Folder structure
+
+Like in any other flutter project, the `lib` folder contains majority of code, divided as follows:
+
+* **main.dart** : is the main file from where execution begins.
+* **data**: connectivity and API calls are provided here.
+* **external_libraries**: all code for external libraries are provided here.
+* **model** : deals with local database management, serializers, etc.
+* **pages** : All the pages mentioned in the `main.dart` file are routed to this folder. It contains the layout of these pages.
+* **screen** : elements of logic for the pages are provided here.
+* **ui** : contains UI elements like dialog boxes, separators, custom widgets, etc common to various pages. 
+
+
+## Contributing
+
+Contributions are welcome! 
+However, if it's going to be a major change, please create an issue first. 
+Before starting to work on something, please comment on a specific issue and say you'd like to work on it.
 
 ## Some clean code guidelines : -
 
