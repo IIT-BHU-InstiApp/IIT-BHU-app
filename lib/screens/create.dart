@@ -214,7 +214,7 @@ class _CreateEditScreenState extends State<CreateEditScreen> {
                       }).then((value) {
                         if (value != null) {
                           tagAlertDialog('Tag Created',
-                              'The Tag has been created succesfully. Search for it again, and add it to the worshop if you wish.');
+                              'The Tag has been created for ${_isEntity ? widget.entity.name : widget.club.name} succesfully. Search for it again, and add it to the worshop if you wish.');
 
                           refreshState(() => this._tagCreateController.clear());
                         } else if (errorMessageShown == false) {
@@ -238,6 +238,55 @@ class _CreateEditScreenState extends State<CreateEditScreen> {
         });
       },
     );
+  }
+
+  tagDeleteDialog(String tagName) async {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return StatefulBuilder(builder: (context, refreshState) {
+            return AlertDialog(
+              title: Text(
+                  'PERMANENTLY Delete Tag for ${_isEntity ? widget.entity.name : widget.club.name}'),
+              content: Text(
+                  '''Are you sure you want to delete this tag for this club?\nNote that option is NOT to be used to remove the tag for the workshop.\nThis is to permanently delete this tag for ${_isEntity ? widget.entity.name : widget.club.name}.'''),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('Yes'),
+                  onPressed: () async {
+                    final deleteTag = TagDelete((b) => b..tag_name = tagName);
+                    await (_isEntity
+                            ? AppConstants.service.deleteEntityTag(
+                                widget.entity.id,
+                                AppConstants.djangoToken,
+                                deleteTag)
+                            : AppConstants.service.deleteClubTag(widget.club.id,
+                                AppConstants.djangoToken, deleteTag))
+                        .catchError((onError) {
+                      final error = onError as Response<dynamic>;
+                      print(error.body);
+                      print(
+                          'Error while deleting Tag: ${onError.toString()} ${onError.runtimeType}');
+                    }).then((value) async {
+                      if (value != null) {
+                        await tagAlertDialog('Tag Deleted',
+                            'The Tag has been deleted from ${_isEntity ? widget.entity.name : widget.club.name} succesfully.');
+                        refreshState(() {});
+                      }
+                    });
+                    Navigator.of(context).pop();
+                  },
+                ),
+                FlatButton(
+                  child: Text('No'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            );
+          });
+        });
   }
 
   _pickImage() async {
@@ -988,7 +1037,11 @@ class _CreateEditScreenState extends State<CreateEditScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            Text(this._searchedTagResult[index].tag_name),
+                            Flexible(
+                              child: Text(
+                                  this._searchedTagResult[index].tag_name,
+                                  maxLines: 1),
+                            ),
                             InkWell(
                               child: (this
                                       ._workshop
@@ -1009,6 +1062,25 @@ class _CreateEditScreenState extends State<CreateEditScreen> {
                                   else
                                     this._workshop.tagNameofId[_id] =
                                         this._searchedTagResult[index].tag_name;
+                                });
+                              },
+                            ),
+                            InkWell(
+                              child: (Icon(
+                                Icons.delete_forever_sharp,
+                                color: Colors.red,
+                              )),
+                              splashColor: Colors.red,
+                              onTap: () {
+                                setState(() async {
+                                  await tagDeleteDialog(
+                                      this._searchedTagResult[index].tag_name);
+                                  if (this
+                                      ._workshop
+                                      .tagNameofId
+                                      .keys
+                                      .contains(_id))
+                                    this._workshop.tagNameofId.remove(_id);
                                 });
                               },
                             ),
@@ -1049,7 +1121,11 @@ class _CreateEditScreenState extends State<CreateEditScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            Text(this._allTagsOfClubOrEntity[index].tag_name),
+                            Flexible(
+                              child: Text(
+                                  this._allTagsOfClubOrEntity[index].tag_name,
+                                  maxLines: 1),
+                            ),
                             InkWell(
                               child: (this
                                       ._workshop
@@ -1077,6 +1153,26 @@ class _CreateEditScreenState extends State<CreateEditScreen> {
                                     this._workshop.tagNameofId[_id] = this
                                         ._allTagsOfClubOrEntity[index]
                                         .tag_name;
+                                });
+                              },
+                            ),
+                            InkWell(
+                              child: (Icon(
+                                Icons.delete_forever_sharp,
+                                color: Colors.red,
+                              )),
+                              splashColor: Colors.red,
+                              onTap: () async {
+                                await tagDeleteDialog(this
+                                    ._allTagsOfClubOrEntity[index]
+                                    .tag_name);
+                                setState(() {
+                                  if (this
+                                      ._workshop
+                                      .tagNameofId
+                                      .keys
+                                      .contains(_id))
+                                    this._workshop.tagNameofId.remove(_id);
                                 });
                               },
                             ),

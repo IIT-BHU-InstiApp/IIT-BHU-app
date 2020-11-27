@@ -228,6 +228,15 @@ class _$PostApiService extends PostApiService {
     return client.send<TagDetail, TagDetail>($request);
   }
 
+  Future<Response> deleteClubTag(int id, String token, TagDelete body) {
+    final $url = '/clubs/${id}/tags/delete/';
+    final $headers = {'Authorization': token};
+    final $body = body;
+    final $request =
+        Request('POST', $url, client.baseUrl, body: $body, headers: $headers);
+    return client.send<dynamic, dynamic>($request);
+  }
+
   Future<Response<BuiltList<TagDetail>>> searchClubTag(
       int id, String token, TagSearch body) {
     final $url = '/clubs/${id}/tags/search/';
@@ -309,6 +318,15 @@ class _$PostApiService extends PostApiService {
     final $request =
         Request('POST', $url, client.baseUrl, body: $body, headers: $headers);
     return client.send<TagDetail, TagDetail>($request);
+  }
+
+  Future<Response> deleteEntityTag(int id, String token, TagDelete body) {
+    final $url = '/entities/${id}/tags/delete/';
+    final $headers = {'Authorization': token};
+    final $body = body;
+    final $request =
+        Request('POST', $url, client.baseUrl, body: $body, headers: $headers);
+    return client.send<dynamic, dynamic>($request);
   }
 
   Future<Response<BuiltList<TagDetail>>> searchEntityTag(

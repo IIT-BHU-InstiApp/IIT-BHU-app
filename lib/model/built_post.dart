@@ -93,6 +93,14 @@ abstract class TagCreate implements Built<TagCreate, TagCreateBuilder> {
   static Serializer<TagCreate> get serializer => _$tagCreateSerializer;
 }
 
+abstract class TagDelete implements Built<TagDelete, TagDeleteBuilder> {
+  String get tag_name;
+
+  TagDelete._();
+  factory TagDelete([updates(TagDeleteBuilder b)]) = _$TagDelete;
+  static Serializer<TagDelete> get serializer => _$tagDeleteSerializer;
+}
+
 abstract class TagSearch implements Built<TagSearch, TagSearchBuilder> {
   @nullable
   int get id;

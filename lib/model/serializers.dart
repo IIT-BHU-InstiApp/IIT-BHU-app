@@ -11,6 +11,7 @@ part 'serializers.g.dart';
   BuiltEntityPost,
   EntityTags,
   TagCreate,
+  TagDelete,
   TagSearch,
   TagDetail,
   ClubTags,
