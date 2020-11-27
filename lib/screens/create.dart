@@ -12,13 +12,13 @@ import 'package:iit_app/model/workshopCreator.dart';
 import 'package:iit_app/ui/dialogBoxes.dart';
 import 'package:image_picker/image_picker.dart';
 
-class CreateScreen extends StatefulWidget {
+class CreateEditScreen extends StatefulWidget {
   final ClubListPost club;
   final String title;
   final EntityListPost entity;
   final BuiltWorkshopDetailPost workshopData;
   final String isWorkshopOrEvent;
-  const CreateScreen(
+  const CreateEditScreen(
       {Key key,
       @required this.club,
       @required this.title,
@@ -27,10 +27,10 @@ class CreateScreen extends StatefulWidget {
       this.isWorkshopOrEvent})
       : super(key: key);
   @override
-  _CreateScreenState createState() => _CreateScreenState();
+  _CreateEditScreenState createState() => _CreateEditScreenState();
 }
 
-class _CreateScreenState extends State<CreateScreen> {
+class _CreateEditScreenState extends State<CreateEditScreen> {
   final _formKey = GlobalKey<FormState>();
   WorkshopCreater _workshop;
 
@@ -809,18 +809,22 @@ class _CreateScreenState extends State<CreateScreen> {
                           );
 
                           if (widget.workshopData == null) {
+                            // if creation is successfull , then automatically user will reach at homePage.
                             await _workshop.create(
                                 context: context,
                                 club: widget.club,
                                 entity: widget.entity,
                                 image: _newImage);
                           } else {
-                            await _workshop.edit(
+                            final success = await _workshop.edit(
                               context: context,
                               widgetWorkshopData: widget.workshopData,
                               oldImage: _oldImage,
                               newImage: _newImage,
                             );
+
+                            if (success == true)
+                              Navigator.of(context).pop(true);
                           }
                         }
                       },

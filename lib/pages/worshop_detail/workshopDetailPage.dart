@@ -6,7 +6,6 @@ import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/colorConstants.dart';
 import 'package:iit_app/model/workshopCreator.dart';
-import 'package:iit_app/pages/club_entity/clubPage.dart';
 import 'package:iit_app/ui/club_council_entity_common/club_council_entity_widgets.dart';
 import 'package:iit_app/ui/dialogBoxes.dart';
 import 'package:iit_app/ui/workshopDetail_custom_widgets.dart';
@@ -164,9 +163,9 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
         await showSuccessfulDialog();
         Navigator.of(context)
             .pushNamedAndRemoveUntil('/home', ModalRoute.withName('/'));
-      }).catchError((onError) {
+      }).catchError((onError) async {
         print("Error in deleting: ${onError.toString()}");
-        CreatePageDialogBoxes.showUnsuccessfulDialog(context: context);
+        await CreatePageDialogBoxes.showUnsuccessfulDialog(context: context);
       });
     }
     setState(() {});
@@ -227,7 +226,7 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
           ..interested_users = _workshop.interested_users + _newInterestedUser);
       }
     }).catchError((onError) {
-      print("Error in toggleing: ${onError.toString()}");
+      print("Error in toggling: ${onError.toString()}");
     });
     setState(() {});
     _reload();

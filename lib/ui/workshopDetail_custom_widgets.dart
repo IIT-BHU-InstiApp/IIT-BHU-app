@@ -530,7 +530,7 @@ class WorkshopDetailCustomWidgets {
                   await Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => CreateScreen(
+                      builder: (context) => CreateEditScreen(
                         club: workshopDetail.club,
                         entity: workshopDetail.entity,
                         title: workshopDetail.club?.name ??
@@ -541,7 +541,9 @@ class WorkshopDetailCustomWidgets {
                             workshopDetail.is_workshop ? 'workshop' : 'event',
                       ),
                     ),
-                  ).then((_) => reload());
+                  ).then((value) {
+                    if (value == true) reload();
+                  });
                 },
               ),
             ],
