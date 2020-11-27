@@ -108,8 +108,11 @@ class SideBar extends Drawer {
             _getActiveEntities(),
             AppConstants.isGuest
                 ? ListTile(
-                    title: Text("Account"),
-                    leading: Icon(Icons.account_box),
+                    title: Text("Account",
+                        style: Style.baseTextStyle
+                            .copyWith(color: ColorConstants.textColor)),
+                    leading: Icon(Icons.account_box,
+                        color: ColorConstants.textColor),
                     // TODO: ask user to log in , may be in a dialog box
 
                     onTap: () {
@@ -177,7 +180,7 @@ class SideBar extends Drawer {
           return ListTile(
             leading: Icon(
               Icons.new_releases,
-              color: ColorConstants.textColor,
+              color: Colors.yellow,
             ),
             title: Text(
               entities[index].name,

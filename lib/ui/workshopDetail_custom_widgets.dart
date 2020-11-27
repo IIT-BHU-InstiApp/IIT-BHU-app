@@ -23,7 +23,7 @@ class WorkshopDetailCustomWidgets {
   final int is_interested;
   final GlobalKey<ScaffoldState> scaffoldKey;
   final Function() updateButton;
-  final Function() fetchWorkshopDetails;
+  final Function() reload;
   final Function() deleteWorkshop;
   final Function(int) deleteResource;
 
@@ -35,7 +35,7 @@ class WorkshopDetailCustomWidgets {
     @required this.is_interested,
     @required this.scaffoldKey,
     @required this.updateButton,
-    @required this.fetchWorkshopDetails,
+    @required this.reload,
     @required this.deleteWorkshop,
     @required this.deleteResource,
   });
@@ -90,13 +90,12 @@ class WorkshopDetailCustomWidgets {
                           .copyWith(color: ColorConstants.textColor),
                     )
                   : SizedBox(
-                      height: 100,
-                      width: 400,
                       child: ListView.separated(
-                        //scrollDirection: Axis.horizontal,
+                        shrinkWrap: true,
                         itemCount: workshopDetail.resources.length,
                         itemBuilder: (context, index) {
                           return Row(
+                            key: ObjectKey(workshopDetail.resources[index].id),
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Flexible(
@@ -104,19 +103,27 @@ class WorkshopDetailCustomWidgets {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      "Name: ${workshopDetail.resources[index].name}",
+                                      "${index + 1}. ${workshopDetail.resources[index].name}   (${workshopDetail.resources[index].resource_type})",
                                       style: Style.baseTextStyle.copyWith(
                                           color: ColorConstants.textColor),
                                     ),
-                                    Text(
-                                      "Link: ${workshopDetail.resources[index].link}",
-                                      style: Style.baseTextStyle.copyWith(
-                                          color: ColorConstants.textColor),
-                                    ),
-                                    Text(
-                                      "Resource Type: ${workshopDetail.resources[index].resource_type}",
-                                      style: Style.baseTextStyle.copyWith(
-                                          color: ColorConstants.textColor),
+                                    SizedBox(height: 5),
+                                    InkWell(
+                                      splashColor: Colors.yellow,
+                                      onTap: () async {
+                                        try {
+                                          await launch(workshopDetail
+                                              .resources[index].link);
+                                        } catch (e) {
+                                          print(
+                                              'error in launching resource link');
+                                        }
+                                      },
+                                      child: Text(
+                                        "Link: ${workshopDetail.resources[index].link}",
+                                        style: Style.baseTextStyle
+                                            .copyWith(color: Colors.blue),
+                                      ),
                                     ),
                                     SizedBox(height: 7)
                                   ],
@@ -126,7 +133,7 @@ class WorkshopDetailCustomWidgets {
                                       workshopDetail.is_por_holder != null)
                                   ? (workshopDetail.is_por_holder ||
                                           workshopDetail.is_workshop_contact)
-                                      ? _editResources(
+                                      ? _editResourceIcons(
                                           workshopDetail.resources[index].id)
                                       : Container()
                                   : Container(),
@@ -157,7 +164,7 @@ class WorkshopDetailCustomWidgets {
                   : Container()
               : Container(),
 
-          //_editResources(),
+          //_editResourceIcons(),
 
           //_workshop.resources,
 
@@ -237,7 +244,7 @@ class WorkshopDetailCustomWidgets {
     );
   }
 
-  Widget _editResources(int id) {
+  Widget _editResourceIcons(int id) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
@@ -255,7 +262,9 @@ class WorkshopDetailCustomWidgets {
                   builder: (context) =>
                       ResourceCreateScreen(workshopDetail, id),
                 ),
-              );
+              ).then((isEdited) {
+                if (isEdited == true) reload();
+              });
             },
           ),
         ]),
@@ -532,7 +541,7 @@ class WorkshopDetailCustomWidgets {
                             workshopDetail.is_workshop ? 'workshop' : 'event',
                       ),
                     ),
-                  ).then((_) => fetchWorkshopDetails());
+                  ).then((_) => reload());
                 },
               ),
             ],

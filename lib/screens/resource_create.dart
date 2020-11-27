@@ -1,4 +1,3 @@
-import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
@@ -7,7 +6,7 @@ class ResourceCreateScreen extends StatefulWidget {
   @override
   BuiltWorkshopDetailPost workshop;
   int id;
-  ResourceCreateScreen(@required this.workshop, [this.id]);
+  ResourceCreateScreen(this.workshop, [this.id]);
   _ResourceCreateScreenState createState() => _ResourceCreateScreenState();
 }
 
@@ -21,11 +20,11 @@ class _ResourceCreateScreenState extends State<ResourceCreateScreen> {
 
   _ResourceCreateScreenState();
 
-  @override
   final _resourceFormKey = GlobalKey<FormState>();
   TextEditingController _nameController;
   TextEditingController _linkController;
 
+  @override
   void initState() {
     this._nameController = TextEditingController();
     this._linkController = TextEditingController();
@@ -40,39 +39,38 @@ class _ResourceCreateScreenState extends State<ResourceCreateScreen> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   WorkshopResources getResourceById(int id) {
     for (int i = 0; i < widget.workshop.resources.length; i++) {
       if (widget.workshop.resources[i].id == id) {
         return widget.workshop.resources[i];
       }
     }
+    return null;
   }
 
-  createResource({
+  Future<bool> createResource({
     @required BuildContext context,
     @required WorkshopResources resource,
   }) async {
     bool done = false;
-    print(resource.name);
-    print(resource.link);
-    print(resource.id);
-    print(widget.workshop.id);
+
     await AppConstants.service
         .createResource(widget.workshop.id, AppConstants.djangoToken, resource)
-        .catchError((onError) {
-      final error = onError as Response<dynamic>;
-      print(error.body);
-      print(
-          'Error creating resource: ${onError.toString()} ${onError.runtimeType}');
-    }).then((value) {
+        .then((value) {
       if (value.isSuccessful) {
         done = true;
       }
     }).catchError((onError) {
       print('Error printing CREATED resource: ${onError.toString()}');
     });
-    showDialog(
+    await showDialog(
         context: context,
+        barrierDismissible: true,
         builder: (BuildContext context) {
           return AlertDialog(
               content: done
@@ -81,22 +79,14 @@ class _ResourceCreateScreenState extends State<ResourceCreateScreen> {
               actions: <Widget>[
                 FlatButton(
                   child: Text("Okay"),
-                  onPressed: () => {
-                    if (done)
-                      {
-                        Navigator.pop(context),
-                        Navigator.pop(context),
-                        Navigator.pop(context),
-                      }
-                    else
-                      {Navigator.pop(context)}
-                  },
+                  onPressed: () => Navigator.pop(context),
                 )
               ]);
         });
+    return done;
   }
 
-  editResource({
+  Future<bool> editResource({
     @required BuildContext context,
     @required WorkshopResources resource,
     @required int id,
@@ -105,19 +95,14 @@ class _ResourceCreateScreenState extends State<ResourceCreateScreen> {
     await AppConstants.service
         .updateWorkshopResourcesByPatch(
             widget.id, AppConstants.djangoToken, resource)
-        .catchError((onError) {
-      final error = onError as Response<dynamic>;
-      print(error.body);
-      print(
-          'Error editing resource: ${onError.toString()} ${onError.runtimeType}');
-    }).then((value) {
+        .then((value) {
       if (value.isSuccessful) {
         done = true;
       }
     }).catchError((onError) {
       print('Error printing edited resource: ${onError.toString()}');
     });
-    showDialog(
+    await showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
@@ -127,19 +112,11 @@ class _ResourceCreateScreenState extends State<ResourceCreateScreen> {
               actions: <Widget>[
                 FlatButton(
                   child: Text("Okay"),
-                  onPressed: () => {
-                    if (done)
-                      {
-                        Navigator.pop(context),
-                        Navigator.pop(context),
-                        Navigator.pop(context),
-                      }
-                    else
-                      {Navigator.pop(context)}
-                  },
+                  onPressed: () => Navigator.pop(context),
                 )
               ]);
         });
+    return done;
   }
 
   Widget build(BuildContext context) {
@@ -190,8 +167,8 @@ class _ResourceCreateScreenState extends State<ResourceCreateScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         DropdownButton(
-                            hint: Text(
-                                "Resource type \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t"),
+                            isExpanded: true,
+                            hint: Text("Resource type"),
                             value: resource_type,
                             iconSize: 30,
                             underline: Container(
@@ -241,15 +218,16 @@ class _ResourceCreateScreenState extends State<ResourceCreateScreen> {
                               ..link = link
                               ..resource_type = resource_type);
 
-                            if (editMode) {
-                              editResource(
-                                  context: context,
-                                  resource: _resources,
-                                  id: widget.id);
-                            } else {
-                              createResource(
-                                  context: context, resource: _resources);
-                            }
+                            final success = await (editMode
+                                ? editResource(
+                                    context: context,
+                                    resource: _resources,
+                                    id: widget.id)
+                                : createResource(
+                                    context: context, resource: _resources));
+
+                            if (success) Navigator.of(context).pop(true);
+
                             Scaffold.of(context).showSnackBar(SnackBar(
                                 content: editMode
                                     ? Text("Editing resource")

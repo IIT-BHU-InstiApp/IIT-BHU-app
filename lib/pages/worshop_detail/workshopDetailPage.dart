@@ -42,27 +42,11 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
   showSuccessfulDialog() {
     showDialog(
       context: context,
-      barrierDismissible: false,
+      barrierDismissible: true,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: new Text("Successful!"),
-          content: new Text("Succesfully deleted!"),
-          actions: <Widget>[
-            FlatButton(
-              child: new Text("yay"),
-              onPressed: () {
-                // TODO: Refresh clubs page after deleting workshop!
-                Navigator.pop(context);
-                Navigator.pop(context);
-                Navigator.pop(context);
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            ClubPage(club: _workshop.club, editMode: true)));
-              },
-            ),
-          ],
+          title: Text("Successful!"),
+          content: Text("Succesfully deleted!"),
         );
       },
     );
@@ -73,11 +57,11 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: new Text("Unsuccessful :("),
-          content: new Text("Please try again"),
+          title: Text("Unsuccessful :("),
+          content: Text("Please try again"),
           actions: <Widget>[
             FlatButton(
-              child: new Text("Ok"),
+              child: Text("Ok"),
               onPressed: () {
                 Navigator.pop(context);
               },
@@ -93,17 +77,17 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: new Text("Create workshop"),
-          content: new Text("Are you sure to create this new workshop?"),
+          title: Text("Create workshop"),
+          content: Text("Are you sure to create this new workshop?"),
           actions: <Widget>[
             FlatButton(
-              child: new Text("Yup!"),
+              child: Text("Yup!"),
               onPressed: () {
                 Navigator.of(context).pop(true);
               },
             ),
             FlatButton(
-              child: new Text("nope, let me rethink.."),
+              child: Text("nope, let me rethink.."),
               onPressed: () {
                 Navigator.of(context).pop(false);
                 return false;
@@ -118,28 +102,28 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
   Future<bool> confirmDeleteDialog() async {
     return showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: new Text("Delete resource"),
-          content: new Text("Are you sure to remove this resource?"),
+          title: Text("Delete resource"),
+          content: Text("Are you sure to remove this resource?"),
           actions: <Widget>[
             FlatButton(
-              child: new Text("Yup!"),
-              onPressed: () {
-                Navigator.of(context).pop(true);
-              },
+              child: Text("Yup!"),
+              onPressed: () => Navigator.of(context).pop(true),
             ),
             FlatButton(
-              child: new Text("nope, let me rethink.."),
-              onPressed: () {
-                Navigator.of(context).pop(false);
-                return false;
-              },
+              child: Text("nope, let me rethink.."),
+              onPressed: () => Navigator.of(context).pop(false),
             ),
           ],
         );
       },
     );
+  }
+
+  void _reload() {
+    fetchWorkshopDetails();
   }
 
   void fetchWorkshopDetails() async {
@@ -177,7 +161,9 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
         await WorkshopCreater.deleteImageFromFirestore(_workshop.image_url);
 
         print("status of deleting workshop: ${snapshot.statusCode}");
-        showSuccessfulDialog();
+        await showSuccessfulDialog();
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil('/home', ModalRoute.withName('/'));
       }).catchError((onError) {
         print("Error in deleting: ${onError.toString()}");
         CreatePageDialogBoxes.showUnsuccessfulDialog(context: context);
@@ -187,34 +173,36 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
   }
 
   void deleteResource(int id) async {
-    print(id);
-    await confirmDeleteDialog()
-        ? await AppConstants.service
-            .deleteWorkshopResources(id, AppConstants.djangoToken)
-            .then((snapshot) {
-            print("status of deleting resource ${snapshot.statusCode}");
-            showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                      content: Text("Resource deleted"),
-                      actions: <Widget>[
-                        FlatButton(
-                          child: Text("yay"),
-                          onPressed: () {
-                            Navigator.pop(context);
-                            Navigator.pop(context);
-                          },
-                        )
-                      ]);
-                });
-          }).catchError((onError) {
-            final error = onError as Response<dynamic>;
-            print(error.body);
-            print("Error in deleting: ${onError.toString()}");
-            showUnsuccessfulDialog();
-          })
-        : null;
+    bool _deleteAction = await confirmDeleteDialog();
+    if (_deleteAction != true) return;
+
+    bool _isDeleted = false;
+    await AppConstants.service
+        .deleteWorkshopResources(id, AppConstants.djangoToken)
+        .then((snapshot) async {
+      print("status of deleting resource ${snapshot.statusCode}");
+      _isDeleted = true;
+    }).catchError((error) {
+      print("Error in deleting: ${error.toString()}");
+      showUnsuccessfulDialog();
+    });
+
+    if (_isDeleted) {
+      await showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+                content: Text("Resource deleted"),
+                actions: <Widget>[
+                  FlatButton(
+                    child: Text("yay"),
+                    onPressed: () => Navigator.pop(context),
+                  )
+                ]);
+          });
+      _reload();
+    }
+
     setState(() {});
   }
 
@@ -242,7 +230,7 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
       print("Error in toggleing: ${onError.toString()}");
     });
     setState(() {});
-    fetchWorkshopDetails();
+    _reload();
   }
 
   BorderRadiusGeometry radius = BorderRadius.only(
@@ -260,7 +248,7 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
         is_interested: is_interested,
         scaffoldKey: _scaffoldKey,
         updateButton: updateButton,
-        fetchWorkshopDetails: fetchWorkshopDetails,
+        reload: _reload,
         deleteWorkshop: deleteWorkshop,
         deleteResource: deleteResource);
 
