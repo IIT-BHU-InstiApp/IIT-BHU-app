@@ -484,11 +484,19 @@ class ClubCouncilAndEntityWidgets {
             horizontal ? CrossAxisAlignment.start : CrossAxisAlignment.center,
         children: <Widget>[
           horizontal ? Container() : SizedBox(height: 4.0),
-          Text(title, style: Style.titleTextStyle),
+          Text(
+            title,
+            style: Style.titleTextStyle,
+            maxLines: 2,
+          ),
           Container(height: horizontal ? 4 : 10),
           subtitle == null
               ? Container()
-              : Text(subtitle, style: Style.commonTextStyle),
+              : Text(
+                  subtitle,
+                  style: Style.commonTextStyle,
+                  maxLines: 1,
+                ),
           horizontal ? Container() : Separator(),
         ],
       ),

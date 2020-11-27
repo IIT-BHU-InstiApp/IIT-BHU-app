@@ -349,7 +349,7 @@ class _CreateEditScreenState extends State<CreateEditScreen> {
                                     Center(child: Icon(Icons.add, size: 40)),
                                     _newImage == null
                                         ? Text(
-                                            'By default, club/entity logo will be shown')
+                                            'By default, ${_isEntity ? widget.entity.name : widget.club.name}\'s logo will be shown')
                                         : Container(),
                                   ],
                                 )),
@@ -1101,7 +1101,7 @@ class _CreateEditScreenState extends State<CreateEditScreen> {
                     this._allTagsOfClubOrEntity.isEmpty)
                 ? Center(
                     child: Text(
-                      'No Tags of this club/entity available',
+                      'No Tags of ${_isEntity ? widget.entity.name : widget.club.name} available',
                       textAlign: TextAlign.center,
                       textScaleFactor: 1.5,
                     ),
