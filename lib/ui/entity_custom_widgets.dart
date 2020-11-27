@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:iit_app/external_libraries/spin_kit.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/colorConstants.dart';
@@ -10,7 +9,6 @@ import 'package:iit_app/pages/club_entity/entityPage.dart';
 import 'package:iit_app/ui/club_entity_common.dart';
 import 'package:iit_app/ui/separator.dart';
 import 'package:iit_app/ui/text_style.dart';
-import 'package:iit_app/ui/workshop_custom_widgets.dart';
 
 class EntityCustomWidgets {
   final BorderRadiusGeometry radius;

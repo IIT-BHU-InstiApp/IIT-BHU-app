@@ -7,42 +7,29 @@ import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/ui/workshop_custom_widgets.dart';
 import 'package:built_collection/built_collection.dart';
 
-ListView buildCurrentWorkshopPosts(
+Widget buildCurrentWorkshopAndEventPosts(
     BuildContext context, GlobalKey<FabCircularMenuState> fabKey,
-    {Function reload}) {
-  return ListView.builder(
-    physics: AlwaysScrollableScrollPhysics(),
-    scrollDirection: Axis.vertical,
-    itemCount: AppConstants.workshopFromDatabase.length,
-    padding: EdgeInsets.all(8),
-    itemBuilder: (context, index) {
-      if (AppConstants.workshopFromDatabase[index].is_workshop)
-        return WorkshopCustomWidgets.getWorkshopOrEventCard(context,
-            w: AppConstants.workshopFromDatabase[index],
-            fabKey: fabKey,
-            reload: reload);
-      return Container();
-    },
-  );
-}
+    {Function reload, bool isEvent}) {
+  Widget _builder(w) {
+    return w.length == 0
+        ? Center(
+            child: Text('No Activity :(',
+                style: TextStyle(color: Colors.white, fontSize: 25)))
+        : ListView.builder(
+            physics: AlwaysScrollableScrollPhysics(),
+            scrollDirection: Axis.vertical,
+            itemCount: w.length,
+            padding: EdgeInsets.all(8),
+            itemBuilder: (context, index) {
+              return WorkshopCustomWidgets.getWorkshopOrEventCard(context,
+                  w: w[index], fabKey: fabKey, reload: reload);
+            },
+          );
+  }
 
-ListView buildCurrentEventPosts(
-    BuildContext context, GlobalKey<FabCircularMenuState> fabKey,
-    {Function reload}) {
-  return ListView.builder(
-    physics: AlwaysScrollableScrollPhysics(),
-    scrollDirection: Axis.vertical,
-    itemCount: AppConstants.workshopFromDatabase.length,
-    padding: EdgeInsets.all(8),
-    itemBuilder: (context, index) {
-      if (!AppConstants.workshopFromDatabase[index].is_workshop)
-        return WorkshopCustomWidgets.getWorkshopOrEventCard(context,
-            w: AppConstants.workshopFromDatabase[index],
-            fabKey: fabKey,
-            reload: reload);
-      return Container();
-    },
-  );
+  return _builder(AppConstants.workshopFromDatabase
+      .where((w) => isEvent ? !w.is_workshop : w.is_workshop)
+      .toList());
 }
 
 FutureBuilder<Response> buildInterestedWorkshopsBody(BuildContext context,

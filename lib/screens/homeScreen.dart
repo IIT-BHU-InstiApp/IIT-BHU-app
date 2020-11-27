@@ -60,9 +60,9 @@ class _HomeScreenState extends State<HomeScreen>
                     : RefreshIndicator(
                         displacement: 60,
                         onRefresh: () async => onRefresh(),
-                        child: buildWorkhops.buildCurrentWorkshopPosts(
+                        child: buildWorkhops.buildCurrentWorkshopAndEventPosts(
                             context, widget.fabKey,
-                            reload: onRefresh),
+                            isEvent: false, reload: onRefresh),
                       ),
               ),
               Container(
@@ -71,9 +71,9 @@ class _HomeScreenState extends State<HomeScreen>
                     : RefreshIndicator(
                         displacement: 60,
                         onRefresh: () async => onRefresh(),
-                        child: buildWorkhops.buildCurrentEventPosts(
+                        child: buildWorkhops.buildCurrentWorkshopAndEventPosts(
                             context, widget.fabKey,
-                            reload: onRefresh),
+                            isEvent: true, reload: onRefresh),
                       ),
               )
             ],

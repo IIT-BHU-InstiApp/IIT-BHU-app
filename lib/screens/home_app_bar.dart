@@ -39,7 +39,7 @@ AppBar homeAppBar(context,
                         child: AppConstants.isGuest
                             ? Icon(
                                 Icons.menu,
-                                color: Colors.black,
+                                color: ColorConstants.textColor,
                               )
                             : null,
                       ),
