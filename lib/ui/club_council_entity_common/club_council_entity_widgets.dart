@@ -198,6 +198,20 @@ class ClubCouncilAndEntityWidgets {
         ],
       );
     }
+    
+    var _icons=List<Widget>();
+    if(map.youtube_url != null && map.youtube_url.length != 0)
+    _icons.add(_buildButtonColumn(FontAwesomeIcons.youtube, 'YouTube', map.youtube_url),);
+    if(map.website_url != null && map.website_url.length != 0)
+    _icons.add(_buildButtonColumn(Icons.web, 'Website', map.website_url),);
+    if(map.linkedin_url != null && map.linkedin_url.length != 0)
+    _icons.add(_buildButtonColumn(FontAwesomeIcons.linkedin,'LinkedIn', map.linkedin_url),);
+    if(map.instagram_url != null && map.instagram_url.length != 0)
+    _icons.add(_buildButtonColumn(FontAwesomeIcons.instagram, 'Instagaram', map.instagram_url),);
+    if(map.facebook_url != null && map.facebook_url.length != 0)
+    _icons.add(_buildButtonColumn(FontAwesomeIcons.facebook, 'Facebook', map.facebook_url),);
+    if(map.twitter_url != null && map.twitter_url.length != 0)
+    _icons.add(_buildButtonColumn(FontAwesomeIcons.twitter, 'Twitter', map.twitter_url),);
 
     return Container(
       height: 100,
@@ -207,31 +221,7 @@ class ClubCouncilAndEntityWidgets {
           borderRadius: BorderRadius.all(Radius.circular(10))),*/
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          map.youtube_url == null || map.youtube_url.length == 0
-              ? Container()
-              : _buildButtonColumn(
-                  FontAwesomeIcons.youtube, 'YouTube', map.youtube_url),
-          map.website_url == null || map.website_url.length == 0
-              ? Container()
-              : _buildButtonColumn(Icons.web, 'Website', map.website_url),
-          map.linkedin_url == null || map.linkedin_url.length == 0
-              ? Container()
-              : _buildButtonColumn(
-                  FontAwesomeIcons.linkedin, 'LinkedIn', map.linkedin_url),
-          map.instagram_url == null || map.instagram_url.length == 0
-              ? Container()
-              : _buildButtonColumn(
-                  FontAwesomeIcons.instagram, 'Instagram', map.instagram_url),
-          map.facebook_url == null || map.facebook_url.length == 0
-              ? Container()
-              : _buildButtonColumn(
-                  FontAwesomeIcons.facebook, 'Facebook', map.facebook_url),
-          map.twitter_url == null || map.twitter_url.length == 0
-              ? Container()
-              : _buildButtonColumn(
-                  FontAwesomeIcons.twitter, 'Twitter', map.twitter_url),
-        ],
+        children: _icons,
       ),
     );
   }
