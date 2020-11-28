@@ -45,7 +45,7 @@ class _CreateEditScreenState extends State<CreateEditScreen> {
   TextEditingController _audienceController;
   TextEditingController _tagSearchController;
   TextEditingController _tagCreateController;
-  TextEditingController _linkController;
+  // TextEditingController _linkController;
 
   String _editingDate;
   String _editingTime;
@@ -108,7 +108,7 @@ class _CreateEditScreenState extends State<CreateEditScreen> {
     this._audienceController = TextEditingController();
     this._tagSearchController = TextEditingController();
     this._tagCreateController = TextEditingController();
-    this._linkController = TextEditingController();
+    // this._linkController = TextEditingController();
 
     this._searchContactsController = TextEditingController();
 
@@ -424,13 +424,13 @@ class _CreateEditScreenState extends State<CreateEditScreen> {
                         onSaved: (val) =>
                             setState(() => _workshop.description = val)),
                     SizedBox(height: 8),
-                    TextFormField(
-                        decoration: InputDecoration(
-                            labelText: 'Link',
-                            hintText: 'Link should be valid url'),
-                        controller: this._linkController,
-                        onSaved: (val) => _workshop.link = val),
-                    SizedBox(height: 8),
+                    // TextFormField(
+                    //     decoration: InputDecoration(
+                    //         labelText: 'Link',
+                    //         hintText: 'Link should be valid url'),
+                    //     controller: this._linkController,
+                    //     onSaved: (val) => _workshop.link = val),
+                    // SizedBox(height: 8),
                     Row(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,

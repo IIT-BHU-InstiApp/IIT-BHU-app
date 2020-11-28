@@ -67,18 +67,19 @@ class WorkshopCreater {
     bool _created = false;
 
     var newWorkshop = BuiltWorkshopCreatePost((b) => b
-      ..title = title
-      ..description = description
-      ..date = date
-      ..time = time
-      ..is_workshop = is_workshop
-      ..location = location
-      ..latitude = latitude
-      ..longitude = longitude
-      ..audience = audience
-      ..contacts = contactIds.build().toBuilder()
-      ..tags = tagNameofId.keys.toList().build().toBuilder()
-      ..link = link);
+          ..title = title
+          ..description = description
+          ..date = date
+          ..time = time
+          ..is_workshop = is_workshop
+          ..location = location
+          ..latitude = latitude
+          ..longitude = longitude
+          ..audience = audience
+          ..contacts = contactIds.build().toBuilder()
+          ..tags = tagNameofId.keys.toList().build().toBuilder()
+        // ..link = link
+        );
 
     if (club != null) {
       await AppConstants.service
@@ -168,16 +169,17 @@ class WorkshopCreater {
     bool _edited = false;
 
     final editedWorkshop = BuiltWorkshopDetailPost((b) => b
-      ..title = title
-      ..description = description
-      ..date = date
-      ..time = time
-      ..is_workshop = is_workshop
-      ..location = location
-      ..latitude = latitude
-      ..longitude = longitude
-      ..audience = audience
-      ..link = link);
+          ..title = title
+          ..description = description
+          ..date = date
+          ..time = time
+          ..is_workshop = is_workshop
+          ..location = location
+          ..latitude = latitude
+          ..longitude = longitude
+          ..audience = audience
+        // ..link = link
+        );
     await AppConstants.service
         .updateWorkshopByPatch(
             widgetWorkshopData.id, AppConstants.djangoToken, editedWorkshop)
