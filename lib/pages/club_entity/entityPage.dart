@@ -143,14 +143,14 @@ class _EntityPageState extends State<EntityPage>
           backgroundColor: ColorConstants.backgroundThemeColor,
           floatingActionButton: AppConstants.isGuest
               ? null
-              : FloatingActionButton(
+              : FloatingActionButton.extended(
                   backgroundColor: Colors.white,
                   onPressed: () {
                     if (this._toggling == false) {
                       toggleSubscription();
                     }
                   },
-                  child: this._toggling || entityMap == null
+                  icon: this._toggling || entityMap == null
                       ? CircularProgressIndicator()
                       : Icon(
                           Icons.subscriptions,
@@ -158,6 +158,14 @@ class _EntityPageState extends State<EntityPage>
                               ? Colors.red
                               : Colors.black26,
                         ),
+                  label: Text(
+                    'Subscribe',
+                    style: TextStyle(
+                        fontSize: 16,
+                        color: entityMap != null && entityMap.is_subscribed
+                            ? Colors.red
+                            : Colors.black26),
+                  ),
                 ),
           body: RefreshIndicator(
               onRefresh: () async => _reload(),

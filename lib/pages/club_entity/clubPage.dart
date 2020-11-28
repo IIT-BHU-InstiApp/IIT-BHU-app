@@ -142,20 +142,28 @@ class _ClubPageState extends State<ClubPage>
         backgroundColor: ColorConstants.backgroundThemeColor,
         floatingActionButton: AppConstants.isGuest
             ? null
-            : FloatingActionButton(
+            : FloatingActionButton.extended(
                 backgroundColor: Colors.white,
                 onPressed: () {
                   if (this._toggling == false) {
                     toggleSubscription();
                   }
                 },
-                child: this._toggling || clubMap == null
+                icon: this._toggling || clubMap == null
                     ? CircularProgressIndicator()
                     : Icon(
                         Icons.subscriptions,
                         color:
                             clubMap.is_subscribed ? Colors.red : Colors.black26,
                       ),
+                label: Text(
+                  'Subscribe',
+                  style: TextStyle(
+                      fontSize: 16,
+                      color: clubMap != null && clubMap.is_subscribed
+                          ? Colors.red
+                          : Colors.black26),
+                ),
               ),
         body: RefreshIndicator(
           onRefresh: () async => _reload(),
