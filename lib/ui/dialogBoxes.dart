@@ -71,14 +71,15 @@ class CreatePageDialogBoxes {
   }
 
   static Future<bool> confirmCalendarOpenDialog(
-      {@required BuildContext context}) async {
+      {@required BuildContext context,
+      @required String workshopOrEvent}) async {
     return showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text("Open Calendar"),
           content: new Text(
-              "You have expressed Interest!\nDo you want to save this event to your Google Calendar?"),
+              "You have successfully expressed your interest in this $workshopOrEvent!\nDo you wish to save this $workshopOrEvent to your Google Calendar?"),
           actions: <Widget>[
             FlatButton(
               child: Text("Yup!"),

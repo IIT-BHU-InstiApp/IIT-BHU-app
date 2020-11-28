@@ -206,7 +206,7 @@ class _CreateEditScreenState extends State<CreateEditScreen> {
                             .toString()
                             .contains('The tag already exists for this')) {
                           tagAlertDialog('Tag Exists',
-                              'This tag already exists. Search for it if you wish to add it to the workshop.');
+                              'This tag already exists. Search for it if you wish to add it to the ${widget.isWorkshopOrEvent}.');
                           errorMessageShown = true;
                           refreshState(() => this._tagCreateController.clear());
                         }
@@ -215,7 +215,7 @@ class _CreateEditScreenState extends State<CreateEditScreen> {
                       }).then((value) {
                         if (value != null) {
                           tagAlertDialog('Tag Created',
-                              'The Tag has been created for ${_isEntity ? widget.entity.name : widget.club.name} succesfully. Search for it again, and add it to the worshop if you wish.');
+                              'The Tag has been created for ${_isEntity ? widget.entity.name : widget.club.name} succesfully. Search for it again, and add it to the ${widget.isWorkshopOrEvent} if you wish.');
 
                           refreshState(() => this._tagCreateController.clear());
                         } else if (errorMessageShown == false) {
@@ -250,7 +250,7 @@ class _CreateEditScreenState extends State<CreateEditScreen> {
               title: Text(
                   'PERMANENTLY Delete Tag for ${_isEntity ? widget.entity.name : widget.club.name}'),
               content: Text(
-                  '''Are you sure you want to delete this tag for this club?\nNote that option is NOT to be used to remove the tag for the workshop.\nThis is to permanently delete this tag for ${_isEntity ? widget.entity.name : widget.club.name}.'''),
+                  '''Are you sure you want to delete this tag for this club?\nNote that option is NOT to be used to remove the tag for the ${widget.isWorkshopOrEvent}.\nThis is to permanently delete this tag for ${_isEntity ? widget.entity.name : widget.club.name}.'''),
               actions: <Widget>[
                 FlatButton(
                   child: Text('Yes'),
@@ -417,7 +417,7 @@ class _CreateEditScreenState extends State<CreateEditScreen> {
                         controller: this._descriptionController,
                         validator: (value) {
                           if (value.isEmpty) {
-                            return 'Please describe the workshop in detail.';
+                            return 'Please describe the ${widget.isWorkshopOrEvent} in detail.';
                           }
                           return null;
                         },
@@ -497,7 +497,8 @@ class _CreateEditScreenState extends State<CreateEditScreen> {
                     TextFormField(
                       decoration: InputDecoration(
                         labelText: 'Audience',
-                        hintText: 'Who should attend it?',
+                        hintText:
+                            'Who should attend the ${widget.isWorkshopOrEvent}?',
                       ),
                       controller: this._audienceController,
                       validator: (value) {
