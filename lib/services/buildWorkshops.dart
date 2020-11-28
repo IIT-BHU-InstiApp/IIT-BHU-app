@@ -204,16 +204,6 @@ Widget _buildAllWorkshopsBodyPosts(
     {Function reload}) {
   return ListView(
     children: <Widget>[
-      Padding(
-        padding: const EdgeInsets.fromLTRB(15, 20, 15, 0),
-        child: Center(
-          child: Text(
-            'Upcoming..',
-            style: TextStyle(
-                fontSize: 25, color: Colors.white, fontWeight: FontWeight.bold),
-          ),
-        ),
-      ),
       Container(
         child: ListView.builder(
           physics: ScrollPhysics(),
