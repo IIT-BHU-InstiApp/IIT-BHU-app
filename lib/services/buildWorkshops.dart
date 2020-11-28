@@ -121,8 +121,11 @@ Widget _buildWorkshopsFromSearchPosts(
               padding: const EdgeInsets.all(15.0),
               child: Center(
                 child: Text(
-                  'Upcoming..',
-                  style: TextStyle(fontSize: 25),
+                  'Upcoming...',
+                  style: TextStyle(
+                      fontSize: 32,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold),
                 ),
               ),
             ),
@@ -145,8 +148,11 @@ Widget _buildWorkshopsFromSearchPosts(
               padding: const EdgeInsets.all(15.0),
               child: Center(
                 child: Text(
-                  'Past..',
-                  style: TextStyle(fontSize: 25),
+                  '..... Past .....',
+                  style: TextStyle(
+                      fontSize: 32,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold),
                 ),
               ),
             ),
@@ -218,12 +224,12 @@ Widget _buildAllWorkshopsBodyPosts(
         ),
       ),
       Padding(
-        padding: const EdgeInsets.fromLTRB(15, 20, 15, 0),
+        padding: const EdgeInsets.fromLTRB(15, 20, 15, 10),
         child: Center(
           child: Text(
-            'Past..',
+            '..... Past .....',
             style: TextStyle(
-                fontSize: 25, color: Colors.white, fontWeight: FontWeight.bold),
+                fontSize: 32, color: Colors.white, fontWeight: FontWeight.bold),
           ),
         ),
       ),
