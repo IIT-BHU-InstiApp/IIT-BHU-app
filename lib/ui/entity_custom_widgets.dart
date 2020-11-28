@@ -62,7 +62,7 @@ class EntityCustomWidgets {
     bool horizontal = false,
   }) {
     final File entityLogoFile =
-        AppConstants.getImageFile(isSmall: true, id: entity.id, isEntity: true);
+        AppConstants.getImageFile(entity.small_image_url);
 
     final entityThumbnail = Container(
       margin: EdgeInsets.symmetric(vertical: 16.0),

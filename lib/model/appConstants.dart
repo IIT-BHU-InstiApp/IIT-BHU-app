@@ -91,34 +91,22 @@ class AppConstants {
           councils: councilSummaryPosts, db: database);
 
       councilSummaryPosts.forEach((council) async {
-        await writeImageFileIntoDisk(
-            isCouncil: true,
-            isSmall: true,
-            id: council.id,
-            url: council.small_image_url);
+        await writeImageFileIntoDisk(council.small_image_url);
       });
 
       await DatabaseWrite.insertEntitiesSummaryIntoDatabase(
           db: database, entities: entitySummaryPosts);
 
       entitySummaryPosts.forEach((entity) async {
-        await writeImageFileIntoDisk(
-            isEntity: true,
-            isSmall: true,
-            id: entity.id,
-            url: entity.small_image_url);
+        await writeImageFileIntoDisk(entity.small_image_url);
       });
 
       for (var post in workshopPosts) {
         await DatabaseWrite.insertWorkshopSummaryIntoDatabase(
             post: post, db: database);
-        writeImageFileIntoDisk(
-            isClub: true,
-            isSmall: true,
-            id: post.club == null ? post.entity.id : post.club.id,
-            url: post.club == null
-                ? post.entity.small_image_url
-                : post.club.small_image_url);
+        writeImageFileIntoDisk(post.club == null
+            ? post.entity.small_image_url
+            : post.club.small_image_url);
       }
 
 // fetching the data from local database and storing it into variables
@@ -137,103 +125,52 @@ class AppConstants {
 
   static writeCouncilAndEntityLogoIntoDisk() async {
     councilsSummaryfromDatabase?.forEach((council) async {
-      await writeImageFileIntoDisk(
-          isCouncil: true,
-          isSmall: true,
-          id: council.id,
-          url: council.small_image_url);
+      await writeImageFileIntoDisk(council.small_image_url);
     });
     entitiesSummaryFromDatabase?.forEach((entity) async {
-      await writeImageFileIntoDisk(
-          isEntity: true,
-          isSmall: true,
-          id: entity.id,
-          url: entity.small_image_url);
+      await writeImageFileIntoDisk(entity.small_image_url);
     });
   }
 
-  /// if [isSmall] is false, then image will be considered as large
-  ///
-  /// [id] will be served for any option , [isCouncil] or [isClub] , whichever is true
-  ///
-  /// if [isCouncil] and [isClub] both are true/false , function produces zero work.
-  static writeImageFileIntoDisk(
-      {bool isCouncil = false,
-      bool isClub = false,
-      bool isEntity = false,
-      @required bool isSmall,
-      @required int id,
-      @required String url}) async {
-    int truthCount = 0;
-    if (isCouncil) truthCount++;
-    if (isClub) truthCount++;
-    if (isEntity) truthCount++;
+  static writeImageFileIntoDisk(String url) async {
+    if (url == null || url.isEmpty) return null;
 
-    if (truthCount != 1 ||
-        isSmall == null ||
-        id == null ||
-        url == null ||
-        url == "") {
-      return;
-    }
+    final parsed = _diskRWableImageUrl(url);
 
-    String size = isSmall ? 'small' : 'large';
-    String host = isCouncil ? 'council' : 'club';
-
-    if (isEntity) {
-      host = 'entity';
-    }
-
-    File file =
-        File('${AppConstants.deviceDirectoryPathImages}/$host($size)_$id');
+    File file = File('${AppConstants.deviceDirectoryPathImages}/$parsed');
 
     if (file.existsSync() == false) {
       http.get(url).catchError((error) {
         print('Error in downloading image : $error');
-        print('for $host , id = $id');
       }).then((response) {
         if (response != null && response.statusCode == 200) {
           final imageData = response.bodyBytes.toList();
-          final File writingFile = File(
-              '${AppConstants.deviceDirectoryPathImages}/$host($size)_$id');
+          final File writingFile =
+              File('${AppConstants.deviceDirectoryPathImages}/$parsed');
           writingFile.writeAsBytesSync(imageData);
-          print('image saved into disk = $host , id = $id');
+          print('image saved into disk ');
         }
       });
     }
   }
 
+  static String _diskRWableImageUrl(String imageUrl) {
+    String parsedUrl = '';
+    imageUrl.split('/').forEach((element) {
+      parsedUrl += element;
+    });
+    return parsedUrl;
+  }
+
   /// if file doesn't exist, null is returned
-  ///
-  /// if [isSmall] is false, then image will be considered as large
-  ///
-  /// [id] will be served for any option , [isCouncil] or [isClub] , whichever is true
-  ///
-  /// if [isCouncil] and [isClub] both are true/false, null will be returned
+  static File getImageFile(String url) {
+    if (url == null || url.isEmpty) return null;
 
-  static File getImageFile({
-    bool isCouncil = false,
-    bool isClub = false,
-    bool isEntity = false,
-    @required bool isSmall,
-    @required int id,
-  }) {
-    int truthCount = 0;
-    if (isCouncil) truthCount++;
-    if (isClub) truthCount++;
-    if (isEntity) truthCount++;
-
-    if (truthCount != 1 || isSmall == null || id == null) {
-      return null;
-    }
-
-    String size = isSmall ? 'small' : 'large';
     File file;
-    String host = isCouncil ? 'council' : 'club';
-    if (isEntity) {
-      host = 'entity';
-    }
-    file = File('${AppConstants.deviceDirectoryPathImages}/$host($size)_$id');
+
+    final parsed = _diskRWableImageUrl(url);
+
+    file = File('${AppConstants.deviceDirectoryPathImages}/$parsed');
 
     if (file.existsSync()) {
       return file;

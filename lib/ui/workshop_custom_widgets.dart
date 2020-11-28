@@ -25,11 +25,9 @@ class WorkshopCustomWidgets {
     final bool isClub = w.club != null;
     File logoFile;
     if (isClub)
-      logoFile =
-          AppConstants.getImageFile(isSmall: true, id: w.club.id, isClub: true);
+      logoFile = AppConstants.getImageFile(w.club.small_image_url);
     else
-      logoFile = AppConstants.getImageFile(
-          isSmall: true, id: w.entity.id, isEntity: true);
+      logoFile = AppConstants.getImageFile(w.entity.small_image_url);
 
     final workshopThumbnail = Container(
       margin: EdgeInsets.symmetric(vertical: 16.0),

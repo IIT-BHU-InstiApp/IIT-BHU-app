@@ -354,16 +354,16 @@ class WorkshopDetailCustomWidgets {
       final isClub = workshopSummary.club != null;
       final id = isClub ? workshopSummary.club.id : workshopSummary.entity.id;
 
-      final File logoFile = AppConstants.getImageFile(
-          isSmall: true, id: id, isClub: isClub, isEntity: !isClub);
+      String logoImageUrl = isClub
+          ? workshopSummary.club.small_image_url
+          : workshopSummary.entity.small_image_url;
 
-      String logoImageUrl;
-      if (logoFile == null) {
-        logoImageUrl = isClub
-            ? workshopSummary.club.small_image_url
-            : workshopSummary.entity.small_image_url;
-        if (logoImageUrl?.isEmpty == true) logoImageUrl = null;
-      }
+      if (logoImageUrl?.isEmpty == true) logoImageUrl = null;
+
+      final File logoFile =
+          logoImageUrl != null ? AppConstants.getImageFile(logoImageUrl) : null;
+
+      if (logoFile == null) {}
       _image = logoFile == null
           ? (logoImageUrl == null
               ? Image.asset('assets/iitbhu.jpeg',

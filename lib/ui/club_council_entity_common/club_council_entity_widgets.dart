@@ -198,20 +198,37 @@ class ClubCouncilAndEntityWidgets {
         ],
       );
     }
-    
-    var _icons=List<Widget>();
-    if(map.youtube_url != null && map.youtube_url.length != 0)
-    _icons.add(_buildButtonColumn(FontAwesomeIcons.youtube, 'YouTube', map.youtube_url),);
-    if(map.website_url != null && map.website_url.length != 0)
-    _icons.add(_buildButtonColumn(Icons.web, 'Website', map.website_url),);
-    if(map.linkedin_url != null && map.linkedin_url.length != 0)
-    _icons.add(_buildButtonColumn(FontAwesomeIcons.linkedin,'LinkedIn', map.linkedin_url),);
-    if(map.instagram_url != null && map.instagram_url.length != 0)
-    _icons.add(_buildButtonColumn(FontAwesomeIcons.instagram, 'Instagaram', map.instagram_url),);
-    if(map.facebook_url != null && map.facebook_url.length != 0)
-    _icons.add(_buildButtonColumn(FontAwesomeIcons.facebook, 'Facebook', map.facebook_url),);
-    if(map.twitter_url != null && map.twitter_url.length != 0)
-    _icons.add(_buildButtonColumn(FontAwesomeIcons.twitter, 'Twitter', map.twitter_url),);
+
+    var _icons = List<Widget>();
+    if (map.youtube_url != null && map.youtube_url.length != 0)
+      _icons.add(
+        _buildButtonColumn(
+            FontAwesomeIcons.youtube, 'YouTube', map.youtube_url),
+      );
+    if (map.website_url != null && map.website_url.length != 0)
+      _icons.add(
+        _buildButtonColumn(Icons.web, 'Website', map.website_url),
+      );
+    if (map.linkedin_url != null && map.linkedin_url.length != 0)
+      _icons.add(
+        _buildButtonColumn(
+            FontAwesomeIcons.linkedin, 'LinkedIn', map.linkedin_url),
+      );
+    if (map.instagram_url != null && map.instagram_url.length != 0)
+      _icons.add(
+        _buildButtonColumn(
+            FontAwesomeIcons.instagram, 'Instagaram', map.instagram_url),
+      );
+    if (map.facebook_url != null && map.facebook_url.length != 0)
+      _icons.add(
+        _buildButtonColumn(
+            FontAwesomeIcons.facebook, 'Facebook', map.facebook_url),
+      );
+    if (map.twitter_url != null && map.twitter_url.length != 0)
+      _icons.add(
+        _buildButtonColumn(
+            FontAwesomeIcons.twitter, 'Twitter', map.twitter_url),
+      );
 
     return Container(
       height: 100,
@@ -380,30 +397,12 @@ class ClubCouncilAndEntityWidgets {
 
     bool isSmall = horizontal;
 
-    File logoFile = AppConstants.getImageFile(
-      isSmall: isSmall,
-      id: id,
-      isEntity: isEntity,
-      isClub: isClub,
-      isCouncil: isCouncil,
-    );
+    File logoFile = AppConstants.getImageFile(imageUrl);
 
     if (logoFile == null) {
-      AppConstants.writeImageFileIntoDisk(
-          isSmall: isSmall,
-          id: id,
-          isEntity: isEntity,
-          isClub: isClub,
-          isCouncil: isCouncil,
-          url: imageUrl);
+      AppConstants.writeImageFileIntoDisk(imageUrl);
     }
-    logoFile = AppConstants.getImageFile(
-      isSmall: isSmall,
-      id: id,
-      isEntity: isEntity,
-      isClub: isClub,
-      isCouncil: isCouncil,
-    );
+    logoFile = AppConstants.getImageFile(imageUrl);
 
     final clubThumbnail = Container(
       margin: EdgeInsets.symmetric(vertical: 16.0),

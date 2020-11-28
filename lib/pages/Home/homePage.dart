@@ -28,14 +28,14 @@ class _HomePageState extends State<HomePage>
 
   @override
   void initState() {
-    fetchWorkshopsAndCouncilButtons();
+    fetchWorkshopsAndCouncilAndEntityButtons();
     searchListener = ValueNotifier(false);
     searchBarWidget = SearchBarWidget(searchListener);
     searchFocusNode = FocusNode();
     super.initState();
   }
 
-  fetchWorkshopsAndCouncilButtons() async {
+  fetchWorkshopsAndCouncilAndEntityButtons() async {
     await AppConstants.populateWorkshopsAndCouncilAndEntityButtons();
     setState(() {
       AppConstants.firstTimeFetching = false;

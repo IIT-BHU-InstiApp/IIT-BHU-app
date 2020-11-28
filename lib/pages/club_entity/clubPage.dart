@@ -7,7 +7,6 @@ import 'package:iit_app/model/colorConstants.dart';
 import 'package:iit_app/ui/club_council_entity_common/club_council_entity_widgets.dart';
 import 'package:iit_app/ui/club_custom_widgets.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:iit_app/pages/account/accountPage.dart';
 
 class ClubPage extends StatefulWidget {
   final ClubListPost club;
@@ -43,15 +42,10 @@ class _ClubPageState extends State<ClubPage>
     clubMap = await AppConstants.getClubDetailsFromDatabase(
         clubId: widget.club.id, refresh: refresh);
     if (clubMap != null) {
-      _clubLargeLogoFile = AppConstants.getImageFile(
-          isClub: true, isSmall: false, id: clubMap.id);
+      _clubLargeLogoFile = AppConstants.getImageFile(clubMap.large_image_url);
 
       if (_clubLargeLogoFile == null) {
-        AppConstants.writeImageFileIntoDisk(
-            isClub: true,
-            isSmall: false,
-            id: clubMap.id,
-            url: clubMap.large_image_url);
+        AppConstants.writeImageFileIntoDisk(clubMap.large_image_url);
       }
     }
     if (!this.mounted) {

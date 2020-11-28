@@ -50,11 +50,9 @@ Widget _fabButtons(BuildContext context, double size,
 
   File _imageFile;
   if (council != null) {
-    _imageFile = AppConstants.getImageFile(
-        isCouncil: true, isSmall: true, id: council.id);
+    _imageFile = AppConstants.getImageFile(council.small_image_url);
   } else {
-    _imageFile =
-        AppConstants.getImageFile(isSmall: true, id: entity.id, isEntity: true);
+    _imageFile = AppConstants.getImageFile(entity.small_image_url);
   }
 
   return GestureDetector(

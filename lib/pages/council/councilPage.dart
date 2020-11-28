@@ -33,15 +33,11 @@ class _CouncilPageState extends State<CouncilPage> {
     councilData = await AppConstants.getCouncilDetailsFromDatabase(
         councilId: widget.councilId, refresh: refresh);
 
-    _councilLargeLogoFile = AppConstants.getImageFile(
-        isCouncil: true, isSmall: false, id: councilData.id);
+    _councilLargeLogoFile =
+        AppConstants.getImageFile(councilData.large_image_url);
 
     if (_councilLargeLogoFile == null) {
-      AppConstants.writeImageFileIntoDisk(
-          isCouncil: true,
-          isSmall: false,
-          id: councilData.id,
-          url: councilData.large_image_url);
+      AppConstants.writeImageFileIntoDisk(councilData.large_image_url);
     }
 
     if (!this.mounted) {
