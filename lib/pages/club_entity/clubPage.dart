@@ -123,6 +123,16 @@ class _ClubPageState extends State<ClubPage>
   );
 
   PanelController _pc = PanelController();
+
+  Future<bool> _willPopCallback() async {
+    if (_pc.isPanelOpen) {
+      _pc.close();
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final clubCustomWidgets = ClubCustomWidgets(
@@ -136,55 +146,59 @@ class _ClubPageState extends State<ClubPage>
 
     return SafeArea(
       minimum: const EdgeInsets.all(2.0),
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        resizeToAvoidBottomPadding: false,
-        backgroundColor: ColorConstants.backgroundThemeColor,
-        floatingActionButton: AppConstants.isGuest
-            ? null
-            : FloatingActionButton.extended(
-                backgroundColor: Colors.white,
-                onPressed: () {
-                  if (this._toggling == false) {
-                    toggleSubscription();
-                  }
-                },
-                icon: this._toggling || clubMap == null
-                    ? CircularProgressIndicator()
-                    : Icon(
-                        Icons.subscriptions,
-                        color:
-                            clubMap.is_subscribed ? Colors.red : Colors.black26,
-                      ),
-                label: Text(
-                  'Subscribe',
-                  style: TextStyle(
-                      fontSize: 16,
-                      color: clubMap != null && clubMap.is_subscribed
-                          ? Colors.red
-                          : Colors.black26),
+      child: WillPopScope(
+        onWillPop: _willPopCallback,
+        child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          resizeToAvoidBottomPadding: false,
+          backgroundColor: ColorConstants.backgroundThemeColor,
+          floatingActionButton: AppConstants.isGuest
+              ? null
+              : FloatingActionButton.extended(
+                  backgroundColor: Colors.white,
+                  onPressed: () {
+                    if (this._toggling == false) {
+                      toggleSubscription();
+                    }
+                  },
+                  icon: this._toggling || clubMap == null
+                      ? CircularProgressIndicator()
+                      : Icon(
+                          Icons.subscriptions,
+                          color: clubMap.is_subscribed
+                              ? Colors.red
+                              : Colors.black26,
+                        ),
+                  label: Text(
+                    'Subscribe',
+                    style: TextStyle(
+                        fontSize: 16,
+                        color: clubMap != null && clubMap.is_subscribed
+                            ? Colors.red
+                            : Colors.black26),
+                  ),
+                ),
+          body: RefreshIndicator(
+            onRefresh: () async => _reload(),
+            child: SlidingUpPanel(
+              body: ClubCouncilAndEntityWidgets.getPanelBackground(
+                  context, _clubLargeLogoFile,
+                  isClub: true, clubDetail: clubMap, club: widget.club),
+              parallaxEnabled: true,
+              controller: _pc,
+              borderRadius: radius,
+              collapsed: Container(
+                decoration: BoxDecoration(
+                  borderRadius: radius,
                 ),
               ),
-        body: RefreshIndicator(
-          onRefresh: () async => _reload(),
-          child: SlidingUpPanel(
-            body: ClubCouncilAndEntityWidgets.getPanelBackground(
-                context, _clubLargeLogoFile,
-                isClub: true, clubDetail: clubMap, club: widget.club),
-            parallaxEnabled: true,
-            controller: _pc,
-            borderRadius: radius,
-            collapsed: Container(
-              decoration: BoxDecoration(
-                borderRadius: radius,
-              ),
+              backdropEnabled: true,
+              panelBuilder: (ScrollController sc) =>
+                  clubCustomWidgets.getPanel(sc: sc, club: widget.club),
+              minHeight: ClubCouncilAndEntityWidgets.getMinPanelHeight(context),
+              maxHeight: ClubCouncilAndEntityWidgets.getMaxPanelHeight(context),
+              header: ClubCouncilAndEntityWidgets.getHeader(context),
             ),
-            backdropEnabled: true,
-            panelBuilder: (ScrollController sc) =>
-                clubCustomWidgets.getPanel(sc: sc, club: widget.club),
-            minHeight: ClubCouncilAndEntityWidgets.getMinPanelHeight(context),
-            maxHeight: ClubCouncilAndEntityWidgets.getMaxPanelHeight(context),
-            header: ClubCouncilAndEntityWidgets.getHeader(context),
           ),
         ),
       ),

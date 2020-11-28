@@ -57,36 +57,50 @@ class _CouncilPageState extends State<CouncilPage> {
 
   PanelController _pc = PanelController();
 
+  Future<bool> _willPopCallback() async {
+    if (_pc.isPanelOpen) {
+      _pc.close();
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final councilCustomWidgets =
         CouncilCustomWidgets(context: context, councilData: councilData);
     return SafeArea(
         minimum: const EdgeInsets.all(2.0),
-        child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          resizeToAvoidBottomPadding: false,
-          backgroundColor: ColorConstants.backgroundThemeColor,
-          body: RefreshIndicator(
-            onRefresh: () async => _reload(),
-            child: SlidingUpPanel(
-              parallaxEnabled: true,
-              body: ClubCouncilAndEntityWidgets.getPanelBackground(
-                  context, _councilLargeLogoFile,
-                  isCouncil: true, councilDetail: councilData),
-              controller: _pc,
-              borderRadius: radius,
-              collapsed: Container(
-                decoration: BoxDecoration(
-                  borderRadius: radius,
+        child: WillPopScope(
+          onWillPop: _willPopCallback,
+          child: Scaffold(
+            resizeToAvoidBottomInset: false,
+            resizeToAvoidBottomPadding: false,
+            backgroundColor: ColorConstants.backgroundThemeColor,
+            body: RefreshIndicator(
+              onRefresh: () async => _reload(),
+              child: SlidingUpPanel(
+                parallaxEnabled: true,
+                body: ClubCouncilAndEntityWidgets.getPanelBackground(
+                    context, _councilLargeLogoFile,
+                    isCouncil: true, councilDetail: councilData),
+                controller: _pc,
+                borderRadius: radius,
+                collapsed: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: radius,
+                  ),
                 ),
+                backdropEnabled: true,
+                panelBuilder: (ScrollController sc) => councilCustomWidgets
+                    .getPanel(scrollController: sc, radius: radius),
+                minHeight:
+                    ClubCouncilAndEntityWidgets.getMinPanelHeight(context),
+                maxHeight:
+                    ClubCouncilAndEntityWidgets.getMaxPanelHeight(context),
+                header: ClubCouncilAndEntityWidgets.getHeader(context),
               ),
-              backdropEnabled: true,
-              panelBuilder: (ScrollController sc) => councilCustomWidgets
-                  .getPanel(scrollController: sc, radius: radius),
-              minHeight: ClubCouncilAndEntityWidgets.getMinPanelHeight(context),
-              maxHeight: ClubCouncilAndEntityWidgets.getMaxPanelHeight(context),
-              header: ClubCouncilAndEntityWidgets.getHeader(context),
             ),
           ),
         ));

@@ -125,6 +125,15 @@ class _EntityPageState extends State<EntityPage>
 
   PanelController _pc = PanelController();
 
+  Future<bool> _willPopCallback() async {
+    if (_pc.isPanelOpen) {
+      _pc.close();
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final entityCustomWidgets = EntityCustomWidgets(
@@ -137,61 +146,64 @@ class _EntityPageState extends State<EntityPage>
     );
     return SafeArea(
         minimum: const EdgeInsets.all(2.0),
-        child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          resizeToAvoidBottomPadding: false,
-          backgroundColor: ColorConstants.backgroundThemeColor,
-          floatingActionButton: AppConstants.isGuest
-              ? null
-              : FloatingActionButton.extended(
-                  backgroundColor: Colors.white,
-                  onPressed: () {
-                    if (this._toggling == false) {
-                      toggleSubscription();
-                    }
-                  },
-                  icon: this._toggling || entityMap == null
-                      ? CircularProgressIndicator()
-                      : Icon(
-                          Icons.subscriptions,
-                          color: entityMap.is_subscribed
+        child: WillPopScope(
+          onWillPop: _willPopCallback,
+          child: Scaffold(
+            resizeToAvoidBottomInset: false,
+            resizeToAvoidBottomPadding: false,
+            backgroundColor: ColorConstants.backgroundThemeColor,
+            floatingActionButton: AppConstants.isGuest
+                ? null
+                : FloatingActionButton.extended(
+                    backgroundColor: Colors.white,
+                    onPressed: () {
+                      if (this._toggling == false) {
+                        toggleSubscription();
+                      }
+                    },
+                    icon: this._toggling || entityMap == null
+                        ? CircularProgressIndicator()
+                        : Icon(
+                            Icons.subscriptions,
+                            color: entityMap.is_subscribed
+                                ? Colors.red
+                                : Colors.black26,
+                          ),
+                    label: Text(
+                      'Subscribe',
+                      style: TextStyle(
+                          fontSize: 16,
+                          color: entityMap != null && entityMap.is_subscribed
                               ? Colors.red
-                              : Colors.black26,
-                        ),
-                  label: Text(
-                    'Subscribe',
-                    style: TextStyle(
-                        fontSize: 16,
-                        color: entityMap != null && entityMap.is_subscribed
-                            ? Colors.red
-                            : Colors.black26),
+                              : Colors.black26),
+                    ),
                   ),
-                ),
-          body: RefreshIndicator(
-              onRefresh: () async => _reload(),
-              child: SlidingUpPanel(
-                body: ClubCouncilAndEntityWidgets.getPanelBackground(
-                    context, _entityLargeLogoFile,
-                    isEntity: true,
-                    entityDetail: entityMap,
-                    entity: widget.entity),
-                parallaxEnabled: true,
-                controller: _pc,
-                borderRadius: radius,
-                collapsed: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: radius,
+            body: RefreshIndicator(
+                onRefresh: () async => _reload(),
+                child: SlidingUpPanel(
+                  body: ClubCouncilAndEntityWidgets.getPanelBackground(
+                      context, _entityLargeLogoFile,
+                      isEntity: true,
+                      entityDetail: entityMap,
+                      entity: widget.entity),
+                  parallaxEnabled: true,
+                  controller: _pc,
+                  borderRadius: radius,
+                  collapsed: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: radius,
+                    ),
                   ),
-                ),
-                backdropEnabled: true,
-                panelBuilder: (ScrollController sc) =>
-                    entityCustomWidgets.getPanel(sc: sc, entity: widget.entity),
-                minHeight:
-                    ClubCouncilAndEntityWidgets.getMinPanelHeight(context),
-                maxHeight:
-                    ClubCouncilAndEntityWidgets.getMaxPanelHeight(context),
-                header: ClubCouncilAndEntityWidgets.getHeader(context),
-              )),
+                  backdropEnabled: true,
+                  panelBuilder: (ScrollController sc) => entityCustomWidgets
+                      .getPanel(sc: sc, entity: widget.entity),
+                  minHeight:
+                      ClubCouncilAndEntityWidgets.getMinPanelHeight(context),
+                  maxHeight:
+                      ClubCouncilAndEntityWidgets.getMaxPanelHeight(context),
+                  header: ClubCouncilAndEntityWidgets.getHeader(context),
+                )),
+          ),
         ));
   }
 }

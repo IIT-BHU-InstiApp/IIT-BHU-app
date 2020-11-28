@@ -238,6 +238,7 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
   Future<bool> _willPopCallback() async {
     if (_panelController.isPanelOpen) {
       _panelController.close();
+      return false;
     } else {
       return true;
     }
