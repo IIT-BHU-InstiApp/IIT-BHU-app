@@ -80,6 +80,7 @@ class ClubCouncilAndEntityWidgets {
                           title: _data.name,
                           id: _data.id,
                           imageUrl: _data.large_image_url,
+                          isClub: isClub,
                           isCouncil: isCouncil,
                           isEntity: isEntity,
                           context: context),

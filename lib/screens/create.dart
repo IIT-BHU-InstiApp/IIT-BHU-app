@@ -24,7 +24,7 @@ class CreateEditScreen extends StatefulWidget {
       @required this.title,
       this.workshopData,
       @required this.entity,
-      this.isWorkshopOrEvent})
+      @required this.isWorkshopOrEvent})
       : super(key: key);
   @override
   _CreateEditScreenState createState() => _CreateEditScreenState();
@@ -852,8 +852,8 @@ class _CreateEditScreenState extends State<CreateEditScreen> {
                           Scaffold.of(context).showSnackBar(
                             SnackBar(
                               content: widget.workshopData == null
-                                  ? Text('Creating Workshop...')
-                                  : Text('Editing Workshop...'),
+                                  ? Text('Creating ...')
+                                  : Text('Editing ...'),
                             ),
                           );
 
