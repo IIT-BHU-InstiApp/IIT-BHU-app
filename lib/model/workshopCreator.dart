@@ -125,7 +125,8 @@ class WorkshopCreater {
               BuiltWorkshopDetailPost((b) => b
                 ..title = title
                 ..date = date
-                ..image_url = imageUrl))
+                ..image_url = imageUrl
+                ..is_workshop = is_workshop))
           .then((value) {
         print("image url updated successfully");
       }).catchError((err) {
@@ -186,7 +187,9 @@ class WorkshopCreater {
     }).then((value) async {
       if (value.isSuccessful) {
         print('Edited!');
-        if (widgetWorkshopData.image_url != null && oldImage == null) {
+        if (widgetWorkshopData.image_url != null &&
+            widgetWorkshopData.image_url.isNotEmpty &&
+            oldImage == null) {
           await deleteImageFromFirestore(widgetWorkshopData.image_url);
         }
 

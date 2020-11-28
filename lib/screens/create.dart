@@ -113,7 +113,8 @@ class _CreateEditScreenState extends State<CreateEditScreen> {
     this._searchContactsController = TextEditingController();
 
     if (widget.workshopData != null) {
-      if (widget.workshopData.image_url != null) {
+      if (widget.workshopData.image_url != null &&
+          widget.workshopData.image_url.isNotEmpty) {
         this._oldImage = NetworkImage(widget.workshopData.image_url);
       }
 
