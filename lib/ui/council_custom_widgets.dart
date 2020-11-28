@@ -75,7 +75,7 @@ class CouncilCustomWidgets {
                   subtitle: councilData.name,
                   id: councilData.clubs[index].id,
                   imageUrl: councilData.clubs[index].small_image_url,
-                  isCouncil: false,
+                  isClub: true,
                   club: councilData.clubs[index],
                   horizontal: true,
                 );

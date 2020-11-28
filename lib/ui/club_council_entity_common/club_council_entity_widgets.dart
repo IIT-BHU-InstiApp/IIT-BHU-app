@@ -373,39 +373,46 @@ class ClubCouncilAndEntityWidgets {
     String imageUrl,
     bool isCouncil = false,
     bool isEntity = false,
+    bool isClub = false,
     horizontal = false,
     ClubListPost club,
     EntityListPost entity,
     String clubTypeForHero = 'default',
     String entityTypeForHero = 'default',
   }) {
-    if (isCouncil == false) {
-      final File clubLogoFile =
-          AppConstants.getImageFile(isSmall: true, id: id, isClub: true);
-      if (clubLogoFile == null) {
-        AppConstants.writeImageFileIntoDisk(
-            isClub: true, isSmall: true, id: id, url: imageUrl);
-      }
-    }
+    int _counter = 0;
+    if (isCouncil) _counter++;
+    if (isClub) _counter++;
+    if (isEntity) _counter++;
 
-    if (isEntity) {
-      final File entityLogoFile = AppConstants.getImageFile(
-        isSmall: true,
-        id: id,
-        isEntity: true,
-      );
-      if (entityLogoFile == null) {
-        AppConstants.writeImageFileIntoDisk(
-            isEntity: true, isSmall: true, id: id, url: imageUrl);
-      }
-    }
+    assert(_counter == 1, 'All three, council club entity , can not be true');
 
-    final File _largeLogofile = AppConstants.getImageFile(
-        isCouncil: isCouncil,
-        isClub: !isCouncil,
-        isEntity: isEntity,
-        isSmall: false,
-        id: id);
+    bool isSmall = horizontal;
+
+    File logoFile = AppConstants.getImageFile(
+      isSmall: isSmall,
+      id: id,
+      isEntity: isEntity,
+      isClub: isClub,
+      isCouncil: isCouncil,
+    );
+
+    if (logoFile == null) {
+      AppConstants.writeImageFileIntoDisk(
+          isSmall: isSmall,
+          id: id,
+          isEntity: isEntity,
+          isClub: isClub,
+          isCouncil: isCouncil,
+          url: imageUrl);
+    }
+    logoFile = AppConstants.getImageFile(
+      isSmall: isSmall,
+      id: id,
+      isEntity: isEntity,
+      isClub: isClub,
+      isCouncil: isCouncil,
+    );
 
     final clubThumbnail = Container(
       margin: EdgeInsets.symmetric(vertical: 16.0),
@@ -420,9 +427,9 @@ class ClubCouncilAndEntityWidgets {
               fit: BoxFit.contain,
               image: imageUrl == null || imageUrl == ''
                   ? AssetImage('assets/iitbhu.jpeg')
-                  : _largeLogofile == null
+                  : logoFile == null
                       ? NetworkImage(imageUrl)
-                      : FileImage(_largeLogofile),
+                      : FileImage(logoFile),
             ),
           ),
           height: horizontal ? 50 : 82,
@@ -441,9 +448,9 @@ class ClubCouncilAndEntityWidgets {
             fit: BoxFit.contain,
             image: imageUrl == null || imageUrl == ''
                 ? AssetImage('assets/iitbhu.jpeg')
-                : _largeLogofile == null
+                : logoFile == null
                     ? NetworkImage(imageUrl)
-                    : FileImage(_largeLogofile),
+                    : FileImage(logoFile),
           ),
         ),
         height: 92.0,
@@ -464,9 +471,9 @@ class ClubCouncilAndEntityWidgets {
               fit: BoxFit.contain,
               image: imageUrl == null || imageUrl == ''
                   ? AssetImage('assets/iitbhu.jpeg')
-                  : _largeLogofile == null
+                  : logoFile == null
                       ? NetworkImage(imageUrl)
-                      : FileImage(_largeLogofile),
+                      : FileImage(logoFile),
             ),
           ),
           height: horizontal ? 50 : 82,

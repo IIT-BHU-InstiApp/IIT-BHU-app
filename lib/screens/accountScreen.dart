@@ -26,16 +26,16 @@ class AccountScreen extends StatelessWidget {
         itemCount: profileDetails.club_subscriptions.length,
         itemBuilder: (context, index) {
           return ClubCouncilAndEntityWidgets.getTitleCard(
-              clubTypeForHero: 'club_subscriptions',
-              context: context,
-              title: profileDetails.club_subscriptions[index].name,
-              subtitle: profileDetails.club_subscriptions[index].council.name,
-              id: profileDetails.club_subscriptions[index].id,
-              imageUrl:
-                  profileDetails.club_subscriptions[index].small_image_url,
-              club: profileDetails.club_subscriptions[index],
-              isCouncil: false,
-              horizontal: true);
+            clubTypeForHero: 'club_subscriptions',
+            isClub: true,
+            context: context,
+            title: profileDetails.club_subscriptions[index].name,
+            subtitle: profileDetails.club_subscriptions[index].council.name,
+            id: profileDetails.club_subscriptions[index].id,
+            imageUrl: profileDetails.club_subscriptions[index].small_image_url,
+            club: profileDetails.club_subscriptions[index],
+            horizontal: true,
+          );
         },
       );
     } else {
@@ -52,7 +52,6 @@ class AccountScreen extends StatelessWidget {
               imageUrl:
                   profileDetails.entity_subscriptions[index].small_image_url,
               entity: profileDetails.entity_subscriptions[index],
-              isCouncil: false,
               isEntity: true,
               horizontal: true);
         },
@@ -262,7 +261,7 @@ class AccountScreen extends StatelessWidget {
                               imageUrl: profileDetails
                                   .club_privileges[index].small_image_url,
                               club: profileDetails.club_privileges[index],
-                              isCouncil: false,
+                              isClub: true,
                               horizontal: true);
                         },
                       ),
@@ -291,7 +290,6 @@ class AccountScreen extends StatelessWidget {
                               imageUrl: profileDetails
                                   .entity_privileges[index].small_image_url,
                               entity: profileDetails.entity_privileges[index],
-                              isCouncil: false,
                               isEntity: true,
                               horizontal: true);
                         },
