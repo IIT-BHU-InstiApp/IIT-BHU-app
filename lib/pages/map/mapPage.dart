@@ -430,11 +430,11 @@ class _MyAppState extends State<TheMap> {
                                     _displayMarkers[index]
                                         .position
                                         .latitude
-                                        .toString(),
+                                        .toStringAsFixed(6),
                                     _displayMarkers[index]
                                         .position
                                         .longitude
-                                        .toString(),
+                                        .toStringAsFixed(6),
                                     _displayMarkers[index]
                                         .infoWindow
                                         .title
