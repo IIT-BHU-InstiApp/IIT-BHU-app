@@ -12,16 +12,18 @@ class ClubAndEntityWidgets {
           ? Center(
               child:
                   Text('No Activity :(', style: TextStyle(color: Colors.white)))
-          : ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              scrollDirection: Axis.vertical,
-              itemCount: w.length,
-              padding: EdgeInsets.all(8),
-              itemBuilder: (context, index) {
-                return WorkshopCustomWidgets.getWorkshopOrEventCard(context,
-                    w: w[index], reload: reload);
-              },
+          : Expanded(
+              child: ListView.builder(
+                shrinkWrap: true,
+                physics: const ClampingScrollPhysics(),
+                scrollDirection: Axis.vertical,
+                itemCount: w.length,
+                padding: EdgeInsets.all(8),
+                itemBuilder: (context, index) {
+                  return WorkshopCustomWidgets.getWorkshopOrEventCard(context,
+                      w: w[index], reload: reload);
+                },
+              ),
             );
     }
 
