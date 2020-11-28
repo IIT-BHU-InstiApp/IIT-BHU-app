@@ -202,6 +202,25 @@ class AppConstants {
     print('workshops fetched and updated ');
   }
 
+  static Future updateAndPopulateAllEntities() async {
+    DatabaseHelper helper = DatabaseHelper.instance;
+    var database = await helper.database;
+
+    final entitySummarySnapshots = await service.getAllEntity();
+    final entitySummaryPosts = entitySummarySnapshots.body;
+
+    if (entitySummaryPosts != null) {
+      await DatabaseWrite.deleteAllEntitySummary(db: database);
+      await DatabaseWrite.insertEntitiesSummaryIntoDatabase(
+          db: database, entities: entitySummaryPosts);
+
+      entitySummaryPosts.forEach((entity) async {
+        await writeImageFileIntoDisk(entity.small_image_url);
+      });
+      entitiesSummaryFromDatabase = entitySummaryPosts;
+    }
+  }
+
   static Future getCouncilDetailsFromDatabase(
       {@required int councilId, bool refresh = false}) async {
     DatabaseHelper helper = DatabaseHelper.instance;

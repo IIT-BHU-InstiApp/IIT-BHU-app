@@ -8,7 +8,7 @@ import '../services/buildWorkshops.dart' as buildWorkhops;
 class HomeScreen extends StatefulWidget {
   final BuildContext context;
   final GlobalKey<FabCircularMenuState> fabKey;
-  final Function reload;
+  final Function(bool refreshed) reload;
 
   const HomeScreen({Key key, this.context, this.fabKey, this.reload})
       : super(key: key);
@@ -23,7 +23,7 @@ class _HomeScreenState extends State<HomeScreen>
 
   void onRefresh() async {
     await AppConstants.updateAndPopulateWorkshops();
-    this.widget.reload();
+    this.widget.reload(true);
   }
 
   @override

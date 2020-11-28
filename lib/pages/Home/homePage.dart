@@ -28,20 +28,23 @@ class _HomePageState extends State<HomePage>
 
   @override
   void initState() {
-    fetchWorkshopsAndCouncilAndEntityButtons();
+    _fetchWorkshopsAndCouncilAndEntityButtons(false);
     searchListener = ValueNotifier(false);
     searchBarWidget = SearchBarWidget(searchListener);
     searchFocusNode = FocusNode();
     super.initState();
   }
 
-  fetchWorkshopsAndCouncilAndEntityButtons() async {
-    await AppConstants.populateWorkshopsAndCouncilAndEntityButtons();
-    setState(() {
-      AppConstants.firstTimeFetching = false;
-    });
+  _fetchWorkshopsAndCouncilAndEntityButtons(bool refreshed) async {
+    if (refreshed != true) {
+      await AppConstants.populateWorkshopsAndCouncilAndEntityButtons();
+      setState(() {
+        AppConstants.firstTimeFetching = false;
+      });
+    }
     await AppConstants.updateAndPopulateWorkshops();
-
+    setState(() {});
+    await AppConstants.updateAndPopulateAllEntities();
     await AppConstants.writeCouncilAndEntityLogoIntoDisk();
     setState(() {});
   }
@@ -128,7 +131,7 @@ class _HomePageState extends State<HomePage>
                         : HomeScreen(
                             context: context,
                             fabKey: fabKey,
-                            reload: () => {setState(() {})},
+                            reload: _fetchWorkshopsAndCouncilAndEntityButtons,
                           );
                   },
                 ),

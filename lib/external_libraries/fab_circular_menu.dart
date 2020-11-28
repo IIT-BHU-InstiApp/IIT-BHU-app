@@ -51,7 +51,7 @@ class FabCircularMenu extends StatefulWidget {
     this.innerRingDiameter,
     this.innerRingWidth,
   })  : assert(children != null),
-        assert(innerRingChildren == null || innerRingChildren.length <= 3),
+        // assert(innerRingChildren == null || innerRingChildren.length <= 3),
         assert(children.length >= 2),
         super(key: key);
 
