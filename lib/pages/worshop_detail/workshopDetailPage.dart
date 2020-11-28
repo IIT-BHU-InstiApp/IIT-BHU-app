@@ -263,33 +263,35 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
         deleteResource: deleteResource);
 
     return SafeArea(
-      minimum: const EdgeInsets.all(2.0),
-      child: WillPopScope(
-        onWillPop: _willPopCallback,
-      child: RefreshIndicator(
-        onRefresh: () async => _reload(),
-        child: Scaffold(
-          key: _scaffoldKey,
-          backgroundColor: ColorConstants.backgroundThemeColor,
-          body: SlidingUpPanel(
-            controller: _panelController,
-            body: workshopDetailCustomWidgets.getPanelBackground(),
-            borderRadius: radius,
-            backdropEnabled: true,
-            parallaxEnabled: true,
-            collapsed: Container(
-              decoration: BoxDecoration(
+        minimum: const EdgeInsets.all(2.0),
+        child: WillPopScope(
+          onWillPop: _willPopCallback,
+          child: RefreshIndicator(
+            onRefresh: () async => _reload(),
+            child: Scaffold(
+              key: _scaffoldKey,
+              backgroundColor: ColorConstants.backgroundThemeColor,
+              body: SlidingUpPanel(
+                controller: _panelController,
+                body: workshopDetailCustomWidgets.getPanelBackground(),
                 borderRadius: radius,
+                backdropEnabled: true,
+                parallaxEnabled: true,
+                collapsed: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: radius,
+                  ),
+                ),
+                minHeight:
+                    ClubCouncilAndEntityWidgets.getMinPanelHeight(context),
+                maxHeight:
+                    ClubCouncilAndEntityWidgets.getMaxPanelHeight(context),
+                header: workshopDetailCustomWidgets.getPanelHeader(context),
+                panelBuilder: (ScrollController sc) =>
+                    workshopDetailCustomWidgets.getPanel(sc: sc),
               ),
             ),
-            minHeight: ClubCouncilAndEntityWidgets.getMinPanelHeight(context),
-            maxHeight: ClubCouncilAndEntityWidgets.getMaxPanelHeight(context),
-            header: workshopDetailCustomWidgets.getPanelHeader(context),
-            panelBuilder: (ScrollController sc) =>
-                workshopDetailCustomWidgets.getPanel(sc: sc),
           ),
-        ),
-      ),
-    );
+        ));
   }
 }
