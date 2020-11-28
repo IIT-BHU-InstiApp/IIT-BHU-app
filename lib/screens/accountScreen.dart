@@ -187,8 +187,12 @@ class AccountScreen extends StatelessWidget {
                         IconButton(
                           icon: Icon(Icons.edit),
                           onPressed: () async {
-                            final phoneNumber = await asyncInputDialog(context,
-                                'Phone No.', profileDetails.phone_number);
+                            final phoneNumber = await asyncInputDialog(
+                                context,
+                                'Phone No.',
+                                profileDetails.phone_number == ''
+                                    ? '+91'
+                                    : profileDetails.phone_number);
                             print(phoneNumber);
                             updateProfileDetails(
                                 profileDetails.name, phoneNumber);

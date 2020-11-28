@@ -38,6 +38,9 @@ class _AccountPageState extends State<AccountPage> {
             children: <Widget>[
               Expanded(
                   child: TextField(
+                keyboardType: queryName == 'Phone No.'
+                    ? TextInputType.phone
+                    : TextInputType.name,
                 autofocus: true,
                 controller: controller,
                 decoration: InputDecoration(
@@ -67,7 +70,8 @@ class _AccountPageState extends State<AccountPage> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: new Text("Unsuccessful :("),
-          content: new Text("Please try again"),
+          content: new Text(
+              "Please enter a number of the form +919876543210. Don't forget +91!"),
           actions: <Widget>[
             FlatButton(
               child: new Text("Ok"),
