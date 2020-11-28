@@ -15,14 +15,14 @@ Widget homeFAB(context, {fabKey}) =>
             key: fabKey,
             ringColor: ColorConstants.circularRingBackground,
             ringDiameter: 400,
-            ringWidth: 84,
-            fabSize: 65,
-            innerRingDiameter: 240,
-            innerRingWidth: 60,
+            ringWidth: 75,
+            fabSize: 45,
+            innerRingDiameter: 200,
+            innerRingWidth: 55,
             // animationDuration: Duration(milliseconds: 500),
             fabOpenColor: Colors.red,
             children: AppConstants.councilsSummaryfromDatabase
-                    ?.map((council) => _fabButtons(context, 52,
+                    ?.map((council) => _fabButtons(context, 50,
                         council: council,
                         entity: null,
                         imageUrl: council.small_image_url))
@@ -31,7 +31,7 @@ Widget homeFAB(context, {fabKey}) =>
 
             innerRingChildren: AppConstants.entitiesSummaryFromDatabase
                     ?.where((entity) => entity.is_permanent == true)
-                    ?.map((entity) => _fabButtons(context, 52,
+                    ?.map((entity) => _fabButtons(context, 42,
                         council: null,
                         entity: entity,
                         imageUrl: entity.small_image_url))
@@ -68,23 +68,19 @@ Widget _fabButtons(BuildContext context, double size,
       );
     },
     child: Container(
-      padding: const EdgeInsets.all(0),
-      // color: Colors.blue,
-      child: Container(
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          image: DecorationImage(
-            image: _imageFile != null
-                ? FileImage(_imageFile)
-                : imageUrl?.isEmpty != false
-                    ? AssetImage('assets/iitbhu.jpeg')
-                    : NetworkImage(imageUrl),
-            fit: BoxFit.fill,
-          ),
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        image: DecorationImage(
+          image: _imageFile != null
+              ? FileImage(_imageFile)
+              : imageUrl?.isEmpty != false
+                  ? AssetImage('assets/iitbhu.jpeg')
+                  : NetworkImage(imageUrl),
+          fit: BoxFit.fill,
         ),
-        height: size,
-        width: size,
       ),
+      height: size,
+      width: size,
     ),
   );
 }

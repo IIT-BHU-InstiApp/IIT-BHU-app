@@ -257,7 +257,7 @@ class FabCircularMenuState extends State<FabCircularMenu>
     }
 
     final angle = vector.radians(
-        84.0 / (widget.innerRingChildren.length - 1) * (index) + angleFix + 4);
+        90.0 / (widget.innerRingChildren.length - 1) * (index) + angleFix + 4);
 
     return Transform(
         transform: Matrix4.translationValues(
