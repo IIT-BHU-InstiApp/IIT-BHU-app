@@ -123,7 +123,8 @@ class _ResourceCreateScreenState extends State<ResourceCreateScreen> {
     return SafeArea(
       minimum: const EdgeInsets.all(5.0),
       child: Scaffold(
-        appBar: AppBar(title: Text("Add and edit resources")),
+        appBar:
+            AppBar(title: Text(editMode ? "Edit Resources" : "Add Resources")),
         body: Builder(builder: (context) {
           return Container(
             padding: EdgeInsets.all(15),
@@ -149,6 +150,10 @@ class _ResourceCreateScreenState extends State<ResourceCreateScreen> {
                     validator: (value) {
                       if (value.isEmpty) {
                         return 'Please enter some resource link';
+                      }
+                      if (!value.startsWith("https://") &&
+                          !value.startsWith("http://")) {
+                        return 'The link must begin with https:// or http://';
                       }
                       return null;
                     },

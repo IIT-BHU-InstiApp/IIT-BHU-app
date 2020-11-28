@@ -158,7 +158,9 @@ class WorkshopDetailCustomWidgets {
                             builder: (context) =>
                                 ResourceCreateScreen(workshopDetail),
                           ),
-                        )
+                        ).then((isEdited) {
+                          if (isEdited) reload();
+                        })
                       },
                     )
                   : Container()

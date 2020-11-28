@@ -253,24 +253,27 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
 
     return SafeArea(
       minimum: const EdgeInsets.all(2.0),
-      child: Scaffold(
-        key: _scaffoldKey,
-        backgroundColor: ColorConstants.backgroundThemeColor,
-        body: SlidingUpPanel(
-          body: workshopDetailCustomWidgets.getPanelBackground(),
-          borderRadius: radius,
-          backdropEnabled: true,
-          parallaxEnabled: true,
-          collapsed: Container(
-            decoration: BoxDecoration(
-              borderRadius: radius,
+      child: RefreshIndicator(
+        onRefresh: () async => _reload(),
+        child: Scaffold(
+          key: _scaffoldKey,
+          backgroundColor: ColorConstants.backgroundThemeColor,
+          body: SlidingUpPanel(
+            body: workshopDetailCustomWidgets.getPanelBackground(),
+            borderRadius: radius,
+            backdropEnabled: true,
+            parallaxEnabled: true,
+            collapsed: Container(
+              decoration: BoxDecoration(
+                borderRadius: radius,
+              ),
             ),
+            minHeight: ClubCouncilAndEntityWidgets.getMinPanelHeight(context),
+            maxHeight: ClubCouncilAndEntityWidgets.getMaxPanelHeight(context),
+            header: workshopDetailCustomWidgets.getPanelHeader(context),
+            panelBuilder: (ScrollController sc) =>
+                workshopDetailCustomWidgets.getPanel(sc: sc),
           ),
-          minHeight: ClubCouncilAndEntityWidgets.getMinPanelHeight(context),
-          maxHeight: ClubCouncilAndEntityWidgets.getMaxPanelHeight(context),
-          header: workshopDetailCustomWidgets.getPanelHeader(context),
-          panelBuilder: (ScrollController sc) =>
-              workshopDetailCustomWidgets.getPanel(sc: sc),
         ),
       ),
     );
