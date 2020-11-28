@@ -179,7 +179,9 @@ class _DescriptionState extends State<Description> {
                                 onPressed: () async {
                                   bool isconfirmed =
                                       await CreatePageDialogBoxes.confirmDialog(
-                                          context: context, action: 'Edit');
+                                          context: context,
+                                          title: 'Edit',
+                                          action: 'Edit');
 
                                   if (isconfirmed == false) return;
                                   if (widget.isClub) {

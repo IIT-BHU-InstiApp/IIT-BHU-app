@@ -302,589 +302,608 @@ class _CreateEditScreenState extends State<CreateEditScreen> {
     setState(() {});
   }
 
+  Future<bool> _onWillPop() async {
+    final res = await CreatePageDialogBoxes.confirmDialog(
+        context: context, title: 'Exit', action: 'Exit');
+    return res == true ? true : false;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      minimum: const EdgeInsets.all(2.0),
-      child: Scaffold(
-        // backgroundColor: ColorConstants.homeBackground,
-        appBar: AppBar(
-            backgroundColor: ColorConstants.homeBackground,
-            title: widget.workshopData == null
-                ? Text(
-                    _workshop.is_workshop ? 'Create Workshop' : 'Create Event')
-                : Text(_workshop.is_workshop ? 'Edit Workshop' : 'Edit Event')),
-        body: Container(
-          padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
-          child: Builder(
-            builder: (context) => Form(
-              key: _formKey,
-              child: ListView(
-                children: [
-                  Text(
-                    widget.title,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.blue, fontSize: 24),
-                  ),
-                  SizedBox(height: 8),
-                  Card(
-                    elevation: 4,
-                    child: Container(
-                      padding: const EdgeInsets.all(8),
-                      height: MediaQuery.of(context).size.height / 4,
-                      child: Stack(
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              image: this._oldImage == null
-                                  ? (_newImage == null
-                                      ? null
-                                      : DecorationImage(image: _newImage))
-                                  : DecorationImage(image: this._oldImage),
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: SafeArea(
+        minimum: const EdgeInsets.all(2.0),
+        child: Scaffold(
+          // backgroundColor: ColorConstants.homeBackground,
+          appBar: AppBar(
+              backgroundColor: ColorConstants.homeBackground,
+              title: widget.workshopData == null
+                  ? Text(_workshop.is_workshop
+                      ? 'Create Workshop'
+                      : 'Create Event')
+                  : Text(
+                      _workshop.is_workshop ? 'Edit Workshop' : 'Edit Event')),
+          body: Container(
+            padding:
+                const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
+            child: Builder(
+              builder: (context) => Form(
+                key: _formKey,
+                child: ListView(
+                  children: [
+                    Text(
+                      widget.title,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Colors.blue, fontSize: 24),
+                    ),
+                    SizedBox(height: 8),
+                    Card(
+                      elevation: 4,
+                      child: Container(
+                        padding: const EdgeInsets.all(8),
+                        height: MediaQuery.of(context).size.height / 4,
+                        child: Stack(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                image: this._oldImage == null
+                                    ? (_newImage == null
+                                        ? null
+                                        : DecorationImage(image: _newImage))
+                                    : DecorationImage(image: this._oldImage),
+                              ),
+                              child: InkWell(
+                                  onTap: _pickImage,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Center(child: Icon(Icons.add, size: 40)),
+                                      _newImage == null
+                                          ? Text(
+                                              'By default, ${_isEntity ? widget.entity.name : widget.club.name}\'s logo will be shown')
+                                          : Container(),
+                                    ],
+                                  )),
                             ),
-                            child: InkWell(
-                                onTap: _pickImage,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Center(child: Icon(Icons.add, size: 40)),
-                                    _newImage == null
-                                        ? Text(
-                                            'By default, ${_isEntity ? widget.entity.name : widget.club.name}\'s logo will be shown')
-                                        : Container(),
-                                  ],
-                                )),
-                          ),
-                          _newImage != null
-                              ? Align(
-                                  alignment: Alignment.topRight,
-                                  child: CircleAvatar(
-                                    radius: 24,
-                                    backgroundColor: Colors.yellow,
-                                    child: IconButton(
-                                      icon: Icon(
-                                        Icons.clear,
-                                        color: Colors.red,
-                                        size: 30,
+                            _newImage != null
+                                ? Align(
+                                    alignment: Alignment.topRight,
+                                    child: CircleAvatar(
+                                      radius: 24,
+                                      backgroundColor: Colors.yellow,
+                                      child: IconButton(
+                                        icon: Icon(
+                                          Icons.clear,
+                                          color: Colors.red,
+                                          size: 30,
+                                        ),
+                                        onPressed: () {
+                                          if (_oldImage != null) {
+                                            this._oldImage = null;
+                                          }
+                                          setState(() {
+                                            _newImage = null;
+                                          });
+                                        },
                                       ),
-                                      onPressed: () {
-                                        if (_oldImage != null) {
-                                          this._oldImage = null;
-                                        }
-                                        setState(() {
-                                          _newImage = null;
-                                        });
-                                      },
                                     ),
-                                  ),
-                                )
-                              : Container(),
-                        ],
+                                  )
+                                : Container(),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(height: 8),
-                  TextFormField(
-                    decoration: InputDecoration(
-                        labelText: _workshop.is_workshop
-                            ? 'Title of the Workshop'
-                            : 'Title of the Event'),
-                    controller: this._titleController,
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return 'Please enter the title';
-                      }
-                      return null;
-                    },
-                    onSaved: (val) => _workshop.title = val,
-                  ),
-                  SizedBox(height: 8),
-                  TextFormField(
-                      decoration: InputDecoration(labelText: 'Description'),
-                      minLines: 3,
-                      maxLines: 6,
-                      controller: this._descriptionController,
+                    SizedBox(height: 8),
+                    TextFormField(
+                      decoration: InputDecoration(
+                          labelText: _workshop.is_workshop
+                              ? 'Title of the Workshop'
+                              : 'Title of the Event'),
+                      controller: this._titleController,
                       validator: (value) {
                         if (value.isEmpty) {
-                          return 'Please describe the workshop in detail.';
+                          return 'Please enter the title';
                         }
                         return null;
                       },
-                      onSaved: (val) =>
-                          setState(() => _workshop.description = val)),
-                  SizedBox(height: 8),
-                  TextFormField(
-                      decoration: InputDecoration(
-                          labelText: 'Link',
-                          hintText: 'Link should be valid url'),
-                      controller: this._linkController,
-                      onSaved: (val) => _workshop.link = val),
-                  SizedBox(height: 8),
-                  Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text("Date:"),
-                      RaisedButton(
-                        onPressed: () => _selectDate(context),
-                        child: Text('${_workshop.date}'),
-                      ),
-                      Text("Time:"),
-                      RaisedButton(
-                        onPressed: () => _selectTime(context),
-                        child: Text('${_workshop.time}'),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: TextFormField(
-                            decoration: InputDecoration(
-                              labelText: 'Location',
-                              hintText: 'Choose from Map or enter manually',
-                            ),
-                            controller: this._locationController,
-                            onSaved: (val) => _workshop.location = val),
-                      ),
-                      this._workshop.latitude != null &&
-                              this._workshop.latitude != ''
-                          ? IconButton(
-                              icon: Icon(Icons.clear),
-                              onPressed: () {
-                                this._workshop.latitude = null;
-                                this._workshop.longitude = null;
-                                this._workshop.location = null;
-                                _locationController.clear();
-                                setState(() {});
-                              })
-                          : Container(),
-                      RaisedButton(
-                        child: Icon(Icons.map),
-                        onPressed: () async {
-                          final location = await Navigator.of(context)
-                                  .pushNamed('/mapPage',
-                                      arguments: {'fromWorkshopCreate': true})
-                              as List<String>;
-                          this._workshop.latitude =
-                              location == null ? null : location[0];
-                          this._workshop.longitude =
-                              location == null ? null : location[1];
-                          _locationController.text = location == null
-                              ? _locationController.text
-                              : location[2];
-                          setState(() {});
-                        },
-                      ),
-                    ],
-                  ),
-                  this._workshop.latitude != null &&
-                          this._workshop.longitude != null
-                      ? Text(
-                          '${this._workshop.latitude}, ${this._workshop.longitude}')
-                      : Container(),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      labelText: 'Audience',
-                      hintText: 'Who should attend it?',
+                      onSaved: (val) => _workshop.title = val,
                     ),
-                    controller: this._audienceController,
-                    validator: (value) {
-                      return null;
-                    },
-                    onSaved: (val) => _workshop.audience = val,
-                  ),
-                  Form(
-                    key: this._searchContactFormKey,
-                    child: Row(
+                    SizedBox(height: 8),
+                    TextFormField(
+                        decoration: InputDecoration(labelText: 'Description'),
+                        minLines: 3,
+                        maxLines: 6,
+                        controller: this._descriptionController,
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Please describe the workshop in detail.';
+                          }
+                          return null;
+                        },
+                        onSaved: (val) =>
+                            setState(() => _workshop.description = val)),
+                    SizedBox(height: 8),
+                    TextFormField(
+                        decoration: InputDecoration(
+                            labelText: 'Link',
+                            hintText: 'Link should be valid url'),
+                        controller: this._linkController,
+                        onSaved: (val) => _workshop.link = val),
+                    SizedBox(height: 8),
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        _searchCategoryDropDown(),
-                        Expanded(
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                                labelText:
-                                    'Search contacts by ${this._searchByValue}'),
-                            onFieldSubmitted: (value) async {
-                              if (value.isEmpty) return;
-
-                              if (!this
-                                  ._searchContactFormKey
-                                  .currentState
-                                  .validate()) return;
-
-                              this._searchPost = BuiltProfileSearchPost((b) => b
-                                ..search_by = this._searchByValue
-                                ..search_string =
-                                    this._searchContactsController.text);
-
-                              if (!this.mounted) return;
-                              setState(() {
-                                this._isSearchingContacts = true;
-                                this._searchedDataFetched = false;
-
-                                this._searchedProfileresult = null;
-                              });
-                              await AppConstants.service
-                                  .searchProfile(AppConstants.djangoToken,
-                                      this._searchPost)
-                                  .catchError((onError) {
-                                print(
-                                    'Error while fetching search results: $onError');
-                              }).then((result) {
-                                if (result != null)
-                                  this._searchedProfileresult = result.body;
-                              });
-
-                              if (!this.mounted) return;
-                              setState(() {
-                                this._searchedDataFetched = true;
-                              });
-                            },
-                            controller: this._searchContactsController,
-                            validator: (value) {
-                              if (value.isNotEmpty && value.length < 3)
-                                return '${this._searchByValue} must contain atleast 3 characters';
-                            },
-                          ),
+                        Text("Date:"),
+                        RaisedButton(
+                          onPressed: () => _selectDate(context),
+                          child: Text('${_workshop.date}'),
                         ),
-                        this._isSearchingContacts
-                            ? RaisedButton(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(50)),
-                                onPressed: () {
-                                  this._searchContactsController.text = '';
-                                  this._isSearchingContacts = false;
-                                  if (!this.mounted) return;
-                                  setState(() {});
-                                },
-                                child: Text('X Clear'),
-                              )
-                            : Container()
+                        Text("Time:"),
+                        RaisedButton(
+                          onPressed: () => _selectTime(context),
+                          child: Text('${_workshop.time}'),
+                        ),
                       ],
                     ),
-                  ),
-                  this._isSearchingContacts
-                      ? Column(
-                          children: <Widget>[
-                            Divider(
-                              height: 2,
-                              thickness: 2,
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextFormField(
+                              decoration: InputDecoration(
+                                labelText: 'Location',
+                                hintText: 'Choose from Map or enter manually',
+                              ),
+                              controller: this._locationController,
+                              onSaved: (val) => _workshop.location = val),
+                        ),
+                        this._workshop.latitude != null &&
+                                this._workshop.latitude != ''
+                            ? IconButton(
+                                icon: Icon(Icons.clear),
+                                onPressed: () {
+                                  this._workshop.latitude = null;
+                                  this._workshop.longitude = null;
+                                  this._workshop.location = null;
+                                  _locationController.clear();
+                                  setState(() {});
+                                })
+                            : Container(),
+                        RaisedButton(
+                          child: Icon(Icons.map),
+                          onPressed: () async {
+                            final location = await Navigator.of(context)
+                                    .pushNamed('/mapPage',
+                                        arguments: {'fromWorkshopCreate': true})
+                                as List<String>;
+                            this._workshop.latitude =
+                                location == null ? null : location[0];
+                            this._workshop.longitude =
+                                location == null ? null : location[1];
+                            _locationController.text = location == null
+                                ? _locationController.text
+                                : location[2];
+                            setState(() {});
+                          },
+                        ),
+                      ],
+                    ),
+                    this._workshop.latitude != null &&
+                            this._workshop.longitude != null
+                        ? Text(
+                            '${this._workshop.latitude}, ${this._workshop.longitude}')
+                        : Container(),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        labelText: 'Audience',
+                        hintText: 'Who should attend it?',
+                      ),
+                      controller: this._audienceController,
+                      validator: (value) {
+                        return null;
+                      },
+                      onSaved: (val) => _workshop.audience = val,
+                    ),
+                    Form(
+                      key: this._searchContactFormKey,
+                      child: Row(
+                        children: <Widget>[
+                          _searchCategoryDropDown(),
+                          Expanded(
+                            child: TextFormField(
+                              decoration: InputDecoration(
+                                  labelText:
+                                      'Search contacts by ${this._searchByValue}'),
+                              onFieldSubmitted: (value) async {
+                                if (value.isEmpty) return;
+
+                                if (!this
+                                    ._searchContactFormKey
+                                    .currentState
+                                    .validate()) return;
+
+                                this._searchPost = BuiltProfileSearchPost((b) =>
+                                    b
+                                      ..search_by = this._searchByValue
+                                      ..search_string =
+                                          this._searchContactsController.text);
+
+                                if (!this.mounted) return;
+                                setState(() {
+                                  this._isSearchingContacts = true;
+                                  this._searchedDataFetched = false;
+
+                                  this._searchedProfileresult = null;
+                                });
+                                await AppConstants.service
+                                    .searchProfile(AppConstants.djangoToken,
+                                        this._searchPost)
+                                    .catchError((onError) {
+                                  print(
+                                      'Error while fetching search results: $onError');
+                                }).then((result) {
+                                  if (result != null)
+                                    this._searchedProfileresult = result.body;
+                                });
+
+                                if (!this.mounted) return;
+                                setState(() {
+                                  this._searchedDataFetched = true;
+                                });
+                              },
+                              controller: this._searchContactsController,
+                              validator: (value) {
+                                if (value.isNotEmpty && value.length < 3)
+                                  return '${this._searchByValue} must contain atleast 3 characters';
+                              },
                             ),
-                            Container(
-                              height: MediaQuery.of(context).size.height / 6,
-                              child: _buildContactsFromSearchPosts(context),
-                            ),
-                            Divider(
-                              height: 2,
-                              thickness: 2,
-                            ),
-                          ],
-                        )
-                      : Container(),
-                  this._workshop.contactIds.length > 0
-                      ? Container(
-                          height: 50,
-                          child: Row(
-                            children: [
-                              Text('Contacts: '),
-                              Expanded(
-                                child: ListView.separated(
-                                  shrinkWrap: true,
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: this._workshop.contactIds.length,
-                                  itemBuilder: (context, index) {
-                                    int _id = this._workshop.contactIds[index];
-                                    return Container(
-                                      padding: EdgeInsets.all(2),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: <Widget>[
-                                          Text(this
-                                              ._workshop
-                                              .contactNameofId[_id]),
-                                          InkWell(
-                                            splashColor: Colors.red,
-                                            onTap: () {
-                                              setState(() {
-                                                this
-                                                    ._workshop
-                                                    .contactIds
-                                                    .remove(_id);
-                                                this
-                                                    ._workshop
-                                                    .contactNameofId
-                                                    .remove(_id);
-                                              });
-                                            },
-                                            child: Icon(Icons.cancel),
-                                          ),
-                                        ],
-                                      ),
-                                    );
+                          ),
+                          this._isSearchingContacts
+                              ? RaisedButton(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(50)),
+                                  onPressed: () {
+                                    this._searchContactsController.text = '';
+                                    this._isSearchingContacts = false;
+                                    if (!this.mounted) return;
+                                    setState(() {});
                                   },
-                                  separatorBuilder: (_, __) {
-                                    return Text(' | ');
-                                  },
-                                ),
+                                  child: Text('X Clear'),
+                                )
+                              : Container()
+                        ],
+                      ),
+                    ),
+                    this._isSearchingContacts
+                        ? Column(
+                            children: <Widget>[
+                              Divider(
+                                height: 2,
+                                thickness: 2,
+                              ),
+                              Container(
+                                height: MediaQuery.of(context).size.height / 6,
+                                child: _buildContactsFromSearchPosts(context),
+                              ),
+                              Divider(
+                                height: 2,
+                                thickness: 2,
                               ),
                             ],
-                          ),
-                        )
-                      : Container(),
-                  Row(children: [
-                    Expanded(
-                      child: TextFormField(
-                        controller: this._tagSearchController,
-                        decoration: InputDecoration(
-                          contentPadding:
-                              EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-                          labelText: 'Search tags by name',
-                          suffix: IconButton(
-                            icon: Icon(Icons.clear),
-                            onPressed: () {
-                              this._tagSearchController.text = '';
-                              if (!this.mounted) return;
-                            },
-                          ),
-                        ),
-                        onFieldSubmitted: (value) async {
-                          print("Submitted");
-                          if (value.isEmpty) return;
-
-                          this._tagSearchPost = TagSearch((b) =>
-                              b..tag_name = this._tagSearchController.text);
-
-                          if (!this.mounted) return;
-                          setState(() {
-                            this._isSearchingTags = true;
-                            this._tagDataFetched = false;
-                            this._searchedTagResult = null;
-                            this._allTagDataShow = false;
-                          });
-                          await (_isEntity
-                                  ? AppConstants.service.searchEntityTag(
-                                      widget.entity.id,
-                                      AppConstants.djangoToken,
-                                      this._tagSearchPost)
-                                  : AppConstants.service.searchClubTag(
-                                      widget.club.id,
-                                      AppConstants.djangoToken,
-                                      this._tagSearchPost))
-                              .catchError((onError) {
-                            print('Error while fetching tags $onError');
-                          }).then((result) {
-                            if (result != null)
-                              this._searchedTagResult = result.body;
-                          });
-                          if (!this.mounted) return;
-                          setState(() {
-                            this._tagDataFetched = true;
-                          });
-                        },
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                      child: RaisedButton(
-                        child: Text('+ Create'),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50),
-                        ),
-                        onPressed: () async {
-                          await tagCreateDialog();
-                        },
-                      ),
-                    ),
-                    this._isSearchingTags || this._allTagDataShow
-                        ? RaisedButton(
-                            child: Text('X Clear'),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(50),
-                            ),
-                            onPressed: () {
-                              FocusScope.of(context).unfocus();
-                              this._tagSearchController.text = '';
-                              this._isSearchingTags = false;
-                              this._allTagsOfClubOrEntity = null;
-                              this._allTagDataShow = false;
-                              this._allTagDataFetched = false;
-                              if (!this.mounted) return;
-                              setState(() {});
-                            },
                           )
-                        : RaisedButton(
-                            child: Text('All Tags'),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(50),
-                            ),
-                            onPressed: () async {
-                              FocusScope.of(context).unfocus();
-                              if (!_isEntity) {
-                                await AppConstants.service
-                                    .getClubTags(widget.club.id,
-                                        AppConstants.djangoToken)
-                                    .catchError((onError) {
-                                  print(
-                                      'Error while fetching all tags $onError');
-                                }).then((result) {
-                                  if (result != null) {
-                                    this._allTagsOfClubOrEntity =
-                                        result.body.club_tags;
-                                    this._allTagDataShow = true;
-                                    this._allTagDataFetched = true;
-                                    setState(() {});
-                                  }
-                                });
-                              } else {
-                                await AppConstants.service
-                                    .getEntityTags(widget.entity.id,
-                                        AppConstants.djangoToken)
-                                    .catchError((onError) {
-                                  print(
-                                      'Error while fetching all tags $onError');
-                                }).then((result) {
-                                  if (result != null) {
-                                    this._allTagsOfClubOrEntity =
-                                        result.body.entity_tags;
-                                    this._allTagDataShow = true;
-                                    this._allTagDataFetched = true;
-                                    setState(() {});
-                                  }
-                                });
-                              }
-                            },
-                          ),
-                  ]),
-                  this._isSearchingTags || this._allTagDataShow
-                      ? Column(
-                          children: <Widget>[
-                            Divider(
-                              height: 2,
-                              thickness: 2,
-                            ),
-                            Container(
-                              constraints: BoxConstraints(
-                                maxHeight:
-                                    MediaQuery.of(context).size.height / 10,
-                              ),
-                              child: this._isSearchingTags
-                                  ? _buildTagsFromSearchPosts(context)
-                                  : this._allTagDataShow
-                                      ? _buildAllTagsOfClubOrEntity(context)
-                                      : Container(),
-                            ),
-                            Divider(
-                              height: 2,
-                              thickness: 2,
-                            ),
-                          ],
-                        )
-                      : Container(),
-                  this._workshop.tagNameofId.keys.length > 0
-                      ? Container(
-                          height: 50,
-                          child: Row(
-                            children: [
-                              Text('Tags: '),
-                              Expanded(
-                                child: ListView.separated(
-                                  shrinkWrap: true,
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount:
-                                      this._workshop.tagNameofId.keys.length,
-                                  itemBuilder: (context, index) {
-                                    int _id = this
-                                        ._workshop
-                                        .tagNameofId
-                                        .keys
-                                        .toList()[index];
-                                    return Container(
-                                      padding: EdgeInsets.all(2),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: <Widget>[
-                                          Text(this._workshop.tagNameofId[_id]),
-                                          InkWell(
-                                            child: Icon(Icons.cancel),
-                                            splashColor: Colors.red,
-                                            onTap: () {
-                                              setState(() {
-                                                this
-                                                    ._workshop
-                                                    .tagNameofId
-                                                    .remove(_id);
-                                              });
-                                            },
-                                          ),
-                                        ],
-                                      ),
-                                    );
-                                  },
-                                  separatorBuilder: (_, __) {
-                                    return Text(' | ');
-                                  },
+                        : Container(),
+                    this._workshop.contactIds.length > 0
+                        ? Container(
+                            height: 50,
+                            child: Row(
+                              children: [
+                                Text('Contacts: '),
+                                Expanded(
+                                  child: ListView.separated(
+                                    shrinkWrap: true,
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: this._workshop.contactIds.length,
+                                    itemBuilder: (context, index) {
+                                      int _id =
+                                          this._workshop.contactIds[index];
+                                      return Container(
+                                        padding: EdgeInsets.all(2),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: <Widget>[
+                                            Text(this
+                                                ._workshop
+                                                .contactNameofId[_id]),
+                                            InkWell(
+                                              splashColor: Colors.red,
+                                              onTap: () {
+                                                setState(() {
+                                                  this
+                                                      ._workshop
+                                                      .contactIds
+                                                      .remove(_id);
+                                                  this
+                                                      ._workshop
+                                                      .contactNameofId
+                                                      .remove(_id);
+                                                });
+                                              },
+                                              child: Icon(Icons.cancel),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                    separatorBuilder: (_, __) {
+                                      return Text(' | ');
+                                    },
+                                  ),
                                 ),
+                              ],
+                            ),
+                          )
+                        : Container(),
+                    Row(children: [
+                      Expanded(
+                        child: TextFormField(
+                          controller: this._tagSearchController,
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(
+                                vertical: 0, horizontal: 10),
+                            labelText: 'Search tags by name',
+                            suffix: IconButton(
+                              icon: Icon(Icons.clear),
+                              onPressed: () {
+                                this._tagSearchController.text = '';
+                                if (!this.mounted) return;
+                              },
+                            ),
+                          ),
+                          onFieldSubmitted: (value) async {
+                            print("Submitted");
+                            if (value.isEmpty) return;
+
+                            this._tagSearchPost = TagSearch((b) =>
+                                b..tag_name = this._tagSearchController.text);
+
+                            if (!this.mounted) return;
+                            setState(() {
+                              this._isSearchingTags = true;
+                              this._tagDataFetched = false;
+                              this._searchedTagResult = null;
+                              this._allTagDataShow = false;
+                            });
+                            await (_isEntity
+                                    ? AppConstants.service.searchEntityTag(
+                                        widget.entity.id,
+                                        AppConstants.djangoToken,
+                                        this._tagSearchPost)
+                                    : AppConstants.service.searchClubTag(
+                                        widget.club.id,
+                                        AppConstants.djangoToken,
+                                        this._tagSearchPost))
+                                .catchError((onError) {
+                              print('Error while fetching tags $onError');
+                            }).then((result) {
+                              if (result != null)
+                                this._searchedTagResult = result.body;
+                            });
+                            if (!this.mounted) return;
+                            setState(() {
+                              this._tagDataFetched = true;
+                            });
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                        child: RaisedButton(
+                          child: Text('+ Create'),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(50),
+                          ),
+                          onPressed: () async {
+                            await tagCreateDialog();
+                          },
+                        ),
+                      ),
+                      this._isSearchingTags || this._allTagDataShow
+                          ? RaisedButton(
+                              child: Text('X Clear'),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(50),
+                              ),
+                              onPressed: () {
+                                FocusScope.of(context).unfocus();
+                                this._tagSearchController.text = '';
+                                this._isSearchingTags = false;
+                                this._allTagsOfClubOrEntity = null;
+                                this._allTagDataShow = false;
+                                this._allTagDataFetched = false;
+                                if (!this.mounted) return;
+                                setState(() {});
+                              },
+                            )
+                          : RaisedButton(
+                              child: Text('All Tags'),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(50),
+                              ),
+                              onPressed: () async {
+                                FocusScope.of(context).unfocus();
+                                if (!_isEntity) {
+                                  await AppConstants.service
+                                      .getClubTags(widget.club.id,
+                                          AppConstants.djangoToken)
+                                      .catchError((onError) {
+                                    print(
+                                        'Error while fetching all tags $onError');
+                                  }).then((result) {
+                                    if (result != null) {
+                                      this._allTagsOfClubOrEntity =
+                                          result.body.club_tags;
+                                      this._allTagDataShow = true;
+                                      this._allTagDataFetched = true;
+                                      setState(() {});
+                                    }
+                                  });
+                                } else {
+                                  await AppConstants.service
+                                      .getEntityTags(widget.entity.id,
+                                          AppConstants.djangoToken)
+                                      .catchError((onError) {
+                                    print(
+                                        'Error while fetching all tags $onError');
+                                  }).then((result) {
+                                    if (result != null) {
+                                      this._allTagsOfClubOrEntity =
+                                          result.body.entity_tags;
+                                      this._allTagDataShow = true;
+                                      this._allTagDataFetched = true;
+                                      setState(() {});
+                                    }
+                                  });
+                                }
+                              },
+                            ),
+                    ]),
+                    this._isSearchingTags || this._allTagDataShow
+                        ? Column(
+                            children: <Widget>[
+                              Divider(
+                                height: 2,
+                                thickness: 2,
+                              ),
+                              Container(
+                                constraints: BoxConstraints(
+                                  maxHeight:
+                                      MediaQuery.of(context).size.height / 10,
+                                ),
+                                child: this._isSearchingTags
+                                    ? _buildTagsFromSearchPosts(context)
+                                    : this._allTagDataShow
+                                        ? _buildAllTagsOfClubOrEntity(context)
+                                        : Container(),
+                              ),
+                              Divider(
+                                height: 2,
+                                thickness: 2,
                               ),
                             ],
-                          ),
-                        )
-                      : Container(),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 16.0, horizontal: 64.0),
-                    child: RaisedButton(
-                      color: ColorConstants.homeBackground,
-                      onPressed: () async {
-                        final form = _formKey.currentState;
-                        if (form.validate()) {
-                          form.save();
-
-                          bool isconfirmed =
-                              await CreatePageDialogBoxes.confirmDialog(
-                                  context: context,
-                                  action: widget.workshopData == null
-                                      ? 'Create'
-                                      : 'Edit');
-
-                          if (isconfirmed == false || isconfirmed == null)
-                            return;
-
-                          Scaffold.of(context).showSnackBar(
-                            SnackBar(
-                              content: widget.workshopData == null
-                                  ? Text('Creating ...')
-                                  : Text('Editing ...'),
+                          )
+                        : Container(),
+                    this._workshop.tagNameofId.keys.length > 0
+                        ? Container(
+                            height: 50,
+                            child: Row(
+                              children: [
+                                Text('Tags: '),
+                                Expanded(
+                                  child: ListView.separated(
+                                    shrinkWrap: true,
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount:
+                                        this._workshop.tagNameofId.keys.length,
+                                    itemBuilder: (context, index) {
+                                      int _id = this
+                                          ._workshop
+                                          .tagNameofId
+                                          .keys
+                                          .toList()[index];
+                                      return Container(
+                                        padding: EdgeInsets.all(2),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: <Widget>[
+                                            Text(this
+                                                ._workshop
+                                                .tagNameofId[_id]),
+                                            InkWell(
+                                              child: Icon(Icons.cancel),
+                                              splashColor: Colors.red,
+                                              onTap: () {
+                                                setState(() {
+                                                  this
+                                                      ._workshop
+                                                      .tagNameofId
+                                                      .remove(_id);
+                                                });
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                    separatorBuilder: (_, __) {
+                                      return Text(' | ');
+                                    },
+                                  ),
+                                ),
+                              ],
                             ),
-                          );
+                          )
+                        : Container(),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 16.0, horizontal: 64.0),
+                      child: RaisedButton(
+                        color: ColorConstants.homeBackground,
+                        onPressed: () async {
+                          final form = _formKey.currentState;
+                          if (form.validate()) {
+                            form.save();
 
-                          if (widget.workshopData == null) {
-                            // if creation is successfull , then automatically user will reach at homePage.
-                            await _workshop.create(
-                                context: context,
-                                club: widget.club,
-                                entity: widget.entity,
-                                image: _newImage);
-                          } else {
-                            final success = await _workshop.edit(
-                              context: context,
-                              widgetWorkshopData: widget.workshopData,
-                              oldImage: _oldImage,
-                              newImage: _newImage,
+                            bool isconfirmed =
+                                await CreatePageDialogBoxes.confirmDialog(
+                                    context: context,
+                                    title: widget.workshopData == null
+                                        ? 'Create'
+                                        : 'Edit',
+                                    action: widget.workshopData == null
+                                        ? 'Create'
+                                        : 'Edit');
+
+                            if (isconfirmed == false || isconfirmed == null)
+                              return;
+
+                            Scaffold.of(context).showSnackBar(
+                              SnackBar(
+                                content: widget.workshopData == null
+                                    ? Text('Creating ...')
+                                    : Text('Editing ...'),
+                              ),
                             );
 
-                            if (success == true)
-                              Navigator.of(context).pop(true);
+                            if (widget.workshopData == null) {
+                              // if creation is successfull , then automatically user will reach at homePage.
+                              await _workshop.create(
+                                  context: context,
+                                  club: widget.club,
+                                  entity: widget.entity,
+                                  image: _newImage);
+                            } else {
+                              final success = await _workshop.edit(
+                                context: context,
+                                widgetWorkshopData: widget.workshopData,
+                                oldImage: _oldImage,
+                                newImage: _newImage,
+                              );
+
+                              if (success == true)
+                                Navigator.of(context).pop(true);
+                            }
                           }
-                        }
-                      },
-                      child: Text(
-                        widget.workshopData == null ? 'Create' : 'Edit',
-                        style: TextStyle(color: Colors.white),
+                        },
+                        child: Text(
+                          widget.workshopData == null ? 'Create' : 'Edit',
+                          style: TextStyle(color: Colors.white),
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

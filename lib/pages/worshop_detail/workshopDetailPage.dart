@@ -152,7 +152,7 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
 
   void deleteWorkshop() async {
     bool isConfirmed = await CreatePageDialogBoxes.confirmDialog(
-        context: context, action: 'Delete');
+        context: context, title: 'Delete', action: 'Delete');
     if (isConfirmed == true) {
       AppConstants.service
           .removeWorkshop(workshopSummary.id, AppConstants.djangoToken)

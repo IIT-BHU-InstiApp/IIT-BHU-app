@@ -46,27 +46,23 @@ class CreatePageDialogBoxes {
 
   static Future<bool> confirmDialog({
     @required BuildContext context,
+    String title,
     String action,
   }) async {
     return showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(action + " workshop"),
+          title: Text(title),
           content: Text("Are you sure to " + action + " this?"),
           actions: <Widget>[
             FlatButton(
               child: Text("Yup!"),
-              onPressed: () {
-                Navigator.of(context).pop(true);
-              },
+              onPressed: () => Navigator.of(context).pop(true),
             ),
             FlatButton(
               child: Text("Nope!"),
-              onPressed: () {
-                Navigator.of(context).pop(false);
-                return false;
-              },
+              onPressed: () => Navigator.of(context).pop(false),
             ),
           ],
         );
