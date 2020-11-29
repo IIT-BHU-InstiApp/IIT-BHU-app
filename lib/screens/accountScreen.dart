@@ -216,7 +216,10 @@ class AccountScreen extends StatelessWidget {
                           )
                         : profileDetails.club_subscriptions.length == 0
                             ? Text(
-                                'You haven\'t subscribed to any channels yet!')
+                                'You haven\'t subscribed to any channels yet!',
+                                style:
+                                    TextStyle(color: ColorConstants.textColor),
+                              )
                             : Container(child: subscribed("Club")),
                     SizedBox(height: 22),
                     Text(
@@ -234,7 +237,10 @@ class AccountScreen extends StatelessWidget {
                           )
                         : profileDetails.entity_subscriptions.length == 0
                             ? Text(
-                                'You haven\'t subscribed to any entities yet!')
+                                'You haven\'t subscribed to any entities yet!',
+                                style:
+                                    TextStyle(color: ColorConstants.textColor),
+                              )
                             : Container(child: subscribed("Entity")),
                     profileDetails.club_privileges.length == 0
                         ? Container()
