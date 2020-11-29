@@ -11,13 +11,13 @@ class InternetErrorFlushbar {
     flushbar = Flushbar(
       title: 'Internet Error',
       message: 'Could not connect to internet, please check your connection.',
-      duration: Duration(seconds: 2),
+      duration: Duration(seconds: 3),
       flushbarPosition: FlushbarPosition.BOTTOM,
       flushbarStyle: FlushbarStyle.FLOATING,
       showProgressIndicator: true,
       progressIndicatorBackgroundColor: Colors.blueGrey,
       isDismissible: false,
-      icon: Icon(Icons.error_outline, color: Colors.red),
+      icon: Icon(Icons.error_outline, color: Colors.red, size: 36),
     );
     flushbar.onStatusChanged = _handleStatus;
   }
