@@ -70,6 +70,8 @@ class CouncilCustomWidgets {
           )
         : Container(
             child: ListView.builder(
+              reverse: councilData.name.contains(
+                  'Sports'), // So that the teams are displayed in alphabetical order
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               itemCount: councilData.clubs.length,
