@@ -27,7 +27,7 @@ class ClubCustomWidgets {
   Widget getPanel(
       {@required ScrollController sc, @required ClubListPost club}) {
     return Container(
-      padding: EdgeInsets.only(top: 20.0),
+      padding: EdgeInsets.only(top: 16.0),
       decoration: BoxDecoration(
         borderRadius: radius,
         color: ColorConstants.panelColor,
@@ -36,10 +36,7 @@ class ClubCustomWidgets {
         controller: sc,
         children: [
           space,
-          SizedBox(
-            height: ClubCouncilAndEntityWidgets.getMinPanelHeight(context),
-          ),
-          ClubAndEntityWidgets.getActiveAndPastTabBar(
+          ClubAndEntityWidgets.getWorkshopEventTabBar(
               workshops: clubWorkshops,
               tabController: tabController,
               context: context,

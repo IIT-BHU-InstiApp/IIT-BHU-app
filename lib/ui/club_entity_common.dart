@@ -54,7 +54,7 @@ class ClubAndEntityWidgets {
           );
   }
 
-  static Widget getActiveAndPastTabBar(
+  static Widget getWorkshopEventTabBar(
       {BuiltAllWorkshopsPost workshops,
       @required TabController tabController,
       BuildContext context,
@@ -64,7 +64,7 @@ class ClubAndEntityWidgets {
       decoration: BoxDecoration(
           color: ColorConstants.workshopContainerBackground,
           borderRadius: BorderRadius.all(Radius.circular(20.0))),
-      height: MediaQuery.of(context).size.height * 0.7,
+      height: MediaQuery.of(context).size.height * 0.80,
       child: Column(
         children: [
           TabBar(

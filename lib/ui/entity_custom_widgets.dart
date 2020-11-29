@@ -45,7 +45,7 @@ class EntityCustomWidgets {
           SizedBox(
             height: ClubCouncilAndEntityWidgets.getMinPanelHeight(context),
           ),
-          ClubAndEntityWidgets.getActiveAndPastTabBar(
+          ClubAndEntityWidgets.getWorkshopEventTabBar(
               workshops: entityWorkshops,
               tabController: tabController,
               context: context,
