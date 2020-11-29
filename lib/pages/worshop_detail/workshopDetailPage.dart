@@ -1,7 +1,7 @@
 import 'package:chopper/chopper.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:iit_app/external_libraries/spin_kit.dart';
+import 'package:skeleton_text/skeleton_text.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/colorConstants.dart';
@@ -35,10 +35,6 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
     this.workshopSummary = widget.workshop;
     fetchWorkshopDetails();
     super.initState();
-  }
-
-  Widget loadingAnimation() {
-    return LoadingCircle;
   }
 
   showSuccessfulDialog() {

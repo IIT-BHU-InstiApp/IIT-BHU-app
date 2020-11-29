@@ -16,7 +16,7 @@ class SideBar extends Drawer {
   SideBar({@required this.context});
 
   ListTile getNavItem(IconData icon, String s, String routeName,
-      {bool replacement = false}) {
+      {bool homeRoute = false}) {
     return ListTile(
       leading: Icon(icon, color: ColorConstants.textColor),
       title: Text(s,
@@ -25,10 +25,12 @@ class SideBar extends Drawer {
         // pop closes the drawer
         Navigator.of(context).pop();
         // navigate to the route
-        if (replacement)
-          Navigator.of(context).pushReplacementNamed(routeName);
-        else
-          Navigator.of(context).pushNamed(routeName);
+
+        if (homeRoute) {
+          Navigator.popUntil(context, ModalRoute.withName('/'));
+        }
+
+        Navigator.of(context).pushNamed(routeName);
       },
     );
   }
@@ -99,7 +101,7 @@ class SideBar extends Drawer {
                 ),
               ),
             ),
-            getNavItem(Icons.home, "Home", '/home', replacement: true),
+            getNavItem(Icons.home, "Home", '/home', homeRoute: true),
             getNavItem(Icons.map, "Map", '/mapPage'),
             // getNavItem(Icons.local_dining, "Mess management", '/mess'),
             getNavItem(

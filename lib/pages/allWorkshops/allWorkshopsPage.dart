@@ -54,45 +54,48 @@ class _AllWorkshopsScreenState extends State<AllWorkshopsScreen>
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: onPop,
-      child: SafeArea(
-        minimum: const EdgeInsets.all(2.0),
-        child: Scaffold(
-          backgroundColor: ColorConstants.homeBackground,
-          appBar: AppBar(
-            leading: IconButton(
-              icon: Icon(Icons.arrow_back, color: ColorConstants.textColor),
-              onPressed: () => Navigator.pop(context),
-            ),
+      child: RefreshIndicator(
+        onRefresh: () async => reload(),
+        child: SafeArea(
+          minimum: const EdgeInsets.all(2.0),
+          child: Scaffold(
             backgroundColor: ColorConstants.homeBackground,
-            automaticallyImplyLeading: false,
-            title: Text("All Workshops"),
-            actions: <Widget>[
-              Expanded(
-                  child: Padding(
-                padding: const EdgeInsets.fromLTRB(50.0, 5.0, 20, 0),
-                child: searchBarWidget.getSearchTextField(context,
-                    searchFocusNode: searchFocusNode),
-              )),
-            ],
-          ),
-          drawer: SideBar(context: context),
-          body: GestureDetector(
-            onTap: () {
-              if (searchFocusNode.hasFocus) {
-                searchFocusNode.unfocus();
-              }
-            },
-            child: ValueListenableBuilder(
-                valueListenable: searchListener,
-                builder: (context, isSearching, child) {
-                  return (isSearching
-                      ? buildWorkshop.buildWorkshopsFromSearch(
-                          context: context,
-                          searchPost: searchBarWidget.searchPost,
-                          reload: reload)
-                      : buildWorkshop.buildAllWorkshopsBody(context,
-                          reload: reload));
-                }),
+            appBar: AppBar(
+              leading: IconButton(
+                icon: Icon(Icons.arrow_back, color: ColorConstants.textColor),
+                onPressed: () => Navigator.pop(context),
+              ),
+              backgroundColor: ColorConstants.homeBackground,
+              automaticallyImplyLeading: false,
+              title: Text("All Workshops"),
+              actions: <Widget>[
+                Expanded(
+                    child: Padding(
+                  padding: const EdgeInsets.fromLTRB(50.0, 5.0, 20, 0),
+                  child: searchBarWidget.getSearchTextField(context,
+                      searchFocusNode: searchFocusNode),
+                )),
+              ],
+            ),
+            drawer: SideBar(context: context),
+            body: GestureDetector(
+              onTap: () {
+                if (searchFocusNode.hasFocus) {
+                  searchFocusNode.unfocus();
+                }
+              },
+              child: ValueListenableBuilder(
+                  valueListenable: searchListener,
+                  builder: (context, isSearching, child) {
+                    return (isSearching
+                        ? buildWorkshop.buildWorkshopsFromSearch(
+                            context: context,
+                            searchPost: searchBarWidget.searchPost,
+                            reload: reload)
+                        : buildWorkshop.buildAllWorkshopsBody(context,
+                            reload: reload));
+                  }),
+            ),
           ),
         ),
       ),

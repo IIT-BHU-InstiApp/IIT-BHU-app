@@ -16,6 +16,7 @@ class SearchBarWidget {
       {GlobalKey<FabCircularMenuState> fabKey, FocusNode searchFocusNode}) {
     return StatefulBuilder(
       builder: (context, setState) => TextFormField(
+        style: TextStyle(color: ColorConstants.textColor),
         focusNode: searchFocusNode,
         onTap: () {
           print('====================');
@@ -25,20 +26,23 @@ class SearchBarWidget {
         },
         controller: searchController,
         decoration: InputDecoration(
-            hintText: 'Search Workshops ...',
-            hintStyle:
-                Style.baseTextStyle.copyWith(color: ColorConstants.textColor),
-            prefixIcon: Icon(Icons.search, color: ColorConstants.textColor),
-            suffixIcon: IconButton(
-              icon: isSearching.value ? Icon(Icons.clear) : Container(),
-              onPressed: () {
-                setState(() {
-                  searchController.clear();
-                  isSearching.value = false;
-                  searchFocusNode.unfocus();
-                });
-              },
-            )),
+          hintText: 'Search Workshops ...',
+          hintStyle:
+              Style.baseTextStyle.copyWith(color: ColorConstants.textColor),
+          prefixIcon: Icon(Icons.search, color: ColorConstants.textColor),
+          suffixIcon: IconButton(
+            icon: isSearching.value
+                ? Icon(Icons.clear, color: ColorConstants.textColor)
+                : Container(),
+            onPressed: () {
+              setState(() {
+                searchController.clear();
+                isSearching.value = false;
+                searchFocusNode.unfocus();
+              });
+            },
+          ),
+        ),
         onFieldSubmitted: (value) {
           if (value.isEmpty) return;
 

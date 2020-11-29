@@ -48,9 +48,13 @@ class _InterestedScreenState extends State<InterestedScreen>
                       style: TextStyle(color: Colors.white, fontSize: 25),
                     ),
                   )
-                : buildWorkhops.buildInterestedWorkshopsBody(
-                    context,
-                    reload: reload,
+                : RefreshIndicator(
+                    displacement: 60,
+                    onRefresh: () async => reload(),
+                    child: buildWorkhops.buildInterestedWorkshopsBody(
+                      context,
+                      reload: reload,
+                    ),
                   ),
           )),
     );
