@@ -65,14 +65,13 @@ class _AccountPageState extends State<AccountPage> {
     );
   }
 
-  Future showUnsuccessfulDialog() async {
+  Future showUnsuccessfulDialog(String title) async {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: new Text("Unsuccessful :("),
-          content: new Text(
-              "Please enter a number of the form +919876543210. Don't forget +91!"),
+          content: new Text(title),
           actions: <Widget>[
             FlatButton(
               child: new Text("Ok."),
@@ -109,6 +108,7 @@ class _AccountPageState extends State<AccountPage> {
         .updateProfileByPatch(AppConstants.djangoToken, updatedProfile)
         .then((value) {
       profileDetails = value.body;
+      AppConstants.currentUser = value.body;
       setState(() {});
     }).catchError((onError) {
       if (onError is InternetConnectionException) {
@@ -116,7 +116,11 @@ class _AccountPageState extends State<AccountPage> {
         return;
       }
       print("Error in updating profile: ${onError.toString()}");
-      showUnsuccessfulDialog();
+      if (phoneNumber != profileDetails.phone_number)
+        showUnsuccessfulDialog(
+            "Please enter a number of the form +919876543210. Don't forget +91!");
+      else if (name != profileDetails.name)
+        showUnsuccessfulDialog("Could not update your name!");
     });
   }
 
