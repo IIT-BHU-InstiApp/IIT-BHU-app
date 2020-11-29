@@ -82,7 +82,7 @@ FutureBuilder<Response> buildWorkshopsFromSearch(
                 snapshot.data.body.past_workshops.isEmpty)) {
           return Center(
             child: Text(
-              'No Workshops found........',
+              'No such Workshop',
               textAlign: TextAlign.center,
               textScaleFactor: 3,
             ),

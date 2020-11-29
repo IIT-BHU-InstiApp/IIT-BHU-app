@@ -60,39 +60,12 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text("Unsuccessful :("),
-          content: Text("Please try again"),
+          content: Text("Please try again."),
           actions: <Widget>[
             FlatButton(
-              child: Text("Ok"),
+              child: Text("Ok."),
               onPressed: () {
                 Navigator.pop(context);
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Future<bool> confirmCreateDialog() async {
-    return showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Create workshop"),
-          content: Text("Are you sure to create this new workshop?"),
-          actions: <Widget>[
-            FlatButton(
-              child: Text("Yup!"),
-              onPressed: () {
-                Navigator.of(context).pop(true);
-              },
-            ),
-            FlatButton(
-              child: Text("nope, let me rethink.."),
-              onPressed: () {
-                Navigator.of(context).pop(false);
-                return false;
               },
             ),
           ],
@@ -111,12 +84,12 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
           content: Text("Are you sure to remove this resource?"),
           actions: <Widget>[
             FlatButton(
-              child: Text("Yup!"),
-              onPressed: () => Navigator.of(context).pop(true),
+              child: Text("No. Take Me Back."),
+              onPressed: () => Navigator.of(context).pop(false),
             ),
             FlatButton(
-              child: Text("nope, let me rethink.."),
-              onPressed: () => Navigator.of(context).pop(false),
+              child: Text("Yup!"),
+              onPressed: () => Navigator.of(context).pop(true),
             ),
           ],
         );

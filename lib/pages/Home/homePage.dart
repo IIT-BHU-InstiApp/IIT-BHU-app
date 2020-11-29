@@ -78,11 +78,11 @@ class _HomePageState extends State<HomePage>
               title: Text('Do you really want to exit?'),
               actions: <Widget>[
                 FlatButton(
-                  child: Text('No'),
+                  child: Text('No!'),
                   onPressed: () => Navigator.pop(context, false),
                 ),
                 FlatButton(
-                  child: Text('Yes'),
+                  child: Text('Yes.'),
                   onPressed: () => SystemChannels.platform
                       .invokeMethod('SystemNavigator.pop'),
                 )

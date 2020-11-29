@@ -154,7 +154,7 @@ class _CreateEditScreenState extends State<CreateEditScreen> {
             content: Text(innerText ?? '(No Inner Text)'),
             actions: <Widget>[
               FlatButton(
-                child: Text('Ok'),
+                child: Text('Ok.'),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
@@ -229,7 +229,7 @@ class _CreateEditScreenState extends State<CreateEditScreen> {
               ),
               actions: <Widget>[
                 FlatButton(
-                  child: Text('Ok'),
+                  child: Text('Ok.'),
                   onPressed: () {
                     this._tagCreateController.text = '';
                     Navigator.of(context).pop();
@@ -253,7 +253,13 @@ class _CreateEditScreenState extends State<CreateEditScreen> {
                   '''Are you sure you want to delete this tag for this club?\nNote that option is NOT to be used to remove the tag for the ${widget.isWorkshopOrEvent}.\nThis is to permanently delete this tag for ${_isEntity ? widget.entity.name : widget.club.name}.'''),
               actions: <Widget>[
                 FlatButton(
-                  child: Text('Yes'),
+                  child: Text('No.'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                FlatButton(
+                  child: Text('Yes.'),
                   onPressed: () async {
                     final deleteTag = TagDelete((b) => b..tag_name = tagName);
                     await (_isEntity
@@ -278,12 +284,6 @@ class _CreateEditScreenState extends State<CreateEditScreen> {
                     Navigator.of(context).pop();
                   },
                 ),
-                FlatButton(
-                  child: Text('No'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                )
               ],
             );
           });
@@ -925,7 +925,7 @@ class _CreateEditScreenState extends State<CreateEditScreen> {
                         this._searchedProfileresult.isEmpty)
                     ? Center(
                         child: Text(
-                          'No such contact found........',
+                          'No such Contact.',
                           textAlign: TextAlign.center,
                           textScaleFactor: 1.5,
                         ),

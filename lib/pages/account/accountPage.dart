@@ -74,7 +74,7 @@ class _AccountPageState extends State<AccountPage> {
               "Please enter a number of the form +919876543210. Don't forget +91!"),
           actions: <Widget>[
             FlatButton(
-              child: new Text("Ok"),
+              child: new Text("Ok."),
               onPressed: () {
                 Navigator.pop(context);
               },

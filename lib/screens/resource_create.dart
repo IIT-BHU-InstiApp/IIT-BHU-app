@@ -78,7 +78,7 @@ class _ResourceCreateScreenState extends State<ResourceCreateScreen> {
                   : Text("Unsuccessful. Please try again"),
               actions: <Widget>[
                 FlatButton(
-                  child: Text("Okay"),
+                  child: Text("Ok."),
                   onPressed: () => Navigator.pop(context),
                 )
               ]);
@@ -111,7 +111,7 @@ class _ResourceCreateScreenState extends State<ResourceCreateScreen> {
                   : Text("Unsuccessful! Please try again"),
               actions: <Widget>[
                 FlatButton(
-                  child: Text("Okay"),
+                  child: Text("Ok."),
                   onPressed: () => Navigator.pop(context),
                 )
               ]);
