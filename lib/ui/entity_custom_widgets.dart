@@ -56,11 +56,8 @@ class EntityCustomWidgets {
     );
   }
 
-  static Widget getEntityCard(
-    BuildContext context, {
-    EntityListPost entity,
-    bool horizontal = false,
-  }) {
+  static Widget getEntityCard(BuildContext context,
+      {EntityListPost entity, bool horizontal = false, Function reload}) {
     final File entityLogoFile =
         AppConstants.getImageFile(entity.small_image_url);
 
@@ -126,12 +123,14 @@ class EntityCustomWidgets {
     return GestureDetector(
         onTap: () {
           if (horizontal)
-            Navigator.of(context).push(PageRouteBuilder(
-              pageBuilder: (_, __, ___) => EntityPage(entity: entity),
-              transitionsBuilder:
-                  (context, animation, secondaryAnimation, child) =>
-                      FadeTransition(opacity: animation, child: child),
-            ));
+            Navigator.of(context)
+                .push(PageRouteBuilder(
+                  pageBuilder: (_, __, ___) => EntityPage(entity: entity),
+                  transitionsBuilder:
+                      (context, animation, secondaryAnimation, child) =>
+                          FadeTransition(opacity: animation, child: child),
+                ))
+                .then((value) => reload());
         },
         child: Container(
           margin: const EdgeInsets.symmetric(

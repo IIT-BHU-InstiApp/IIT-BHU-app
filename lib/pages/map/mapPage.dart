@@ -276,16 +276,16 @@ class _MyAppState extends State<TheMap> {
             content: Text(innerText ?? '(No Inner Text)'),
             actions: <Widget>[
               FlatButton(
-                child: Text("Yup!"),
-                onPressed: () {
-                  Navigator.of(context).pop(true);
-                },
-              ),
-              FlatButton(
-                child: Text("Nope!"),
+                child: Text("No."),
                 onPressed: () {
                   Navigator.of(context).pop(false);
                   return false;
+                },
+              ),
+              FlatButton(
+                child: Text("Yes!"),
+                onPressed: () {
+                  Navigator.of(context).pop(true);
                 },
               ),
             ],

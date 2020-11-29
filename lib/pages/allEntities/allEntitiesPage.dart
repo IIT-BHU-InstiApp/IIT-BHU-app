@@ -24,6 +24,10 @@ class _EntitiesPageState extends State<EntitiesPage> {
     return true;
   }
 
+  void reload() {
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -42,12 +46,16 @@ class _EntitiesPageState extends State<EntitiesPage> {
               title: Text("All Entities and Fests"),
             ),
             drawer: SideBar(context: context),
-            body: _getAllEntities(),
+            body: RefreshIndicator(
+              displacement: 60,
+              onRefresh: () async => reload(),
+              child: _getAllEntities(reload: reload),
+            ),
           )),
     );
   }
 
-  Widget _getAllEntities() {
+  Widget _getAllEntities({Function reload}) {
     return Container(
         child: FutureBuilder<Response<BuiltList<EntityListPost>>>(
       future: AppConstants.service.getAllEntity(),
@@ -69,7 +77,7 @@ class _EntitiesPageState extends State<EntitiesPage> {
           final posts = snapshot.data.body
               ?.where((entity) => entity.is_permanent != true)
               ?.toBuiltList();
-          return _buildAllEntitiesBodyPosts(context, posts);
+          return _buildAllEntitiesBodyPosts(context, posts, reload: reload);
         } else {
           return Center(
             child: LoadingCircle,
@@ -80,19 +88,18 @@ class _EntitiesPageState extends State<EntitiesPage> {
   }
 
   Widget _buildAllEntitiesBodyPosts(
-    BuildContext context,
-    BuiltList<EntityListPost> posts,
-  ) {
+      BuildContext context, BuiltList<EntityListPost> posts,
+      {Function reload}) {
     return Container(
       child: ListView.builder(
-          physics: ScrollPhysics(),
+          physics: AlwaysScrollableScrollPhysics(),
           shrinkWrap: true,
           scrollDirection: Axis.vertical,
           itemCount: posts.length,
           padding: EdgeInsets.all(8),
           itemBuilder: (context, index) {
             return EntityCustomWidgets.getEntityCard(context,
-                entity: posts[index], horizontal: true);
+                entity: posts[index], horizontal: true, reload: reload);
           }),
     );
   }

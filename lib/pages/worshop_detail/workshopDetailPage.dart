@@ -3,6 +3,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:iit_app/data/internet_connection_interceptor.dart';
 import 'package:iit_app/external_libraries/spin_kit.dart';
+import 'package:skeleton_text/skeleton_text.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/colorConstants.dart';
@@ -38,10 +39,6 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
     super.initState();
   }
 
-  Widget loadingAnimation() {
-    return LoadingCircle;
-  }
-
   showSuccessfulDialog() {
     showDialog(
       context: context,
@@ -61,39 +58,12 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text("Unsuccessful :("),
-          content: Text("Please try again"),
+          content: Text("Please try again."),
           actions: <Widget>[
             FlatButton(
-              child: Text("Ok"),
+              child: Text("Ok."),
               onPressed: () {
                 Navigator.pop(context);
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Future<bool> confirmCreateDialog() async {
-    return showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Create workshop"),
-          content: Text("Are you sure to create this new workshop?"),
-          actions: <Widget>[
-            FlatButton(
-              child: Text("Yup!"),
-              onPressed: () {
-                Navigator.of(context).pop(true);
-              },
-            ),
-            FlatButton(
-              child: Text("nope, let me rethink.."),
-              onPressed: () {
-                Navigator.of(context).pop(false);
-                return false;
               },
             ),
           ],
@@ -112,12 +82,12 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
           content: Text("Are you sure to remove this resource?"),
           actions: <Widget>[
             FlatButton(
-              child: Text("Yup!"),
-              onPressed: () => Navigator.of(context).pop(true),
+              child: Text("No. Take Me Back."),
+              onPressed: () => Navigator.of(context).pop(false),
             ),
             FlatButton(
-              child: Text("nope, let me rethink.."),
-              onPressed: () => Navigator.of(context).pop(false),
+              child: Text("Yup!"),
+              onPressed: () => Navigator.of(context).pop(true),
             ),
           ],
         );

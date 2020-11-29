@@ -36,10 +36,10 @@ class _DescriptionState extends State<Description> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text("Unsuccessful :("),
-          content: Text("Please try again"),
+          content: Text("Please try again."),
           actions: <Widget>[
             FlatButton(
-              child: Text("Ok"),
+              child: Text("Ok."),
               onPressed: () {
                 Navigator.pop(context);
               },
@@ -61,7 +61,7 @@ class _DescriptionState extends State<Description> {
           content: Text("Description edited succesfully!"),
           actions: <Widget>[
             FlatButton(
-              child: Text("yay"),
+              child: Text("Ok."),
               onPressed: () {
                 Navigator.pop(context);
                 setState(() {});

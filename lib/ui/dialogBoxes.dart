@@ -12,11 +12,11 @@ class CreatePageDialogBoxes {
         return AlertDialog(
           title: Text("Successful!"),
           content: isEditing
-              ? Text("Edited succesfully!")
+              ? Text("Succesfully Edited!")
               : Text("Succesfully created!"),
           actions: <Widget>[
             FlatButton(
-              child: Text("yay"),
+              child: Text("Ok."),
               onPressed: () => Navigator.pop(context),
             ),
           ],
@@ -32,10 +32,10 @@ class CreatePageDialogBoxes {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text("Unsuccessful :("),
-          content: Text("Please try again"),
+          content: Text("Please try again."),
           actions: <Widget>[
             FlatButton(
-              child: Text("Ok"),
+              child: Text("Ok."),
               onPressed: () => Navigator.pop(context),
             ),
           ],
@@ -57,12 +57,12 @@ class CreatePageDialogBoxes {
           content: Text("Are you sure to " + action + " this?"),
           actions: <Widget>[
             FlatButton(
-              child: Text("Yup!"),
-              onPressed: () => Navigator.of(context).pop(true),
+              child: Text("No."),
+              onPressed: () => Navigator.of(context).pop(false),
             ),
             FlatButton(
-              child: Text("Nope!"),
-              onPressed: () => Navigator.of(context).pop(false),
+              child: Text("Yes!"),
+              onPressed: () => Navigator.of(context).pop(true),
             ),
           ],
         );
@@ -82,16 +82,16 @@ class CreatePageDialogBoxes {
               "You have successfully expressed your interest in this $workshopOrEvent!\nDo you wish to save this $workshopOrEvent to your Google Calendar?"),
           actions: <Widget>[
             FlatButton(
-              child: Text("Yup!"),
-              onPressed: () {
-                Navigator.of(context).pop(true);
-              },
-            ),
-            FlatButton(
-              child: Text("Nope."),
+              child: Text("No."),
               onPressed: () {
                 Navigator.of(context).pop(false);
                 return false;
+              },
+            ),
+            FlatButton(
+              child: Text("Yes!"),
+              onPressed: () {
+                Navigator.of(context).pop(true);
               },
             ),
           ],
@@ -159,7 +159,7 @@ Future<bool> getLogoutDialog(context, details) => showDialog(
                   FlatButton(
                       child: Center(
                         child: Text(
-                          'Log Out',
+                          'Logout',
                           style: TextStyle(
                               fontFamily: 'Montserrat',
                               fontSize: 14.0,

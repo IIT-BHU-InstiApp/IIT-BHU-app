@@ -38,10 +38,20 @@ void main() async {
   await AppConstants.setDeviceDirectoryForImages();
 
   runApp(MaterialApp(
+    theme: ThemeData(
+      primaryTextTheme: TextTheme(
+        bodyText1: TextStyle(),
+        bodyText2: TextStyle(),
+      ).apply(
+        bodyColor: ColorConstants.textColor,
+        displayColor: ColorConstants.textColor,
+      ),
+    ),
     debugShowCheckedModeBanner: false,
     initialRoute: '/',
+    // define the routes
     routes: <String, WidgetBuilder>{
-      // define the routes
+//! '/' is root route and should always remain in navigator stack, period.
       '/': (BuildContext context) => ConnectedMain(),
       '/home': (BuildContext context) => HomePage(),
       '/mapPage': (BuildContext context) => MapPage(),

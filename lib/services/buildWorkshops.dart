@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
 import 'package:iit_app/data/internet_connection_interceptor.dart';
@@ -7,6 +9,7 @@ import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/ui/workshop_custom_widgets.dart';
 import 'package:built_collection/built_collection.dart';
+import 'package:iit_app/model/colorConstants.dart';
 
 Widget buildCurrentWorkshopAndEventPosts(
     BuildContext context, GlobalKey<FabCircularMenuState> fabKey,
@@ -15,7 +18,8 @@ Widget buildCurrentWorkshopAndEventPosts(
     return w.length == 0
         ? Center(
             child: Text('No Activity :(',
-                style: TextStyle(color: Colors.white, fontSize: 25)))
+                style:
+                    TextStyle(color: ColorConstants.textColor, fontSize: 25)))
         : ListView.builder(
             physics: AlwaysScrollableScrollPhysics(),
             scrollDirection: Axis.vertical,
@@ -55,7 +59,7 @@ FutureBuilder<Response> buildInterestedWorkshopsBody(BuildContext context,
 
         final posts = snapshot.data.body;
         return ListView.builder(
-          physics: BouncingScrollPhysics(),
+          physics: AlwaysScrollableScrollPhysics(),
           scrollDirection: Axis.vertical,
           itemCount: posts.length,
           padding: EdgeInsets.all(8),
@@ -87,9 +91,10 @@ FutureBuilder<Response> buildWorkshopsFromSearch(
           }
           return Center(
             child: Text(
-              snapshot.error.toString(),
+              'No such Workshop',
               textAlign: TextAlign.center,
-              textScaleFactor: 1.3,
+              textScaleFactor: 3,
+              style: TextStyle(color: ColorConstants.textColor),
             ),
           );
         }
@@ -100,7 +105,8 @@ FutureBuilder<Response> buildWorkshopsFromSearch(
             child: Text(
               'No Workshops found........',
               textAlign: TextAlign.center,
-              textScaleFactor: 3,
+              textScaleFactor: 1.3,
+              style: TextStyle(color: Colors.white),
             ),
           );
         }

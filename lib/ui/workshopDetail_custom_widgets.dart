@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:iit_app/external_libraries/spin_kit.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/colorConstants.dart';
@@ -14,6 +13,7 @@ import 'package:iit_app/ui/text_style.dart';
 import 'package:iit_app/ui/workshop_custom_widgets.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:skeleton_text/skeleton_text.dart';
 
 class WorkshopDetailCustomWidgets {
   final BuiltWorkshopDetailPost workshopDetail;
@@ -41,7 +41,16 @@ class WorkshopDetailCustomWidgets {
   });
 
   Widget _loadingAnimation() {
-    return LoadingCircle;
+    return SkeletonAnimation(
+      child: Container(
+        width: MediaQuery.of(context).size.width * 0.8,
+        height: 20.0,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(3.0),
+          color: ColorConstants.shimmerSkeletonColor,
+        ),
+      ),
+    );
   }
 
   final radius = BorderRadius.only(
@@ -64,7 +73,7 @@ class WorkshopDetailCustomWidgets {
           workshopDetail == null
               ? Container(
                   height: 35.0,
-                  child: Center(child: LoadingCircle),
+                  child: Center(child: _loadingAnimation()),
                 )
               : Text(
                   workshopDetail.location,
@@ -81,7 +90,7 @@ class WorkshopDetailCustomWidgets {
           workshopDetail == null
               ? Container(
                   height: 35.0,
-                  child: Center(child: LoadingCircle),
+                  child: Center(child: _loadingAnimation()),
                 )
               : (workshopDetail.resources.length == 0)
                   ? Text(
@@ -176,7 +185,7 @@ class WorkshopDetailCustomWidgets {
           workshopDetail == null
               ? Container(
                   height: 35.0,
-                  child: Center(child: LoadingCircle),
+                  child: Center(child: _loadingAnimation()),
                 )
               : Text(
                   workshopDetail.audience,
@@ -190,7 +199,7 @@ class WorkshopDetailCustomWidgets {
           workshopDetail == null
               ? Container(
                   height: 35.0,
-                  child: Center(child: LoadingCircle),
+                  child: Center(child: _loadingAnimation()),
                 )
               : Container(
                   decoration: BoxDecoration(
@@ -225,7 +234,7 @@ class WorkshopDetailCustomWidgets {
           workshopDetail == null
               ? Container(
                   height: 35.0,
-                  child: Center(child: LoadingCircle),
+                  child: Center(child: _loadingAnimation()),
                 )
               : Container(
                   //height: ,
@@ -324,6 +333,7 @@ class WorkshopDetailCustomWidgets {
                     ? _loadingAnimation()
                     : Text(workshopDetail.description,
                         style: Style.commonTextStyle),
+                SizedBox(height: 13.0),
                 _getPeopleGoing(),
                 Separator(),
                 SizedBox(
@@ -402,7 +412,16 @@ class WorkshopDetailCustomWidgets {
                 fontWeight: FontWeight.w600)),
         SizedBox(width: 20),
         workshopDetail == null
-            ? _loadingAnimation()
+            ? SkeletonAnimation(
+                child: Container(
+                  width: MediaQuery.of(context).size.width * 0.5,
+                  height: 20.0,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(3.0),
+                    color: ColorConstants.shimmerSkeletonColor,
+                  ),
+                ),
+              )
             : Container(
                 padding: EdgeInsets.only(left: 5.0),
                 height: isPast ? 40 : 60.0,
