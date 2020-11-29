@@ -38,7 +38,12 @@ class CouncilCustomWidgets {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text('Clubs',
+                      Text(
+                          councilData == null
+                              ? ''
+                              : councilData.name.contains('Sport')
+                                  ? 'Teams'
+                                  : 'Clubs',
                           style: Style.headingStyle
                               .copyWith(color: ColorConstants.textColor),
                           textAlign: TextAlign.left),

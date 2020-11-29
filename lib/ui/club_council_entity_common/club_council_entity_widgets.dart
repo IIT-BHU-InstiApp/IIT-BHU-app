@@ -145,6 +145,7 @@ class ClubCouncilAndEntityWidgets {
                   secy: _secy,
                   jointSecy: _jointSecyOrPoC,
                   isEntity: isEntity,
+                  isSports: (isClub && club.council.name.contains('Sport')),
                 ),
                 _data == null
                     ? Container()
@@ -244,7 +245,7 @@ class ClubCouncilAndEntityWidgets {
   }
 
   static Container getSecies(BuildContext context,
-      {secy, jointSecy, isEntity = false}) {
+      {secy, jointSecy, isEntity = false, isSports = false}) {
     return Container(
       margin: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
       decoration: BoxDecoration(
@@ -261,7 +262,11 @@ class ClubCouncilAndEntityWidgets {
                   ? ClubCouncilAndEntityWidgets.getPosHolder(
                       context: context,
                       imageUrl: jointSecy[0].photo_url,
-                      desg: isEntity ? 'PoR Holder' : 'Joint-Secy',
+                      desg: isEntity
+                          ? 'PoR Holder'
+                          : isSports
+                              ? 'Point of Contact'
+                              : 'Joint-Secy',
                       name: jointSecy[0].name,
                       email: jointSecy[0].email,
                       phone: jointSecy[0].phone_number,
@@ -272,7 +277,7 @@ class ClubCouncilAndEntityWidgets {
                   : ClubCouncilAndEntityWidgets.getPosHolder(
                       context: context,
                       imageUrl: secy.photo_url,
-                      desg: 'Secy',
+                      desg: isSports ? 'Point of Contact' : 'Secy',
                       name: secy.name,
                       email: secy.email,
                       phone: secy.phone_number,
@@ -281,7 +286,11 @@ class ClubCouncilAndEntityWidgets {
                   ? ClubCouncilAndEntityWidgets.getPosHolder(
                       context: context,
                       imageUrl: jointSecy[1].photo_url,
-                      desg: isEntity ? 'PoR Holder' : 'Joint-Secy',
+                      desg: isEntity
+                          ? 'PoR Holder'
+                          : isSports
+                              ? 'Point of Contact'
+                              : 'Joint-Secy',
                       name: jointSecy[1].name,
                       email: jointSecy[1].email,
                       phone: jointSecy[1].phone_number,
