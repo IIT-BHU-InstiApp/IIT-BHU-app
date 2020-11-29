@@ -61,14 +61,17 @@ class _LoginPageState extends State<LoginPage> {
                   Container(
                     padding: EdgeInsets.fromLTRB(15.0, 110.0, 0.0, 0.0),
                     child: Text('Welcome to IIT(BHU)\'s Workshops App.',
-                        style: TextStyle(fontSize: 40.0, fontWeight: FontWeight.bold)),
+                        style: TextStyle(
+                            fontSize: 40.0, fontWeight: FontWeight.bold)),
                   ),
                   SizedBox(height: 15),
                   OutlineButton(
                     splashColor: Colors.grey,
-                    onPressed:
-                        AppConstants.logInButtonEnabled == false ? null : () => _signInWithGoogle(),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+                    onPressed: AppConstants.logInButtonEnabled == false
+                        ? null
+                        : () => _signInWithGoogle(),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(40)),
                     highlightElevation: 0,
                     borderSide: BorderSide(color: Colors.grey),
                     child: Padding(
@@ -77,12 +80,15 @@ class _LoginPageState extends State<LoginPage> {
                         mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Image(image: AssetImage("assets/google_logo.png"), height: 25.0),
+                          Image(
+                              image: AssetImage("assets/google_logo.png"),
+                              height: 25.0),
                           Padding(
                             padding: const EdgeInsets.only(left: 10),
                             child: Text(
                               'Sign in with Google',
-                              style: TextStyle(fontSize: 20, color: Colors.grey),
+                              style:
+                                  TextStyle(fontSize: 20, color: Colors.grey),
                             ),
                           )
                         ],
@@ -105,13 +111,14 @@ class _LoginPageState extends State<LoginPage> {
                       AppConstants.isGuest = true;
                       AppConstants.djangoToken = null;
                       //saving guest mode in shared preferences
-                      SharedPreferences prefs = await SharedPreferences.getInstance();
+                      SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
                       prefs.clear();
                       prefs = await SharedPreferences.getInstance();
                       prefs.setBool(SharedPreferenceKeys.isGuest, true);
 
-                      Navigator.of(context)
-                          .pushNamedAndRemoveUntil('/home', ModalRoute.withName('/'));
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                          '/home', ModalRoute.withName('/'));
                     },
                     child: CircleAvatar(
                       radius: 52,
@@ -123,7 +130,9 @@ class _LoginPageState extends State<LoginPage> {
                             child: Text(
                           'Guest',
                           style: TextStyle(
-                              fontSize: 26, fontWeight: FontWeight.bold, color: Colors.white),
+                              fontSize: 26,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
                         )),
                       ),
                     ),
@@ -136,18 +145,19 @@ class _LoginPageState extends State<LoginPage> {
 
   void _signInWithGoogle() async {
     if (AppConstants.logInButtonEnabled == true) {
-      print('appConstants.logInButtonEnabled : ${AppConstants.logInButtonEnabled}');
+      print(
+          'appConstants.logInButtonEnabled : ${AppConstants.logInButtonEnabled}');
       AppConstants.logInButtonEnabled = false;
 
       setState(() {
         this._loading = true;
       });
 
-      AppConstants.currentUser = await authentication.signInWithGoogle();
+      final _user = await authentication.signInWithGoogle();
 
       AppConstants.logInButtonEnabled = true;
 
-      if (AppConstants.currentUser == null || AppConstants.djangoToken == null) {
+      if (_user == null || AppConstants.djangoToken == null) {
         setState(() {
           this._loading = false;
         });
@@ -159,9 +169,19 @@ class _LoginPageState extends State<LoginPage> {
         // logged in successfully :)
 
         SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.setString(SharedPreferenceKeys.djangoToken, AppConstants.djangoToken);
+        await prefs.setString(
+            SharedPreferenceKeys.djangoToken, AppConstants.djangoToken);
 
-        Navigator.of(context).pushNamedAndRemoveUntil('/home', ModalRoute.withName('/'));
+        await AppConstants.service
+            .getProfile(AppConstants.djangoToken)
+            .then((snapshot) {
+          AppConstants.currentUser = snapshot.body;
+        }).catchError((onError) {
+          print('unable to fetch user profile $onError');
+        });
+
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil('/home', ModalRoute.withName('/'));
       }
     }
 

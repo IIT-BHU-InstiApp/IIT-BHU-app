@@ -395,8 +395,6 @@ class ClubCouncilAndEntityWidgets {
 
     assert(_counter == 1, 'All three, council club entity , can not be true');
 
-    bool isSmall = horizontal;
-
     File logoFile = AppConstants.getImageFile(imageUrl);
 
     if (logoFile == null) {

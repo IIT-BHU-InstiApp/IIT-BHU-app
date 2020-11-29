@@ -51,7 +51,7 @@ AppBar homeAppBar(context,
                                 image: AppConstants.currentUser == null
                                     ? AssetImage('assets/guest.png')
                                     : NetworkImage(
-                                        AppConstants.currentUser.photoUrl),
+                                        AppConstants.currentUser.photo_url),
                                 fit: BoxFit.cover),
                             borderRadius: BorderRadius.circular(50.0),
                           ),

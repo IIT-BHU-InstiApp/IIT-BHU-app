@@ -62,7 +62,8 @@ class SideBar extends Drawer {
                           image: (AppConstants.currentUser == null ||
                                   AppConstants.isGuest == true)
                               ? AssetImage('assets/guest.png')
-                              : NetworkImage(AppConstants.currentUser.photoUrl),
+                              : NetworkImage(
+                                  AppConstants.currentUser.photo_url),
                           fit: BoxFit.fill,
                         ),
                         borderRadius: BorderRadius.all(Radius.circular(40.0)),
@@ -78,7 +79,7 @@ class SideBar extends Drawer {
                                   .copyWith(color: ColorConstants.textColor),
                             )
                           : Text(
-                              AppConstants.currentUser.displayName,
+                              AppConstants.currentUser.name,
                               style: Style.titleTextStyle
                                   .copyWith(color: ColorConstants.textColor),
                             ),
@@ -142,8 +143,8 @@ class SideBar extends Drawer {
               onTap: () async {
                 if (!AppConstants.isGuest) {
                   bool result = await getLogoutDialog(context, [
-                    NetworkImage(AppConstants.currentUser.photoUrl),
-                    AppConstants.currentUser.displayName,
+                    NetworkImage(AppConstants.currentUser.photo_url),
+                    AppConstants.currentUser.name,
                   ]);
                   if (result == true) {
                     await authentication.signOutGoogle();

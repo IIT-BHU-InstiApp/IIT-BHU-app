@@ -40,7 +40,7 @@ class AppConstants {
 
   static String djangoToken;
 
-  static User currentUser;
+  static BuiltProfilePost currentUser;
   static PostApiService service;
 
   static BuiltList<BuiltWorkshopSummaryPost> workshopFromDatabase;

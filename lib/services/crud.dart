@@ -15,21 +15,32 @@ class CrudMethods {
       return false;
     }
 
-    AppConstants.currentUser = FirebaseAuth.instance.currentUser;
+    final user = FirebaseAuth.instance.currentUser;
 
-    if (AppConstants.currentUser != null) {
-      AppConstants.djangoToken = prefs.getString(SharedPreferenceKeys.djangoToken);
+    if (user != null) {
+      AppConstants.djangoToken =
+          prefs.getString(SharedPreferenceKeys.djangoToken);
 
       if (AppConstants.djangoToken == null) {
-        String idToken = (await AppConstants.currentUser.getIdToken());
+        String idToken = (await user.getIdToken());
         await authentication.verifyToken(idToken);
-        await prefs.setString(SharedPreferenceKeys.djangoToken, AppConstants.djangoToken);
+        await prefs.setString(
+            SharedPreferenceKeys.djangoToken, AppConstants.djangoToken);
       } else {
-        print('DjangoToken from shared preferences: ${AppConstants.djangoToken}');
+        print(
+            'DjangoToken from shared preferences: ${AppConstants.djangoToken}');
       }
+
+      await AppConstants.service
+          .getProfile(AppConstants.djangoToken)
+          .then((snapshot) {
+        AppConstants.currentUser = snapshot.body;
+      }).catchError((onError) {
+        print('unable to fetch user profile $onError');
+      });
     }
 
-    if (AppConstants.currentUser != null && AppConstants.djangoToken != null) {
+    if (user != null && AppConstants.djangoToken != null) {
       return true;
     } else
       return false;
