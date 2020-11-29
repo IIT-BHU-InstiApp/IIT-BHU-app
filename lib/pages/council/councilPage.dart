@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:iit_app/data/internet_connection_interceptor.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/colorConstants.dart';
@@ -29,21 +30,31 @@ class _CouncilPageState extends State<CouncilPage> {
   }
 
   void _fetchCouncilById({bool refresh = false}) async {
-    print('fetching council data ');
-    councilData = await AppConstants.getCouncilDetailsFromDatabase(
-        councilId: widget.councilId, refresh: refresh);
+    try {
+      print('fetching council data ');
+      councilData = await AppConstants.getCouncilDetailsFromDatabase(
+          councilId: widget.councilId, refresh: refresh);
 
-    _councilLargeLogoFile =
-        AppConstants.getImageFile(councilData.large_image_url);
+      _councilLargeLogoFile =
+          AppConstants.getImageFile(councilData.large_image_url);
 
-    if (_councilLargeLogoFile == null) {
-      AppConstants.writeImageFileIntoDisk(councilData.large_image_url);
+      if (_councilLargeLogoFile == null) {
+        AppConstants.writeImageFileIntoDisk(councilData.large_image_url);
+      }
+
+      if (!this.mounted) {
+        return;
+      }
+      setState(() {});
+    } on InternetConnectionException catch (_) {
+      if (AppConstants.internetErrorFlushBar.onScreen == false) {
+        AppConstants.internetErrorFlushBar.flushbar..show(context);
+
+        return;
+      }
+    } catch (err) {
+      print(err);
     }
-
-    if (!this.mounted) {
-      return;
-    }
-    setState(() {});
   }
 
   final BorderRadiusGeometry radius = BorderRadius.only(

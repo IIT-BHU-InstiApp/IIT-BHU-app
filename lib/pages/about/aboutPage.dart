@@ -1,5 +1,6 @@
 import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
+import 'package:iit_app/data/internet_connection_interceptor.dart';
 import 'package:iit_app/external_libraries/spin_kit.dart';
 import 'package:iit_app/external_libraries/url_launcher.dart';
 import 'package:iit_app/model/appConstants.dart';
@@ -24,11 +25,17 @@ class _AboutPageState extends State<AboutPage> {
   }
 
   void fetchTeamDetails() async {
-    Response<BuiltList<BuiltTeamMemberPost>> snapshots =
-        await AppConstants.service.getTeam();
-    // print(snapshots.body);
-    teamData = snapshots.body;
-    setState(() {});
+    try {
+      Response<BuiltList<BuiltTeamMemberPost>> snapshots =
+          await AppConstants.service.getTeam();
+      // print(snapshots.body);
+      teamData = snapshots.body;
+      setState(() {});
+    } on InternetConnectionException catch (_) {
+      AppConstants.internetErrorFlushBar.flushbar..show(context);
+    } catch (err) {
+      print(err);
+    }
   }
 
   final space = SizedBox(height: 8.0);

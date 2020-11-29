@@ -1,5 +1,6 @@
 import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
+import 'package:iit_app/data/internet_connection_interceptor.dart';
 import 'package:iit_app/external_libraries/spin_kit.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
@@ -53,6 +54,11 @@ class _EntitiesPageState extends State<EntitiesPage> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasError) {
+            if (snapshot.error is InternetConnectionException &&
+                AppConstants.internetErrorFlushBar.onScreen == false) {
+              AppConstants.internetErrorFlushBar.flushbar..show(context);
+            }
+
             return Center(
               child: Text(
                 snapshot.error.toString(),

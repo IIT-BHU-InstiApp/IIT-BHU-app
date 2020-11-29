@@ -1,5 +1,6 @@
 import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
+import 'package:iit_app/data/internet_connection_interceptor.dart';
 import 'package:iit_app/external_libraries/fab_circular_menu.dart';
 import 'package:iit_app/external_libraries/spin_kit.dart';
 import 'package:iit_app/model/appConstants.dart';
@@ -40,6 +41,10 @@ FutureBuilder<Response> buildInterestedWorkshopsBody(BuildContext context,
     builder: (context, snapshot) {
       if (snapshot.connectionState == ConnectionState.done) {
         if (snapshot.hasError) {
+          if (snapshot.error is InternetConnectionException &&
+              AppConstants.internetErrorFlushBar.onScreen == false) {
+            AppConstants.internetErrorFlushBar.flushbar..show(context);
+          }
           return Center(
             child: Text(
               snapshot.error.toString(),
@@ -77,6 +82,19 @@ FutureBuilder<Response> buildWorkshopsFromSearch(
     future: AppConstants.service.searchWorkshop(searchPost),
     builder: (context, snapshot) {
       if (snapshot.connectionState == ConnectionState.done) {
+        if (snapshot.hasError) {
+          if (snapshot.error is InternetConnectionException &&
+              AppConstants.internetErrorFlushBar.onScreen == false) {
+            AppConstants.internetErrorFlushBar.flushbar..show(context);
+          }
+          return Center(
+            child: Text(
+              snapshot.error.toString(),
+              textAlign: TextAlign.center,
+              textScaleFactor: 1.3,
+            ),
+          );
+        }
         if (snapshot.data == null ||
             (snapshot.data.body.active_workshops.isEmpty &&
                 snapshot.data.body.past_workshops.isEmpty)) {
@@ -85,15 +103,6 @@ FutureBuilder<Response> buildWorkshopsFromSearch(
               'No Workshops found........',
               textAlign: TextAlign.center,
               textScaleFactor: 3,
-            ),
-          );
-        }
-        if (snapshot.hasError) {
-          return Center(
-            child: Text(
-              snapshot.error.toString(),
-              textAlign: TextAlign.center,
-              textScaleFactor: 1.3,
             ),
           );
         }
@@ -180,6 +189,10 @@ FutureBuilder<Response> buildAllWorkshopsBody(BuildContext context,
     builder: (context, snapshot) {
       if (snapshot.connectionState == ConnectionState.done) {
         if (snapshot.hasError) {
+          if (snapshot.error is InternetConnectionException &&
+              AppConstants.internetErrorFlushBar.onScreen == false) {
+            AppConstants.internetErrorFlushBar.flushbar..show(context);
+          }
           return Center(
             child: Text(
               snapshot.error.toString(),

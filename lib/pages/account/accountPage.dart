@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iit_app/data/internet_connection_interceptor.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/screens/accountScreen.dart';
@@ -88,11 +89,16 @@ class _AccountPageState extends State<AccountPage> {
   void fetchProfileDetails() async {
     await AppConstants.service
         .getProfile(AppConstants.djangoToken)
-        .catchError((onError) {
-      print("Error in fetching profile: ${onError.toString()}");
-    }).then((value) {
+        .then((value) {
       profileDetails = value.body;
       setState(() {});
+    }).catchError((onError) {
+      if (onError is InternetConnectionException &&
+          AppConstants.internetErrorFlushBar.onScreen == false) {
+        AppConstants.internetErrorFlushBar.flushbar..show(context);
+        return;
+      }
+      print("Error in fetching profile: ${onError.toString()}");
     });
   }
 
@@ -106,6 +112,11 @@ class _AccountPageState extends State<AccountPage> {
       profileDetails = value.body;
       setState(() {});
     }).catchError((onError) {
+      if (onError is InternetConnectionException &&
+          AppConstants.internetErrorFlushBar.onScreen == false) {
+        AppConstants.internetErrorFlushBar.flushbar..show(context);
+        return;
+      }
       print("Error in updating profile: ${onError.toString()}");
       showUnsuccessfulDialog();
     });
