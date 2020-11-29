@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:built_collection/built_collection.dart';
 import 'built_value_converter.dart';
+import 'internet_connection_interceptor.dart';
 part 'post_api_service.chopper.dart';
 
 // command for initiating chopper inspector/generator - flutter packages pub run build_runner watch --delete-conflicting-outputs --use-polling-watcher
@@ -304,7 +305,7 @@ abstract class PostApiService extends ChopperService {
         _$PostApiService(),
       ],
       converter: BuiltValueConverter(),
-      interceptors: [HttpLoggingInterceptor()],
+      interceptors: [InternetConnectionInterceptor(), HttpLoggingInterceptor()],
     );
     return _$PostApiService(client);
   }

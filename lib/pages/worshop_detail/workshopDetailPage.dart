@@ -1,6 +1,8 @@
 import 'package:chopper/chopper.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:iit_app/data/internet_connection_interceptor.dart';
+import 'package:iit_app/external_libraries/spin_kit.dart';
 import 'package:skeleton_text/skeleton_text.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/appConstants.dart';
@@ -98,25 +100,28 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
   }
 
   void fetchWorkshopDetails() async {
-    Response<BuiltWorkshopDetailPost> snapshots = await AppConstants.service
+    await AppConstants.service
         .getWorkshopDetailsPost(workshopSummary.id, AppConstants.djangoToken)
-        .catchError((onError) {
+        .then((snapshots) {
+      _workshop = snapshots.body;
+      if (_workshop.is_interested != null) {
+        is_interested = _workshop.is_interested ? 1 : -1;
+      } else {
+        is_interested = -1;
+      }
+
+      workshopSummary = workshopSummary.rebuild((builder) => builder
+        ..title = _workshop.title
+        ..date = _workshop.date
+        ..time = _workshop.time
+        ..tags = _workshop.tags.toBuilder());
+    }).catchError((onError) {
+      if (onError is InternetConnectionException) {
+        AppConstants.internetErrorFlushBar.showFlushbar(context);
+        return;
+      }
       print("Error in fetching workshop: ${onError.toString()}");
     });
-    _workshop = snapshots.body;
-    if (_workshop.is_interested != null) {
-      is_interested = _workshop.is_interested ? 1 : -1;
-    } else {
-      is_interested = -1;
-    }
-
-    debugPrint(_workshop.toString());
-
-    workshopSummary = workshopSummary.rebuild((builder) => builder
-      ..title = _workshop.title
-      ..date = _workshop.date
-      ..time = _workshop.time
-      ..tags = _workshop.tags.toBuilder());
 
     if (!this.mounted) return;
     setState(() {});
@@ -136,6 +141,10 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
         Navigator.of(context)
             .pushNamedAndRemoveUntil('/home', ModalRoute.withName('/'));
       }).catchError((onError) async {
+        if (onError is InternetConnectionException) {
+          AppConstants.internetErrorFlushBar.showFlushbar(context);
+          return;
+        }
         print("Error in deleting: ${onError.toString()}");
         await CreatePageDialogBoxes.showUnsuccessfulDialog(context: context);
       });
@@ -154,6 +163,10 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
       print("status of deleting resource ${snapshot.statusCode}");
       _isDeleted = true;
     }).catchError((error) {
+      if (error is InternetConnectionException) {
+        AppConstants.internetErrorFlushBar.showFlushbar(context);
+        return;
+      }
       print("Error in deleting: ${error.toString()}");
       showUnsuccessfulDialog();
     });
@@ -198,6 +211,10 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
           ..interested_users = _workshop.interested_users + _newInterestedUser);
       }
     }).catchError((onError) {
+      if (onError is InternetConnectionException) {
+        AppConstants.internetErrorFlushBar.showFlushbar(context);
+        return;
+      }
       print("Error in toggling: ${onError.toString()}");
     });
     setState(() {});

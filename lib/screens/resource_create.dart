@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iit_app/data/internet_connection_interceptor.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
 
@@ -58,6 +59,7 @@ class _ResourceCreateScreenState extends State<ResourceCreateScreen> {
     @required WorkshopResources resource,
   }) async {
     bool done = false;
+    bool internetError = false;
 
     await AppConstants.service
         .createResource(widget.workshop.id, AppConstants.djangoToken, resource)
@@ -66,23 +68,29 @@ class _ResourceCreateScreenState extends State<ResourceCreateScreen> {
         done = true;
       }
     }).catchError((onError) {
+      if (onError is InternetConnectionException) {
+        AppConstants.internetErrorFlushBar.showFlushbar(context);
+        internetError = true;
+        return;
+      }
       print('Error printing CREATED resource: ${onError.toString()}');
     });
-    await showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (BuildContext context) {
-          return AlertDialog(
-              content: done
-                  ? Text("Succesfully added")
-                  : Text("Unsuccessful. Please try again"),
-              actions: <Widget>[
-                FlatButton(
-                  child: Text("Ok."),
-                  onPressed: () => Navigator.pop(context),
-                )
-              ]);
-        });
+    if (internetError == false)
+      await showDialog(
+          context: context,
+          barrierDismissible: true,
+          builder: (BuildContext context) {
+            return AlertDialog(
+                content: done
+                    ? Text("Succesfully added")
+                    : Text("Unsuccessful. Please try again"),
+                actions: <Widget>[
+                  FlatButton(
+                    child: Text("Okay"),
+                    onPressed: () => Navigator.pop(context),
+                  )
+                ]);
+          });
     return done;
   }
 
@@ -92,6 +100,8 @@ class _ResourceCreateScreenState extends State<ResourceCreateScreen> {
     @required int id,
   }) async {
     bool done = false;
+    bool internetError = false;
+
     await AppConstants.service
         .updateWorkshopResourcesByPatch(
             widget.id, AppConstants.djangoToken, resource)
@@ -100,22 +110,28 @@ class _ResourceCreateScreenState extends State<ResourceCreateScreen> {
         done = true;
       }
     }).catchError((onError) {
+      if (onError is InternetConnectionException) {
+        AppConstants.internetErrorFlushBar.showFlushbar(context);
+        internetError = true;
+        return;
+      }
       print('Error printing edited resource: ${onError.toString()}');
     });
-    await showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-              content: done
-                  ? Text("Succesfully edited")
-                  : Text("Unsuccessful! Please try again"),
-              actions: <Widget>[
-                FlatButton(
-                  child: Text("Ok."),
-                  onPressed: () => Navigator.pop(context),
-                )
-              ]);
-        });
+    if (internetError == false)
+      await showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+                content: done
+                    ? Text("Succesfully edited")
+                    : Text("Unsuccessful! Please try again"),
+                actions: <Widget>[
+                  FlatButton(
+                    child: Text("Okay"),
+                    onPressed: () => Navigator.pop(context),
+                  )
+                ]);
+          });
     return done;
   }
 

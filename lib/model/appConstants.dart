@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:chopper/chopper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:iit_app/data/internet_connection_interceptor.dart';
 import 'package:iit_app/data/post_api_service.dart';
 import 'package:iit_app/model/LocalDatabase/databaseQuery.dart';
 import 'package:iit_app/model/LocalDatabase/databaseWrite.dart';
@@ -10,9 +11,12 @@ import 'package:iit_app/model/LocalDatabase/database_helpers.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:iit_app/services/connectivityCheck.dart';
 import 'package:http/http.dart' as http;
+import 'package:iit_app/ui/internet_error_flushbar.dart';
 import 'package:path_provider/path_provider.dart';
 
 class AppConstants {
+  static final internetErrorFlushBar = InternetErrorFlushbar();
+
   //for guest user
   static bool isGuest = false;
 
@@ -75,51 +79,56 @@ class AppConstants {
       print(
           'fetching workshops and all councils and entites summary from json');
 
-// API calls to fetch the data
-      final workshopSnapshots = await service.getActiveWorkshops();
-      final workshopPosts = workshopSnapshots.body;
+      // API calls to fetch the data
+      try {
+        final workshopSnapshots = await service.getActiveWorkshops();
+        final workshopPosts = workshopSnapshots.body;
 
-      final councilSummarySnapshots = await service.getAllCouncils();
-      final councilSummaryPosts = councilSummarySnapshots.body;
+        final councilSummarySnapshots = await service.getAllCouncils();
+        final councilSummaryPosts = councilSummarySnapshots.body;
 
-      final entitySummarySnapshots = await service.getAllEntity();
-      final entitySummaryPosts = entitySummarySnapshots.body;
+        final entitySummarySnapshots = await service.getAllEntity();
+        final entitySummaryPosts = entitySummarySnapshots.body;
 
 // storing the data fetched from json objects into local database
-      // ? remember, we use council summary in database while fetching other data (most of time)
-      await DatabaseWrite.insertCouncilSummaryIntoDatabase(
-          councils: councilSummaryPosts, db: database);
+        // ? remember, we use council summary in database while fetching other data (most of time)
+        await DatabaseWrite.insertCouncilSummaryIntoDatabase(
+            councils: councilSummaryPosts, db: database);
 
-      councilSummaryPosts.forEach((council) async {
-        await writeImageFileIntoDisk(council.small_image_url);
-      });
+        councilSummaryPosts.forEach((council) async {
+          await writeImageFileIntoDisk(council.small_image_url);
+        });
 
-      await DatabaseWrite.insertEntitiesSummaryIntoDatabase(
-          db: database, entities: entitySummaryPosts);
+        await DatabaseWrite.insertEntitiesSummaryIntoDatabase(
+            db: database, entities: entitySummaryPosts);
 
-      entitySummaryPosts.forEach((entity) async {
-        await writeImageFileIntoDisk(entity.small_image_url);
-      });
+        entitySummaryPosts.forEach((entity) async {
+          await writeImageFileIntoDisk(entity.small_image_url);
+        });
 
-      for (var post in workshopPosts) {
-        await DatabaseWrite.insertWorkshopSummaryIntoDatabase(
-            post: post, db: database);
-        writeImageFileIntoDisk(post.club == null
-            ? post.entity.small_image_url
-            : post.club.small_image_url);
-      }
+        for (var post in workshopPosts) {
+          await DatabaseWrite.insertWorkshopSummaryIntoDatabase(
+              post: post, db: database);
+          writeImageFileIntoDisk(post.club == null
+              ? post.entity.small_image_url
+              : post.club.small_image_url);
+        }
 
 // fetching the data from local database and storing it into variables
 // whose scope is throughout the app
 
-      councilsSummaryfromDatabase = councilSummaryPosts;
-      // await helper.getAllCouncilsSummary(db: database);
-      workshopFromDatabase = workshopPosts;
-      // await helper.getAllWorkshopsSummary(db: database);
-      entitiesSummaryFromDatabase = entitySummaryPosts;
+        councilsSummaryfromDatabase = councilSummaryPosts;
+        // await helper.getAllCouncilsSummary(db: database);
+        workshopFromDatabase = workshopPosts;
+        // await helper.getAllWorkshopsSummary(db: database);
+        entitiesSummaryFromDatabase = entitySummaryPosts;
+      } on InternetConnectionException catch (error) {
+        throw error;
+      } catch (err) {
+        print(err);
+      }
     }
 
-    // helper.closeDatabase(db: database);
     print('workshops and all councils and entities summary fetched ');
   }
 
@@ -185,19 +194,24 @@ class AppConstants {
     var database = await helper.database;
 
     print('fetching workshops infos from json for updation');
+    try {
+      Response<BuiltList<BuiltWorkshopSummaryPost>> workshopSnapshots =
+          await service.getActiveWorkshops();
 
-    Response<BuiltList<BuiltWorkshopSummaryPost>> workshopSnapshots =
-        await service.getActiveWorkshops();
+      if (workshopSnapshots.body != null) {
+        await DatabaseWrite.deleteAllWorkshopsSummary(db: database);
+        final workshopPosts = workshopSnapshots.body;
 
-    if (workshopSnapshots.body != null) {
-      await DatabaseWrite.deleteAllWorkshopsSummary(db: database);
-      final workshopPosts = workshopSnapshots.body;
-
-      for (var post in workshopPosts) {
-        await DatabaseWrite.insertWorkshopSummaryIntoDatabase(
-            post: post, db: database);
+        for (var post in workshopPosts) {
+          await DatabaseWrite.insertWorkshopSummaryIntoDatabase(
+              post: post, db: database);
+        }
+        workshopFromDatabase = workshopPosts;
       }
-      workshopFromDatabase = workshopPosts;
+    } on InternetConnectionException catch (error) {
+      throw error;
+    } catch (err) {
+      print(err);
     }
     print('workshops fetched and updated ');
   }
@@ -205,19 +219,24 @@ class AppConstants {
   static Future updateAndPopulateAllEntities() async {
     DatabaseHelper helper = DatabaseHelper.instance;
     var database = await helper.database;
+    try {
+      final entitySummarySnapshots = await service.getAllEntity();
+      final entitySummaryPosts = entitySummarySnapshots.body;
 
-    final entitySummarySnapshots = await service.getAllEntity();
-    final entitySummaryPosts = entitySummarySnapshots.body;
+      if (entitySummaryPosts != null) {
+        await DatabaseWrite.deleteAllEntitySummary(db: database);
+        await DatabaseWrite.insertEntitiesSummaryIntoDatabase(
+            db: database, entities: entitySummaryPosts);
 
-    if (entitySummaryPosts != null) {
-      await DatabaseWrite.deleteAllEntitySummary(db: database);
-      await DatabaseWrite.insertEntitiesSummaryIntoDatabase(
-          db: database, entities: entitySummaryPosts);
-
-      entitySummaryPosts.forEach((entity) async {
-        await writeImageFileIntoDisk(entity.small_image_url);
-      });
-      entitiesSummaryFromDatabase = entitySummaryPosts;
+        entitySummaryPosts.forEach((entity) async {
+          await writeImageFileIntoDisk(entity.small_image_url);
+        });
+        entitiesSummaryFromDatabase = entitySummaryPosts;
+      }
+    } on InternetConnectionException catch (error) {
+      throw error;
+    } catch (err) {
+      print(err);
     }
   }
 
@@ -230,14 +249,20 @@ class AppConstants {
         db: database, councilId: councilId);
 
     if (councilPost == null || refresh == true) {
-      Response<BuiltCouncilPost> councilSnapshots = await AppConstants.service
-          .getCouncil(AppConstants.djangoToken, councilId);
+      try {
+        Response<BuiltCouncilPost> councilSnapshots = await AppConstants.service
+            .getCouncil(AppConstants.djangoToken, councilId);
 
-      if (councilSnapshots.body != null) {
-        councilPost = councilSnapshots.body;
+        if (councilSnapshots.body != null) {
+          councilPost = councilSnapshots.body;
 
-        await DatabaseWrite.insertCouncilDetailsIntoDatabase(
-            councilPost: councilPost, db: database);
+          await DatabaseWrite.insertCouncilDetailsIntoDatabase(
+              councilPost: councilPost, db: database);
+        }
+      } on InternetConnectionException catch (error) {
+        throw error;
+      } catch (err) {
+        print(err);
       }
     }
 
@@ -253,17 +278,23 @@ class AppConstants {
         await DatabaseQuery.getClubDetails(db: database, clubId: clubId);
 
     if (clubPost == null || refresh == true) {
-      Response<BuiltClubPost> clubSnapshots = await AppConstants.service
-          .getClub(clubId, AppConstants.djangoToken)
-          .catchError((onError) {
-        print("Error in fetching clubs: ${onError.toString()}");
-      });
+      try {
+        Response<BuiltClubPost> clubSnapshots = await AppConstants.service
+            .getClub(clubId, AppConstants.djangoToken)
+            .catchError((onError) {
+          print("Error in fetching clubs: ${onError.toString()}");
+        });
 
-      if (clubSnapshots.body != null) {
-        clubPost = clubSnapshots.body;
+        if (clubSnapshots.body != null) {
+          clubPost = clubSnapshots.body;
 
-        await DatabaseWrite.insertClubDetailsIntoDatabase(
-            clubPost: clubPost, db: database);
+          await DatabaseWrite.insertClubDetailsIntoDatabase(
+              clubPost: clubPost, db: database);
+        }
+      } on InternetConnectionException catch (error) {
+        throw error;
+      } catch (err) {
+        print(err);
       }
     }
 
@@ -295,16 +326,22 @@ class AppConstants {
     await DatabaseQuery.getEntityDetails(db: database, entityId: entityId);
 
     if (entityPost == null || refresh == true) {
-      Response<BuiltEntityPost> entitySnapshots = await AppConstants.service
-          .getEntity(entityId, AppConstants.djangoToken)
-          .catchError((onError) {
-        print("Error in fetching entity: ${onError.toString()}");
-      });
-      if (entitySnapshots.body != null) {
-        entityPost = entitySnapshots.body;
+      try {
+        Response<BuiltEntityPost> entitySnapshots = await AppConstants.service
+            .getEntity(entityId, AppConstants.djangoToken)
+            .catchError((onError) {
+          print("Error in fetching entity: ${onError.toString()}");
+        });
+        if (entitySnapshots.body != null) {
+          entityPost = entitySnapshots.body;
 
-        await DatabaseWrite.insertEntityDetailsIntoDatabase(
-            entityPost: entityPost, db: database);
+          await DatabaseWrite.insertEntityDetailsIntoDatabase(
+              entityPost: entityPost, db: database);
+        }
+      } on InternetConnectionException catch (error) {
+        throw error;
+      } catch (err) {
+        print(err);
       }
     }
 

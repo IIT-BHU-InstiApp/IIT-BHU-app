@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iit_app/data/internet_connection_interceptor.dart';
 import 'package:iit_app/external_libraries/fab_circular_menu.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/colorConstants.dart';
@@ -36,17 +37,24 @@ class _HomePageState extends State<HomePage>
   }
 
   _fetchWorkshopsAndCouncilAndEntityButtons(bool refreshed) async {
-    if (refreshed != true) {
-      await AppConstants.populateWorkshopsAndCouncilAndEntityButtons();
-      setState(() {
-        AppConstants.firstTimeFetching = false;
-      });
+    try {
+      if (refreshed != true) {
+        await AppConstants.populateWorkshopsAndCouncilAndEntityButtons();
+        setState(() {
+          AppConstants.firstTimeFetching = false;
+        });
+      }
+      await AppConstants.updateAndPopulateWorkshops();
+      setState(() {});
+      await AppConstants.updateAndPopulateAllEntities();
+      await AppConstants.writeCouncilAndEntityLogoIntoDisk();
+      setState(() {});
+    } on InternetConnectionException catch (_) {
+      AppConstants.internetErrorFlushBar.showFlushbar(context);
+      return;
+    } catch (err) {
+      print(err);
     }
-    await AppConstants.updateAndPopulateWorkshops();
-    setState(() {});
-    await AppConstants.updateAndPopulateAllEntities();
-    await AppConstants.writeCouncilAndEntityLogoIntoDisk();
-    setState(() {});
   }
 
   Future<bool> _onPopHome() async {
