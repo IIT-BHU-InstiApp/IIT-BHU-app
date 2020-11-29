@@ -220,6 +220,8 @@ class WorkshopDetailCustomWidgets {
                                   workshopDetail.contacts[index].photo_url,
                               name: workshopDetail.contacts[index].name,
                               email: workshopDetail.contacts[index].email,
+                              phone:
+                                  workshopDetail.contacts[index].phone_number,
                               context: context,
                             );
                           },
