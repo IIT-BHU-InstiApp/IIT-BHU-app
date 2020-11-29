@@ -41,9 +41,8 @@ FutureBuilder<Response> buildInterestedWorkshopsBody(BuildContext context,
     builder: (context, snapshot) {
       if (snapshot.connectionState == ConnectionState.done) {
         if (snapshot.hasError) {
-          if (snapshot.error is InternetConnectionException &&
-              AppConstants.internetErrorFlushBar.onScreen == false) {
-            AppConstants.internetErrorFlushBar.flushbar..show(context);
+          if (snapshot.error is InternetConnectionException) {
+            AppConstants.internetErrorFlushBar.showFlushbar(context);
           }
           return Center(
             child: Text(
@@ -83,9 +82,8 @@ FutureBuilder<Response> buildWorkshopsFromSearch(
     builder: (context, snapshot) {
       if (snapshot.connectionState == ConnectionState.done) {
         if (snapshot.hasError) {
-          if (snapshot.error is InternetConnectionException &&
-              AppConstants.internetErrorFlushBar.onScreen == false) {
-            AppConstants.internetErrorFlushBar.flushbar..show(context);
+          if (snapshot.error is InternetConnectionException) {
+            AppConstants.internetErrorFlushBar.showFlushbar(context);
           }
           return Center(
             child: Text(
@@ -189,9 +187,8 @@ FutureBuilder<Response> buildAllWorkshopsBody(BuildContext context,
     builder: (context, snapshot) {
       if (snapshot.connectionState == ConnectionState.done) {
         if (snapshot.hasError) {
-          if (snapshot.error is InternetConnectionException &&
-              AppConstants.internetErrorFlushBar.onScreen == false) {
-            AppConstants.internetErrorFlushBar.flushbar..show(context);
+          if (snapshot.error is InternetConnectionException) {
+            AppConstants.internetErrorFlushBar.showFlushbar(context);
           }
           return Center(
             child: Text(

@@ -3,12 +3,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class InternetErrorFlushbar {
-  Flushbar flushbar;
-  bool onScreen;
+  Flushbar _flushbar;
+  bool _onScreen;
 
   InternetErrorFlushbar() {
-    onScreen = false;
-    flushbar = Flushbar(
+    _onScreen = false;
+    _flushbar = Flushbar(
       title: 'Internet Error',
       message: 'Could not connect to internet, please check your connection.',
       duration: Duration(seconds: 3),
@@ -19,16 +19,22 @@ class InternetErrorFlushbar {
       isDismissible: false,
       icon: Icon(Icons.error_outline, color: Colors.red, size: 36),
     );
-    flushbar.onStatusChanged = _handleStatus;
+    _flushbar.onStatusChanged = _handleStatus;
+  }
+
+  showFlushbar(BuildContext context) async {
+    if (_onScreen) return;
+    await Future.delayed(Duration(milliseconds: 250));
+    _flushbar..show(context);
   }
 
   void _handleStatus(FlushbarStatus status) {
     switch (status) {
       case FlushbarStatus.SHOWING:
-        onScreen = true;
+        _onScreen = true;
         break;
       default:
-        onScreen = false;
+        _onScreen = false;
     }
   }
 }

@@ -48,11 +48,8 @@ class _EntityPageState extends State<EntityPage>
         }
       }
     } on InternetConnectionException catch (_) {
-      if (AppConstants.internetErrorFlushBar.onScreen == false) {
-        AppConstants.internetErrorFlushBar.flushbar..show(context);
-
-        return;
-      }
+      AppConstants.internetErrorFlushBar.showFlushbar(context);
+      return;
     } catch (err) {
       print(err);
     }
@@ -66,9 +63,8 @@ class _EntityPageState extends State<EntityPage>
         .then((snapshots) {
       entityWorkshops = snapshots.body;
     }).catchError((onError) {
-      if (onError is InternetConnectionException &&
-          AppConstants.internetErrorFlushBar.onScreen == false) {
-        AppConstants.internetErrorFlushBar.flushbar..show(context);
+      if (onError is InternetConnectionException) {
+        AppConstants.internetErrorFlushBar.showFlushbar(context);
         return;
       }
       print("Error fetching Entity Workshops: ${onError.toString()}");
@@ -119,19 +115,15 @@ class _EntityPageState extends State<EntityPage>
             await FirebaseMessaging().unsubscribeFromTopic('E_${entityMap.id}');
           }
         } on InternetConnectionException catch (_) {
-          if (AppConstants.internetErrorFlushBar.onScreen == false) {
-            AppConstants.internetErrorFlushBar.flushbar..show(context);
-
-            return;
-          }
+          AppConstants.internetErrorFlushBar.showFlushbar(context);
+          return;
         } catch (err) {
           print(err);
         }
       }
     }).catchError((onError) {
-      if (onError is InternetConnectionException &&
-          AppConstants.internetErrorFlushBar.onScreen == false) {
-        AppConstants.internetErrorFlushBar.flushbar..show(context);
+      if (onError is InternetConnectionException) {
+        AppConstants.internetErrorFlushBar.showFlushbar(context);
         return;
       }
       print("Error in toggleing: ${onError.toString()}");

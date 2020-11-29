@@ -26,11 +26,8 @@ class _HomeScreenState extends State<HomeScreen>
     try {
       await AppConstants.updateAndPopulateWorkshops();
     } on InternetConnectionException catch (_) {
-      if (AppConstants.internetErrorFlushBar.onScreen == false) {
-        AppConstants.internetErrorFlushBar.flushbar..show(context);
-
-        return;
-      }
+      AppConstants.internetErrorFlushBar.showFlushbar(context);
+      return;
     } catch (err) {
       print(err);
     }

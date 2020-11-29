@@ -87,10 +87,8 @@ class _DescriptionState extends State<Description> {
         this.showSuccesfulDialog(context: context);
       }
     }).catchError((onError) {
-      if (onError is InternetConnectionException &&
-          AppConstants.internetErrorFlushBar.onScreen == false) {
-        AppConstants.internetErrorFlushBar.flushbar..show(context);
-
+      if (onError is InternetConnectionException) {
+        AppConstants.internetErrorFlushBar.showFlushbar(context);
         return;
       }
       this.showUnsuccessfulDialog(context: context);
@@ -113,10 +111,8 @@ class _DescriptionState extends State<Description> {
         this.showSuccesfulDialog(context: context);
       }
     }).catchError((onError) {
-      if (onError is InternetConnectionException &&
-          AppConstants.internetErrorFlushBar.onScreen == false) {
-        AppConstants.internetErrorFlushBar.flushbar..show(context);
-
+      if (onError is InternetConnectionException) {
+        AppConstants.internetErrorFlushBar.showFlushbar(context);
         return;
       }
       this.showUnsuccessfulDialog(context: context);
@@ -138,10 +134,8 @@ class _DescriptionState extends State<Description> {
         this.showSuccesfulDialog(context: context);
       }
     }).catchError((onError) {
-      if (onError is InternetConnectionException &&
-          AppConstants.internetErrorFlushBar.onScreen == false) {
-        AppConstants.internetErrorFlushBar.flushbar..show(context);
-
+      if (onError is InternetConnectionException) {
+        AppConstants.internetErrorFlushBar.showFlushbar(context);
         return;
       }
       this.showUnsuccessfulDialog(context: context);

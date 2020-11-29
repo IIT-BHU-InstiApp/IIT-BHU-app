@@ -54,9 +54,8 @@ class _EntitiesPageState extends State<EntitiesPage> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasError) {
-            if (snapshot.error is InternetConnectionException &&
-                AppConstants.internetErrorFlushBar.onScreen == false) {
-              AppConstants.internetErrorFlushBar.flushbar..show(context);
+            if (snapshot.error is InternetConnectionException) {
+              AppConstants.internetErrorFlushBar.showFlushbar(context);
             }
 
             return Center(

@@ -46,7 +46,6 @@ class _CreateEditScreenState extends State<CreateEditScreen> {
   TextEditingController _audienceController;
   TextEditingController _tagSearchController;
   TextEditingController _tagCreateController;
-  // TextEditingController _linkController;
 
   String _editingDate;
   String _editingTime;
@@ -109,7 +108,6 @@ class _CreateEditScreenState extends State<CreateEditScreen> {
     this._audienceController = TextEditingController();
     this._tagSearchController = TextEditingController();
     this._tagCreateController = TextEditingController();
-    // this._linkController = TextEditingController();
 
     this._searchContactsController = TextEditingController();
 
@@ -212,11 +210,9 @@ class _CreateEditScreenState extends State<CreateEditScreen> {
                               'Error', 'There was an error creating this tag.');
                         }
                       }).catchError((onError) {
-                        if (onError is InternetConnectionException &&
-                            AppConstants.internetErrorFlushBar.onScreen ==
-                                false) {
-                          AppConstants.internetErrorFlushBar.flushbar
-                            ..show(context);
+                        if (onError is InternetConnectionException) {
+                          AppConstants.internetErrorFlushBar
+                              .showFlushbar(context);
                           return;
                         }
 
@@ -280,11 +276,9 @@ class _CreateEditScreenState extends State<CreateEditScreen> {
                         refreshState(() {});
                       }
                     }).catchError((onError) {
-                      if (onError is InternetConnectionException &&
-                          AppConstants.internetErrorFlushBar.onScreen ==
-                              false) {
-                        AppConstants.internetErrorFlushBar.flushbar
-                          ..show(context);
+                      if (onError is InternetConnectionException) {
+                        AppConstants.internetErrorFlushBar
+                            .showFlushbar(context);
                         return;
                       }
 
@@ -442,13 +436,6 @@ class _CreateEditScreenState extends State<CreateEditScreen> {
                         onSaved: (val) =>
                             setState(() => _workshop.description = val)),
                     SizedBox(height: 8),
-                    // TextFormField(
-                    //     decoration: InputDecoration(
-                    //         labelText: 'Link',
-                    //         hintText: 'Link should be valid url'),
-                    //     controller: this._linkController,
-                    //     onSaved: (val) => _workshop.link = val),
-                    // SizedBox(height: 8),
                     Row(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -562,12 +549,9 @@ class _CreateEditScreenState extends State<CreateEditScreen> {
                                   if (result != null)
                                     this._searchedProfileresult = result.body;
                                 }).catchError((onError) {
-                                  if (onError is InternetConnectionException &&
-                                      AppConstants
-                                              .internetErrorFlushBar.onScreen ==
-                                          false) {
-                                    AppConstants.internetErrorFlushBar.flushbar
-                                      ..show(context);
+                                  if (onError is InternetConnectionException) {
+                                    AppConstants.internetErrorFlushBar
+                                        .showFlushbar(context);
                                     return;
                                   }
                                   print(
@@ -714,11 +698,9 @@ class _CreateEditScreenState extends State<CreateEditScreen> {
                               if (result != null)
                                 this._searchedTagResult = result.body;
                             }).catchError((onError) {
-                              if (onError is InternetConnectionException &&
-                                  AppConstants.internetErrorFlushBar.onScreen ==
-                                      false) {
-                                AppConstants.internetErrorFlushBar.flushbar
-                                  ..show(context);
+                              if (onError is InternetConnectionException) {
+                                AppConstants.internetErrorFlushBar
+                                    .showFlushbar(context);
                                 return;
                               }
                               print('Error while fetching tags $onError');
@@ -780,13 +762,9 @@ class _CreateEditScreenState extends State<CreateEditScreen> {
                                     }
                                   }).catchError((onError) {
                                     if (onError
-                                            is InternetConnectionException &&
-                                        AppConstants.internetErrorFlushBar
-                                                .onScreen ==
-                                            false) {
-                                      AppConstants
-                                          .internetErrorFlushBar.flushbar
-                                        ..show(context);
+                                        is InternetConnectionException) {
+                                      AppConstants.internetErrorFlushBar
+                                          .showFlushbar(context);
                                       return;
                                     }
                                     print(
@@ -806,13 +784,9 @@ class _CreateEditScreenState extends State<CreateEditScreen> {
                                     }
                                   }).catchError((onError) {
                                     if (onError
-                                            is InternetConnectionException &&
-                                        AppConstants.internetErrorFlushBar
-                                                .onScreen ==
-                                            false) {
-                                      AppConstants
-                                          .internetErrorFlushBar.flushbar
-                                        ..show(context);
+                                        is InternetConnectionException) {
+                                      AppConstants.internetErrorFlushBar
+                                          .showFlushbar(context);
                                       return;
                                     }
                                     print(

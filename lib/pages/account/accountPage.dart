@@ -93,9 +93,8 @@ class _AccountPageState extends State<AccountPage> {
       profileDetails = value.body;
       setState(() {});
     }).catchError((onError) {
-      if (onError is InternetConnectionException &&
-          AppConstants.internetErrorFlushBar.onScreen == false) {
-        AppConstants.internetErrorFlushBar.flushbar..show(context);
+      if (onError is InternetConnectionException) {
+        AppConstants.internetErrorFlushBar.showFlushbar(context);
         return;
       }
       print("Error in fetching profile: ${onError.toString()}");
@@ -112,9 +111,8 @@ class _AccountPageState extends State<AccountPage> {
       profileDetails = value.body;
       setState(() {});
     }).catchError((onError) {
-      if (onError is InternetConnectionException &&
-          AppConstants.internetErrorFlushBar.onScreen == false) {
-        AppConstants.internetErrorFlushBar.flushbar..show(context);
+      if (onError is InternetConnectionException) {
+        AppConstants.internetErrorFlushBar.showFlushbar(context);
         return;
       }
       print("Error in updating profile: ${onError.toString()}");

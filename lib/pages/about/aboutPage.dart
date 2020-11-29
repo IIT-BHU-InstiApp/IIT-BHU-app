@@ -32,7 +32,7 @@ class _AboutPageState extends State<AboutPage> {
       teamData = snapshots.body;
       setState(() {});
     } on InternetConnectionException catch (_) {
-      AppConstants.internetErrorFlushBar.flushbar..show(context);
+      AppConstants.internetErrorFlushBar.showFlushbar(context);
     } catch (err) {
       print(err);
     }

@@ -146,9 +146,8 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
         ..time = _workshop.time
         ..tags = _workshop.tags.toBuilder());
     }).catchError((onError) {
-      if (onError is InternetConnectionException &&
-          AppConstants.internetErrorFlushBar.onScreen == false) {
-        AppConstants.internetErrorFlushBar.flushbar..show(context);
+      if (onError is InternetConnectionException) {
+        AppConstants.internetErrorFlushBar.showFlushbar(context);
         return;
       }
       print("Error in fetching workshop: ${onError.toString()}");
@@ -172,9 +171,8 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
         Navigator.of(context)
             .pushNamedAndRemoveUntil('/home', ModalRoute.withName('/'));
       }).catchError((onError) async {
-        if (onError is InternetConnectionException &&
-            AppConstants.internetErrorFlushBar.onScreen == false) {
-          AppConstants.internetErrorFlushBar.flushbar..show(context);
+        if (onError is InternetConnectionException) {
+          AppConstants.internetErrorFlushBar.showFlushbar(context);
           return;
         }
         print("Error in deleting: ${onError.toString()}");
@@ -195,9 +193,8 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
       print("status of deleting resource ${snapshot.statusCode}");
       _isDeleted = true;
     }).catchError((error) {
-      if (error is InternetConnectionException &&
-          AppConstants.internetErrorFlushBar.onScreen == false) {
-        AppConstants.internetErrorFlushBar.flushbar..show(context);
+      if (error is InternetConnectionException) {
+        AppConstants.internetErrorFlushBar.showFlushbar(context);
         return;
       }
       print("Error in deleting: ${error.toString()}");
@@ -244,9 +241,8 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
           ..interested_users = _workshop.interested_users + _newInterestedUser);
       }
     }).catchError((onError) {
-      if (onError is InternetConnectionException &&
-          AppConstants.internetErrorFlushBar.onScreen == false) {
-        AppConstants.internetErrorFlushBar.flushbar..show(context);
+      if (onError is InternetConnectionException) {
+        AppConstants.internetErrorFlushBar.showFlushbar(context);
         return;
       }
       print("Error in toggling: ${onError.toString()}");

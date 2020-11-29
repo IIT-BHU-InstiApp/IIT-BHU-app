@@ -51,11 +51,8 @@ class _ClubPageState extends State<ClubPage>
         }
       }
     } on InternetConnectionException catch (_) {
-      if (AppConstants.internetErrorFlushBar.onScreen == false) {
-        AppConstants.internetErrorFlushBar.flushbar..show(context);
-
-        return;
-      }
+      AppConstants.internetErrorFlushBar.showFlushbar(context);
+      return;
     } catch (err) {
       print(err);
     }
@@ -68,9 +65,8 @@ class _ClubPageState extends State<ClubPage>
         .then((snapshots) {
       clubWorkshops = snapshots.body;
     }).catchError((onError) {
-      if (onError is InternetConnectionException &&
-          AppConstants.internetErrorFlushBar.onScreen == false) {
-        AppConstants.internetErrorFlushBar.flushbar..show(context);
+      if (onError is InternetConnectionException) {
+        AppConstants.internetErrorFlushBar.showFlushbar(context);
         return;
       }
       print("Error in fetching workshops: ${onError.toString()}");
@@ -117,19 +113,15 @@ class _ClubPageState extends State<ClubPage>
             await FirebaseMessaging().unsubscribeFromTopic('C_${clubMap.id}');
           }
         } on InternetConnectionException catch (_) {
-          if (AppConstants.internetErrorFlushBar.onScreen == false) {
-            AppConstants.internetErrorFlushBar.flushbar..show(context);
-
-            return;
-          }
+          AppConstants.internetErrorFlushBar.showFlushbar(context);
+          return;
         } catch (err) {
           print(err);
         }
       }
     }).catchError((onError) {
-      if (onError is InternetConnectionException &&
-          AppConstants.internetErrorFlushBar.onScreen == false) {
-        AppConstants.internetErrorFlushBar.flushbar..show(context);
+      if (onError is InternetConnectionException) {
+        AppConstants.internetErrorFlushBar.showFlushbar(context);
         return;
       }
       print("Error in toggleing: ${onError.toString()}");

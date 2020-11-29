@@ -68,9 +68,8 @@ class _ResourceCreateScreenState extends State<ResourceCreateScreen> {
         done = true;
       }
     }).catchError((onError) {
-      if (onError is InternetConnectionException &&
-          AppConstants.internetErrorFlushBar.onScreen == false) {
-        AppConstants.internetErrorFlushBar.flushbar..show(context);
+      if (onError is InternetConnectionException) {
+        AppConstants.internetErrorFlushBar.showFlushbar(context);
         internetError = true;
         return;
       }
@@ -111,11 +110,9 @@ class _ResourceCreateScreenState extends State<ResourceCreateScreen> {
         done = true;
       }
     }).catchError((onError) {
-      if (onError is InternetConnectionException &&
-          AppConstants.internetErrorFlushBar.onScreen == false) {
-        AppConstants.internetErrorFlushBar.flushbar..show(context);
+      if (onError is InternetConnectionException) {
+        AppConstants.internetErrorFlushBar.showFlushbar(context);
         internetError = true;
-
         return;
       }
       print('Error printing edited resource: ${onError.toString()}');

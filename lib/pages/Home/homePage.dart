@@ -50,11 +50,8 @@ class _HomePageState extends State<HomePage>
       await AppConstants.writeCouncilAndEntityLogoIntoDisk();
       setState(() {});
     } on InternetConnectionException catch (_) {
-      if (AppConstants.internetErrorFlushBar.onScreen == false) {
-        AppConstants.internetErrorFlushBar.flushbar..show(context);
-
-        return;
-      }
+      AppConstants.internetErrorFlushBar.showFlushbar(context);
+      return;
     } catch (err) {
       print(err);
     }
