@@ -111,9 +111,8 @@ class DatabaseQuery {
         StringConst.idString,
         StringConst.nameString,
         StringConst.descriptionString,
-        StringConst.gensecIdString,
-        StringConst.jointGensecId1String,
-        StringConst.jointGensecId2String,
+        StringConst.mainPoRString,
+        StringConst.jointPoRListAsStringString,
         StringConst.smallImageUrlString,
         StringConst.largeImageUrlString,
         StringConst.isPORHolderString,
@@ -134,27 +133,29 @@ class DatabaseQuery {
     var map = maps[0];
 
     SecyPost gensec;
-    if (map[StringConst.gensecIdString] != -1) {
-      gensec = await getPORHolderInfo(
-          db: db, porId: map[StringConst.gensecIdString]);
+
+    if (map[StringConst.mainPoRString] != -1) {
+      gensec =
+          await getPORHolderInfo(db: db, porId: map[StringConst.mainPoRString]);
     }
 
-    BuiltList<SecyPost> porList = BuiltList<SecyPost>([]);
-    var porBuilder = porList.toBuilder();
+    List<int> secies = [];
+    (map[StringConst.jointPoRListAsStringString] ?? '')
+        ?.split(' ')
+        ?.forEach((secyId) {
+      final id = int.tryParse(secyId);
+      if (id != null) secies.add(id);
+    });
 
-    if (map[StringConst.jointGensecId1String] != -1) {
-      var jg1 = await getPORHolderInfo(
-          db: db, porId: map[StringConst.jointGensecId1String]);
-      porBuilder.add(jg1);
-    }
+    BuiltList<SecyPost> jointSecyList = BuiltList<SecyPost>([]);
+    var jointSecyBuilder = jointSecyList.toBuilder();
 
-    if (map[StringConst.jointGensecId2String] != -1) {
-      var jg2 = await getPORHolderInfo(
-          db: db, porId: map[StringConst.jointGensecId2String]);
-      porBuilder.add(jg2);
-    }
+    secies?.forEach((element) async {
+      final secy = await getPORHolderInfo(db: db, porId: element);
+      if (secy != null) jointSecyBuilder.add(secy);
+    });
 
-    BuiltList<SecyPost> jointGensec = porBuilder.build();
+    BuiltList<SecyPost> jointGensec = jointSecyBuilder.build();
 
     BuiltList<ClubListPost> clubs =
         await getClubsSummary(db: db, councilId: councilId);
@@ -194,6 +195,8 @@ class DatabaseQuery {
       ],
       where: '${StringConst.idString}  = $porId',
     );
+
+    if (maps == null || maps.length == 0) return null;
 
     var map = maps[0];
 
@@ -247,9 +250,8 @@ class DatabaseQuery {
         StringConst.councilNameString,
         StringConst.councilSmallImageUrlString,
         StringConst.councilLargeImageUrlString,
-        StringConst.secyIdString,
-        StringConst.jointSecyId1String,
-        StringConst.jointSecyId2String,
+        StringConst.mainPoRString,
+        StringConst.jointPoRListAsStringString,
         StringConst.smallImageUrlString,
         StringConst.largeImageUrlString,
         StringConst.isSubscribedString,
@@ -280,26 +282,28 @@ class DatabaseQuery {
       ..large_image_url = map[StringConst.councilLargeImageUrlString]);
 
     SecyPost secy;
-    if (map[StringConst.secyIdString] != -1) {
+    if (map[StringConst.mainPoRString] != -1) {
       secy =
-          await getPORHolderInfo(db: db, porId: map[StringConst.secyIdString]);
+          await getPORHolderInfo(db: db, porId: map[StringConst.mainPoRString]);
     }
 
-    BuiltList<SecyPost> porList = BuiltList<SecyPost>([]);
-    var porBuilder = porList.toBuilder();
+    List<int> secies = [];
+    (map[StringConst.jointPoRListAsStringString] ?? '')
+        ?.split(' ')
+        ?.forEach((secyId) {
+      final id = int.tryParse(secyId);
+      if (id != null) secies.add(id);
+    });
 
-    if (map[StringConst.jointSecyId1String] != -1) {
-      var js1 = await getPORHolderInfo(
-          db: db, porId: map[StringConst.jointSecyId1String]);
-      porBuilder.add(js1);
-    }
+    BuiltList<SecyPost> jointSecyList = BuiltList<SecyPost>([]);
+    var jointSecyBuilder = jointSecyList.toBuilder();
 
-    if (map[StringConst.jointSecyId2String] != -1) {
-      var js2 = await getPORHolderInfo(
-          db: db, porId: map[StringConst.jointSecyId2String]);
-      porBuilder.add(js2);
-    }
-    BuiltList<SecyPost> jointSecy = porBuilder.build();
+    secies?.forEach((element) async {
+      final secy = await getPORHolderInfo(db: db, porId: element);
+      if (secy != null) jointSecyBuilder.add(secy);
+    });
+
+    BuiltList<SecyPost> jointSecy = jointSecyBuilder.build();
 
     final BuiltClubPost clubDetails = BuiltClubPost((b) => b
       ..id = map[StringConst.idString]
@@ -384,7 +388,7 @@ class DatabaseQuery {
     var map = maps[0];
 
     List<int> pocIds = [];
-    (map[StringConst.pointOfContactAsStringArrayString] as String)
+    (map[StringConst.pointOfContactAsStringArrayString] ?? '')
         ?.split(' ')
         ?.forEach((poc) {
       final id = int.tryParse(poc);
@@ -396,7 +400,7 @@ class DatabaseQuery {
 
     pocIds?.forEach((element) async {
       final secy = await getPORHolderInfo(db: db, porId: element);
-      pocBuilder.add(secy);
+      if (secy != null) pocBuilder.add(secy);
     });
 
     final BuiltEntityPost entityDetails = BuiltEntityPost((b) => b

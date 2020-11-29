@@ -27,9 +27,9 @@ class StringConst {
 
   static const String nameString = 'name';
   static const String descriptionString = 'description';
-  static const String gensecIdString = 'gensecId';
-  static const String jointGensecId1String = 'jointGensecId1';
-  static const String jointGensecId2String = 'jointGensecId2';
+
+  static const String mainPoRString = 'mainPoR';
+  static const String jointPoRListAsStringString = 'jointPoRListAsString';
 
   static const String isPORHolderString = 'isPORHolder';
   static const String websiteUrlString = 'websiteUrl';
@@ -49,12 +49,9 @@ class StringConst {
 
   static const String clubDetailsString = 'clubDetails'; //*table name
 
-  static const String secyIdString = 'secyId';
   static const String councilNameString = 'councilName';
   static const String councilSmallImageUrlString = 'councilSmallImageUrl';
   static const String councilLargeImageUrlString = 'councilLargeImageUrl';
-  static const String jointSecyId1String = 'jointSecyId1';
-  static const String jointSecyId2String = 'jointSecyId2';
   static const String isSubscribedString = 'isSubscribed';
   static const String subscribedUsersString = 'subscribedUsers';
 

@@ -37,17 +37,19 @@ class DatabaseMapping {
   }
 
   static Map<String, dynamic> councilDetailToMap(BuiltCouncilPost councilPost) {
+    String jointSecyList = '';
+    councilPost.joint_gensec?.forEach((secy) {
+      if (secy?.id == null) return;
+      jointSecyList += '${secy.id}';
+    });
+    jointSecyList = jointSecyList.trim();
+
     Map<String, dynamic> map = {
       StringConst.idString: councilPost.id,
       StringConst.nameString: councilPost.name ?? '',
       StringConst.descriptionString: councilPost.description ?? '',
-      StringConst.gensecIdString: councilPost.gensec?.id ?? -1,
-      StringConst.jointGensecId1String: (councilPost.joint_gensec.isEmpty)
-          ? -1
-          : councilPost.joint_gensec[0].id,
-      StringConst.jointGensecId2String: (councilPost.joint_gensec.length < 2)
-          ? -1
-          : councilPost.joint_gensec[1].id,
+      StringConst.mainPoRString: councilPost.gensec?.id ?? -1,
+      StringConst.jointPoRListAsStringString: jointSecyList,
       StringConst.smallImageUrlString: councilPost.small_image_url ?? '',
       StringConst.largeImageUrlString: councilPost.large_image_url ?? '',
       StringConst.isPORHolderString: councilPost.is_por_holder == null
@@ -63,13 +65,9 @@ class DatabaseMapping {
     return map;
   }
 
-  static Map<String, dynamic> porInfoToMap(
-      {SecyPost por, int councilId = -1, int clubId = -1, int entityId = -1}) {
+  static Map<String, dynamic> porInfoToMap(SecyPost por) {
     Map<String, dynamic> map = {
       StringConst.idString: por.id,
-      StringConst.councilIdString: councilId,
-      StringConst.clubIdString: clubId,
-      StringConst.entityIdString: entityId,
       StringConst.nameString: por.name ?? '',
       StringConst.emailString: por.email ?? '',
       StringConst.phoneNumberString: por.phone_number ?? '',
@@ -106,6 +104,13 @@ class DatabaseMapping {
   }
 
   static Map<String, dynamic> clubDetailToMap(BuiltClubPost clubPost) {
+    String jointSecyList = '';
+    clubPost.joint_secy?.forEach((secy) {
+      if (secy?.id == null) return;
+      jointSecyList += '${secy.id}';
+    });
+    jointSecyList = jointSecyList.trim();
+
     Map<String, dynamic> map = {
       StringConst.idString: clubPost.id,
       StringConst.nameString: clubPost.name ?? '',
@@ -114,11 +119,8 @@ class DatabaseMapping {
       StringConst.councilNameString: clubPost.council.name,
       StringConst.councilSmallImageUrlString: clubPost.council.small_image_url,
       StringConst.councilLargeImageUrlString: clubPost.council.large_image_url,
-      StringConst.secyIdString: clubPost.secy == null ? -1 : clubPost.secy.id,
-      StringConst.jointSecyId1String:
-          (clubPost.joint_secy.isEmpty) ? -1 : clubPost.joint_secy[0].id,
-      StringConst.jointSecyId2String:
-          (clubPost.joint_secy.length < 2) ? -1 : clubPost.joint_secy[1].id,
+      StringConst.mainPoRString: clubPost.secy?.id ?? -1,
+      StringConst.jointPoRListAsStringString: jointSecyList,
       StringConst.smallImageUrlString: clubPost.small_image_url ?? '',
       StringConst.largeImageUrlString: clubPost.large_image_url ?? '',
       StringConst.isSubscribedString: clubPost.is_subscribed == true ? 1 : 0,
@@ -140,7 +142,7 @@ class DatabaseMapping {
     String pocString = '';
     entityPost.point_of_contact?.forEach((secy) {
       if (secy?.id == null) return;
-      pocString += '${secy.id}' ' ';
+      pocString += '${secy.id}';
     });
 
     pocString = pocString.trim();
@@ -168,6 +170,7 @@ class DatabaseMapping {
   }
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------
+// !                                        Converting map to data models
 // -------------------------------------------------------------------------------------------------------------------------------------------------
 
   static BuiltWorkshopSummaryPost workshopSummaryFromMap(

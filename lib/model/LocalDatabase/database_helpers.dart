@@ -59,7 +59,7 @@ class DatabaseHelper {
 // for workshops summary on homepage
 
     await db.execute('CREATE TABLE ${StringConst.workshopSummaryString} ('
-        '       ${StringConst.idString} INTEGER NOT NULL, '
+        '       ${StringConst.idString} INTEGER PRIMARY KEY, '
         '       ${StringConst.isWorkshopString} INTEGER, '
         '       ${StringConst.clubIdString} INTEGER, '
         '       ${StringConst.clubString} DEFAULT "", '
@@ -70,25 +70,24 @@ class DatabaseHelper {
         '       ${StringConst.largeImageUrlString} DEFAULT "", '
         '       ${StringConst.titleString} DEFAULT "", '
         '       ${StringConst.dateString} DEFAULT "", '
-        '       ${StringConst.timeString} DEFAULT "")');
+        '       ${StringConst.timeString} DEFAULT "") WITHOUT ROWID');
 
 // for council buttons
 
     await db.execute('CREATE TABLE ${StringConst.allCouncislSummaryString} ('
-        '       ${StringConst.idString} INTEGER NOT NULL,'
+        '       ${StringConst.idString} INTEGER PRIMARY KEY,'
         '       ${StringConst.nameString} DEFAULT "",'
         '       ${StringConst.smallImageUrlString} DEFAULT "",'
-        '       ${StringConst.largeImageUrlString} DEFAULT "")');
+        '       ${StringConst.largeImageUrlString} DEFAULT "") WITHOUT ROWID');
 
 // for council page
 
     await db.execute('      CREATE TABLE ${StringConst.councilDetailString} ('
-        '        ${StringConst.idString} INTEGER NOT NULL,'
+        '        ${StringConst.idString} INTEGER PRIMARY KEY,'
         '        ${StringConst.nameString} DEFAULT "",'
         '        ${StringConst.descriptionString} DEFAULT "",'
-        '        ${StringConst.gensecIdString} INTEGER,'
-        '        ${StringConst.jointGensecId1String} INTEGER,'
-        '        ${StringConst.jointGensecId2String} INTEGER,'
+        '        ${StringConst.mainPoRString} INTEGER,'
+        '        ${StringConst.jointPoRListAsStringString} DEFAULT "",'
         '        ${StringConst.smallImageUrlString} DEFAULT "",'
         '        ${StringConst.largeImageUrlString} DEFAULT "",'
         '        ${StringConst.isPORHolderString} INTEGER,'
@@ -97,41 +96,34 @@ class DatabaseHelper {
         '        ${StringConst.twitterUrlString} DEFAULT "",'
         '        ${StringConst.instagramUrlString} DEFAULT "",'
         '        ${StringConst.linkedinUrlString} DEFAULT "",'
-        '        ${StringConst.youtubeUrlString} DEFAULT "")');
+        '        ${StringConst.youtubeUrlString} DEFAULT "") WITHOUT ROWID');
 
     await db.execute('      CREATE TABLE ${StringConst.porHoldersString} ('
-        '        ${StringConst.idString} INTEGER NOT NULL,'
-
-//storing club/council/entity ids to ease the deletion and also if a person has por in two different fields (only possible in dummy data though)
-        '        ${StringConst.councilIdString} INTEGER ,'
-        '        ${StringConst.clubIdString} INTEGER,'
-        '        ${StringConst.entityIdString} INTEGER,'
-        //
+        '        ${StringConst.idString} INTEGER PRIMARY KEY,'
         '        ${StringConst.nameString} DEFAULT "",'
         '        ${StringConst.emailString} DEFAULT "",'
         '        ${StringConst.phoneNumberString} DEFAULT "",'
-        '        ${StringConst.photoUrlString} DEFAULT "")');
+        '        ${StringConst.photoUrlString} DEFAULT "") WITHOUT ROWID');
 
     await db.execute('      CREATE TABLE ${StringConst.clubSummaryString} ('
-        '        ${StringConst.idString} INTEGER NOT NULL,'
+        '        ${StringConst.idString} INTEGER PRIMARY KEY,'
         '        ${StringConst.nameString} DEFAULT "",'
         '        ${StringConst.councilIdString} INTEGER,'
         '        ${StringConst.smallImageUrlString} DEFAULT "",'
-        '        ${StringConst.largeImageUrlString} DEFAULT "")');
+        '        ${StringConst.largeImageUrlString} DEFAULT "") WITHOUT ROWID');
 
 // for club page
 
     await db.execute('      CREATE TABLE ${StringConst.clubDetailsString} ('
-        '        ${StringConst.idString} INTEGER NOT NULL,'
+        '        ${StringConst.idString} INTEGER PRIMARY KEY,'
         '        ${StringConst.nameString} DEFAULT "",'
         '        ${StringConst.descriptionString} DEFAULT "",'
         '        ${StringConst.councilIdString} INTEGER,'
         '        ${StringConst.councilNameString} DEFAULT "",'
         '        ${StringConst.councilSmallImageUrlString} DEFAULT "",'
         '        ${StringConst.councilLargeImageUrlString} DEFAULT "",'
-        '        ${StringConst.secyIdString} INTEGER,'
-        '        ${StringConst.jointSecyId1String} INTEGER,'
-        '        ${StringConst.jointSecyId2String} INTEGER,'
+        '        ${StringConst.mainPoRString} INTEGER,'
+        '        ${StringConst.jointPoRListAsStringString} DEFAULT "",'
         '        ${StringConst.smallImageUrlString} DEFAULT "",'
         '        ${StringConst.largeImageUrlString} DEFAULT "",'
         '        ${StringConst.isSubscribedString} INTEGER,'
@@ -142,22 +134,22 @@ class DatabaseHelper {
         '        ${StringConst.twitterUrlString} DEFAULT "",'
         '        ${StringConst.instagramUrlString} DEFAULT "",'
         '        ${StringConst.linkedinUrlString} DEFAULT "",'
-        '        ${StringConst.youtubeUrlString} DEFAULT "")');
+        '        ${StringConst.youtubeUrlString} DEFAULT "") WITHOUT ROWID');
 
     // for entity buttons
 
     await db.execute('CREATE TABLE ${StringConst.entitySummaryString} ('
-        '       ${StringConst.idString} INTEGER NOT NULL,'
+        '       ${StringConst.idString} INTEGER PRIMARY KEY,'
         '       ${StringConst.nameString} DEFAULT "",'
         '       ${StringConst.isPermanentString} INTEGER,'
         '       ${StringConst.isHighlightedString} INTEGER,'
         '       ${StringConst.smallImageUrlString} DEFAULT "",'
-        '       ${StringConst.largeImageUrlString} DEFAULT "")');
+        '       ${StringConst.largeImageUrlString} DEFAULT "") WITHOUT ROWID');
 
     // for entity page
 
     await db.execute('      CREATE TABLE ${StringConst.entityDetailsString} ('
-        '        ${StringConst.idString} INTEGER NOT NULL,'
+        '        ${StringConst.idString} INTEGER PRIMARY KEY,'
         '        ${StringConst.nameString} DEFAULT "",'
         '        ${StringConst.descriptionString} DEFAULT "",'
         '        ${StringConst.pointOfContactAsStringArrayString} DEFAULT "",'
@@ -171,7 +163,7 @@ class DatabaseHelper {
         '        ${StringConst.twitterUrlString} DEFAULT "",'
         '        ${StringConst.instagramUrlString} DEFAULT "",'
         '        ${StringConst.linkedinUrlString} DEFAULT "",'
-        '        ${StringConst.youtubeUrlString} DEFAULT "")');
+        '        ${StringConst.youtubeUrlString} DEFAULT "") WITHOUT ROWID');
   }
 
   Future closeDatabase({@required Database db}) async => db.close();
