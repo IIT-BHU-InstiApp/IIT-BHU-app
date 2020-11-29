@@ -18,8 +18,8 @@ class _AccountPageState extends State<AccountPage> {
     super.initState();
   }
 
-  void _reload() {
-    fetchProfileDetails();
+  void _reload() async {
+    await fetchProfileDetails();
   }
 
   Future<String> _asyncInputDialog(
@@ -85,7 +85,7 @@ class _AccountPageState extends State<AccountPage> {
     );
   }
 
-  void fetchProfileDetails() async {
+  Future fetchProfileDetails() async {
     await AppConstants.service
         .getProfile(AppConstants.djangoToken)
         .then((value) {

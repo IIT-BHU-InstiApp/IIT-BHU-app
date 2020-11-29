@@ -80,8 +80,8 @@ class _EntityPageState extends State<EntityPage>
     super.dispose();
   }
 
-  void _reload() {
-    _fetchEntityDataByID(refresh: true);
+  void _reload() async {
+    await _fetchEntityDataByID(refresh: true);
   }
 
   void toggleSubscription() async {

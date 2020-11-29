@@ -35,8 +35,8 @@ class _ClubPageState extends State<ClubPage>
     super.initState();
   }
 
-  void _reload() {
-    _fetchClubDataById(refresh: true);
+  void _reload() async {
+    await _fetchClubDataById(refresh: true);
   }
 
   _fetchClubDataById({bool refresh = false}) async {

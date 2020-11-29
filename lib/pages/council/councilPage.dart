@@ -25,11 +25,11 @@ class _CouncilPageState extends State<CouncilPage> {
     super.initState();
   }
 
-  void _reload() {
-    _fetchCouncilById(refresh: true);
+  void _reload() async {
+    await _fetchCouncilById(refresh: true);
   }
 
-  void _fetchCouncilById({bool refresh = false}) async {
+  Future _fetchCouncilById({bool refresh = false}) async {
     try {
       print('fetching council data ');
       councilData = await AppConstants.getCouncilDetailsFromDatabase(

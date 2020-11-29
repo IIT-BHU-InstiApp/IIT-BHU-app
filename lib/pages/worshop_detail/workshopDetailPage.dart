@@ -95,11 +95,11 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
     );
   }
 
-  void _reload() {
-    fetchWorkshopDetails();
+  Future _reload() async {
+    await fetchWorkshopDetails();
   }
 
-  void fetchWorkshopDetails() async {
+  Future fetchWorkshopDetails() async {
     await AppConstants.service
         .getWorkshopDetailsPost(workshopSummary.id, AppConstants.djangoToken)
         .then((snapshots) {
