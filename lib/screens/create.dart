@@ -315,6 +315,7 @@ class _CreateEditScreenState extends State<CreateEditScreen> {
   }
 
   Future<bool> _onWillPop() async {
+    FocusScope.of(context).unfocus();
     final res = await CreatePageDialogBoxes.confirmDialog(
         context: context, title: 'Exit', action: 'Exit');
     return res == true ? true : false;
