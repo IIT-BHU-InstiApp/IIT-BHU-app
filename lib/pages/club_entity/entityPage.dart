@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:chopper/chopper.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:iit_app/data/internet_connection_interceptor.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/colorConstants.dart';
@@ -36,26 +37,38 @@ class _EntityPageState extends State<EntityPage>
   }
 
   _fetchEntityDataByID({bool refresh = false}) async {
-    entityMap = await AppConstants.getEntityDetailsFromDatabase(
-        entityId: widget.entity.id, refresh: refresh);
-    if (entityMap != null) {
-      _entityLargeLogoFile =
-          AppConstants.getImageFile(entityMap.large_image_url);
-      if (_entityLargeLogoFile == null) {
-        AppConstants.writeImageFileIntoDisk(entityMap.large_image_url);
+    try {
+      entityMap = await AppConstants.getEntityDetailsFromDatabase(
+          entityId: widget.entity.id, refresh: refresh);
+      if (entityMap != null) {
+        _entityLargeLogoFile =
+            AppConstants.getImageFile(entityMap.large_image_url);
+        if (_entityLargeLogoFile == null) {
+          AppConstants.writeImageFileIntoDisk(entityMap.large_image_url);
+        }
       }
+    } on InternetConnectionException catch (_) {
+      AppConstants.internetErrorFlushBar.showFlushbar(context);
+      return;
+    } catch (err) {
+      print(err);
     }
     if (!this.mounted) {
       return;
     }
     setState(() {});
 
-    Response<BuiltAllWorkshopsPost> snapshots = await AppConstants.service
+    await AppConstants.service
         .getEntityWorkshops(widget.entity.id, AppConstants.djangoToken)
-        .catchError((onError) {
+        .then((snapshots) {
+      entityWorkshops = snapshots.body;
+    }).catchError((onError) {
+      if (onError is InternetConnectionException) {
+        AppConstants.internetErrorFlushBar.showFlushbar(context);
+        return;
+      }
       print("Error fetching Entity Workshops: ${onError.toString()}");
     });
-    entityWorkshops = snapshots.body;
     if (!this.mounted) {
       return;
     }
@@ -85,23 +98,34 @@ class _EntityPageState extends State<EntityPage>
       print("status of entity subscription: ${snapshot.statusCode}");
 
       if (snapshot.statusCode == 200) {
-        await AppConstants.updateEntitySubscriptionInDatabase(
-            entityId: widget.entity.id,
-            isSubscribed: !entityMap.is_subscribed,
-            currentSubscribedUsers: entityMap.subscribed_users);
+        try {
+          await AppConstants.updateEntitySubscriptionInDatabase(
+              entityId: widget.entity.id,
+              isSubscribed: !entityMap.is_subscribed,
+              currentSubscribedUsers: entityMap.subscribed_users);
 
-        entityMap = await AppConstants.getEntityDetailsFromDatabase(
-            entityId: widget.entity.id);
+          entityMap = await AppConstants.getEntityDetailsFromDatabase(
+              entityId: widget.entity.id);
 
-        if (entityMap.is_subscribed == true) {
-          await FirebaseMessaging()
-              .subscribeToTopic('E_${entityMap.id}')
-              .then((_) => print('subscribed to E_${entityMap.id}'));
-        } else {
-          await FirebaseMessaging().unsubscribeFromTopic('E_${entityMap.id}');
+          if (entityMap.is_subscribed == true) {
+            await FirebaseMessaging()
+                .subscribeToTopic('E_${entityMap.id}')
+                .then((_) => print('subscribed to E_${entityMap.id}'));
+          } else {
+            await FirebaseMessaging().unsubscribeFromTopic('E_${entityMap.id}');
+          }
+        } on InternetConnectionException catch (_) {
+          AppConstants.internetErrorFlushBar.showFlushbar(context);
+          return;
+        } catch (err) {
+          print(err);
         }
       }
     }).catchError((onError) {
+      if (onError is InternetConnectionException) {
+        AppConstants.internetErrorFlushBar.showFlushbar(context);
+        return;
+      }
       print("Error in toggleing: ${onError.toString()}");
     });
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iit_app/data/internet_connection_interceptor.dart';
 import 'package:iit_app/external_libraries/fab_circular_menu.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/colorConstants.dart';
@@ -22,7 +23,14 @@ class _HomeScreenState extends State<HomeScreen>
   TabController _tabController;
 
   void onRefresh() async {
-    await AppConstants.updateAndPopulateWorkshops();
+    try {
+      await AppConstants.updateAndPopulateWorkshops();
+    } on InternetConnectionException catch (_) {
+      AppConstants.internetErrorFlushBar.showFlushbar(context);
+      return;
+    } catch (err) {
+      print(err);
+    }
     this.widget.reload(true);
   }
 

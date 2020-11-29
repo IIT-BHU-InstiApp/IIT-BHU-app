@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:iit_app/data/internet_connection_interceptor.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/colorConstants.dart';
@@ -39,25 +40,37 @@ class _ClubPageState extends State<ClubPage>
   }
 
   _fetchClubDataById({bool refresh = false}) async {
-    clubMap = await AppConstants.getClubDetailsFromDatabase(
-        clubId: widget.club.id, refresh: refresh);
-    if (clubMap != null) {
-      _clubLargeLogoFile = AppConstants.getImageFile(clubMap.large_image_url);
+    try {
+      clubMap = await AppConstants.getClubDetailsFromDatabase(
+          clubId: widget.club.id, refresh: refresh);
+      if (clubMap != null) {
+        _clubLargeLogoFile = AppConstants.getImageFile(clubMap.large_image_url);
 
-      if (_clubLargeLogoFile == null) {
-        AppConstants.writeImageFileIntoDisk(clubMap.large_image_url);
+        if (_clubLargeLogoFile == null) {
+          AppConstants.writeImageFileIntoDisk(clubMap.large_image_url);
+        }
       }
+    } on InternetConnectionException catch (_) {
+      AppConstants.internetErrorFlushBar.showFlushbar(context);
+      return;
+    } catch (err) {
+      print(err);
     }
     if (!this.mounted) {
       return;
     }
     setState(() {});
-    final snapshots = await AppConstants.service
+    await AppConstants.service
         .getClubWorkshops(widget.club.id, AppConstants.djangoToken)
-        .catchError((onError) {
+        .then((snapshots) {
+      clubWorkshops = snapshots.body;
+    }).catchError((onError) {
+      if (onError is InternetConnectionException) {
+        AppConstants.internetErrorFlushBar.showFlushbar(context);
+        return;
+      }
       print("Error in fetching workshops: ${onError.toString()}");
     });
-    clubWorkshops = snapshots.body;
     if (!this.mounted) {
       return;
     }
@@ -83,23 +96,34 @@ class _ClubPageState extends State<ClubPage>
       print("status of club subscription: ${snapshot.statusCode}");
 
       if (snapshot.statusCode == 200) {
-        await AppConstants.updateClubSubscriptionInDatabase(
-            clubId: widget.club.id,
-            isSubscribed: !clubMap.is_subscribed,
-            currentSubscribedUsers: clubMap.subscribed_users);
+        try {
+          await AppConstants.updateClubSubscriptionInDatabase(
+              clubId: widget.club.id,
+              isSubscribed: !clubMap.is_subscribed,
+              currentSubscribedUsers: clubMap.subscribed_users);
 
-        clubMap = await AppConstants.getClubDetailsFromDatabase(
-            clubId: widget.club.id);
+          clubMap = await AppConstants.getClubDetailsFromDatabase(
+              clubId: widget.club.id);
 
-        if (clubMap.is_subscribed == true) {
-          await FirebaseMessaging()
-              .subscribeToTopic('C_${clubMap.id}')
-              .then((_) => print('subscribed to C_${clubMap.id}'));
-        } else {
-          await FirebaseMessaging().unsubscribeFromTopic('C_${clubMap.id}');
+          if (clubMap.is_subscribed == true) {
+            await FirebaseMessaging()
+                .subscribeToTopic('C_${clubMap.id}')
+                .then((_) => print('subscribed to C_${clubMap.id}'));
+          } else {
+            await FirebaseMessaging().unsubscribeFromTopic('C_${clubMap.id}');
+          }
+        } on InternetConnectionException catch (_) {
+          AppConstants.internetErrorFlushBar.showFlushbar(context);
+          return;
+        } catch (err) {
+          print(err);
         }
       }
     }).catchError((onError) {
+      if (onError is InternetConnectionException) {
+        AppConstants.internetErrorFlushBar.showFlushbar(context);
+        return;
+      }
       print("Error in toggleing: ${onError.toString()}");
     });
 

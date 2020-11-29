@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
+import 'package:iit_app/data/internet_connection_interceptor.dart';
 import 'package:iit_app/external_libraries/spin_kit.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'dart:async';
@@ -45,7 +46,6 @@ class _CreateEditScreenState extends State<CreateEditScreen> {
   TextEditingController _audienceController;
   TextEditingController _tagSearchController;
   TextEditingController _tagCreateController;
-  // TextEditingController _linkController;
 
   String _editingDate;
   String _editingTime;
@@ -108,7 +108,6 @@ class _CreateEditScreenState extends State<CreateEditScreen> {
     this._audienceController = TextEditingController();
     this._tagSearchController = TextEditingController();
     this._tagCreateController = TextEditingController();
-    // this._linkController = TextEditingController();
 
     this._searchContactsController = TextEditingController();
 
@@ -190,6 +189,7 @@ class _CreateEditScreenState extends State<CreateEditScreen> {
                       print(this._tagCreateController.text);
                       final newTag = TagCreate(
                           (b) => b..tag_name = this._tagCreateController.text);
+
                       await (_isEntity
                               ? AppConstants.service.createEntityTag(
                                   widget.entity.id,
@@ -199,7 +199,23 @@ class _CreateEditScreenState extends State<CreateEditScreen> {
                                   widget.club.id,
                                   AppConstants.djangoToken,
                                   newTag))
-                          .catchError((onError) {
+                          .then((value) {
+                        if (value != null) {
+                          tagAlertDialog('Tag Created',
+                              'The Tag has been created for ${_isEntity ? widget.entity.name : widget.club.name} succesfully. Search for it again, and add it to the ${widget.isWorkshopOrEvent} if you wish.');
+
+                          refreshState(() => this._tagCreateController.clear());
+                        } else if (errorMessageShown == false) {
+                          tagAlertDialog(
+                              'Error', 'There was an error creating this tag.');
+                        }
+                      }).catchError((onError) {
+                        if (onError is InternetConnectionException) {
+                          AppConstants.internetErrorFlushBar
+                              .showFlushbar(context);
+                          return;
+                        }
+
                         final error = onError as Response<dynamic>;
                         print(error.body);
                         if (error.body
@@ -212,16 +228,6 @@ class _CreateEditScreenState extends State<CreateEditScreen> {
                         }
                         print(
                             'Error while creating Tag: ${onError.toString()} ${onError.runtimeType}');
-                      }).then((value) {
-                        if (value != null) {
-                          tagAlertDialog('Tag Created',
-                              'The Tag has been created for ${_isEntity ? widget.entity.name : widget.club.name} succesfully. Search for it again, and add it to the ${widget.isWorkshopOrEvent} if you wish.');
-
-                          refreshState(() => this._tagCreateController.clear());
-                        } else if (errorMessageShown == false) {
-                          tagAlertDialog(
-                              'Error', 'There was an error creating this tag.');
-                        }
                       });
                     },
                   )
@@ -269,17 +275,23 @@ class _CreateEditScreenState extends State<CreateEditScreen> {
                                 deleteTag)
                             : AppConstants.service.deleteClubTag(widget.club.id,
                                 AppConstants.djangoToken, deleteTag))
-                        .catchError((onError) {
-                      final error = onError as Response<dynamic>;
-                      print(error.body);
-                      print(
-                          'Error while deleting Tag: ${onError.toString()} ${onError.runtimeType}');
-                    }).then((value) async {
+                        .then((value) async {
                       if (value != null) {
                         await tagAlertDialog('Tag Deleted',
                             'The Tag has been deleted from ${_isEntity ? widget.entity.name : widget.club.name} succesfully.');
                         refreshState(() {});
                       }
+                    }).catchError((onError) {
+                      if (onError is InternetConnectionException) {
+                        AppConstants.internetErrorFlushBar
+                            .showFlushbar(context);
+                        return;
+                      }
+
+                      final error = onError as Response<dynamic>;
+                      print(error.body);
+                      print(
+                          'Error while deleting Tag: ${onError.toString()} ${onError.runtimeType}');
                     });
                     Navigator.of(context).pop();
                   },
@@ -424,13 +436,6 @@ class _CreateEditScreenState extends State<CreateEditScreen> {
                         onSaved: (val) =>
                             setState(() => _workshop.description = val)),
                     SizedBox(height: 8),
-                    // TextFormField(
-                    //     decoration: InputDecoration(
-                    //         labelText: 'Link',
-                    //         hintText: 'Link should be valid url'),
-                    //     controller: this._linkController,
-                    //     onSaved: (val) => _workshop.link = val),
-                    // SizedBox(height: 8),
                     Row(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -540,12 +545,17 @@ class _CreateEditScreenState extends State<CreateEditScreen> {
                                 await AppConstants.service
                                     .searchProfile(AppConstants.djangoToken,
                                         this._searchPost)
-                                    .catchError((onError) {
-                                  print(
-                                      'Error while fetching search results: $onError');
-                                }).then((result) {
+                                    .then((result) {
                                   if (result != null)
                                     this._searchedProfileresult = result.body;
+                                }).catchError((onError) {
+                                  if (onError is InternetConnectionException) {
+                                    AppConstants.internetErrorFlushBar
+                                        .showFlushbar(context);
+                                    return;
+                                  }
+                                  print(
+                                      'Error while fetching search results: $onError');
                                 });
 
                                 if (!this.mounted) return;
@@ -684,11 +694,16 @@ class _CreateEditScreenState extends State<CreateEditScreen> {
                                         widget.club.id,
                                         AppConstants.djangoToken,
                                         this._tagSearchPost))
-                                .catchError((onError) {
-                              print('Error while fetching tags $onError');
-                            }).then((result) {
+                                .then((result) {
                               if (result != null)
                                 this._searchedTagResult = result.body;
+                            }).catchError((onError) {
+                              if (onError is InternetConnectionException) {
+                                AppConstants.internetErrorFlushBar
+                                    .showFlushbar(context);
+                                return;
+                              }
+                              print('Error while fetching tags $onError');
                             });
                             if (!this.mounted) return;
                             setState(() {
@@ -737,10 +752,7 @@ class _CreateEditScreenState extends State<CreateEditScreen> {
                                   await AppConstants.service
                                       .getClubTags(widget.club.id,
                                           AppConstants.djangoToken)
-                                      .catchError((onError) {
-                                    print(
-                                        'Error while fetching all tags $onError');
-                                  }).then((result) {
+                                      .then((result) {
                                     if (result != null) {
                                       this._allTagsOfClubOrEntity =
                                           result.body.club_tags;
@@ -748,15 +760,21 @@ class _CreateEditScreenState extends State<CreateEditScreen> {
                                       this._allTagDataFetched = true;
                                       setState(() {});
                                     }
+                                  }).catchError((onError) {
+                                    if (onError
+                                        is InternetConnectionException) {
+                                      AppConstants.internetErrorFlushBar
+                                          .showFlushbar(context);
+                                      return;
+                                    }
+                                    print(
+                                        'Error while fetching all tags $onError');
                                   });
                                 } else {
                                   await AppConstants.service
                                       .getEntityTags(widget.entity.id,
                                           AppConstants.djangoToken)
-                                      .catchError((onError) {
-                                    print(
-                                        'Error while fetching all tags $onError');
-                                  }).then((result) {
+                                      .then((result) {
                                     if (result != null) {
                                       this._allTagsOfClubOrEntity =
                                           result.body.entity_tags;
@@ -764,6 +782,15 @@ class _CreateEditScreenState extends State<CreateEditScreen> {
                                       this._allTagDataFetched = true;
                                       setState(() {});
                                     }
+                                  }).catchError((onError) {
+                                    if (onError
+                                        is InternetConnectionException) {
+                                      AppConstants.internetErrorFlushBar
+                                          .showFlushbar(context);
+                                      return;
+                                    }
+                                    print(
+                                        'Error while fetching all tags $onError');
                                   });
                                 }
                               },

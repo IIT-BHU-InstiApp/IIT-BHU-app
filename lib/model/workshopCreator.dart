@@ -1,5 +1,6 @@
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:iit_app/data/internet_connection_interceptor.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/ui/dialogBoxes.dart';
 import 'package:iit_app/model/built_post.dart';
@@ -92,6 +93,10 @@ class WorkshopCreater {
           _created = true;
         }
       }).catchError((onError) {
+        if (onError is InternetConnectionException) {
+          AppConstants.internetErrorFlushBar.showFlushbar(context);
+          return;
+        }
         print('Error printing CREATED workshop: ${onError.toString()}');
       });
     } else if (entity != null) {
@@ -106,6 +111,10 @@ class WorkshopCreater {
           _created = true;
         }
       }).catchError((onError) {
+        if (onError is InternetConnectionException) {
+          AppConstants.internetErrorFlushBar.showFlushbar(context);
+          return;
+        }
         print('Error printing CREATED workshop: ${onError.toString()}');
       });
     }
@@ -202,6 +211,10 @@ class WorkshopCreater {
         _edited = true;
       }
     }).catchError((onError) {
+      if (onError is InternetConnectionException) {
+        AppConstants.internetErrorFlushBar.showFlushbar(context);
+        return;
+      }
       print('Error printing EDITED workshop: ${onError.toString()}');
     });
 
@@ -214,6 +227,10 @@ class WorkshopCreater {
       ),
     )
         .catchError((onError) {
+      if (onError is InternetConnectionException) {
+        AppConstants.internetErrorFlushBar.showFlushbar(context);
+        return;
+      }
       print('Error editing contacts in edited workshop: ${onError.toString()}');
     });
 
@@ -225,6 +242,10 @@ class WorkshopCreater {
               (b) => b..tags = tagNameofId.keys.toList().build().toBuilder(),
             ))
         .catchError((onError) {
+      if (onError is InternetConnectionException) {
+        AppConstants.internetErrorFlushBar.showFlushbar(context);
+        return;
+      }
       print('Error editing tags in edited workshop: ${onError.toString()}');
     });
     return _edited;
