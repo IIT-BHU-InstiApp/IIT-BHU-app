@@ -54,10 +54,8 @@ class _InitiationState extends State<Initiation> {
     this._isOnline = await AppConstants.connectionStatus.checkConnection();
     if (this._isOnline == true) {
       AppConstants.isLoggedIn = await CrudMethods.isLoggedIn();
-      await Future.delayed(Duration(
-          milliseconds: AppConstants.isLoggedIn == true
-              ? (AppConstants.isGuest == true ? 700 : 400)
-              : 1000));
+      await Future.delayed(
+          Duration(milliseconds: AppConstants.isLoggedIn == true ? 500 : 1500));
       await Navigator.of(context)
           .popAndPushNamed('/root', arguments: {'initFCM': true});
     } else {
