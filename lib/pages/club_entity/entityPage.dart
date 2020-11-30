@@ -189,7 +189,9 @@ class _EntityPageState extends State<EntityPage>
                                 : Colors.black26,
                           ),
                     label: Text(
-                      'Subscribe',
+                      entityMap != null && entityMap.is_subscribed
+                          ? 'Subscribed'
+                          : 'Subscribe',
                       style: TextStyle(
                           fontSize: 16,
                           color: entityMap != null && entityMap.is_subscribed

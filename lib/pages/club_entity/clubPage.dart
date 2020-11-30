@@ -188,7 +188,9 @@ class _ClubPageState extends State<ClubPage>
                               : Colors.black26,
                         ),
                   label: Text(
-                    'Subscribe',
+                    clubMap != null && clubMap.is_subscribed
+                        ? 'Subscribed'
+                        : 'Subscribe',
                     style: TextStyle(
                         fontSize: 16,
                         color: clubMap != null && clubMap.is_subscribed
