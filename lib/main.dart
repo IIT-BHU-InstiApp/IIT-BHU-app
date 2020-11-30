@@ -38,6 +38,7 @@ void main() async {
   await AppConstants.setDeviceDirectoryForImages();
 
   runApp(MaterialApp(
+    title: 'Lite Hai',
     theme: ThemeData(
       primaryTextTheme: TextTheme(
         bodyText1: TextStyle(),

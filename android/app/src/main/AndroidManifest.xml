@@ -15,7 +15,7 @@
 
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="iit_app"
+        android:label="Lite Hai"
         android:icon="@mipmap/ic_launcher"
         android:requestLegacyExternalStorage="true"
         >
