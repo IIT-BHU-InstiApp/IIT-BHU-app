@@ -107,7 +107,8 @@ class AccountScreen extends StatelessWidget {
                       children: <Widget>[
                         Center(
                             child: CircleAvatar(
-                          backgroundImage: profileDetails.photo_url == null
+                          backgroundImage: profileDetails.photo_url == null ||
+                                  profileDetails.photo_url == ''
                               ? AssetImage('assets/AMC.png')
                               : NetworkImage(profileDetails.photo_url),
                           radius: 30.0,

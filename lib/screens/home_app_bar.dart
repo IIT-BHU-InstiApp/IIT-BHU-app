@@ -48,7 +48,8 @@ AppBar homeAppBar(context,
                         ? BoxDecoration()
                         : BoxDecoration(
                             image: DecorationImage(
-                                image: AppConstants.currentUser == null
+                                image: AppConstants.currentUser == null ||
+                                        AppConstants.currentUser.photo_url == ''
                                     ? AssetImage('assets/guest.png')
                                     : NetworkImage(
                                         AppConstants.currentUser.photo_url),

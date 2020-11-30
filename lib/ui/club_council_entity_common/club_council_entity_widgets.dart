@@ -67,7 +67,8 @@ class ClubCouncilAndEntityWidgets {
                       child: largeLogoFile != null
                           ? Image.file(largeLogoFile,
                               fit: BoxFit.cover, height: 300.0)
-                          : _data.large_image_url != null
+                          : _data.large_image_url != null &&
+                                  _data.large_image_url != ''
                               ? Image.network(_data.large_image_url,
                                   fit: BoxFit.cover, height: 300.0)
                               : Image(image: AssetImage('assets/iitbhu.jpeg')),

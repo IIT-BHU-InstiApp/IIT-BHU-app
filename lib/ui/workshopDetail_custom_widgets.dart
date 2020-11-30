@@ -358,7 +358,7 @@ class WorkshopDetailCustomWidgets {
     var _providerImage;
     double height = 295;
 
-    if (imageUrl != null) {
+    if (imageUrl != null && imageUrl != '') {
       _image = Image.network(imageUrl);
       _providerImage = NetworkImage(imageUrl);
       height = 360;
@@ -377,13 +377,13 @@ class WorkshopDetailCustomWidgets {
 
       if (logoFile == null) {}
       _image = logoFile == null
-          ? (logoImageUrl == null
+          ? (logoImageUrl == null || logoImageUrl == ''
               ? Image.asset('assets/iitbhu.jpeg',
                   fit: BoxFit.cover, height: 300.0)
               : Image.network(logoImageUrl, fit: BoxFit.cover, height: 300.0))
           : Image.file(logoFile, fit: BoxFit.cover, height: 300);
       _providerImage = logoFile == null
-          ? (logoImageUrl == null
+          ? (logoImageUrl == null || logoImageUrl == ''
               ? AssetImage('assets/iitbhu.jpeg')
               : NetworkImage(logoImageUrl))
           : FileImage(logoFile);

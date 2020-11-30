@@ -50,7 +50,7 @@ class _AboutPageState extends State<AboutPage> {
               space,
               Center(
                   child: CircleAvatar(
-                backgroundImage: imageUrl == null
+                backgroundImage: imageUrl == null || imageUrl == ''
                     ? AssetImage('assets/AMC.png')
                     : NetworkImage(imageUrl),
                 radius: 30.0,
@@ -155,9 +155,13 @@ class _AboutPageState extends State<AboutPage> {
                                     decoration: BoxDecoration(
                                         image: DecorationImage(
                                           image: teamData[index]
-                                                      .team_members[index2]
-                                                      .github_image_url ==
-                                                  null
+                                                          .team_members[index2]
+                                                          .github_image_url ==
+                                                      null ||
+                                                  teamData[index]
+                                                          .team_members[index2]
+                                                          .github_image_url ==
+                                                      ''
                                               ? AssetImage('assets/AMC.png')
                                               : NetworkImage(teamData[index]
                                                   .team_members[index2]

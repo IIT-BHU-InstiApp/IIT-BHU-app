@@ -60,7 +60,8 @@ class SideBar extends Drawer {
                       decoration: BoxDecoration(
                         image: DecorationImage(
                           image: (AppConstants.currentUser == null ||
-                                  AppConstants.isGuest == true)
+                                  AppConstants.isGuest == true ||
+                                  AppConstants.currentUser.photo_url == '')
                               ? AssetImage('assets/guest.png')
                               : NetworkImage(
                                   AppConstants.currentUser.photo_url),
@@ -143,7 +144,9 @@ class SideBar extends Drawer {
               onTap: () async {
                 if (!AppConstants.isGuest) {
                   bool result = await getLogoutDialog(context, [
-                    NetworkImage(AppConstants.currentUser.photo_url),
+                    AppConstants.currentUser.photo_url == ''
+                        ? AssetImage('assets/guest.png')
+                        : NetworkImage(AppConstants.currentUser.photo_url),
                     AppConstants.currentUser.name,
                   ]);
                   if (result == true) {
