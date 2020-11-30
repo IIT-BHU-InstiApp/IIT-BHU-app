@@ -245,7 +245,52 @@ class ClubCouncilAndEntityWidgets {
   }
 
   static Container getSecies(BuildContext context,
-      {secy, jointSecy, isEntity = false, isSports = false}) {
+      {SecyPost secy, jointSecy, isEntity = false, isSports = false}) {
+    var _displayList = List<Widget>();
+    if (jointSecy.length > 0) {
+      _displayList.add(SizedBox(width: 20));
+      _displayList.add(ClubCouncilAndEntityWidgets.getPosHolder(
+        context: context,
+        imageUrl: jointSecy[0].photo_url,
+        desg: isEntity
+            ? 'PoR Holder'
+            : isSports
+                ? 'Point of Contact'
+                : 'Joint-Secy',
+        name: jointSecy[0].name,
+        email: jointSecy[0].email,
+        phone: jointSecy[0].phone_number,
+      ));
+      _displayList.add(SizedBox(width: 20));
+    }
+    if (secy != null) {
+      _displayList.add(ClubCouncilAndEntityWidgets.getPosHolder(
+        context: context,
+        imageUrl: secy.photo_url,
+        desg: isSports ? 'Point of Contact' : 'Secy',
+        name: secy.name,
+        email: secy.email,
+        phone: secy.phone_number,
+      ));
+      _displayList.add(SizedBox(width: 20));
+    }
+    if (jointSecy.length > 1) {
+      for (int i = 1; i < jointSecy.length; i++) {
+        _displayList.add(ClubCouncilAndEntityWidgets.getPosHolder(
+          context: context,
+          imageUrl: jointSecy[i].photo_url,
+          desg: isEntity
+              ? 'PoR Holder'
+              : isSports
+                  ? 'Point of Contact'
+                  : 'Joint-Secy',
+          name: jointSecy[i].name,
+          email: jointSecy[i].email,
+          phone: jointSecy[i].phone_number,
+        ));
+        _displayList.add(SizedBox(width: 20));
+      }
+    }
     return Container(
       margin: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
       decoration: BoxDecoration(
@@ -255,48 +300,11 @@ class ClubCouncilAndEntityWidgets {
       child: Column(
         children: [
           Center(child: Text('PoR Holders', style: Style.headingStyle)),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              jointSecy.length > 0
-                  ? ClubCouncilAndEntityWidgets.getPosHolder(
-                      context: context,
-                      imageUrl: jointSecy[0].photo_url,
-                      desg: isEntity
-                          ? 'PoR Holder'
-                          : isSports
-                              ? 'Point of Contact'
-                              : 'Joint-Secy',
-                      name: jointSecy[0].name,
-                      email: jointSecy[0].email,
-                      phone: jointSecy[0].phone_number,
-                    )
-                  : SizedBox(width: 1),
-              secy == null
-                  ? SizedBox(width: 1)
-                  : ClubCouncilAndEntityWidgets.getPosHolder(
-                      context: context,
-                      imageUrl: secy.photo_url,
-                      desg: isSports ? 'Point of Contact' : 'Secy',
-                      name: secy.name,
-                      email: secy.email,
-                      phone: secy.phone_number,
-                    ),
-              jointSecy.length > 1
-                  ? ClubCouncilAndEntityWidgets.getPosHolder(
-                      context: context,
-                      imageUrl: jointSecy[1].photo_url,
-                      desg: isEntity
-                          ? 'PoR Holder'
-                          : isSports
-                              ? 'Point of Contact'
-                              : 'Joint-Secy',
-                      name: jointSecy[1].name,
-                      email: jointSecy[1].email,
-                      phone: jointSecy[1].phone_number,
-                    )
-                  : SizedBox(width: 1),
-            ],
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: _displayList),
           ),
           SizedBox(height: 15.0),
         ],
