@@ -40,7 +40,7 @@ class DatabaseMapping {
     String jointSecyList = '';
 
     for (var secy in councilPost.joint_gensec) {
-      if (secy?.id != null) jointSecyList += '${secy.id}';
+      if (secy?.id != null) jointSecyList += '${secy.id}' + ' ';
     }
     jointSecyList = jointSecyList.trim();
 
@@ -107,7 +107,7 @@ class DatabaseMapping {
     String jointSecyList = '';
 
     for (var secy in clubPost.joint_secy) {
-      if (secy?.id != null) jointSecyList += '${secy.id}';
+      if (secy?.id != null) jointSecyList += '${secy.id}' + ' ';
     }
     jointSecyList = jointSecyList.trim();
 
@@ -141,7 +141,7 @@ class DatabaseMapping {
   static Map<String, dynamic> entityDetailToMap(BuiltEntityPost entityPost) {
     String pocString = '';
     for (var secy in entityPost.point_of_contact) {
-      if (secy?.id != null) pocString += '${secy.id}';
+      if (secy?.id != null) pocString += '${secy.id}' + ' ';
     }
 
     pocString = pocString.trim();
