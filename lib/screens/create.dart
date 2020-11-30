@@ -257,7 +257,7 @@ class _CreateEditScreenState extends State<CreateEditScreen> {
               title: Text(
                   'PERMANENTLY Delete Tag for ${_isEntity ? widget.entity.name : widget.club.name}'),
               content: Text(
-                  '''Are you sure you want to delete this tag for this club?\nNote that option is NOT to be used to remove the tag for the ${widget.isWorkshopOrEvent}.\nThis is to permanently delete this tag for ${_isEntity ? widget.entity.name : widget.club.name}.'''),
+                  '''Are you sure you want to delete this tag for this club?\nNote that this option is NOT to be used to remove the tag for the ${widget.isWorkshopOrEvent}.\nThis is to permanently delete this tag for ${_isEntity ? widget.entity.name : widget.club.name}.'''),
               actions: <Widget>[
                 FlatButton(
                   child: Text('No.'),
