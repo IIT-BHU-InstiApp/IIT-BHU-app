@@ -38,10 +38,10 @@ class DatabaseMapping {
 
   static Map<String, dynamic> councilDetailToMap(BuiltCouncilPost councilPost) {
     String jointSecyList = '';
-    councilPost.joint_gensec?.forEach((secy) {
-      if (secy?.id == null) return;
-      jointSecyList += '${secy.id}';
-    });
+
+    for (var secy in councilPost.joint_gensec) {
+      if (secy?.id != null) jointSecyList += '${secy.id}';
+    }
     jointSecyList = jointSecyList.trim();
 
     Map<String, dynamic> map = {
@@ -105,10 +105,10 @@ class DatabaseMapping {
 
   static Map<String, dynamic> clubDetailToMap(BuiltClubPost clubPost) {
     String jointSecyList = '';
-    clubPost.joint_secy?.forEach((secy) {
-      if (secy?.id == null) return;
-      jointSecyList += '${secy.id}';
-    });
+
+    for (var secy in clubPost.joint_secy) {
+      if (secy?.id != null) jointSecyList += '${secy.id}';
+    }
     jointSecyList = jointSecyList.trim();
 
     Map<String, dynamic> map = {
@@ -140,10 +140,9 @@ class DatabaseMapping {
 
   static Map<String, dynamic> entityDetailToMap(BuiltEntityPost entityPost) {
     String pocString = '';
-    entityPost.point_of_contact?.forEach((secy) {
-      if (secy?.id == null) return;
-      pocString += '${secy.id}';
-    });
+    for (var secy in entityPost.point_of_contact) {
+      if (secy?.id != null) pocString += '${secy.id}';
+    }
 
     pocString = pocString.trim();
 

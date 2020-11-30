@@ -125,14 +125,15 @@ class _CreateEditScreenState extends State<CreateEditScreen> {
       this._audienceController.text = widget.workshopData.audience;
       _workshop = WorkshopCreater(
           editingDate: this._editingDate, editingTime: this._editingTime);
-      widget.workshopData.contacts.forEach((contact) {
+
+      for (var contact in widget.workshopData.contacts) {
         this._workshop.contactIds.add(contact.id);
         this._workshop.contactNameofId[contact.id] =
             WorkshopCreater.nameOfContact(contact.name);
-      });
-      widget.workshopData.tags.forEach((tag) {
+      }
+      for (var tag in widget.workshopData.tags) {
         this._workshop.tagNameofId[tag.id] = tag.tag_name;
-      });
+      }
       this._workshop.latitude = widget.workshopData.latitude;
       this._workshop.longitude = widget.workshopData.longitude;
       this._workshop.is_workshop = widget.workshopData.is_workshop;

@@ -95,6 +95,7 @@ class AppConstants {
         await DatabaseWrite.insertCouncilSummaryIntoDatabase(
             councils: councilSummaryPosts, db: database);
 
+// using forEach instead of for loop so that image being written to disk in backgroud without affecting main processes.
         councilSummaryPosts.forEach((council) async {
           await writeImageFileIntoDisk(council.small_image_url);
         });
@@ -102,6 +103,7 @@ class AppConstants {
         await DatabaseWrite.insertEntitiesSummaryIntoDatabase(
             db: database, entities: entitySummaryPosts);
 
+// using forEach instead of for loop so that image being written to disk in backgroud without affecting main processes.
         entitySummaryPosts.forEach((entity) async {
           await writeImageFileIntoDisk(entity.small_image_url);
         });
@@ -133,6 +135,7 @@ class AppConstants {
   }
 
   static writeCouncilAndEntityLogoIntoDisk() async {
+// using forEach instead of for loop so that image being written to disk in backgroud without affecting main processes.
     councilsSummaryfromDatabase?.forEach((council) async {
       await writeImageFileIntoDisk(council.small_image_url);
     });
@@ -165,9 +168,9 @@ class AppConstants {
 
   static String _diskRWableImageUrl(String imageUrl) {
     String parsedUrl = '';
-    imageUrl.split('/').forEach((element) {
+    for (var element in imageUrl.split('/')) {
       parsedUrl += element;
-    });
+    }
     return parsedUrl;
   }
 
@@ -228,6 +231,7 @@ class AppConstants {
         await DatabaseWrite.insertEntitiesSummaryIntoDatabase(
             db: database, entities: entitySummaryPosts);
 
+// using forEach instead of for loop so that image being written to disk in backgroud without affecting main processes.
         entitySummaryPosts.forEach((entity) async {
           await writeImageFileIntoDisk(entity.small_image_url);
         });

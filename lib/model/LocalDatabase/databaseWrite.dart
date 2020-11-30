@@ -57,13 +57,13 @@ class DatabaseWrite {
       );
     }
 
-    jointPOR?.forEach((joint) async {
+    for (var joint in jointPOR) {
       await db.insert(
         StringConst.porHoldersString,
         DatabaseMapping.porInfoToMap(joint),
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
-    });
+    }
   }
 
   static Future insertClubsSummaryIntoDatabase(
