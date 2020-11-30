@@ -139,7 +139,7 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
         print("status of deleting workshop: ${snapshot.statusCode}");
         await showSuccessfulDialog();
         Navigator.of(context)
-            .pushNamedAndRemoveUntil('/home', ModalRoute.withName('/'));
+            .pushNamedAndRemoveUntil('/home', ModalRoute.withName('/root'));
       }).catchError((onError) async {
         if (onError is InternetConnectionException) {
           AppConstants.internetErrorFlushBar.showFlushbar(context);

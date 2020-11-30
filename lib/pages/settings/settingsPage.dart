@@ -28,7 +28,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     await AppConstants.deleteAllLocalDataWithImages();
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (context) => HomePage()),
-        ModalRoute.withName('/'));
+        ModalRoute.withName('/root'));
   }
 
 // TODO: Remove this dialog box, instead create buttons directly (like      Pick Theme:           Light   Dark)

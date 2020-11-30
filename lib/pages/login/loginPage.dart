@@ -118,7 +118,7 @@ class _LoginPageState extends State<LoginPage> {
                       prefs.setBool(SharedPreferenceKeys.isGuest, true);
 
                       Navigator.of(context).pushNamedAndRemoveUntil(
-                          '/home', ModalRoute.withName('/'));
+                          '/home', ModalRoute.withName('/root'));
                     },
                     child: CircleAvatar(
                       radius: 52,
@@ -181,7 +181,7 @@ class _LoginPageState extends State<LoginPage> {
         });
 
         Navigator.of(context)
-            .pushNamedAndRemoveUntil('/home', ModalRoute.withName('/'));
+            .pushNamedAndRemoveUntil('/home', ModalRoute.withName('/root'));
       }
     }
 

@@ -121,7 +121,7 @@ class WorkshopCreater {
 
     if (_created) {
       Navigator.of(context)
-          .pushNamedAndRemoveUntil('/home', ModalRoute.withName('/'));
+          .pushNamedAndRemoveUntil('/home', ModalRoute.withName('/root'));
     }
   }
 

@@ -27,7 +27,7 @@ class SideBar extends Drawer {
         // navigate to the route
 
         if (homeRoute) {
-          Navigator.popUntil(context, ModalRoute.withName('/'));
+          Navigator.popUntil(context, ModalRoute.withName('/root'));
         }
 
         Navigator.of(context).pushNamed(routeName);

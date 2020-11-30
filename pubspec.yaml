@@ -31,7 +31,7 @@ dependencies:
   url_launcher: ^5.1.6
   chopper: ^2.4.2
   provider: ^3.0.0+1
-  connectivity: ^0.4.3+2
+  connectivity: ^2.0.2
   built_value: ^6.7.0
   sqflite: ^1.2.0
   path_provider: ^1.5.1
@@ -46,6 +46,7 @@ dependencies:
   image_picker: ^0.6.7+14
   photo_view: ^0.10.3
   flushbar: ^1.10.4
+  video_player: ^1.0.1
 
 dev_dependencies:
   flutter_test:

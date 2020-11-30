@@ -126,7 +126,7 @@ class _AccountPageState extends State<AccountPage> {
 
   Future<bool> onPop() {
     Navigator.pushNamedAndRemoveUntil(
-        context, '/home', ModalRoute.withName('/'));
+        context, '/home', ModalRoute.withName('/root'));
     return Future.value(false);
   }
 
