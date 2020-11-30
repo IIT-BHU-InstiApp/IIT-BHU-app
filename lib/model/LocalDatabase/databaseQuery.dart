@@ -155,8 +155,6 @@ class DatabaseQuery {
       if (secy != null) jointSecyBuilder.add(secy);
     });
 
-    BuiltList<SecyPost> jointGensec = jointSecyBuilder.build();
-
     BuiltList<ClubListPost> clubs =
         await getClubsSummary(db: db, councilId: councilId);
 
@@ -165,7 +163,7 @@ class DatabaseQuery {
       ..name = map[StringConst.nameString]
       ..description = map[StringConst.descriptionString]
       ..gensec = (gensec?.toBuilder())
-      ..joint_gensec = (jointGensec?.toBuilder())
+      ..joint_gensec = jointSecyBuilder
       ..clubs = (clubs?.toBuilder())
       ..small_image_url = map[StringConst.smallImageUrlString]
       ..large_image_url = map[StringConst.largeImageUrlString]
