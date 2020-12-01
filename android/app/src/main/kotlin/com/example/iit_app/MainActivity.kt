@@ -1,4 +1,4 @@
-package com.example.iit_app
+package com.iitbhu.litehai
 
 import android.os.Bundle
 

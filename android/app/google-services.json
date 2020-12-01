@@ -8,12 +8,216 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:897714770024:android:8fcf6ca5d31af65b27abdd",
+        "android_client_info": {
+          "package_name": "com.example.anant.iitbhuvaranasi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "897714770024-s7sgv47ro584mgoo0vaouohobnjlljcb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.anant.iitbhuvaranasi",
+            "certificate_hash": "ac183e9ff44b85741ee65d16a5221c7b81634c09"
+          }
+        },
+        {
+          "client_id": "897714770024-2mc4otgm3ge541dht13gqf92rhjb4nai.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.anant.iitbhuvaranasi",
+            "certificate_hash": "1db0085fcfd28ee893371bee51b5266a1cd784d4"
+          }
+        },
+        {
+          "client_id": "897714770024-pktc84mj5nkj9ukpn6u176oaa23rn9k2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.anant.iitbhuvaranasi",
+            "certificate_hash": "ab6e3fdba0c2c148045e79f8098d5f31adb5983f"
+          }
+        },
+        {
+          "client_id": "897714770024-9jg0ugiucd0n1bdafs96o0shpr49g4jc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.anant.iitbhuvaranasi",
+            "certificate_hash": "246c5cabf318cec54b4a4e75d4cb9bc373fd4656"
+          }
+        },
+        {
+          "client_id": "897714770024-4s4ns1sp5a106go47ag97mcs68u2h2p2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCOtLJG_dWAHTXjArWliiiZrR5_25P6k94"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "897714770024-4s4ns1sp5a106go47ag97mcs68u2h2p2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "897714770024-giqlv0d6gsi1gk6ml6i709mop7qd9f89.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.iitApp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:897714770024:android:3a3fa293e0e2e38827abdd",
         "android_client_info": {
           "package_name": "com.example.iit_app"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "897714770024-23e54ldf0iak6u04r6gpsll74rhttcku.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.iit_app",
+            "certificate_hash": "6385554e33570c96ba6967bff6cbdf215e4b80fa"
+          }
+        },
+        {
+          "client_id": "897714770024-7dci7dpl14pup1hlg5jpvrj0ms0r506u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.iit_app",
+            "certificate_hash": "cdd6d0f9dc6e0bea6db5bc42299f043d92a066da"
+          }
+        },
+        {
+          "client_id": "897714770024-fc0tt7tbf9048c3rt0eg2jpkgk67lm5n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.iit_app",
+            "certificate_hash": "63b4581cc1aac492d35db501e776d9363393bf53"
+          }
+        },
+        {
+          "client_id": "897714770024-tut2rmit96n946vlvluhnnonvtoaatlb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.iit_app",
+            "certificate_hash": "06e63cff5b75afbb4e43a7c595e0b4fbe887d9f8"
+          }
+        },
+        {
+          "client_id": "897714770024-k6s4tnj3jjlr0nh7gbus9fnu5vebi177.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.iit_app",
+            "certificate_hash": "431fe240a958eb1b810801a50d8abb9a96d635f0"
+          }
+        },
+        {
+          "client_id": "897714770024-3e72knfk4439bi7m9el923cqbg8ihria.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.iit_app",
+            "certificate_hash": "454f1d7caa951ad8bdf7cd016c2928e0b95474f8"
+          }
+        },
+        {
+          "client_id": "897714770024-c0sgeu1tbu98d0s36la740bntbruasgt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.iit_app",
+            "certificate_hash": "ac183e9ff44b85741ee65d16a5221c7b81634c09"
+          }
+        },
+        {
+          "client_id": "897714770024-2mktrh1p51l6h0jdr2ohekvbg1huhmbg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.iit_app",
+            "certificate_hash": "e2a105315e8639d5f5a4f4c9526d67e297ead9b1"
+          }
+        },
+        {
+          "client_id": "897714770024-0k0bpioks44trtld37b135jnci2vrdrs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.iit_app",
+            "certificate_hash": "1064c3b8b17ceb163fb5d6d5988152cb4c936d6e"
+          }
+        },
+        {
+          "client_id": "897714770024-o5bj73s4res0cv43c00h6ocrur3v8fea.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.iit_app",
+            "certificate_hash": "476e738448ffea33603284900706abad4105bdd6"
+          }
+        },
+        {
+          "client_id": "897714770024-4d52o18v9scsq6h6hocajm81776k38bh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.iit_app",
+            "certificate_hash": "0d6626440f581b2c9f34141678c6316bfbc7bff4"
+          }
+        },
+        {
+          "client_id": "897714770024-400mkkpalnvatd5unapjnbk7usfkb5o6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.iit_app",
+            "certificate_hash": "4e3f602f8906cea5c9d216339c754a44e252b789"
+          }
+        },
+        {
+          "client_id": "897714770024-pjtefjtkbo4o8pcr2a5g7d28dk55s0f5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.iit_app",
+            "certificate_hash": "7c5ae00c26062a4511194f960bc0b724bdacf2ca"
+          }
+        },
+        {
+          "client_id": "897714770024-9imjbo5ojgih5j7q4c6vmdq2hai4udcf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.iit_app",
+            "certificate_hash": "d9f6bb01382d117f8e3915715ca6b5c4ccd6e5b9"
+          }
+        },
+        {
+          "client_id": "897714770024-b71cc9re8jf1qaa2k9j2jrp516h2uh1m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.iit_app",
+            "certificate_hash": "465a721f73eb01071d4268d07df28d312c282f20"
+          }
+        },
+        {
+          "client_id": "897714770024-77as242ahqvmfqhadis5nku1ogub1lq6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.iit_app",
+            "certificate_hash": "072e8452ab93567f9f743889e4df974ab8f2486f"
+          }
+        },
+        {
+          "client_id": "897714770024-57c8ojqvr49kfd6ogvqjp6nkq3ip7v3h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.iit_app",
+            "certificate_hash": "246c5cabf318cec54b4a4e75d4cb9bc373fd4656"
+          }
+        },
         {
           "client_id": "897714770024-1avrl0339v8dhbo4a5o9m56lj86nd36a.apps.googleusercontent.com",
           "client_type": 1,
@@ -38,6 +242,49 @@
             {
               "client_id": "897714770024-4s4ns1sp5a106go47ag97mcs68u2h2p2.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "897714770024-giqlv0d6gsi1gk6ml6i709mop7qd9f89.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.iitApp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:897714770024:android:6f123298e46d2dc827abdd",
+        "android_client_info": {
+          "package_name": "com.iitbhu.litehai"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "897714770024-4s4ns1sp5a106go47ag97mcs68u2h2p2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCOtLJG_dWAHTXjArWliiiZrR5_25P6k94"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "897714770024-4s4ns1sp5a106go47ag97mcs68u2h2p2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "897714770024-giqlv0d6gsi1gk6ml6i709mop7qd9f89.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.iitApp"
+              }
             }
           ]
         }
