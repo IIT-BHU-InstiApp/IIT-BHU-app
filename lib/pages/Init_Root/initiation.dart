@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:iit_app/data/post_api_service.dart';
@@ -20,9 +22,13 @@ class _InitiationState extends State<Initiation> {
   bool _isOnline = false;
   bool _tappable = true;
 
+  DateTime _initTime;
+
   _initVideo() {
     _controller = VideoPlayerController.asset('assets/animated_logo.mp4')
       ..initialize().then((_) {
+        _initTime = DateTime.now();
+
         _controller.play();
         _controller.setLooping(true);
         // Ensure the first frame is shown after the video is initialized
@@ -54,8 +60,12 @@ class _InitiationState extends State<Initiation> {
     this._isOnline = await AppConstants.connectionStatus.checkConnection();
     if (this._isOnline == true) {
       AppConstants.isLoggedIn = await CrudMethods.isLoggedIn();
-      await Future.delayed(
-          Duration(milliseconds: AppConstants.isLoggedIn == true ? 500 : 1500));
+
+      final timePassed = DateTime.now().difference(_initTime);
+      if (timePassed.inMilliseconds < 1500) {
+        await Future.delayed(
+            Duration(milliseconds: 1500 - timePassed.inMilliseconds));
+      }
       await Navigator.of(context)
           .popAndPushNamed('/root', arguments: {'initFCM': true});
     } else {
