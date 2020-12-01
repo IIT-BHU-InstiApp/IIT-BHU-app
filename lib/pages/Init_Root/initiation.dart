@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:iit_app/data/post_api_service.dart';
 import 'package:iit_app/external_libraries/spin_kit.dart';
 import 'package:iit_app/model/appConstants.dart';
@@ -10,7 +11,6 @@ import 'package:iit_app/model/sharedPreferenceKeys.dart';
 import 'package:iit_app/services/connectivityCheck.dart';
 import 'package:iit_app/services/crud.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:video_player/video_player.dart';
 
 class Initiation extends StatefulWidget {
   @override
@@ -18,26 +18,13 @@ class Initiation extends StatefulWidget {
 }
 
 class _InitiationState extends State<Initiation> {
-  VideoPlayerController _controller;
   bool _isOnline = false;
   bool _tappable = true;
-
   DateTime _initTime;
 
-  _initVideo() {
-    _controller = VideoPlayerController.asset('assets/animated_logo.mp4')
-      ..initialize().then((_) {
-        _initTime = DateTime.now();
-
-        _controller.play();
-        _controller.setLooping(true);
-        // Ensure the first frame is shown after the video is initialized
-        setState(() {});
-        _initServices();
-      });
-  }
-
   _initServices() async {
+    _initTime = DateTime.now();
+
     await Firebase.initializeApp();
 
     AppConstants.service = PostApiService.create();
@@ -60,7 +47,6 @@ class _InitiationState extends State<Initiation> {
     this._isOnline = await AppConstants.connectionStatus.checkConnection();
     if (this._isOnline == true) {
       AppConstants.isLoggedIn = await CrudMethods.isLoggedIn();
-
       final timePassed = DateTime.now().difference(_initTime);
       if (timePassed.inMilliseconds < 1500) {
         await Future.delayed(
@@ -87,19 +73,19 @@ class _InitiationState extends State<Initiation> {
   @override
   void initState() {
     super.initState();
-    _initVideo();
+    _initServices();
   }
 
   @override
   void dispose() {
     super.dispose();
-    _controller.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
+        backgroundColor: Color(0xfffffffc),
         body: this._isOnline
             ? Center(
                 child: this._tappable == false
@@ -111,17 +97,33 @@ class _InitiationState extends State<Initiation> {
                         child: connectionError,
                       ),
               )
-            :
-            // Center(child: Text('hesdklfjsf')),
-            SizedBox.expand(
-                child: FittedBox(
-                  fit: BoxFit.fitWidth,
-                  child: SizedBox(
-                    width: _controller.value.size?.width ?? 0,
-                    height: _controller.value.size?.height ?? 0,
-                    child: VideoPlayer(_controller),
+            : Stack(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage('assets/iitLogo.png'),
+                      ),
+                    ),
                   ),
-                ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        'Loading',
+                        style: TextStyle(
+                          color: Color(0xff956178),
+                          fontSize: 24,
+                        ),
+                      ),
+                      SpinKitThreeBounce(
+                        size: 40,
+                        color: Color(0xff956178),
+                      ),
+                      SizedBox(height: 100),
+                    ],
+                  ),
+                ],
               ),
       ),
     );
