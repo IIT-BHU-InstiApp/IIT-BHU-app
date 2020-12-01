@@ -57,8 +57,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             await SharedPreferences.getInstance();
                         await prefs.setString(
                             SharedPreferenceKeys.usertheme, 'dark');
-                        Navigator.pop(context);
-                        Navigator.pushNamed(context, '/home');
+                        Navigator.of(context).pushNamedAndRemoveUntil(
+                            '/home', ModalRoute.withName('/root'));
                       },
                       child: Text('Dark Theme'),
                     ),
