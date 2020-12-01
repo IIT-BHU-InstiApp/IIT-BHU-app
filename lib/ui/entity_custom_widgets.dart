@@ -33,26 +33,16 @@ class EntityCustomWidgets {
   Widget getPanel(
       {@required ScrollController sc, @required EntityListPost entity}) {
     return Container(
-      padding: EdgeInsets.only(top: 20.0),
+      padding: EdgeInsets.only(top: 16.0),
       decoration: BoxDecoration(
         borderRadius: radius,
         color: ColorConstants.panelColor,
       ),
-      child: ListView(
-        controller: sc,
-        children: [
-          space,
-          SizedBox(
-            height: ClubCouncilAndEntityWidgets.getMinPanelHeight(context),
-          ),
-          ClubAndEntityWidgets.getWorkshopEventTabBar(
-              workshops: entityWorkshops,
-              tabController: tabController,
-              context: context,
-              reload: reload),
-          space,
-        ],
-      ),
+      child: ClubAndEntityWidgets().getWorkshopEventTabBar(
+          workshops: entityWorkshops,
+          tabController: tabController,
+          context: context,
+          reload: reload),
     );
   }
 

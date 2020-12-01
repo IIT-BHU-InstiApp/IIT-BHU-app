@@ -3,6 +3,7 @@ import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/colorConstants.dart';
 import 'package:iit_app/ui/club_council_entity_common/club_council_entity_widgets.dart';
 import 'package:iit_app/ui/club_entity_common.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class ClubCustomWidgets {
   final BorderRadiusGeometry radius;
@@ -25,25 +26,21 @@ class ClubCustomWidgets {
   final space = SizedBox(height: 8.0);
 
   Widget getPanel(
-      {@required ScrollController sc, @required ClubListPost club}) {
+      {PanelController pc,
+      @required ScrollController sc,
+      @required ClubListPost club}) {
     return Container(
       padding: EdgeInsets.only(top: 16.0),
       decoration: BoxDecoration(
         borderRadius: radius,
         color: ColorConstants.panelColor,
       ),
-      child: ListView(
-        controller: sc,
-        children: [
-          space,
-          ClubAndEntityWidgets.getWorkshopEventTabBar(
-              workshops: clubWorkshops,
-              tabController: tabController,
-              context: context,
-              reload: reload),
-          space,
-        ],
-      ),
+      child: ClubAndEntityWidgets().getWorkshopEventTabBar(
+          panelController: pc,
+          workshops: clubWorkshops,
+          tabController: tabController,
+          context: context,
+          reload: reload),
     );
   }
 }

@@ -213,8 +213,8 @@ class _ClubPageState extends State<ClubPage>
                 ),
               ),
               backdropEnabled: true,
-              panelBuilder: (ScrollController sc) =>
-                  clubCustomWidgets.getPanel(sc: sc, club: widget.club),
+              panelBuilder: (ScrollController sc) => clubCustomWidgets.getPanel(
+                  pc: _pc, sc: sc, club: widget.club),
               minHeight: ClubCouncilAndEntityWidgets.getMinPanelHeight(context),
               maxHeight: ClubCouncilAndEntityWidgets.getMaxPanelHeight(context),
               header: ClubCouncilAndEntityWidgets.getHeader(context),

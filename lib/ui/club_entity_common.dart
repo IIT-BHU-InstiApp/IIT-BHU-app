@@ -3,9 +3,10 @@ import 'package:iit_app/external_libraries/spin_kit.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/colorConstants.dart';
 import 'package:iit_app/ui/workshop_custom_widgets.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class ClubAndEntityWidgets {
-  static Widget _getWorkshopsAndEvents(
+  Widget _getWorkshopsAndEvents(PanelController panelController,
       BuiltAllWorkshopsPost workshops, bool isEvent, Function reload) {
     Widget _builder(w) {
       return w.length == 0
@@ -25,17 +26,16 @@ class ClubAndEntityWidgets {
             );
     }
 
+    final _controller = ScrollController();
+    _controller.addListener(() {
+      panelController.panelPosition = 1.0;
+    });
     return workshops == null
         ? Container(child: Center(child: LoadingCircle))
         : ListView(
-            // shrinkWrap: true,
+            controller: _controller,
             children: [
               SizedBox(height: 15),
-              // Text(
-              //   'Active:',
-              //   style: TextStyle(color: Colors.white, fontSize: 25),
-              //   textAlign: TextAlign.center,
-              // ),
               _builder(workshops.active_workshops
                   .where((w) => isEvent ? !w.is_workshop : w.is_workshop)
                   .toList()),
@@ -46,7 +46,6 @@ class ClubAndEntityWidgets {
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: 15),
-
               _builder(workshops.past_workshops
                   .where((w) => isEvent ? !w.is_workshop : w.is_workshop)
                   .toList()),
@@ -54,8 +53,9 @@ class ClubAndEntityWidgets {
           );
   }
 
-  static Widget getWorkshopEventTabBar(
-      {BuiltAllWorkshopsPost workshops,
+  Widget getWorkshopEventTabBar(
+      {PanelController panelController,
+      BuiltAllWorkshopsPost workshops,
       @required TabController tabController,
       BuildContext context,
       Function reload}) {
@@ -82,10 +82,12 @@ class ClubAndEntityWidgets {
               children: <Widget>[
                 workshops == null
                     ? Container(child: Center(child: LoadingCircle))
-                    : _getWorkshopsAndEvents(workshops, false, reload),
+                    : _getWorkshopsAndEvents(
+                        panelController, workshops, false, reload),
                 workshops == null
                     ? Container(child: Center(child: LoadingCircle))
-                    : _getWorkshopsAndEvents(workshops, true, reload),
+                    : _getWorkshopsAndEvents(
+                        panelController, workshops, true, reload),
               ],
             ),
           ),
