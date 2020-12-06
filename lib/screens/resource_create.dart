@@ -156,6 +156,9 @@ class _ResourceCreateScreenState extends State<ResourceCreateScreen> {
                       if (value.isEmpty) {
                         return 'Please enter the name of the resource';
                       }
+                      if (value.length > 100) {
+                        return 'The name cannot be longer than 100 characters';
+                      }
                       return null;
                     },
                     onSaved: (val) => setState(() => name = val),

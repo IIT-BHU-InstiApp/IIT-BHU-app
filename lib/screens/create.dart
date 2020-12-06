@@ -165,74 +165,93 @@ class _CreateEditScreenState extends State<CreateEditScreen> {
   }
 
   tagCreateDialog() async {
+    final GlobalKey<FormState> _tagFormKey = GlobalKey<FormState>();
     bool errorMessageShown = false;
     return showDialog(
       context: context,
       builder: (context) {
         return StatefulBuilder(builder: (context, refreshState) {
           return AlertDialog(
-              content: Row(
-                children: [
-                  Expanded(
-                    child: TextFormField(
-                      controller: this._tagCreateController,
-                      decoration: InputDecoration(
-                        labelText: 'Create Tag',
+              content: Form(
+                key: _tagFormKey,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextFormField(
+                        controller: this._tagCreateController,
+                        validator: (value) {
+                          if (value == '') {
+                            return 'The tag cannot be empty';
+                          }
+                          if (value.length > 50) {
+                            return 'Must be less than 50 characters';
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          labelText: 'Create Tag',
+                        ),
                       ),
                     ),
-                  ),
-                  RaisedButton(
-                    child: Text('+ Create'),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(50),
-                    ),
-                    onPressed: () async {
-                      print(this._tagCreateController.text);
-                      final newTag = TagCreate(
-                          (b) => b..tag_name = this._tagCreateController.text);
+                    RaisedButton(
+                      child: Text('+ Create'),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      onPressed: () async {
+                        final tagForm = _tagFormKey.currentState;
+                        if (tagForm.validate()) {
+                          tagForm.save();
+                          print(this._tagCreateController.text);
+                          final newTag = TagCreate((b) =>
+                              b..tag_name = this._tagCreateController.text);
 
-                      await (_isEntity
-                              ? AppConstants.service.createEntityTag(
-                                  widget.entity.id,
-                                  AppConstants.djangoToken,
-                                  newTag)
-                              : AppConstants.service.createClubTag(
-                                  widget.club.id,
-                                  AppConstants.djangoToken,
-                                  newTag))
-                          .then((value) {
-                        if (value != null) {
-                          tagAlertDialog('Tag Created',
-                              'The Tag has been created for ${_isEntity ? widget.entity.name : widget.club.name} succesfully. Search for it again, and add it to the ${widget.isWorkshopOrEvent} if you wish.');
+                          await (_isEntity
+                                  ? AppConstants.service.createEntityTag(
+                                      widget.entity.id,
+                                      AppConstants.djangoToken,
+                                      newTag)
+                                  : AppConstants.service.createClubTag(
+                                      widget.club.id,
+                                      AppConstants.djangoToken,
+                                      newTag))
+                              .then((value) {
+                            if (value != null) {
+                              tagAlertDialog('Tag Created',
+                                  'The Tag has been created for ${_isEntity ? widget.entity.name : widget.club.name} succesfully. Search for it again, and add it to the ${widget.isWorkshopOrEvent} if you wish.');
 
-                          refreshState(() => this._tagCreateController.clear());
-                        } else if (errorMessageShown == false) {
-                          tagAlertDialog(
-                              'Error', 'There was an error creating this tag.');
-                        }
-                      }).catchError((onError) {
-                        if (onError is InternetConnectionException) {
-                          AppConstants.internetErrorFlushBar
-                              .showFlushbar(context);
-                          return;
-                        }
+                              refreshState(
+                                  () => this._tagCreateController.clear());
+                            } else if (errorMessageShown == false) {
+                              tagAlertDialog('Error',
+                                  'There was an error creating this tag.');
+                            }
+                          }).catchError((onError) {
+                            if (onError is InternetConnectionException) {
+                              AppConstants.internetErrorFlushBar
+                                  .showFlushbar(context);
+                              return;
+                            }
 
-                        final error = onError as Response<dynamic>;
-                        print(error.body);
-                        if (error.body
-                            .toString()
-                            .contains('The tag already exists for this')) {
-                          tagAlertDialog('Tag Exists',
-                              'This tag already exists. Search for it if you wish to add it to the ${widget.isWorkshopOrEvent}.');
-                          errorMessageShown = true;
-                          refreshState(() => this._tagCreateController.clear());
+                            final error = onError as Response<dynamic>;
+                            print(error.body);
+                            if (error.body
+                                .toString()
+                                .contains('The tag already exists for this')) {
+                              tagAlertDialog('Tag Exists',
+                                  'This tag already exists. Search for it if you wish to add it to the ${widget.isWorkshopOrEvent}.');
+                              errorMessageShown = true;
+                              refreshState(
+                                  () => this._tagCreateController.clear());
+                            }
+                            print(
+                                'Error while creating Tag: ${onError.toString()} ${onError.runtimeType}');
+                          });
                         }
-                        print(
-                            'Error while creating Tag: ${onError.toString()} ${onError.runtimeType}');
-                      });
-                    },
-                  )
-                ],
+                      },
+                    )
+                  ],
+                ),
               ),
               actions: <Widget>[
                 FlatButton(
@@ -419,6 +438,9 @@ class _CreateEditScreenState extends State<CreateEditScreen> {
                         if (value.isEmpty) {
                           return 'Please enter the title';
                         }
+                        if (value.length > 50) {
+                          return 'The title cannot be longer than 50 characters';
+                        }
                         return null;
                       },
                       onSaved: (val) => _workshop.title = val,
@@ -463,6 +485,12 @@ class _CreateEditScreenState extends State<CreateEditScreen> {
                                 hintText: 'Choose from Map or enter manually',
                               ),
                               controller: this._locationController,
+                              validator: (value) {
+                                if (value.length > 100) {
+                                  return 'The location cannot be longer than 100 characters';
+                                }
+                                return null;
+                              },
                               onSaved: (val) => _workshop.location = val),
                         ),
                         this._workshop.latitude != null &&
@@ -509,6 +537,9 @@ class _CreateEditScreenState extends State<CreateEditScreen> {
                       ),
                       controller: this._audienceController,
                       validator: (value) {
+                        if (value.length > 100) {
+                          return 'The audience cannot be longer than 100 characters';
+                        }
                         return null;
                       },
                       onSaved: (val) => _workshop.audience = val,
