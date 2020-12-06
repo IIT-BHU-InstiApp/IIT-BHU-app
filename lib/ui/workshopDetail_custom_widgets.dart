@@ -297,10 +297,11 @@ class WorkshopDetailCustomWidgets {
   }
 
   Widget getPanelBackground() {
-    final _editWorkshop =
-        (workshopDetail != null && workshopDetail.is_por_holder != false)
-            ? editWorkshopOptions()
-            : Container();
+    final _editWorkshop = (workshopDetail != null &&
+            (workshopDetail.is_por_holder != false ||
+                workshopDetail.is_workshop_contact))
+        ? editWorkshopOptions()
+        : Container();
     final _overviewTitle = "Description".toUpperCase();
 
     return Container(
