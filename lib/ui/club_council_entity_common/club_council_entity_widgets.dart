@@ -80,7 +80,7 @@ class ClubCouncilAndEntityWidgets {
                       child: ClubCouncilAndEntityWidgets.getTitleCard(
                           title: _data.name,
                           id: _data.id,
-                          imageUrl: _data.large_image_url,
+                          imageUrl: _data.small_image_url,
                           isClub: isClub,
                           isCouncil: isCouncil,
                           isEntity: isEntity,
