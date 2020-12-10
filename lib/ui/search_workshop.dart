@@ -47,6 +47,7 @@ class SearchBarWidget {
           if (value.isEmpty) return;
 
           setState(() {
+            isSearching.value = false;
             isSearching.value = true;
 
             searchPost = BuiltWorkshopSearchByStringPost((b) => b
