@@ -16,10 +16,15 @@ Widget buildCurrentWorkshopAndEventPosts(
     {Function reload, bool isEvent}) {
   Widget _builder(w) {
     return w.length == 0
-        ? Center(
-            child: Text('No Activity :(',
-                style:
-                    TextStyle(color: ColorConstants.textColor, fontSize: 25)))
+        ? SingleChildScrollView(
+            physics: AlwaysScrollableScrollPhysics(),
+            child: Container(
+                alignment: Alignment.center,
+                height: MediaQuery.of(context).size.height - 250,
+                child: Text('No Activity :(',
+                    style: TextStyle(
+                        color: ColorConstants.textColor, fontSize: 25))),
+          )
         : ListView.builder(
             physics: AlwaysScrollableScrollPhysics(),
             scrollDirection: Axis.vertical,
@@ -212,9 +217,8 @@ FutureBuilder<Response> buildAllWorkshopsBody(BuildContext context,
 
         return _buildAllWorkshopsBodyPosts(context, posts, reload: reload);
       } else {
-        // Show a loading indicator while waiting for the posts
         return Center(
-          child: LoadingCircle,
+          child: WorkshopCustomWidgets.getPlaceholder(),
         );
       }
     },

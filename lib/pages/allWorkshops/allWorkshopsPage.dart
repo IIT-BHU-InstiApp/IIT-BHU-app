@@ -3,6 +3,8 @@ import 'package:iit_app/model/colorConstants.dart';
 import 'package:iit_app/ui/drawer.dart';
 import 'package:iit_app/services/buildWorkshops.dart' as buildWorkshop;
 import 'package:iit_app/ui/search_workshop.dart';
+import 'package:iit_app/model/appConstants.dart';
+import 'package:iit_app/data/internet_connection_interceptor.dart';
 
 class AllWorkshopsScreen extends StatefulWidget {
   @override
@@ -23,8 +25,16 @@ class _AllWorkshopsScreenState extends State<AllWorkshopsScreen>
     super.initState();
   }
 
-  void reload() {
-    setState(() {});
+  void reload() async {
+    try {
+      await AppConstants.service.getAllWorkshops();
+      setState(() {});
+    } on InternetConnectionException catch (_) {
+      AppConstants.internetErrorFlushBar.showFlushbar(context);
+      return;
+    } catch (err) {
+      print(err);
+    }
   }
 
   @override

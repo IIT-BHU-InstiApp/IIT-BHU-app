@@ -130,17 +130,16 @@ class WorkshopCustomWidgets {
     return GestureDetector(
         onTap: horizontal
             ? () {
-                Navigator.of(context)
-                    .push(
-                      PageRouteBuilder(
-                        pageBuilder: (_, __, ___) =>
-                            WorkshopDetailPage(workshop: w, isPast: isPast),
-                        transitionsBuilder: (context, animation,
-                                secondaryAnimation, child) =>
+                Navigator.of(context).push(
+                  PageRouteBuilder(
+                    pageBuilder: (_, __, ___) =>
+                        WorkshopDetailPage(workshop: w, isPast: isPast),
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) =>
                             FadeTransition(opacity: animation, child: child),
-                      ),
-                    )
-                    .then((value) => reload());
+                  ),
+                );
+                // .then((value) => reload());
                 try {
                   if (fabKey.currentState.isOpen) {
                     fabKey.currentState.close();

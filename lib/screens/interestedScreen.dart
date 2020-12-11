@@ -5,6 +5,7 @@ import 'package:iit_app/pages/Home/homePage.dart';
 import 'package:iit_app/ui/drawer.dart';
 import 'package:iit_app/ui/text_style.dart';
 import '../services/buildWorkshops.dart' as buildWorkhops;
+import 'package:iit_app/data/internet_connection_interceptor.dart';
 
 class InterestedScreen extends StatefulWidget {
   @override
@@ -13,8 +14,17 @@ class InterestedScreen extends StatefulWidget {
 
 class _InterestedScreenState extends State<InterestedScreen>
     with SingleTickerProviderStateMixin {
-  void reload() {
-    setState(() {});
+  void reload() async {
+    try {
+      await AppConstants.service
+          .getInterestedWorkshops(AppConstants.djangoToken);
+      setState(() {});
+    } on InternetConnectionException catch (_) {
+      AppConstants.internetErrorFlushBar.showFlushbar(context);
+      return;
+    } catch (err) {
+      print(err);
+    }
   }
 
   @override

@@ -24,8 +24,16 @@ class _EntitiesPageState extends State<EntitiesPage> {
     return true;
   }
 
-  void reload() {
-    setState(() {});
+  void reload() async {
+    try {
+      await AppConstants.updateAndPopulateAllEntities();
+      setState(() {});
+    } on InternetConnectionException catch (_) {
+      AppConstants.internetErrorFlushBar.showFlushbar(context);
+      return;
+    } catch (err) {
+      print(err);
+    }
   }
 
   @override
@@ -80,7 +88,7 @@ class _EntitiesPageState extends State<EntitiesPage> {
           return _buildAllEntitiesBodyPosts(context, posts, reload: reload);
         } else {
           return Center(
-            child: LoadingCircle,
+            child: EntityCustomWidgets.getPlaceholder(),
           );
         }
       },
