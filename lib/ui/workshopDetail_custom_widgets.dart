@@ -100,6 +100,7 @@ class WorkshopDetailCustomWidgets {
                     )
                   : SizedBox(
                       child: ListView.separated(
+                        physics: NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
                         itemCount: workshopDetail.resources.length,
                         itemBuilder: (context, index) {
