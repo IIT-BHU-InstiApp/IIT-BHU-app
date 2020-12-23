@@ -141,6 +141,13 @@ class ClubCouncilAndEntityWidgets {
                   ),
                 ),
                 SizedBox(height: 15.0),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 32.0),
+                  child: (isClub || isEntity)
+                      ? _getSubscribed(_data)
+                      : Container(),
+                ),
+                SizedBox(height: 15.0),
                 ClubCouncilAndEntityWidgets.getSecies(
                   context,
                   secy: _secy,
@@ -165,6 +172,36 @@ class ClubCouncilAndEntityWidgets {
 
   static double getMaxPanelHeight(context) {
     return MediaQuery.of(context).size.height / 1.1;
+  }
+
+  static Row _getSubscribed(data) {
+    return Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+      Text('Subscription Count:',
+          style: TextStyle(
+              fontFamily: 'Opensans',
+              fontSize: 15.0,
+              color: ColorConstants.textColor,
+              fontWeight: FontWeight.w600)),
+      SizedBox(width: 20),
+      Container(
+          height: 60.0,
+          width: 120.0,
+          decoration: BoxDecoration(
+              color: ColorConstants.workshopCardContainer,
+              borderRadius: BorderRadius.circular(30.0)),
+          child: Row(mainAxisAlignment: MainAxisAlignment.center, children: <
+              Widget>[
+            SizedBox(width: 7.0),
+            Text(
+              '${data.subscribed_users}',
+              style: TextStyle(fontSize: 14.0, color: ColorConstants.textColor),
+            ),
+            SizedBox(width: 15),
+            Icon(Icons.person,
+                color: data.is_subscribed ? Colors.blue[400] : Colors.blue[100],
+                size: 25.0),
+          ]))
+    ]);
   }
 
   static Container getSocialLinks(map) {
