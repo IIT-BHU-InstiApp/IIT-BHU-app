@@ -106,11 +106,12 @@ class _ClubPageState extends State<ClubPage>
               clubId: widget.club.id);
 
           if (clubMap.is_subscribed == true) {
-            await FirebaseMessaging()
+            await FirebaseMessaging.instance
                 .subscribeToTopic('C_${clubMap.id}')
                 .then((_) => print('subscribed to C_${clubMap.id}'));
           } else {
-            await FirebaseMessaging().unsubscribeFromTopic('C_${clubMap.id}');
+            await FirebaseMessaging.instance
+                .unsubscribeFromTopic('C_${clubMap.id}');
           }
         } on InternetConnectionException catch (_) {
           AppConstants.internetErrorFlushBar.showFlushbar(context);
