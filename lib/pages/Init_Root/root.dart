@@ -19,10 +19,11 @@ class _RootPageState extends State<RootPage> {
   _initFCM() {
     Future.delayed(
       Duration(milliseconds: 300),
-      () {
+      () async {
         final Map arguments = ModalRoute.of(context).settings.arguments as Map;
         // to ensure that this function is not called unnecessarily.
-        if (arguments['initFCM'] == true) PushNotification.initialize(context);
+        if (arguments['initFCM'] == true)
+          await PushNotification.initialize(context);
       },
     );
   }
