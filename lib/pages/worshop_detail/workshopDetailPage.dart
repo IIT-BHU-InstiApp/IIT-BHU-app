@@ -1,9 +1,6 @@
-import 'package:chopper/chopper.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:iit_app/data/internet_connection_interceptor.dart';
-import 'package:iit_app/external_libraries/spin_kit.dart';
-import 'package:skeleton_text/skeleton_text.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/colorConstants.dart';
@@ -14,11 +11,12 @@ import 'package:iit_app/ui/workshopDetail_custom_widgets.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class WorkshopDetailPage extends StatefulWidget {
+  final int workshopId;
   final BuiltWorkshopSummaryPost workshop;
   final bool isPast;
 
-  WorkshopDetailPage({Key key, this.workshop, this.isPast = false})
-      : super(key: key);
+  const WorkshopDetailPage(this.workshopId,
+      {this.workshop, this.isPast = false});
 
   @override
   _WorkshopDetailPage createState() => _WorkshopDetailPage();
@@ -101,7 +99,7 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
 
   Future fetchWorkshopDetails() async {
     await AppConstants.service
-        .getWorkshopDetailsPost(workshopSummary.id, AppConstants.djangoToken)
+        .getWorkshopDetailsPost(widget.workshopId, AppConstants.djangoToken)
         .then((snapshots) {
       _workshop = snapshots.body;
       if (_workshop.is_interested != null) {
@@ -110,11 +108,21 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
         is_interested = -1;
       }
 
-      workshopSummary = workshopSummary.rebuild((builder) => builder
-        ..title = _workshop.title
-        ..date = _workshop.date
-        ..time = _workshop.time
-        ..tags = _workshop.tags.toBuilder());
+      workshopSummary = workshopSummary == null
+          ? BuiltWorkshopSummaryPost((b) => b
+            ..id = widget.workshopId
+            ..club = _workshop.club?.toBuilder()
+            ..entity = _workshop.entity?.toBuilder()
+            ..title = _workshop.title
+            ..date = _workshop.date
+            ..is_workshop = _workshop.is_workshop
+            ..time = _workshop.time
+            ..tags = _workshop.tags?.toBuilder())
+          : workshopSummary.rebuild((builder) => builder
+            ..title = _workshop.title
+            ..date = _workshop.date
+            ..time = _workshop.time
+            ..tags = _workshop.tags?.toBuilder());
     }).catchError((onError) {
       if (onError is InternetConnectionException) {
         AppConstants.internetErrorFlushBar.showFlushbar(context);
@@ -132,7 +140,7 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
         context: context, title: 'Delete', action: 'Delete');
     if (isConfirmed == true) {
       AppConstants.service
-          .removeWorkshop(workshopSummary.id, AppConstants.djangoToken)
+          .removeWorkshop(widget.workshopId, AppConstants.djangoToken)
           .then((snapshot) async {
         await WorkshopCreater.deleteImageFromFirestore(_workshop.image_url);
 
@@ -194,7 +202,7 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
     is_interested = 0;
     setState(() {});
     await AppConstants.service
-        .toggleInterestedWorkshop(workshopSummary.id, AppConstants.djangoToken)
+        .toggleInterestedWorkshop(widget.workshopId, AppConstants.djangoToken)
         .then((snapshot) {
       print("status of toggle workshop: ${snapshot.statusCode}");
       if (snapshot.isSuccessful) {
@@ -251,34 +259,37 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
 
     return SafeArea(
         minimum: const EdgeInsets.all(2.0),
-        child: WillPopScope(
-          onWillPop: _willPopCallback,
-          child: RefreshIndicator(
-            onRefresh: () async => _reload(),
-            child: Scaffold(
-              key: _scaffoldKey,
-              backgroundColor: ColorConstants.backgroundThemeColor,
-              body: SlidingUpPanel(
-                controller: _panelController,
-                body: workshopDetailCustomWidgets.getPanelBackground(),
-                borderRadius: radius,
-                backdropEnabled: true,
-                parallaxEnabled: true,
-                collapsed: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: radius,
+        child: this.workshopSummary == null
+            ? Center(child: CircularProgressIndicator())
+            : WillPopScope(
+                onWillPop: _willPopCallback,
+                child: RefreshIndicator(
+                  onRefresh: () async => _reload(),
+                  child: Scaffold(
+                    key: _scaffoldKey,
+                    backgroundColor: ColorConstants.backgroundThemeColor,
+                    body: SlidingUpPanel(
+                      controller: _panelController,
+                      body: workshopDetailCustomWidgets.getPanelBackground(),
+                      borderRadius: radius,
+                      backdropEnabled: true,
+                      parallaxEnabled: true,
+                      collapsed: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: radius,
+                        ),
+                      ),
+                      minHeight: ClubCouncilAndEntityWidgets.getMinPanelHeight(
+                          context),
+                      maxHeight: ClubCouncilAndEntityWidgets.getMaxPanelHeight(
+                          context),
+                      header:
+                          workshopDetailCustomWidgets.getPanelHeader(context),
+                      panelBuilder: (ScrollController sc) =>
+                          workshopDetailCustomWidgets.getPanel(sc: sc),
+                    ),
                   ),
                 ),
-                minHeight:
-                    ClubCouncilAndEntityWidgets.getMinPanelHeight(context),
-                maxHeight:
-                    ClubCouncilAndEntityWidgets.getMaxPanelHeight(context),
-                header: workshopDetailCustomWidgets.getPanelHeader(context),
-                panelBuilder: (ScrollController sc) =>
-                    workshopDetailCustomWidgets.getPanel(sc: sc),
-              ),
-            ),
-          ),
-        ));
+              ));
   }
 }

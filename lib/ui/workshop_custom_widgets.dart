@@ -134,7 +134,7 @@ class WorkshopCustomWidgets {
                 Navigator.of(context).push(
                   PageRouteBuilder(
                     pageBuilder: (_, __, ___) =>
-                        WorkshopDetailPage(workshop: w, isPast: isPast),
+                        WorkshopDetailPage(w.id, workshop: w, isPast: isPast),
                     transitionsBuilder:
                         (context, animation, secondaryAnimation, child) =>
                             FadeTransition(opacity: animation, child: child),

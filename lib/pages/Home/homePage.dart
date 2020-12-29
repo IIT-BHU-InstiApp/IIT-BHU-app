@@ -36,19 +36,26 @@ class _HomePageState extends State<HomePage>
     super.initState();
   }
 
+  _refreshState(Function setup) {
+    if (this.mounted)
+      setState(() {
+        setup();
+      });
+  }
+
   _fetchWorkshopsAndCouncilAndEntityButtons(bool refreshed) async {
     try {
       if (refreshed != true) {
         await AppConstants.populateWorkshopsAndCouncilAndEntityButtons();
-        setState(() {
+        _refreshState(() {
           AppConstants.firstTimeFetching = false;
         });
       }
       await AppConstants.updateAndPopulateWorkshops();
-      setState(() {});
+      _refreshState(null);
       await AppConstants.updateAndPopulateAllEntities();
       await AppConstants.writeCouncilAndEntityLogoIntoDisk();
-      setState(() {});
+      _refreshState(null);
     } on InternetConnectionException catch (_) {
       AppConstants.internetErrorFlushBar.showFlushbar(context);
       return;

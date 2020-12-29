@@ -7,6 +7,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../services/authentication.dart' as authentication;
 
 class LoginPage extends StatefulWidget {
+  static Future guestLoginSetup() async {
+    AppConstants.isGuest = true;
+    AppConstants.djangoToken = null;
+    //saving guest mode in shared preferences
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.clear();
+    prefs = await SharedPreferences.getInstance();
+    prefs.setBool(SharedPreferenceKeys.isGuest, true);
+  }
+
   @override
   _LoginPageState createState() => new _LoginPageState();
 }
@@ -108,14 +118,7 @@ class _LoginPageState extends State<LoginPage> {
                   SizedBox(height: 150.0),
                   GestureDetector(
                     onTap: () async {
-                      AppConstants.isGuest = true;
-                      AppConstants.djangoToken = null;
-                      //saving guest mode in shared preferences
-                      SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
-                      prefs.clear();
-                      prefs = await SharedPreferences.getInstance();
-                      prefs.setBool(SharedPreferenceKeys.isGuest, true);
+                      await LoginPage.guestLoginSetup();
 
                       Navigator.of(context).pushNamedAndRemoveUntil(
                           '/home', ModalRoute.withName('/root'));
