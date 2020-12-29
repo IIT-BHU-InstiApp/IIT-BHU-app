@@ -202,9 +202,9 @@ class _WorkshopDetailPage extends State<WorkshopDetailPage> {
         int _newInterestedUser = is_interested == 1 ? 1 : -1;
 
         if (_newInterestedUser == 1) {
-          FirebaseMessaging().subscribeToTopic('W_${_workshop.id}');
+          FirebaseMessaging.instance.subscribeToTopic('W_${_workshop.id}');
         } else {
-          FirebaseMessaging().unsubscribeFromTopic('W_${_workshop.id}');
+          FirebaseMessaging.instance.unsubscribeFromTopic('W_${_workshop.id}');
         }
 
         _workshop.rebuild((b) => b

@@ -11,10 +11,15 @@ import 'package:iit_app/model/sharedPreferenceKeys.dart';
 import 'package:iit_app/services/connectivityCheck.dart';
 import 'package:iit_app/services/crud.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class Initiation extends StatefulWidget {
   @override
   _InitiationState createState() => _InitiationState();
+}
+
+Future<void> onBackgroundMessageHandler(RemoteMessage message) async {
+  print("Handling a background message: ${message.messageId}");
 }
 
 class _InitiationState extends State<Initiation> {
@@ -27,6 +32,7 @@ class _InitiationState extends State<Initiation> {
 
     await Firebase.initializeApp();
 
+    FirebaseMessaging.onBackgroundMessage(onBackgroundMessageHandler);
     AppConstants.service = PostApiService.create();
     AppConstants.connectionStatus = ConnectionStatusSingleton.getInstance();
     AppConstants.connectionStatus.initialize();

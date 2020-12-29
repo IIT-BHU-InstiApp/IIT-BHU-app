@@ -8,7 +8,8 @@ import 'package:iit_app/model/colorConstants.dart';
 import 'package:iit_app/pages/worshop_detail/workshopDetailPage.dart';
 import 'package:iit_app/ui/separator.dart';
 import 'package:iit_app/ui/text_style.dart';
-
+import 'package:iit_app/pages/club_entity/clubPage.dart';
+import 'package:iit_app/pages/club_entity/entityPage.dart';
 import 'package:skeleton_text/skeleton_text.dart';
 
 class WorkshopCustomWidgets {
@@ -148,7 +149,23 @@ class WorkshopCustomWidgets {
                   print(e);
                 }
               }
-            : null,
+            : () {
+                isClub
+                    ? Navigator.of(context).push(PageRouteBuilder(
+                        pageBuilder: (_, __, ___) =>
+                            ClubPage(club: w.club, editMode: true),
+                        transitionsBuilder: (context, animation,
+                                secondaryAnimation, child) =>
+                            FadeTransition(opacity: animation, child: child),
+                      ))
+                    : Navigator.of(context).push(PageRouteBuilder(
+                        pageBuilder: (_, __, ___) =>
+                            EntityPage(entity: w.entity, editMode: true),
+                        transitionsBuilder: (context, animation,
+                                secondaryAnimation, child) =>
+                            FadeTransition(opacity: animation, child: child),
+                      ));
+              },
         child: Container(
           margin: const EdgeInsets.symmetric(
             vertical: 10.0,

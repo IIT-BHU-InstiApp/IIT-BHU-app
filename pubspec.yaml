@@ -22,11 +22,12 @@ dependencies:
 
   cupertino_icons: ^0.1.2
 
-  firebase_core: ^0.5.0
-  firebase_auth: ^0.18.0+1
-  firebase_messaging: ^7.0.3
-  firebase_storage: ^5.0.1
+  firebase_core: ^0.5.3
+  firebase_auth: ^0.18.4+1
+  firebase_messaging: "^8.0.0-dev.11"
+  firebase_storage: ^5.2.0
 
+  share: ^0.6.5+4
   google_sign_in: ^4.0.7
   url_launcher: ^5.1.6
   chopper: ^2.4.2
@@ -46,6 +47,7 @@ dependencies:
   image_picker: ^0.6.7+14
   photo_view: ^0.10.3
   flushbar: ^1.10.4
+  clippy_flutter: ^1.1.1
 
 dev_dependencies:
   flutter_test:
