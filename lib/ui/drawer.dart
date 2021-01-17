@@ -199,7 +199,7 @@ class SideBar extends Drawer {
             onTap: () {
               Navigator.of(context).push(PageRouteBuilder(
                   pageBuilder: (_, __, ___) =>
-                      EntityPage(entity: entities[index])));
+                      EntityPage(entityId: entities[index].id)));
             },
           );
           // }

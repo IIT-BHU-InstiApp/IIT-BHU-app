@@ -115,7 +115,7 @@ class EntityCustomWidgets {
         onTap: () {
           if (horizontal)
             Navigator.of(context).push(PageRouteBuilder(
-              pageBuilder: (_, __, ___) => EntityPage(entity: entity),
+              pageBuilder: (_, __, ___) => EntityPage(entityId: entity.id),
               transitionsBuilder:
                   (context, animation, secondaryAnimation, child) =>
                       FadeTransition(opacity: animation, child: child),

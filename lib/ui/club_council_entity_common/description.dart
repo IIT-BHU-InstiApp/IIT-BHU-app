@@ -1,8 +1,15 @@
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:esys_flutter_share/esys_flutter_share.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:iit_app/data/internet_connection_interceptor.dart';
 import 'package:iit_app/external_libraries/spin_kit.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
+import 'package:iit_app/model/colorConstants.dart';
+import 'package:iit_app/services/dynamicLink.dart';
 import 'package:iit_app/ui/dialogBoxes.dart';
 import 'package:iit_app/ui/separator.dart';
 import 'package:iit_app/ui/text_style.dart';
@@ -143,6 +150,29 @@ class _DescriptionState extends State<Description> {
     });
   }
 
+  Future<void> _shareWithImage(Uri uri) async {
+    try {
+      var request =
+          await HttpClient().getUrl(Uri.parse(widget.map.small_image_url));
+
+      var response = await request.close();
+      var bytes = await consolidateHttpClientResponseBytes(response);
+      await Share.file(
+          '${widget.map.name}', '${widget.map.id}.png', bytes, 'image/png',
+          text:
+              'Do Subscribe ${widget.map.name} to stay updated about upcoming workshops and events: ${uri.toString()}');
+    } catch (err) {
+      _shareWithoutImage(uri);
+    }
+  }
+
+  Future<void> _shareWithoutImage(Uri uri) async {
+    Share.text(
+        '${widget.map.name}',
+        'Do Subscribe ${widget.map.name} to stay updated about upcoming workshops and events: ${uri.toString()}',
+        'text/plain');
+  }
+
   Widget build(context) {
     return widget.map == null
         ? Container(
@@ -217,6 +247,34 @@ class _DescriptionState extends State<Description> {
                             ],
                           )
                         : Container(),
+                    SizedBox(width: 18.0),
+                    widget.isCouncil
+                        ? Container()
+                        : Container(
+                            child: FutureBuilder<Uri>(
+                              future: widget.isClub
+                                  ? DynamicLinkService.createDynamicLink(
+                                      id: widget.map.id, isClub: widget.isClub)
+                                  : DynamicLinkService.createDynamicLink(
+                                      id: widget.map.id, isClub: widget.isClub),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  Uri uri = snapshot.data;
+                                  return IconButton(
+                                      color: ColorConstants.textColor,
+                                      icon: Icon(Icons.share),
+                                      iconSize: 30.0,
+                                      onPressed: () {
+                                        widget.map.small_image_url != null
+                                            ? _shareWithImage(uri)
+                                            : _shareWithoutImage(uri);
+                                      });
+                                } else {
+                                  return Container();
+                                }
+                              },
+                            ),
+                          ),
                   ],
                 ),
                 Separator(),

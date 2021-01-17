@@ -579,7 +579,7 @@ class ClubCouncilAndEntityWidgets {
                   ? Navigator.of(context).push(
                       PageRouteBuilder(
                         pageBuilder: (_, __, ___) =>
-                            EntityPage(entity: entity, editMode: true),
+                            EntityPage(entityId: entity.id, editMode: true),
                         transitionsBuilder: (context, animation,
                                 secondaryAnimation, child) =>
                             FadeTransition(opacity: animation, child: child),
@@ -588,7 +588,7 @@ class ClubCouncilAndEntityWidgets {
                   : Navigator.of(context).push(
                       PageRouteBuilder(
                         pageBuilder: (_, __, ___) =>
-                            ClubPage(club: club, editMode: true),
+                            ClubPage(clubId: club.id, editMode: true),
                         transitionsBuilder: (context, animation,
                                 secondaryAnimation, child) =>
                             FadeTransition(opacity: animation, child: child),

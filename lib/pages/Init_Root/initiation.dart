@@ -58,8 +58,8 @@ class _InitiationState extends State<Initiation> {
         await Future.delayed(
             Duration(milliseconds: 1500 - timePassed.inMilliseconds));
       }
-      await Navigator.of(context)
-          .popAndPushNamed('/root', arguments: {'initFCM': true});
+      await Navigator.of(context).popAndPushNamed('/root',
+          arguments: {'initFCM': true, 'initLink': true});
     } else {
       setState(() {
         this._tappable = true;

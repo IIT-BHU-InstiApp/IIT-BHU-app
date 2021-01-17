@@ -1,11 +1,15 @@
 import 'dart:io';
+import 'dart:typed_data';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/colorConstants.dart';
 import 'package:iit_app/screens/create.dart';
 import 'package:iit_app/screens/resource_create.dart';
+import 'package:iit_app/services/dynamicLink.dart';
 import 'package:iit_app/ui/club_council_entity_common/club_council_entity_widgets.dart';
 import 'package:iit_app/ui/dialogBoxes.dart';
 import 'package:iit_app/ui/separator.dart';
@@ -14,7 +18,7 @@ import 'package:iit_app/ui/workshop_custom_widgets.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:skeleton_text/skeleton_text.dart';
-import 'package:share/share.dart';
+import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:clippy_flutter/clippy_flutter.dart';
 
 class WorkshopDetailCustomWidgets {
@@ -306,6 +310,38 @@ class WorkshopDetailCustomWidgets {
         ? editWorkshopOptions()
         : Container();
     final _overviewTitle = "Description".toUpperCase();
+    String imageUrl = workshopDetail?.image_url;
+    if (imageUrl?.isEmpty == true) imageUrl = null;
+
+    final isClub = workshopSummary.club != null;
+
+    String logoImageUrl = isClub
+        ? workshopSummary.club.small_image_url
+        : workshopSummary.entity.small_image_url;
+
+    Future<void> _shareWithoutImage(Uri uri) async {
+      Share.text(
+          '${workshopDetail.title}',
+          'Checkout this amazing workshop ${workshopDetail.title} to be held on ${workshopDetail.date} at ${workshopDetail.time}. To know more, follow this link: ${uri.toString()}',
+          'text/plain');
+    }
+
+    Future<void> _shareWithImage(Uri uri) async {
+      try {
+        var request = (imageUrl != null && imageUrl != '')
+            ? await HttpClient().getUrl(Uri.parse(imageUrl))
+            : await HttpClient().getUrl(Uri.parse(logoImageUrl));
+        var response = await request.close();
+        Uint8List bytes = await consolidateHttpClientResponseBytes(response);
+
+        await Share.file('${workshopDetail.title}', '${workshopDetail.id}.png',
+            bytes, 'image/png',
+            text:
+                'Checkout this amazing workshop ${workshopDetail.title} to be held on ${workshopDetail.date} at ${workshopDetail.time}. To know more, follow this link: ${uri.toString()}');
+      } catch (err) {
+        _shareWithoutImage(uri);
+      }
+    }
 
     return Container(
       color: ColorConstants.workshopContainerBackground,
@@ -333,24 +369,80 @@ class WorkshopDetailCustomWidgets {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Row(
-                  children: [
-                    Text(_overviewTitle, style: Style.headerTextStyle),
-                    SizedBox(width: 18.0),
-                    Label(
-                      triangleHeight: 10.0,
-                      edge: Edge.RIGHT,
-                      child: Container(
-                        padding: const EdgeInsets.only(
-                            left: 8.0, right: 18.0, top: 8.0, bottom: 8.0),
-                        color: ColorConstants.workshopCardContainer,
-                        child: Text(
-                          workshopSummary.is_workshop ? 'Workshop' : 'Event',
-                          style: Style.titleTextStyle,
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      Text(_overviewTitle, style: Style.headerTextStyle),
+                      SizedBox(width: 10.0),
+                      Label(
+                        triangleHeight: 10.0,
+                        edge: Edge.RIGHT,
+                        child: Container(
+                          padding: const EdgeInsets.only(
+                              left: 5.0, right: 13.0, top: 8.0, bottom: 8.0),
+                          color: ColorConstants.workshopCardContainer,
+                          child: Text(
+                            workshopSummary.is_workshop ? 'Workshop' : 'Event',
+                            style: Style.titleTextStyle,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                      workshopDetail == null
+                          ? Container()
+                          : Container(
+                              child: FutureBuilder<Uri>(
+                                future: DynamicLinkService.createDynamicLink(
+                                    id: workshopDetail.id, isPast: isPast),
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    Uri uri = snapshot.data;
+                                    return IconButton(
+                                        color: ColorConstants.textColor,
+                                        icon: Icon(Icons.share),
+                                        iconSize: 30.0,
+                                        onPressed: () {
+                                          _shareWithImage(uri);
+                                        });
+                                  } else {
+                                    return Container();
+                                  }
+                                },
+                              ),
+                            ),
+                      workshopDetail == null
+                          ? Container()
+                          : Container(
+                              child: FutureBuilder<Uri>(
+                                future: DynamicLinkService.createDynamicLink(
+                                    id: workshopDetail.id, isPast: isPast),
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    Uri uri = snapshot.data;
+                                    return IconButton(
+                                        color: ColorConstants.textColor,
+                                        icon: Icon(Icons.copy_outlined),
+                                        iconSize: 30.0,
+                                        onPressed: () {
+                                          Clipboard.setData(new ClipboardData(
+                                                  text: uri.toString()))
+                                              .then((_) {
+                                            Scaffold.of(context)
+                                                .showSnackBar(SnackBar(
+                                              content: Text(
+                                                  "URL copied to clipboard!"),
+                                              duration: Duration(seconds: 3),
+                                            ));
+                                          });
+                                        });
+                                  } else {
+                                    return Container();
+                                  }
+                                },
+                              ),
+                            ),
+                    ],
+                  ),
                 ),
                 Separator(),
                 workshopDetail == null

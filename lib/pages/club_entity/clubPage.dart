@@ -10,9 +10,9 @@ import 'package:iit_app/ui/club_custom_widgets.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class ClubPage extends StatefulWidget {
-  final ClubListPost club;
   final bool editMode;
-  const ClubPage({Key key, @required this.club, this.editMode = false})
+  final int clubId;
+  const ClubPage({Key key, this.editMode = false, @required this.clubId})
       : super(key: key);
   @override
   _ClubPageState createState() => _ClubPageState();
@@ -21,6 +21,7 @@ class ClubPage extends StatefulWidget {
 class _ClubPageState extends State<ClubPage>
     with SingleTickerProviderStateMixin {
   BuiltClubPost clubMap;
+  ClubListPost club;
   BuiltAllWorkshopsPost clubWorkshops;
   bool _toggling = false;
   TabController _tabController;
@@ -42,7 +43,8 @@ class _ClubPageState extends State<ClubPage>
   _fetchClubDataById({bool refresh = false}) async {
     try {
       clubMap = await AppConstants.getClubDetailsFromDatabase(
-          clubId: widget.club.id, refresh: refresh);
+          clubId: widget.clubId, refresh: refresh);
+
       if (clubMap != null) {
         _clubLargeLogoFile = AppConstants.getImageFile(clubMap.large_image_url);
 
@@ -50,6 +52,13 @@ class _ClubPageState extends State<ClubPage>
           AppConstants.writeImageFileIntoDisk(clubMap.large_image_url);
         }
       }
+      club = ClubListPost((b) => b
+        ..id = clubMap.id
+        ..name = clubMap.name
+        ..council =
+            clubMap.council == null ? null : (clubMap.council.toBuilder())
+        ..small_image_url = clubMap.small_image_url
+        ..large_image_url = clubMap.large_image_url);
     } on InternetConnectionException catch (_) {
       AppConstants.internetErrorFlushBar.showFlushbar(context);
       return;
@@ -61,7 +70,7 @@ class _ClubPageState extends State<ClubPage>
     }
     setState(() {});
     await AppConstants.service
-        .getClubWorkshops(widget.club.id, AppConstants.djangoToken)
+        .getClubWorkshops(widget.clubId, AppConstants.djangoToken)
         .then((snapshots) {
       clubWorkshops = snapshots.body;
     }).catchError((onError) {
@@ -91,19 +100,19 @@ class _ClubPageState extends State<ClubPage>
     });
 
     await AppConstants.service
-        .toggleClubSubscription(widget.club.id, AppConstants.djangoToken)
+        .toggleClubSubscription(widget.clubId, AppConstants.djangoToken)
         .then((snapshot) async {
       print("status of club subscription: ${snapshot.statusCode}");
 
       if (snapshot.statusCode == 200) {
         try {
           await AppConstants.updateClubSubscriptionInDatabase(
-              clubId: widget.club.id,
+              clubId: widget.clubId,
               isSubscribed: !clubMap.is_subscribed,
               currentSubscribedUsers: clubMap.subscribed_users);
 
           clubMap = await AppConstants.getClubDetailsFromDatabase(
-              clubId: widget.club.id);
+              clubId: widget.clubId);
 
           if (clubMap.is_subscribed == true) {
             await FirebaseMessaging.instance
@@ -204,7 +213,7 @@ class _ClubPageState extends State<ClubPage>
             child: SlidingUpPanel(
               body: ClubCouncilAndEntityWidgets.getPanelBackground(
                   context, _clubLargeLogoFile,
-                  isClub: true, clubDetail: clubMap, club: widget.club),
+                  isClub: true, clubDetail: clubMap, club: club),
               parallaxEnabled: true,
               controller: _pc,
               borderRadius: radius,
@@ -214,8 +223,8 @@ class _ClubPageState extends State<ClubPage>
                 ),
               ),
               backdropEnabled: true,
-              panelBuilder: (ScrollController sc) => clubCustomWidgets.getPanel(
-                  pc: _pc, sc: sc, club: widget.club),
+              panelBuilder: (ScrollController sc) =>
+                  clubCustomWidgets.getPanel(pc: _pc, sc: sc, club: club),
               minHeight: ClubCouncilAndEntityWidgets.getMinPanelHeight(context),
               maxHeight: ClubCouncilAndEntityWidgets.getMaxPanelHeight(context),
               header: ClubCouncilAndEntityWidgets.getHeader(context),

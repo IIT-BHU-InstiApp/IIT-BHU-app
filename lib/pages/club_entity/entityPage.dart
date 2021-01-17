@@ -12,9 +12,9 @@ import 'package:iit_app/ui/entity_custom_widgets.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class EntityPage extends StatefulWidget {
-  final EntityListPost entity;
   final bool editMode;
-  const EntityPage({Key key, @required this.entity, this.editMode = false})
+  final int entityId;
+  const EntityPage({Key key, this.editMode = false, @required this.entityId})
       : super(key: key);
   @override
   _EntityPageState createState() => _EntityPageState();
@@ -23,6 +23,7 @@ class EntityPage extends StatefulWidget {
 class _EntityPageState extends State<EntityPage>
     with SingleTickerProviderStateMixin {
   BuiltEntityPost entityMap;
+  EntityListPost entity;
   BuiltAllWorkshopsPost entityWorkshops;
   bool _toggling = false;
   TabController _tabController;
@@ -39,7 +40,7 @@ class _EntityPageState extends State<EntityPage>
   _fetchEntityDataByID({bool refresh = false}) async {
     try {
       entityMap = await AppConstants.getEntityDetailsFromDatabase(
-          entityId: widget.entity.id, refresh: refresh);
+          entityId: widget.entityId, refresh: refresh);
       if (entityMap != null) {
         _entityLargeLogoFile =
             AppConstants.getImageFile(entityMap.large_image_url);
@@ -47,6 +48,11 @@ class _EntityPageState extends State<EntityPage>
           AppConstants.writeImageFileIntoDisk(entityMap.large_image_url);
         }
       }
+      entity = EntityListPost((b) => b
+        ..id = entityMap.id
+        ..name = entityMap.name
+        ..small_image_url = entityMap.small_image_url
+        ..large_image_url = entityMap.large_image_url);
     } on InternetConnectionException catch (_) {
       AppConstants.internetErrorFlushBar.showFlushbar(context);
       return;
@@ -59,7 +65,7 @@ class _EntityPageState extends State<EntityPage>
     setState(() {});
 
     await AppConstants.service
-        .getEntityWorkshops(widget.entity.id, AppConstants.djangoToken)
+        .getEntityWorkshops(widget.entityId, AppConstants.djangoToken)
         .then((snapshots) {
       entityWorkshops = snapshots.body;
     }).catchError((onError) {
@@ -93,26 +99,27 @@ class _EntityPageState extends State<EntityPage>
     });
 
     await AppConstants.service
-        .toggleEntitySubscription(widget.entity.id, AppConstants.djangoToken)
+        .toggleEntitySubscription(widget.entityId, AppConstants.djangoToken)
         .then((snapshot) async {
       print("status of entity subscription: ${snapshot.statusCode}");
 
       if (snapshot.statusCode == 200) {
         try {
           await AppConstants.updateEntitySubscriptionInDatabase(
-              entityId: widget.entity.id,
+              entityId: widget.entityId,
               isSubscribed: !entityMap.is_subscribed,
               currentSubscribedUsers: entityMap.subscribed_users);
 
           entityMap = await AppConstants.getEntityDetailsFromDatabase(
-              entityId: widget.entity.id);
+              entityId: widget.entityId);
 
           if (entityMap.is_subscribed == true) {
-            await FirebaseMessaging()
+            await FirebaseMessaging.instance
                 .subscribeToTopic('E_${entityMap.id}')
                 .then((_) => print('subscribed to E_${entityMap.id}'));
           } else {
-            await FirebaseMessaging().unsubscribeFromTopic('E_${entityMap.id}');
+            await FirebaseMessaging.instance
+                .unsubscribeFromTopic('E_${entityMap.id}');
           }
         } on InternetConnectionException catch (_) {
           AppConstants.internetErrorFlushBar.showFlushbar(context);
@@ -204,9 +211,7 @@ class _EntityPageState extends State<EntityPage>
                 child: SlidingUpPanel(
                   body: ClubCouncilAndEntityWidgets.getPanelBackground(
                       context, _entityLargeLogoFile,
-                      isEntity: true,
-                      entityDetail: entityMap,
-                      entity: widget.entity),
+                      isEntity: true, entityDetail: entityMap, entity: entity),
                   parallaxEnabled: true,
                   controller: _pc,
                   borderRadius: radius,
@@ -216,8 +221,8 @@ class _EntityPageState extends State<EntityPage>
                     ),
                   ),
                   backdropEnabled: true,
-                  panelBuilder: (ScrollController sc) => entityCustomWidgets
-                      .getPanel(sc: sc, entity: widget.entity),
+                  panelBuilder: (ScrollController sc) =>
+                      entityCustomWidgets.getPanel(sc: sc, entity: entity),
                   minHeight:
                       ClubCouncilAndEntityWidgets.getMinPanelHeight(context),
                   maxHeight:

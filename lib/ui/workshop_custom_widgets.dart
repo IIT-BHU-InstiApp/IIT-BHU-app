@@ -153,14 +153,14 @@ class WorkshopCustomWidgets {
                 isClub
                     ? Navigator.of(context).push(PageRouteBuilder(
                         pageBuilder: (_, __, ___) =>
-                            ClubPage(club: w.club, editMode: true),
+                            ClubPage(clubId: w.club.id, editMode: true),
                         transitionsBuilder: (context, animation,
                                 secondaryAnimation, child) =>
                             FadeTransition(opacity: animation, child: child),
                       ))
                     : Navigator.of(context).push(PageRouteBuilder(
                         pageBuilder: (_, __, ___) =>
-                            EntityPage(entity: w.entity, editMode: true),
+                            EntityPage(entityId: w.entity.id, editMode: true),
                         transitionsBuilder: (context, animation,
                                 secondaryAnimation, child) =>
                             FadeTransition(opacity: animation, child: child),

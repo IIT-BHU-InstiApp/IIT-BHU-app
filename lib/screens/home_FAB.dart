@@ -61,7 +61,7 @@ Widget _fabButtons(BuildContext context, double size,
         MaterialPageRoute(
           builder: (context) => council != null
               ? CouncilPage(council.id)
-              : EntityPage(entity: entity),
+              : EntityPage(entityId: entity.id),
         ),
       );
     },
