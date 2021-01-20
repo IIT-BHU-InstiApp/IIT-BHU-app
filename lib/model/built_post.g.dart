@@ -6,6 +6,7 @@ part of 'built_post.dart';
 // BuiltValueGenerator
 // **************************************************************************
 
+Serializer<ConfigVar> _$configVarSerializer = new _$ConfigVarSerializer();
 Serializer<EntityListPost> _$entityListPostSerializer =
     new _$EntityListPostSerializer();
 Serializer<BuiltEntityPost> _$builtEntityPostSerializer =
@@ -51,6 +52,57 @@ Serializer<BuiltContacts> _$builtContactsSerializer =
 Serializer<BuiltTags> _$builtTagsSerializer = new _$BuiltTagsSerializer();
 Serializer<LoginPost> _$loginPostSerializer = new _$LoginPostSerializer();
 Serializer<Token> _$tokenSerializer = new _$TokenSerializer();
+
+class _$ConfigVarSerializer implements StructuredSerializer<ConfigVar> {
+  @override
+  final Iterable<Type> types = const [ConfigVar, _$ConfigVar];
+  @override
+  final String wireName = 'ConfigVar';
+
+  @override
+  Iterable<Object> serialize(Serializers serializers, ConfigVar object,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = <Object>[];
+    if (object.name != null) {
+      result
+        ..add('name')
+        ..add(serializers.serialize(object.name,
+            specifiedType: const FullType(String)));
+    }
+    if (object.value != null) {
+      result
+        ..add('value')
+        ..add(serializers.serialize(object.value,
+            specifiedType: const FullType(String)));
+    }
+    return result;
+  }
+
+  @override
+  ConfigVar deserialize(Serializers serializers, Iterable<Object> serialized,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = new ConfigVarBuilder();
+
+    final iterator = serialized.iterator;
+    while (iterator.moveNext()) {
+      final key = iterator.current as String;
+      iterator.moveNext();
+      final dynamic value = iterator.current;
+      switch (key) {
+        case 'name':
+          result.name = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'value':
+          result.value = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+      }
+    }
+
+    return result.build();
+  }
+}
 
 class _$EntityListPostSerializer
     implements StructuredSerializer<EntityListPost> {
@@ -2586,6 +2638,87 @@ class _$TokenSerializer implements StructuredSerializer<Token> {
     }
 
     return result.build();
+  }
+}
+
+class _$ConfigVar extends ConfigVar {
+  @override
+  final String name;
+  @override
+  final String value;
+
+  factory _$ConfigVar([void Function(ConfigVarBuilder) updates]) =>
+      (new ConfigVarBuilder()..update(updates)).build();
+
+  _$ConfigVar._({this.name, this.value}) : super._();
+
+  @override
+  ConfigVar rebuild(void Function(ConfigVarBuilder) updates) =>
+      (toBuilder()..update(updates)).build();
+
+  @override
+  ConfigVarBuilder toBuilder() => new ConfigVarBuilder()..replace(this);
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(other, this)) return true;
+    return other is ConfigVar && name == other.name && value == other.value;
+  }
+
+  @override
+  int get hashCode {
+    return $jf($jc($jc(0, name.hashCode), value.hashCode));
+  }
+
+  @override
+  String toString() {
+    return (newBuiltValueToStringHelper('ConfigVar')
+          ..add('name', name)
+          ..add('value', value))
+        .toString();
+  }
+}
+
+class ConfigVarBuilder implements Builder<ConfigVar, ConfigVarBuilder> {
+  _$ConfigVar _$v;
+
+  String _name;
+  String get name => _$this._name;
+  set name(String name) => _$this._name = name;
+
+  String _value;
+  String get value => _$this._value;
+  set value(String value) => _$this._value = value;
+
+  ConfigVarBuilder();
+
+  ConfigVarBuilder get _$this {
+    if (_$v != null) {
+      _name = _$v.name;
+      _value = _$v.value;
+      _$v = null;
+    }
+    return this;
+  }
+
+  @override
+  void replace(ConfigVar other) {
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
+    _$v = other as _$ConfigVar;
+  }
+
+  @override
+  void update(void Function(ConfigVarBuilder) updates) {
+    if (updates != null) updates(this);
+  }
+
+  @override
+  _$ConfigVar build() {
+    final _$result = _$v ?? new _$ConfigVar._(name: name, value: value);
+    replace(_$result);
+    return _$result;
   }
 }
 

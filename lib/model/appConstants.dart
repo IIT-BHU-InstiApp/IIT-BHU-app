@@ -15,6 +15,9 @@ import 'package:iit_app/ui/internet_error_flushbar.dart';
 import 'package:path_provider/path_provider.dart';
 
 class AppConstants {
+  static String minSupportedVersion;
+  static String installedVersion;
+
   static final internetErrorFlushBar = InternetErrorFlushbar();
 
   //for guest user

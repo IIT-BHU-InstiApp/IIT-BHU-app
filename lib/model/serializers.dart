@@ -7,6 +7,7 @@ import 'built_post.dart';
 part 'serializers.g.dart';
 
 @SerializersFor(const [
+  ConfigVar,
   EntityListPost,
   BuiltEntityPost,
   EntityTags,

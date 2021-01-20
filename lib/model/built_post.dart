@@ -4,6 +4,20 @@ import 'package:built_value/serializer.dart';
 
 part 'built_post.g.dart';
 
+abstract class ConfigVar implements Built<ConfigVar, ConfigVarBuilder> {
+  @nullable
+  String get name;
+
+  @nullable
+  String get value;
+
+  ConfigVar._();
+
+  factory ConfigVar([updates(ConfigVarBuilder b)]) = _$ConfigVar;
+
+  static Serializer<ConfigVar> get serializer => _$configVarSerializer;
+}
+
 abstract class EntityListPost
     implements Built<EntityListPost, EntityListPostBuilder> {
   @nullable

@@ -10,8 +10,10 @@ import 'package:iit_app/model/colorConstants.dart';
 import 'package:iit_app/model/sharedPreferenceKeys.dart';
 import 'package:iit_app/services/connectivityCheck.dart';
 import 'package:iit_app/services/crud.dart';
+import 'package:package_info/package_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Initiation extends StatefulWidget {
   @override
@@ -52,6 +54,11 @@ class _InitiationState extends State<Initiation> {
 
     this._isOnline = await AppConstants.connectionStatus.checkConnection();
     if (this._isOnline == true) {
+      final isVersionQualified = await _checkConfigVars();
+      if (isVersionQualified == false) {
+        await _showUpdateDialog();
+      }
+
       AppConstants.isLoggedIn = await CrudMethods.isLoggedIn();
       final timePassed = DateTime.now().difference(_initTime);
       if (timePassed.inMilliseconds < 1500) {
@@ -74,6 +81,86 @@ class _InitiationState extends State<Initiation> {
     } else {
       ColorConstants.setDark();
     }
+  }
+
+  Future<bool> _checkConfigVars() async {
+    try {
+      final configVarList = (await AppConstants.service.getConfigVars()).body;
+      for (var configVar in configVarList) {
+        if (configVar.name == "min_supported_version") {
+          final appVersion = (await PackageInfo.fromPlatform()).version;
+          final minVersion = configVar.value;
+
+          AppConstants.installedVersion = appVersion;
+          AppConstants.minSupportedVersion = minVersion;
+
+          final appVersionSplitted = appVersion.split('.');
+          final minVersionSplitted = minVersion.split('.');
+
+          // comparing major
+          if (appVersionSplitted[0].compareTo(minVersionSplitted[0]) == -1) {
+            return false;
+          }
+
+          // comparing minor
+          if (appVersionSplitted[1].compareTo(minVersionSplitted[1]) == -1) {
+            return false;
+          }
+
+          // comparing patch
+          if (appVersionSplitted[2].compareTo(minVersionSplitted[2]) == -1) {
+            return false;
+          }
+        }
+      }
+      return true;
+    } catch (e) {
+      print('error while comparing versions $e');
+      return true;
+    }
+  }
+
+  _showUpdateDialog() async {
+    await showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (ctx) => WillPopScope(
+              onWillPop: () {
+                return Future.value(false);
+              },
+              child: AlertDialog(
+                title: Text('Update App'),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                        'Min Supported Version : ${AppConstants.minSupportedVersion}'),
+                    SizedBox(height: 8),
+                    Text(
+                        'Installed Version : ${AppConstants.installedVersion}'),
+                    SizedBox(height: 16),
+                    Text(
+                        '(Mandatory) Please update "Lite Hai!" app from Google Play Store'),
+                  ],
+                ),
+                actions: [
+                  RaisedButton(
+                    onPressed: () {
+                      try {
+                        final appLink =
+                            "https://play.google.com/store/apps/details?id=com.iitbhu.litehai";
+                        launch(appLink);
+                      } catch (e) {
+                        print(
+                            'error in launching app link from update button: $e');
+                      }
+                    },
+                    child: Text('Update'),
+                  )
+                ],
+              ),
+            ));
   }
 
   @override

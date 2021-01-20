@@ -284,7 +284,7 @@ abstract class PostApiService extends ChopperService {
 //? --------------------------------------------------------------------------------------------------------------------
 //? --------------------------------------------------------------------------------------------------------------------
 
-//! ------------------------------------------ Other (Team,Login) end point APIs --------------------------------------------------------------
+//! ------------------------------------------ Other (Team,Login,ConfigVar) end point APIs --------------------------------------------------------------
 
   //? ----------------------------------- Get -------------------------------
 
@@ -296,7 +296,10 @@ abstract class PostApiService extends ChopperService {
   @Post(path: '/login/')
   Future<Response<Token>> logInPost(@Body() LoginPost body);
 
-//! ------------------------------------------ Other (Team,Login) end point APIs --------------------------------------------------------------
+  @Get(path: '/config/')
+  Future<Response<BuiltList<ConfigVar>>> getConfigVars();
+
+//! ------------------------------------------ Other (Team,Login,ConfigVar) end point APIs --------------------------------------------------------------
 
   static PostApiService create() {
     final client = ChopperClient(

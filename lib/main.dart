@@ -19,7 +19,7 @@ void main() async {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   runApp(MaterialApp(
-    title: 'Lite Hai',
+    title: 'Lite Hai!',
     theme: ThemeData(
       primaryTextTheme: TextTheme(
         bodyText1: TextStyle(),

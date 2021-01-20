@@ -419,4 +419,10 @@ class _$PostApiService extends PostApiService {
     final $request = Request('POST', $url, client.baseUrl, body: $body);
     return client.send<Token, Token>($request);
   }
+
+  Future<Response<BuiltList<ConfigVar>>> getConfigVars() {
+    final $url = '/config/';
+    final $request = Request('GET', $url, client.baseUrl);
+    return client.send<BuiltList<ConfigVar>, ConfigVar>($request);
+  }
 }
