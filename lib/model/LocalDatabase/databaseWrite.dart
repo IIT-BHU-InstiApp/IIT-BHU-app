@@ -145,6 +145,35 @@ class DatabaseWrite {
     );
   }
 
+  static Future<List<int>> updateCouncilSubcription(
+      {@required Database db,
+      @required int councilId,
+      @required bool isSubscribed}) async {
+    print(councilId);
+    List<Map<String, dynamic>> out = await db.query(
+        StringConst.clubSummaryString,
+        columns: [StringConst.idString],
+        where: '${StringConst.councilIdString} = $councilId');
+    print(out);
+    String clubIdsString = "(";
+    List<int> clubIdList = [];
+    for (int i = 0; i < out.length; ++i) {
+      clubIdsString = clubIdsString + out[i]['id'].toString() + ", ";
+      clubIdList.add(out[i]['id']);
+    }
+    clubIdsString = clubIdsString.substring(0, clubIdsString.length - 2);
+    clubIdsString = clubIdsString + ")";
+    print(clubIdsString);
+    await db.update(
+      StringConst.clubDetailsString,
+      {
+        StringConst.isSubscribedString: isSubscribed ? 1 : 0,
+      },
+      where: '${StringConst.idString} IN $clubIdsString',
+    );
+    return clubIdList;
+  }
+
   // Deleting the data-----------------------------------------------------------------------
 
   static Future deleteEntryOfCouncilDetail(

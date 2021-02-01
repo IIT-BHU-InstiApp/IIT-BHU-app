@@ -276,6 +276,16 @@ class AppConstants {
     return councilPost;
   }
 
+  static Future<List<int>> updateCouncilSubscriptionInDatabase(
+      {@required int councilId, @required bool isSubscribed}) async {
+    DatabaseHelper helper = DatabaseHelper.instance;
+    var database = await helper.database;
+
+    List clubIds = await DatabaseWrite.updateCouncilSubcription(
+        db: database, councilId: councilId, isSubscribed: isSubscribed);
+    return clubIds;
+  }
+
   static Future<BuiltClubPost> getClubDetailsFromDatabase(
       {@required int clubId, bool refresh = false}) async {
     DatabaseHelper helper = DatabaseHelper.instance;

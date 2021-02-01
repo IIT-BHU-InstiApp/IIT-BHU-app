@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:chopper/chopper.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:iit_app/data/internet_connection_interceptor.dart';
 import 'package:iit_app/external_libraries/spin_kit.dart';
@@ -159,7 +160,10 @@ class ClubCouncilAndEntityWidgets {
                   isSports: (isClub && club.council.name.contains('Sport')),
                 ),
                 _data != null && isCouncil
-                    ? getSubscribeButtons()
+                    ? getSubscribeButtons(
+                        context: context,
+                        councilID: councilDetail.id,
+                      )
                     : Container(),
                 _data == null
                     ? Container()
@@ -172,7 +176,8 @@ class ClubCouncilAndEntityWidgets {
     );
   }
 
-  static Row getSubscribeButtons({BuildContext context, int councilID}) {
+  static Row getSubscribeButtons(
+      {@required BuildContext context, @required int councilID}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
@@ -186,15 +191,22 @@ class ClubCouncilAndEntityWidgets {
                   "Are you sure you wish to mute all the clubs in this council? You will no longer receive any notification for workshops or events of this council.",
             );
             if (unsub) {
+              List<int> clubIds =
+                  await AppConstants.updateCouncilSubscriptionInDatabase(
+                      councilId: councilID, isSubscribed: false);
               await AppConstants.service
-                  .councilSubscribe(
+                  .councilUnsubscribe(
                 councilID,
                 AppConstants.djangoToken,
               )
-                  .then((value) {
+                  .then((value) async {
                 if (value != null) {
                   print("Unsubscribed from Council:$councilID");
-                  // TODO : Add Firebase Unsub
+                  for (int i in clubIds) {
+                    await FirebaseMessaging.instance
+                        .unsubscribeFromTopic('C_$i')
+                        .then((_) => print('Unsubscribed from C_$i'));
+                  }
                 }
               }).catchError((onError) {
                 if (onError is InternetConnectionException) {
@@ -210,15 +222,23 @@ class ClubCouncilAndEntityWidgets {
         ElevatedButton(
           child: Text('Unmute'),
           onPressed: () async {
+            List<int> clubIds =
+                await AppConstants.updateCouncilSubscriptionInDatabase(
+                    councilId: councilID, isSubscribed: true);
             await AppConstants.service
-                .councilUnsubscribe(
+                .councilSubscribe(
               councilID,
               AppConstants.djangoToken,
             )
-                .then((value) {
+                .then((value) async {
               if (value != null) {
                 print("Subscribed to Council:$councilID");
-                // TODO : Add Firebase Sub
+                for (int i in clubIds) {
+                  await FirebaseMessaging.instance
+                      .subscribeToTopic('C_$i')
+                      .then((_) => print('Subscribed to C_$i'));
+                  // TODO : Add Firebase Sub
+                }
               }
             }).catchError((onError) {
               if (onError is InternetConnectionException) {
