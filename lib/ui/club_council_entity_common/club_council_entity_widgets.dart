@@ -1,5 +1,7 @@
 import 'dart:io';
+import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
+import 'package:iit_app/data/internet_connection_interceptor.dart';
 import 'package:iit_app/external_libraries/spin_kit.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
@@ -8,6 +10,7 @@ import 'package:iit_app/pages/club_entity/clubPage.dart';
 import 'package:iit_app/screens/create.dart';
 import 'package:iit_app/ui/club_council_entity_common/description.dart';
 import 'package:iit_app/pages/club_entity/entityPage.dart';
+import 'package:iit_app/ui/council_custom_widgets.dart';
 import 'package:iit_app/ui/separator.dart';
 import 'package:iit_app/ui/text_style.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -155,6 +158,9 @@ class ClubCouncilAndEntityWidgets {
                   isEntity: isEntity,
                   isSports: (isClub && club.council.name.contains('Sport')),
                 ),
+                _data != null && isCouncil
+                    ? getSubscribeButtons()
+                    : Container(),
                 _data == null
                     ? Container()
                     : ClubCouncilAndEntityWidgets.getSocialLinks(_data),
@@ -163,6 +169,92 @@ class ClubCouncilAndEntityWidgets {
                         ClubCouncilAndEntityWidgets.getMinPanelHeight(context)),
               ],
             ),
+    );
+  }
+
+  static Row getSubscribeButtons({BuildContext context, int councilID}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        ElevatedButton(
+          child: Text('Mute'),
+          onPressed: () async {
+            bool unsub = await confirmUnsubDialog(
+              context: context,
+              titleText: "Mute This Council",
+              bodyText:
+                  "Are you sure you wish to mute all the clubs in this council? You will no longer receive any notification for workshops or events of this council.",
+            );
+            if (unsub) {
+              await AppConstants.service
+                  .councilSubscribe(
+                councilID,
+                AppConstants.djangoToken,
+              )
+                  .then((value) {
+                if (value != null) {
+                  print("Unsubscribed from Council:$councilID");
+                  // TODO : Add Firebase Unsub
+                }
+              }).catchError((onError) {
+                if (onError is InternetConnectionException) {
+                  AppConstants.internetErrorFlushBar.showFlushbar(context);
+                  return;
+                }
+                final error = onError as Response<dynamic>;
+                print(error.body);
+              });
+            }
+          },
+        ),
+        ElevatedButton(
+          child: Text('Unmute'),
+          onPressed: () async {
+            await AppConstants.service
+                .councilUnsubscribe(
+              councilID,
+              AppConstants.djangoToken,
+            )
+                .then((value) {
+              if (value != null) {
+                print("Subscribed to Council:$councilID");
+                // TODO : Add Firebase Sub
+              }
+            }).catchError((onError) {
+              if (onError is InternetConnectionException) {
+                AppConstants.internetErrorFlushBar.showFlushbar(context);
+                return;
+              }
+              final error = onError as Response<dynamic>;
+              print(error.body);
+            });
+          },
+        ),
+      ],
+    );
+  }
+
+  static Future<bool> confirmUnsubDialog(
+      {BuildContext context, String titleText, String bodyText}) async {
+    return showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(titleText ?? ""),
+          content: Text(bodyText ?? ""),
+          actions: <Widget>[
+            FlatButton(
+              child: Text("No. Take Me Back."),
+              onPressed: () => Navigator.of(context).pop(false),
+            ),
+            FlatButton(
+              child: Text("Yup!"),
+              onPressed: () => Navigator.of(context).pop(true),
+            ),
+          ],
+        );
+      },
     );
   }
 
