@@ -83,6 +83,16 @@ class _InitiationState extends State<Initiation> {
     }
   }
 
+  int _compareVersionParts(String x, String y) {
+    if (x == null) x = "0";
+    if (y == null) y = "0";
+
+    if (x.length > y.length)
+      return 1;
+    else if (x.length < y.length) return -1;
+    return x.compareTo(y);
+  }
+
   Future<bool> _checkConfigVars() async {
     try {
       final configVarList = (await AppConstants.service.getConfigVars()).body;
@@ -96,21 +106,24 @@ class _InitiationState extends State<Initiation> {
 
           final appVersionSplitted = appVersion.split('.');
           final minVersionSplitted = minVersion.split('.');
+          final int major = _compareVersionParts(
+              appVersionSplitted[0], minVersionSplitted[0]);
+          final int minor = _compareVersionParts(
+              appVersionSplitted[1], minVersionSplitted[1]);
+          final int patch = _compareVersionParts(
+              appVersionSplitted[2], minVersionSplitted[2]);
 
-          // comparing major
-          if (appVersionSplitted[0].compareTo(minVersionSplitted[0]) == -1) {
-            return false;
-          }
+          if (major == 1)
+            return true;
+          else if (major == -1) return false;
 
-          // comparing minor
-          if (appVersionSplitted[1].compareTo(minVersionSplitted[1]) == -1) {
-            return false;
-          }
+          if (minor == 1)
+            return true;
+          else if (minor == -1) return false;
 
-          // comparing patch
-          if (appVersionSplitted[2].compareTo(minVersionSplitted[2]) == -1) {
-            return false;
-          }
+          if (patch == 1)
+            return true;
+          else if (patch == -1) return false;
         }
       }
       return true;
