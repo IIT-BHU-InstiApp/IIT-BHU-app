@@ -91,6 +91,14 @@ class _ClubPageState extends State<ClubPage>
     super.dispose();
   }
 
+  void _update() {
+    print("updated");
+    _fetchClubDataById();
+    setState(() {
+      print('State Set');
+    });
+  }
+
   void toggleSubscription() async {
     if (!this.mounted) {
       return;
@@ -180,40 +188,45 @@ class _ClubPageState extends State<ClubPage>
           resizeToAvoidBottomInset: false,
           resizeToAvoidBottomPadding: false,
           backgroundColor: ColorConstants.backgroundThemeColor,
-          floatingActionButton: AppConstants.isGuest
-              ? null
-              : FloatingActionButton.extended(
-                  backgroundColor: Colors.white,
-                  onPressed: () {
-                    if (this._toggling == false) {
-                      toggleSubscription();
-                    }
-                  },
-                  icon: this._toggling || clubMap == null
-                      ? CircularProgressIndicator()
-                      : Icon(
-                          Icons.subscriptions,
-                          color: clubMap.is_subscribed
-                              ? Colors.red
-                              : Colors.black26,
-                        ),
-                  label: Text(
-                    clubMap != null && clubMap.is_subscribed
-                        ? 'Subscribed'
-                        : 'Subscribe',
-                    style: TextStyle(
-                        fontSize: 16,
-                        color: clubMap != null && clubMap.is_subscribed
-                            ? Colors.red
-                            : Colors.black26),
-                  ),
-                ),
+          // floatingActionButton: AppConstants.isGuest
+          //     ? null
+          //     : FloatingActionButton.extended(
+          //         backgroundColor: Colors.white,
+          //         onPressed: () {
+          //           if (this._toggling == false) {
+          //             toggleSubscription();
+          //           }
+          //         },
+          //         icon: this._toggling || clubMap == null
+          //             ? CircularProgressIndicator()
+          //             : Icon(
+          //                 Icons.subscriptions,
+          //                 color: clubMap.is_subscribed
+          //                     ? Colors.red
+          //                     : Colors.black26,
+          //               ),
+          //         label: Text(
+          //           clubMap != null && clubMap.is_subscribed
+          //               ? 'Subscribed'
+          //               : 'Subscribe',
+          //           style: TextStyle(
+          //               fontSize: 16,
+          //               color: clubMap != null && clubMap.is_subscribed
+          //                   ? Colors.red
+          //                   : Colors.black26),
+          //         ),
+          //       ),
           body: RefreshIndicator(
             onRefresh: () async => _reload(),
             child: SlidingUpPanel(
               body: ClubCouncilAndEntityWidgets.getPanelBackground(
-                  context, _clubLargeLogoFile,
-                  isClub: true, clubDetail: clubMap, club: club),
+                context,
+                _clubLargeLogoFile,
+                isClub: true,
+                clubDetail: clubMap,
+                club: club,
+                update: _update,
+              ),
               parallaxEnabled: true,
               controller: _pc,
               borderRadius: radius,

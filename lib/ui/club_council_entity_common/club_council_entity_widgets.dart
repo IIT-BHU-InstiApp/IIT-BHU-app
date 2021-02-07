@@ -18,6 +18,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ClubCouncilAndEntityWidgets {
+  bool _loading = false;
   static Widget getPanelBackground(
     BuildContext context,
     File largeLogoFile, {
@@ -29,6 +30,7 @@ class ClubCouncilAndEntityWidgets {
     bool isEntity = false,
     BuiltEntityPost entityDetail,
     EntityListPost entity,
+    Function update,
   }) {
     assert((isCouncil == true && isClub == false && isEntity == false) ||
         (isCouncil == false && isClub == true && isEntity == false) ||
@@ -159,10 +161,14 @@ class ClubCouncilAndEntityWidgets {
                   isEntity: isEntity,
                   isSports: (isClub && club.council.name.contains('Sport')),
                 ),
-                _data != null && isCouncil
+                _data != null
                     ? getSubscribeButtons(
                         context: context,
-                        councilID: councilDetail.id,
+                        isCouncil: isCouncil,
+                        isClub: isClub,
+                        isEntity: isEntity,
+                        data: _data,
+                        update: update,
                       )
                     : Container(),
                 _data == null
@@ -176,36 +182,199 @@ class ClubCouncilAndEntityWidgets {
     );
   }
 
-  static Row getSubscribeButtons(
-      {@required BuildContext context, @required int councilID}) {
+  static Row getSubscribeButtons({
+    @required BuildContext context,
+    bool isCouncil = false,
+    bool isClub = false,
+    bool isEntity = false,
+    data,
+    Function update,
+  }) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        ElevatedButton(
-          child: Text('Mute'),
+        ElevatedButton.icon(
+          icon: Icon(Icons.volume_off),
+          label: Text(isCouncil
+              ? 'Mute Council'
+              : isClub
+                  ? 'Mute Club'
+                  : 'Mute Entity'),
           onPressed: () async {
-            bool unsub = await confirmUnsubDialog(
-              context: context,
-              titleText: "Mute This Council",
-              bodyText:
-                  "Are you sure you wish to mute all the clubs in this council? You will no longer receive any notification for workshops or events of this council.",
-            );
-            if (unsub) {
+            if (isCouncil) {
+              int councilId = data.id;
+              bool unsub = await confirmUnsubDialog(
+                context: context,
+                titleText: "Mute This Council",
+                bodyText:
+                    "Are you sure you wish to mute all the clubs in this council? You will no longer receive any notification for workshops or events of this council.",
+              );
+              if (unsub) {
+                List<int> clubIds =
+                    await AppConstants.updateCouncilSubscriptionInDatabase(
+                        councilId: councilId, isSubscribed: false);
+                await AppConstants.service
+                    .councilUnsubscribe(
+                  councilId,
+                  AppConstants.djangoToken,
+                )
+                    .then((value) async {
+                  if (value != null) {
+                    print("Unsubscribed from Council:$councilId");
+                    for (int i in clubIds) {
+                      await FirebaseMessaging.instance
+                          .unsubscribeFromTopic('C_$i')
+                          .then((_) => print('Unsubscribed from C_$i'));
+                    }
+                  }
+                }).catchError((onError) {
+                  if (onError is InternetConnectionException) {
+                    AppConstants.internetErrorFlushBar.showFlushbar(context);
+                    return;
+                  }
+                  final error = onError as Response<dynamic>;
+                  print(error.body);
+                });
+              }
+            } else if (isClub) {
+              bool unsub = await confirmUnsubDialog(
+                context: context,
+                titleText: "Mute This Club",
+                bodyText:
+                    "Are you sure you wish to mute this club? You will no longer receive any notification for workshops or events of this club.",
+              );
+              if (unsub) {
+                print(data.is_subscribed);
+                if (data.is_subscribed) {
+                  int clubId = data.id;
+                  await AppConstants.service
+                      .toggleClubSubscription(clubId, AppConstants.djangoToken)
+                      .then((snapshot) async {
+                    print(
+                        "status of club subscription: ${snapshot.statusCode}");
+
+                    if (snapshot.statusCode == 200) {
+                      try {
+                        await AppConstants.updateClubSubscriptionInDatabase(
+                            clubId: clubId,
+                            isSubscribed: false,
+                            currentSubscribedUsers: data.subscribed_users);
+
+                        BuiltClubPost clubMap =
+                            await AppConstants.getClubDetailsFromDatabase(
+                                clubId: clubId);
+
+                        if (clubMap.is_subscribed == true) {
+                          await FirebaseMessaging.instance
+                              .subscribeToTopic('C_${clubMap.id}')
+                              .then((_) =>
+                                  print('subscribed to C_${clubMap.id}'));
+                        } else {
+                          await FirebaseMessaging.instance
+                              .unsubscribeFromTopic('C_${clubMap.id}');
+                        }
+                      } on InternetConnectionException catch (_) {
+                        AppConstants.internetErrorFlushBar
+                            .showFlushbar(context);
+                        return;
+                      } catch (err) {
+                        print(err);
+                      }
+                    }
+                  }).catchError((onError) {
+                    if (onError is InternetConnectionException) {
+                      AppConstants.internetErrorFlushBar.showFlushbar(context);
+                      return;
+                    }
+                    print("Error in toggleing: ${onError.toString()}");
+                  });
+                  update();
+                }
+              }
+            } else {
+              bool unsub = await confirmUnsubDialog(
+                context: context,
+                titleText: "Mute This Entity",
+                bodyText:
+                    "Are you sure you wish to mute this entity? You will no longer receive any notification for workshops or events of this entity.",
+              );
+              if (unsub) {
+                if (data.is_subscribed) {
+                  int entityId = data.id;
+                  await AppConstants.service
+                      .toggleEntitySubscription(
+                          entityId, AppConstants.djangoToken)
+                      .then((snapshot) async {
+                    print(
+                        "status of entity subscription: ${snapshot.statusCode}");
+
+                    if (snapshot.statusCode == 200) {
+                      try {
+                        await AppConstants.updateEntitySubscriptionInDatabase(
+                            entityId: entityId,
+                            isSubscribed: false,
+                            currentSubscribedUsers: data.subscribed_users);
+
+                        BuiltEntityPost entityMap =
+                            await AppConstants.getEntityDetailsFromDatabase(
+                                entityId: entityId);
+
+                        if (entityMap.is_subscribed == true) {
+                          await FirebaseMessaging.instance
+                              .subscribeToTopic('E_${entityMap.id}')
+                              .then((_) =>
+                                  print('subscribed to E_${entityMap.id}'));
+                        } else {
+                          await FirebaseMessaging.instance
+                              .unsubscribeFromTopic('E_${entityMap.id}');
+                        }
+                      } on InternetConnectionException catch (_) {
+                        AppConstants.internetErrorFlushBar
+                            .showFlushbar(context);
+                        return;
+                      } catch (err) {
+                        print(err);
+                      }
+                    }
+                  }).catchError((onError) {
+                    if (onError is InternetConnectionException) {
+                      AppConstants.internetErrorFlushBar.showFlushbar(context);
+                      return;
+                    }
+                    print("Error in toggleing: ${onError.toString()}");
+                  });
+                }
+                update();
+              }
+            }
+          },
+        ),
+        ElevatedButton.icon(
+          icon: Icon(Icons.volume_up),
+          label: Text(isCouncil
+              ? 'Unmute Council'
+              : isClub
+                  ? 'Unmute Club'
+                  : 'Unmute Entity'),
+          onPressed: () async {
+            if (isCouncil) {
+              int councilId = data.id;
               List<int> clubIds =
                   await AppConstants.updateCouncilSubscriptionInDatabase(
-                      councilId: councilID, isSubscribed: false);
+                      councilId: councilId, isSubscribed: true);
               await AppConstants.service
-                  .councilUnsubscribe(
-                councilID,
+                  .councilSubscribe(
+                councilId,
                 AppConstants.djangoToken,
               )
                   .then((value) async {
                 if (value != null) {
-                  print("Unsubscribed from Council:$councilID");
+                  print("Subscribed to Council:$councilId");
                   for (int i in clubIds) {
                     await FirebaseMessaging.instance
-                        .unsubscribeFromTopic('C_$i')
-                        .then((_) => print('Unsubscribed from C_$i'));
+                        .subscribeToTopic('C_$i')
+                        .then((_) => print('Subscribed to C_$i'));
+                    // TODO : Add Firebase Sub
                   }
                 }
               }).catchError((onError) {
@@ -216,38 +385,97 @@ class ClubCouncilAndEntityWidgets {
                 final error = onError as Response<dynamic>;
                 print(error.body);
               });
+            } else if (isClub) {
+              if (!data.is_subscribed) {
+                int clubId = data.id;
+                await AppConstants.service
+                    .toggleClubSubscription(clubId, AppConstants.djangoToken)
+                    .then((snapshot) async {
+                  print("status of club subscription: ${snapshot.statusCode}");
+
+                  if (snapshot.statusCode == 200) {
+                    try {
+                      await AppConstants.updateClubSubscriptionInDatabase(
+                          clubId: clubId,
+                          isSubscribed: true,
+                          currentSubscribedUsers: data.subscribed_users);
+
+                      BuiltClubPost clubMap =
+                          await AppConstants.getClubDetailsFromDatabase(
+                              clubId: clubId);
+
+                      if (clubMap.is_subscribed == true) {
+                        await FirebaseMessaging.instance
+                            .subscribeToTopic('C_${clubMap.id}')
+                            .then(
+                                (_) => print('subscribed to C_${clubMap.id}'));
+                      } else {
+                        await FirebaseMessaging.instance
+                            .unsubscribeFromTopic('C_${clubMap.id}');
+                      }
+                    } on InternetConnectionException catch (_) {
+                      AppConstants.internetErrorFlushBar.showFlushbar(context);
+                      return;
+                    } catch (err) {
+                      print(err);
+                    }
+                  }
+                }).catchError((onError) {
+                  if (onError is InternetConnectionException) {
+                    AppConstants.internetErrorFlushBar.showFlushbar(context);
+                    return;
+                  }
+                  print("Error in toggleing: ${onError.toString()}");
+                });
+                update();
+              }
+            } else {
+              if (!data.is_subscribed) {
+                int entityId = data.id;
+                await AppConstants.service
+                    .toggleEntitySubscription(
+                        entityId, AppConstants.djangoToken)
+                    .then((snapshot) async {
+                  print(
+                      "status of entity subscription: ${snapshot.statusCode}");
+
+                  if (snapshot.statusCode == 200) {
+                    try {
+                      await AppConstants.updateEntitySubscriptionInDatabase(
+                          entityId: entityId,
+                          isSubscribed: true,
+                          currentSubscribedUsers: data.subscribed_users);
+
+                      BuiltEntityPost entityMap =
+                          await AppConstants.getEntityDetailsFromDatabase(
+                              entityId: entityId);
+
+                      if (entityMap.is_subscribed == true) {
+                        await FirebaseMessaging.instance
+                            .subscribeToTopic('E_${entityMap.id}')
+                            .then((_) =>
+                                print('subscribed to E_${entityMap.id}'));
+                      } else {
+                        await FirebaseMessaging.instance
+                            .unsubscribeFromTopic('E_${entityMap.id}');
+                      }
+                    } on InternetConnectionException catch (_) {
+                      AppConstants.internetErrorFlushBar.showFlushbar(context);
+                      return;
+                    } catch (err) {
+                      print(err);
+                    }
+                  }
+                }).catchError((onError) {
+                  if (onError is InternetConnectionException) {
+                    AppConstants.internetErrorFlushBar.showFlushbar(context);
+                    return;
+                  }
+                  print("Error in toggleing: ${onError.toString()}");
+                });
+                update();
+              }
             }
-          },
-        ),
-        ElevatedButton(
-          child: Text('Unmute'),
-          onPressed: () async {
-            List<int> clubIds =
-                await AppConstants.updateCouncilSubscriptionInDatabase(
-                    councilId: councilID, isSubscribed: true);
-            await AppConstants.service
-                .councilSubscribe(
-              councilID,
-              AppConstants.djangoToken,
-            )
-                .then((value) async {
-              if (value != null) {
-                print("Subscribed to Council:$councilID");
-                for (int i in clubIds) {
-                  await FirebaseMessaging.instance
-                      .subscribeToTopic('C_$i')
-                      .then((_) => print('Subscribed to C_$i'));
-                  // TODO : Add Firebase Sub
-                }
-              }
-            }).catchError((onError) {
-              if (onError is InternetConnectionException) {
-                AppConstants.internetErrorFlushBar.showFlushbar(context);
-                return;
-              }
-              final error = onError as Response<dynamic>;
-              print(error.body);
-            });
           },
         ),
       ],
@@ -273,6 +501,24 @@ class ClubCouncilAndEntityWidgets {
               onPressed: () => Navigator.of(context).pop(true),
             ),
           ],
+        );
+      },
+    );
+  }
+
+  static subUnsubDialog({BuildContext context, int councilId, bool subUnsub}) {
+    return showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: new Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CircularProgressIndicator(),
+              Text("Loading"),
+            ],
+          ),
         );
       },
     );

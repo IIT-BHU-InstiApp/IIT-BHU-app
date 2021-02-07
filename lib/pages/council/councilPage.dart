@@ -18,6 +18,7 @@ class CouncilPage extends StatefulWidget {
 class _CouncilPageState extends State<CouncilPage> {
   BuiltCouncilPost councilData;
   File _councilLargeLogoFile;
+  final navigatorKey = GlobalKey<NavigatorState>();
 
   @override
   void initState() {
@@ -87,8 +88,11 @@ class _CouncilPageState extends State<CouncilPage> {
               child: SlidingUpPanel(
                 parallaxEnabled: true,
                 body: ClubCouncilAndEntityWidgets.getPanelBackground(
-                    context, _councilLargeLogoFile,
-                    isCouncil: true, councilDetail: councilData),
+                  context,
+                  _councilLargeLogoFile,
+                  isCouncil: true,
+                  councilDetail: councilData,
+                ),
                 controller: _pc,
                 borderRadius: radius,
                 collapsed: Container(

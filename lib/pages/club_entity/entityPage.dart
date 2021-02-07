@@ -86,6 +86,11 @@ class _EntityPageState extends State<EntityPage>
     super.dispose();
   }
 
+  void _update() {
+    _fetchEntityDataByID();
+    setState(() {});
+  }
+
   void _reload() async {
     await _fetchEntityDataByID(refresh: true);
   }
@@ -178,40 +183,45 @@ class _EntityPageState extends State<EntityPage>
             resizeToAvoidBottomInset: false,
             resizeToAvoidBottomPadding: false,
             backgroundColor: ColorConstants.backgroundThemeColor,
-            floatingActionButton: AppConstants.isGuest
-                ? null
-                : FloatingActionButton.extended(
-                    backgroundColor: Colors.white,
-                    onPressed: () {
-                      if (this._toggling == false) {
-                        toggleSubscription();
-                      }
-                    },
-                    icon: this._toggling || entityMap == null
-                        ? CircularProgressIndicator()
-                        : Icon(
-                            Icons.subscriptions,
-                            color: entityMap.is_subscribed
-                                ? Colors.red
-                                : Colors.black26,
-                          ),
-                    label: Text(
-                      entityMap != null && entityMap.is_subscribed
-                          ? 'Subscribed'
-                          : 'Subscribe',
-                      style: TextStyle(
-                          fontSize: 16,
-                          color: entityMap != null && entityMap.is_subscribed
-                              ? Colors.red
-                              : Colors.black26),
-                    ),
-                  ),
+            // floatingActionButton: AppConstants.isGuest
+            //     ? null
+            //     : FloatingActionButton.extended(
+            //         backgroundColor: Colors.white,
+            //         onPressed: () {
+            //           if (this._toggling == false) {
+            //             toggleSubscription();
+            //           }
+            //         },
+            //         icon: this._toggling || entityMap == null
+            //             ? CircularProgressIndicator()
+            //             : Icon(
+            //                 Icons.subscriptions,
+            //                 color: entityMap.is_subscribed
+            //                     ? Colors.red
+            //                     : Colors.black26,
+            //               ),
+            //         label: Text(
+            //           entityMap != null && entityMap.is_subscribed
+            //               ? 'Subscribed'
+            //               : 'Subscribe',
+            //           style: TextStyle(
+            //               fontSize: 16,
+            //               color: entityMap != null && entityMap.is_subscribed
+            //                   ? Colors.red
+            //                   : Colors.black26),
+            //         ),
+            //       ),
             body: RefreshIndicator(
                 onRefresh: () async => _reload(),
                 child: SlidingUpPanel(
                   body: ClubCouncilAndEntityWidgets.getPanelBackground(
-                      context, _entityLargeLogoFile,
-                      isEntity: true, entityDetail: entityMap, entity: entity),
+                    context,
+                    _entityLargeLogoFile,
+                    isEntity: true,
+                    entityDetail: entityMap,
+                    entity: entity,
+                    update: _update,
+                  ),
                   parallaxEnabled: true,
                   controller: _pc,
                   borderRadius: radius,
