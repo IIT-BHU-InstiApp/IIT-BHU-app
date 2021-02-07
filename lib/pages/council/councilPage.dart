@@ -18,7 +18,7 @@ class CouncilPage extends StatefulWidget {
 class _CouncilPageState extends State<CouncilPage> {
   BuiltCouncilPost councilData;
   File _councilLargeLogoFile;
-  final navigatorKey = GlobalKey<NavigatorState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -80,6 +80,7 @@ class _CouncilPageState extends State<CouncilPage> {
         child: WillPopScope(
           onWillPop: _willPopCallback,
           child: Scaffold(
+            key: _scaffoldKey,
             resizeToAvoidBottomInset: false,
             resizeToAvoidBottomPadding: false,
             backgroundColor: ColorConstants.backgroundThemeColor,
@@ -92,6 +93,7 @@ class _CouncilPageState extends State<CouncilPage> {
                   _councilLargeLogoFile,
                   isCouncil: true,
                   councilDetail: councilData,
+                  scaffoldKey: _scaffoldKey,
                 ),
                 controller: _pc,
                 borderRadius: radius,

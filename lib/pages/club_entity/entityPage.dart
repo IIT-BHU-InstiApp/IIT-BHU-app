@@ -28,6 +28,7 @@ class _EntityPageState extends State<EntityPage>
   bool _toggling = false;
   TabController _tabController;
   File _entityLargeLogoFile;
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -180,6 +181,7 @@ class _EntityPageState extends State<EntityPage>
         child: WillPopScope(
           onWillPop: _willPopCallback,
           child: Scaffold(
+            key: _scaffoldKey,
             resizeToAvoidBottomInset: false,
             resizeToAvoidBottomPadding: false,
             backgroundColor: ColorConstants.backgroundThemeColor,
@@ -221,6 +223,7 @@ class _EntityPageState extends State<EntityPage>
                     entityDetail: entityMap,
                     entity: entity,
                     update: _update,
+                    scaffoldKey: _scaffoldKey,
                   ),
                   parallaxEnabled: true,
                   controller: _pc,

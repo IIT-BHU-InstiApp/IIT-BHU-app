@@ -25,6 +25,7 @@ class _ClubPageState extends State<ClubPage>
   BuiltAllWorkshopsPost clubWorkshops;
   bool _toggling = false;
   TabController _tabController;
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   File _clubLargeLogoFile;
 
@@ -185,6 +186,7 @@ class _ClubPageState extends State<ClubPage>
       child: WillPopScope(
         onWillPop: _willPopCallback,
         child: Scaffold(
+          key: _scaffoldKey,
           resizeToAvoidBottomInset: false,
           resizeToAvoidBottomPadding: false,
           backgroundColor: ColorConstants.backgroundThemeColor,
@@ -226,6 +228,7 @@ class _ClubPageState extends State<ClubPage>
                 clubDetail: clubMap,
                 club: club,
                 update: _update,
+                scaffoldKey: _scaffoldKey,
               ),
               parallaxEnabled: true,
               controller: _pc,
