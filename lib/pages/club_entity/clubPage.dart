@@ -93,11 +93,8 @@ class _ClubPageState extends State<ClubPage>
   }
 
   void _update() {
-    print("updated");
     _fetchClubDataById();
-    setState(() {
-      print('State Set');
-    });
+    setState(() {});
   }
 
   void toggleSubscription() async {
