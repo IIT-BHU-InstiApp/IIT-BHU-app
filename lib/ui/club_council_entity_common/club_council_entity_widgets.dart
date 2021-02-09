@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:chopper/chopper.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:iit_app/data/internet_connection_interceptor.dart';
 import 'package:iit_app/external_libraries/spin_kit.dart';
 import 'package:iit_app/model/appConstants.dart';
@@ -30,6 +31,8 @@ class ClubCouncilAndEntityWidgets {
     BuiltEntityPost entityDetail,
     EntityListPost entity,
     Function update,
+    Function toggler,
+    bool toggling,
     GlobalKey<ScaffoldState> scaffoldKey,
   }) {
     assert((isCouncil == true && isClub == false && isEntity == false) ||
@@ -169,6 +172,8 @@ class ClubCouncilAndEntityWidgets {
                         isEntity: isEntity,
                         data: _data,
                         update: update,
+                        toggler: toggler,
+                        toggling: toggling,
                         scaffoldKey: scaffoldKey,
                       )
                     : Container(),
@@ -190,22 +195,32 @@ class ClubCouncilAndEntityWidgets {
     bool isEntity = false,
     data,
     Function update,
+    Function toggler,
+    bool toggling,
     GlobalKey<ScaffoldState> scaffoldKey,
   }) {
-    bool _toggling = false;
+    // bool _toggling = false;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         ElevatedButton.icon(
-          icon: Icon(Icons.volume_off),
-          label: Text(isCouncil
-              ? 'Mute Council'
-              : isClub
-                  ? 'Mute Club'
-                  : 'Mute Entity'),
+          icon: toggling
+              ? SpinKitWave(
+                  color: Colors.white,
+                  size: 20.0,
+                )
+              : Icon(Icons.volume_off),
+          label: Text(toggling
+              ? 'Please Wait'
+              : isCouncil
+                  ? 'Mute Council'
+                  : isClub
+                      ? 'Mute Club'
+                      : 'Mute Entity'),
           onPressed: () async {
-            if (!_toggling) {
-              _toggling = true;
+            if (!toggling) {
+              // _toggling = true;
+              toggler();
               if (isCouncil) {
                 int councilId = data.id;
                 bool unsub = await confirmUnsubDialog(
@@ -309,7 +324,11 @@ class ClubCouncilAndEntityWidgets {
                       }
                       print("Error in toggleing: ${onError.toString()}");
                     });
-                    update();
+                  } else {
+                    scaffoldKey.currentState.showSnackBar(SnackBar(
+                      content: Text('Already Muted!'),
+                      duration: Duration(seconds: 3),
+                    ));
                   }
                 }
               } else {
@@ -370,26 +389,38 @@ class ClubCouncilAndEntityWidgets {
                       }
                       print("Error in toggleing: ${onError.toString()}");
                     });
+                  } else {
+                    scaffoldKey.currentState.showSnackBar(SnackBar(
+                      content: Text('Already Muted!'),
+                      duration: Duration(seconds: 3),
+                    ));
                   }
-                  update();
                 }
               }
-              _toggling = false;
+              toggler();
+              update();
             } else {
               print("Not now");
             }
           },
         ),
         ElevatedButton.icon(
-          icon: Icon(Icons.volume_up),
-          label: Text(isCouncil
-              ? 'Unmute Council'
-              : isClub
-                  ? 'Unmute Club'
-                  : 'Unmute Entity'),
+          icon: toggling
+              ? SpinKitWave(
+                  color: Colors.white,
+                  size: 20.0,
+                )
+              : Icon(Icons.volume_up),
+          label: Text(toggling
+              ? 'Please Wait'
+              : isCouncil
+                  ? 'Unmute Council'
+                  : isClub
+                      ? 'Unmute Club'
+                      : 'Unmute Entity'),
           onPressed: () async {
-            if (!_toggling) {
-              _toggling = true;
+            if (!toggling) {
+              toggler();
               if (isCouncil) {
                 scaffoldKey.currentState.removeCurrentSnackBar();
                 scaffoldKey.currentState.showSnackBar(SnackBar(
@@ -475,7 +506,11 @@ class ClubCouncilAndEntityWidgets {
                     }
                     print("Error in toggleing: ${onError.toString()}");
                   });
-                  update();
+                } else {
+                  scaffoldKey.currentState.showSnackBar(SnackBar(
+                    content: Text('Already Unmuted!'),
+                    duration: Duration(seconds: 3),
+                  ));
                 }
               } else {
                 if (!data.is_subscribed) {
@@ -526,10 +561,15 @@ class ClubCouncilAndEntityWidgets {
                     }
                     print("Error in toggleing: ${onError.toString()}");
                   });
-                  update();
+                } else {
+                  scaffoldKey.currentState.showSnackBar(SnackBar(
+                    content: Text('Already Unuted!'),
+                    duration: Duration(seconds: 3),
+                  ));
                 }
               }
-              _toggling = false;
+              toggler();
+              update();
             } else {
               print("Not Now");
             }

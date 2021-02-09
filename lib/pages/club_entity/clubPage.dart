@@ -97,6 +97,11 @@ class _ClubPageState extends State<ClubPage>
     setState(() {});
   }
 
+  void _toggleToggle() {
+    _toggling = !_toggling;
+    setState(() {});
+  }
+
   void toggleSubscription() async {
     if (!this.mounted) {
       return;
@@ -225,6 +230,8 @@ class _ClubPageState extends State<ClubPage>
                 clubDetail: clubMap,
                 club: club,
                 update: _update,
+                toggler: _toggleToggle,
+                toggling: _toggling,
                 scaffoldKey: _scaffoldKey,
               ),
               parallaxEnabled: true,

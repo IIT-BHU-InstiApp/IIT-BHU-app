@@ -92,6 +92,11 @@ class _EntityPageState extends State<EntityPage>
     setState(() {});
   }
 
+  void _toggleToggle() {
+    _toggling = !_toggling;
+    setState(() {});
+  }
+
   void _reload() async {
     await _fetchEntityDataByID(refresh: true);
   }
@@ -223,6 +228,8 @@ class _EntityPageState extends State<EntityPage>
                     entityDetail: entityMap,
                     entity: entity,
                     update: _update,
+                    toggler: _toggleToggle,
+                    toggling: _toggling,
                     scaffoldKey: _scaffoldKey,
                   ),
                   parallaxEnabled: true,

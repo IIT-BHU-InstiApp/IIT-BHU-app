@@ -18,6 +18,7 @@ class CouncilPage extends StatefulWidget {
 class _CouncilPageState extends State<CouncilPage> {
   BuiltCouncilPost councilData;
   File _councilLargeLogoFile;
+  bool _toggling = false;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
@@ -71,6 +72,15 @@ class _CouncilPageState extends State<CouncilPage> {
     }
   }
 
+  void _update() {
+    setState(() {});
+  }
+
+  void _toggleToggle() {
+    _toggling = !_toggling;
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     final councilCustomWidgets =
@@ -93,6 +103,9 @@ class _CouncilPageState extends State<CouncilPage> {
                   _councilLargeLogoFile,
                   isCouncil: true,
                   councilDetail: councilData,
+                  update: _update,
+                  toggler: _toggleToggle,
+                  toggling: _toggling,
                   scaffoldKey: _scaffoldKey,
                 ),
                 controller: _pc,
