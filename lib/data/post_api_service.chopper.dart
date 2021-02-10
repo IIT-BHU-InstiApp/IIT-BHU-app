@@ -169,6 +169,20 @@ class _$PostApiService extends PostApiService {
     return client.send<BuiltCouncilPost, BuiltCouncilPost>($request);
   }
 
+  Future<Response> councilSubscribe(int id, String token) {
+    final $url = '/councils/${id}/subscribe/';
+    final $headers = {'Authorization': token};
+    final $request = Request('GET', $url, client.baseUrl, headers: $headers);
+    return client.send<dynamic, dynamic>($request);
+  }
+
+  Future<Response> councilUnsubscribe(int id, String token) {
+    final $url = '/councils/${id}/unsubscribe/';
+    final $headers = {'Authorization': token};
+    final $request = Request('GET', $url, client.baseUrl, headers: $headers);
+    return client.send<dynamic, dynamic>($request);
+  }
+
   Future<Response> updateCouncilByPut(
       int id, String token, BuiltCouncilPost body) {
     final $url = '/councils/${id}/';

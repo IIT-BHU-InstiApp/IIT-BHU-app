@@ -28,6 +28,7 @@ class _EntityPageState extends State<EntityPage>
   bool _toggling = false;
   TabController _tabController;
   File _entityLargeLogoFile;
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -84,6 +85,16 @@ class _EntityPageState extends State<EntityPage>
   @override
   void dispose() {
     super.dispose();
+  }
+
+  void _update() {
+    _fetchEntityDataByID();
+    setState(() {});
+  }
+
+  void _toggleToggle() {
+    _toggling = !_toggling;
+    setState(() {});
   }
 
   void _reload() async {
@@ -175,43 +186,52 @@ class _EntityPageState extends State<EntityPage>
         child: WillPopScope(
           onWillPop: _willPopCallback,
           child: Scaffold(
+            key: _scaffoldKey,
             resizeToAvoidBottomInset: false,
             resizeToAvoidBottomPadding: false,
             backgroundColor: ColorConstants.backgroundThemeColor,
-            floatingActionButton: AppConstants.isGuest
-                ? null
-                : FloatingActionButton.extended(
-                    backgroundColor: Colors.white,
-                    onPressed: () {
-                      if (this._toggling == false) {
-                        toggleSubscription();
-                      }
-                    },
-                    icon: this._toggling || entityMap == null
-                        ? CircularProgressIndicator()
-                        : Icon(
-                            Icons.subscriptions,
-                            color: entityMap.is_subscribed
-                                ? Colors.red
-                                : Colors.black26,
-                          ),
-                    label: Text(
-                      entityMap != null && entityMap.is_subscribed
-                          ? 'Subscribed'
-                          : 'Subscribe',
-                      style: TextStyle(
-                          fontSize: 16,
-                          color: entityMap != null && entityMap.is_subscribed
-                              ? Colors.red
-                              : Colors.black26),
-                    ),
-                  ),
+            // floatingActionButton: AppConstants.isGuest
+            //     ? null
+            //     : FloatingActionButton.extended(
+            //         backgroundColor: Colors.white,
+            //         onPressed: () {
+            //           if (this._toggling == false) {
+            //             toggleSubscription();
+            //           }
+            //         },
+            //         icon: this._toggling || entityMap == null
+            //             ? CircularProgressIndicator()
+            //             : Icon(
+            //                 Icons.subscriptions,
+            //                 color: entityMap.is_subscribed
+            //                     ? Colors.red
+            //                     : Colors.black26,
+            //               ),
+            //         label: Text(
+            //           entityMap != null && entityMap.is_subscribed
+            //               ? 'Subscribed'
+            //               : 'Subscribe',
+            //           style: TextStyle(
+            //               fontSize: 16,
+            //               color: entityMap != null && entityMap.is_subscribed
+            //                   ? Colors.red
+            //                   : Colors.black26),
+            //         ),
+            //       ),
             body: RefreshIndicator(
                 onRefresh: () async => _reload(),
                 child: SlidingUpPanel(
                   body: ClubCouncilAndEntityWidgets.getPanelBackground(
-                      context, _entityLargeLogoFile,
-                      isEntity: true, entityDetail: entityMap, entity: entity),
+                    context,
+                    _entityLargeLogoFile,
+                    isEntity: true,
+                    entityDetail: entityMap,
+                    entity: entity,
+                    update: _update,
+                    toggler: _toggleToggle,
+                    toggling: _toggling,
+                    scaffoldKey: _scaffoldKey,
+                  ),
                   parallaxEnabled: true,
                   controller: _pc,
                   borderRadius: radius,

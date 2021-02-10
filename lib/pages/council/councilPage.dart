@@ -18,6 +18,8 @@ class CouncilPage extends StatefulWidget {
 class _CouncilPageState extends State<CouncilPage> {
   BuiltCouncilPost councilData;
   File _councilLargeLogoFile;
+  bool _toggling = false;
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -70,6 +72,15 @@ class _CouncilPageState extends State<CouncilPage> {
     }
   }
 
+  void _update() {
+    setState(() {});
+  }
+
+  void _toggleToggle() {
+    _toggling = !_toggling;
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     final councilCustomWidgets =
@@ -79,6 +90,7 @@ class _CouncilPageState extends State<CouncilPage> {
         child: WillPopScope(
           onWillPop: _willPopCallback,
           child: Scaffold(
+            key: _scaffoldKey,
             resizeToAvoidBottomInset: false,
             resizeToAvoidBottomPadding: false,
             backgroundColor: ColorConstants.backgroundThemeColor,
@@ -87,8 +99,15 @@ class _CouncilPageState extends State<CouncilPage> {
               child: SlidingUpPanel(
                 parallaxEnabled: true,
                 body: ClubCouncilAndEntityWidgets.getPanelBackground(
-                    context, _councilLargeLogoFile,
-                    isCouncil: true, councilDetail: councilData),
+                  context,
+                  _councilLargeLogoFile,
+                  isCouncil: true,
+                  councilDetail: councilData,
+                  update: _update,
+                  toggler: _toggleToggle,
+                  toggling: _toggling,
+                  scaffoldKey: _scaffoldKey,
+                ),
                 controller: _pc,
                 borderRadius: radius,
                 collapsed: Container(

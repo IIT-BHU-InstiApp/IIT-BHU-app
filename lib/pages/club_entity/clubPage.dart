@@ -25,6 +25,7 @@ class _ClubPageState extends State<ClubPage>
   BuiltAllWorkshopsPost clubWorkshops;
   bool _toggling = false;
   TabController _tabController;
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   File _clubLargeLogoFile;
 
@@ -89,6 +90,16 @@ class _ClubPageState extends State<ClubPage>
   @override
   void dispose() {
     super.dispose();
+  }
+
+  void _update() {
+    _fetchClubDataById();
+    setState(() {});
+  }
+
+  void _toggleToggle() {
+    _toggling = !_toggling;
+    setState(() {});
   }
 
   void toggleSubscription() async {
@@ -177,43 +188,52 @@ class _ClubPageState extends State<ClubPage>
       child: WillPopScope(
         onWillPop: _willPopCallback,
         child: Scaffold(
+          key: _scaffoldKey,
           resizeToAvoidBottomInset: false,
           resizeToAvoidBottomPadding: false,
           backgroundColor: ColorConstants.backgroundThemeColor,
-          floatingActionButton: AppConstants.isGuest
-              ? null
-              : FloatingActionButton.extended(
-                  backgroundColor: Colors.white,
-                  onPressed: () {
-                    if (this._toggling == false) {
-                      toggleSubscription();
-                    }
-                  },
-                  icon: this._toggling || clubMap == null
-                      ? CircularProgressIndicator()
-                      : Icon(
-                          Icons.subscriptions,
-                          color: clubMap.is_subscribed
-                              ? Colors.red
-                              : Colors.black26,
-                        ),
-                  label: Text(
-                    clubMap != null && clubMap.is_subscribed
-                        ? 'Subscribed'
-                        : 'Subscribe',
-                    style: TextStyle(
-                        fontSize: 16,
-                        color: clubMap != null && clubMap.is_subscribed
-                            ? Colors.red
-                            : Colors.black26),
-                  ),
-                ),
+          // floatingActionButton: AppConstants.isGuest
+          //     ? null
+          //     : FloatingActionButton.extended(
+          //         backgroundColor: Colors.white,
+          //         onPressed: () {
+          //           if (this._toggling == false) {
+          //             toggleSubscription();
+          //           }
+          //         },
+          //         icon: this._toggling || clubMap == null
+          //             ? CircularProgressIndicator()
+          //             : Icon(
+          //                 Icons.subscriptions,
+          //                 color: clubMap.is_subscribed
+          //                     ? Colors.red
+          //                     : Colors.black26,
+          //               ),
+          //         label: Text(
+          //           clubMap != null && clubMap.is_subscribed
+          //               ? 'Subscribed'
+          //               : 'Subscribe',
+          //           style: TextStyle(
+          //               fontSize: 16,
+          //               color: clubMap != null && clubMap.is_subscribed
+          //                   ? Colors.red
+          //                   : Colors.black26),
+          //         ),
+          //       ),
           body: RefreshIndicator(
             onRefresh: () async => _reload(),
             child: SlidingUpPanel(
               body: ClubCouncilAndEntityWidgets.getPanelBackground(
-                  context, _clubLargeLogoFile,
-                  isClub: true, clubDetail: clubMap, club: club),
+                context,
+                _clubLargeLogoFile,
+                isClub: true,
+                clubDetail: clubMap,
+                club: club,
+                update: _update,
+                toggler: _toggleToggle,
+                toggling: _toggling,
+                scaffoldKey: _scaffoldKey,
+              ),
               parallaxEnabled: true,
               controller: _pc,
               borderRadius: radius,
