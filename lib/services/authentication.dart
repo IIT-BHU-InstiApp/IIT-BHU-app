@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:iit_app/data/internet_connection_interceptor.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
 
@@ -75,5 +74,6 @@ Future<void> signOutGoogle() async {
   }
   await FirebaseAuth.instance.signOut();
   AppConstants.djangoToken = null;
+  AppConstants.unsubscribeFromAllClubs();
   print("User Sign Out");
 }

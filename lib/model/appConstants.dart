@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:chopper/chopper.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:iit_app/data/internet_connection_interceptor.dart';
 import 'package:iit_app/data/post_api_service.dart';
@@ -43,7 +43,45 @@ class AppConstants {
 
   static String djangoToken;
 
-  static BuiltProfilePost currentUser;
+  static BuiltProfilePost _user;
+
+  static BuiltProfilePost get currentUser => _user;
+
+  static set currentUser(BuiltProfilePost user) {
+    _user = user;
+    subscribeAll();
+  }
+
+  static subscribeAll() async {
+    if (_user == null) return;
+    for (var club in _user.club_subscriptions) {
+      try {
+        await FirebaseMessaging.instance.subscribeToTopic('C_${club.id}');
+      } catch (e) {}
+    }
+
+    for (var entity in _user.entity_subscriptions) {
+      try {
+        await FirebaseMessaging.instance.subscribeToTopic('E_${entity.id}');
+      } catch (e) {}
+    }
+  }
+
+  static unsubscribeAll() async {
+    if (_user == null) return;
+    for (var club in _user.club_subscriptions) {
+      try {
+        await FirebaseMessaging.instance.unsubscribeFromTopic('C_${club.id}');
+      } catch (e) {}
+    }
+
+    for (var entity in _user.entity_subscriptions) {
+      try {
+        await FirebaseMessaging.instance.unsubscribeFromTopic('E_${entity.id}');
+      } catch (e) {}
+    }
+  }
+
   static PostApiService service;
 
   static BuiltList<BuiltWorkshopSummaryPost> workshopFromDatabase;
