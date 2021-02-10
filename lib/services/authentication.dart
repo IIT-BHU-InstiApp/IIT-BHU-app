@@ -74,6 +74,6 @@ Future<void> signOutGoogle() async {
   }
   await FirebaseAuth.instance.signOut();
   AppConstants.djangoToken = null;
-  AppConstants.unsubscribeFromAllClubs();
+  AppConstants.unsubscribeAll();
   print("User Sign Out");
 }
