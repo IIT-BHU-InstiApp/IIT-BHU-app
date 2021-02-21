@@ -30,6 +30,9 @@
 /build/
 pubspec.lock
 
+android/app/*.jks
+android/app/google-services.json
+
 # Android related
 **/android/**/gradle-wrapper.jar
 **/android/.gradle

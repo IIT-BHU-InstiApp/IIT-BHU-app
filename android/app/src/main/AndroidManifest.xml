@@ -1,64 +1,40 @@
-<manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.iitbhu.litehai">
-    <!-- io.flutter.app.FlutterApplication is an android.app.Application that
-         calls FlutterMain.startInitialization(this); in its onCreate method.
-         In most cases you can leave this as-is, but you if you want to provide
-         additional functionality it is fine to subclass or reimplement
-         FlutterApplication and put your custom class here. -->
-
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-
-    <application
-        android:name="io.flutter.app.FlutterApplication"
-        android:label="Lite Hai"
-        android:icon="@mipmap/ic_launcher"
-        android:requestLegacyExternalStorage="true"
-        >
-        <!-- Add the following entry, with your API key -->
-        <meta-data android:name="com.google.android.geo.API_KEY"
- android:value="AIzaSyCXlRxfbr9Y368nLy8o59r0_XZmHdK5-2w"/>
-        <!--  -->
-        <activity
-            android:name="io.flutter.embedding.android.FlutterActivity"
-            android:launchMode="singleTop"
-            android:theme="@style/LaunchTheme"
-            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
-            android:hardwareAccelerated="true"
-            android:windowSoftInputMode="adjustResize">
-            <!-- This keeps the window background of the activity showing
-                 until Flutter renders its first frame. It can be removed if
-                 there is no splash screen (such as the default splash screen
-                 defined in @style/LaunchTheme). -->
-            <meta-data
-                android:name="io.flutter.embedding.android.SplashScreenDrawable"
-                android:resource="@drawable/launch_background" />
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
-            <intent-filter>
-            <action android:name="android.intent.action.VIEW" />
-
-            <category android:name="android.intent.category.DEFAULT" />
-            <category android:name="android.intent.category.BROWSABLE" />
-
-            <data
-                android:host="litehai.page.link"
-                android:scheme="https" />
-        </intent-filter>
-        </activity>
-        <meta-data
-            android:name="flutterEmbedding"
-            android:value="2" />
-        <meta-data
-            android:name="com.google.firebase.messaging.default_notification_channel_id"
-            android:value="high_importance_channel" />
-        
-    </application>
-    
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.iitbhu.litehai">
+	<!--
+	io.flutter.app.FlutterApplication is an android.app.Application that
+	calls FlutterMain.startInitialization(this); in its onCreate method.
+	In most cases you can leave this as-is, but you if you want to provide
+	additional functionality it is fine to subclass or reimplement
+	FlutterApplication and put your custom class here.
+	-->
+	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+	<application android:name="io.flutter.app.FlutterApplication" android:label="Lite Hai" android:icon="@mipmap/ic_launcher" android:requestLegacyExternalStorage="true">
+		<!-- Add the following entry, with your API key -->
+		<meta-data android:name="com.google.android.geo.API_KEY" android:value="${System.env.GEO_API_KEY}" />
+		<!--  -->
+		<activity android:name="io.flutter.embedding.android.FlutterActivity" android:launchMode="singleTop" android:theme="@style/LaunchTheme" android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode" android:hardwareAccelerated="true" android:windowSoftInputMode="adjustResize">
+			<!--
+			This keeps the window background of the activity showing
+			until Flutter renders its first frame. It can be removed if
+			there is no splash screen (such as the default splash screen
+			defined in @style/LaunchTheme).
+			-->
+			<meta-data android:name="io.flutter.embedding.android.SplashScreenDrawable" android:resource="@drawable/launch_background" />
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<category android:name="android.intent.category.BROWSABLE" />
+				<data android:host="litehai.page.link" android:scheme="https" />
+			</intent-filter>
+		</activity>
+		<meta-data android:name="flutterEmbedding" android:value="2" />
+		<meta-data android:name="com.google.firebase.messaging.default_notification_channel_id" android:value="high_importance_channel" />
+	</application>
 </manifest>
