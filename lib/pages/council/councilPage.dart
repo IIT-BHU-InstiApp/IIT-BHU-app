@@ -92,7 +92,6 @@ class _CouncilPageState extends State<CouncilPage> {
           child: Scaffold(
             key: _scaffoldKey,
             resizeToAvoidBottomInset: false,
-            resizeToAvoidBottomPadding: false,
             backgroundColor: ColorConstants.backgroundThemeColor,
             body: RefreshIndicator(
               onRefresh: () async => _reload(),

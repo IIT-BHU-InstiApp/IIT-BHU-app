@@ -229,7 +229,6 @@ class WorkshopCreater {
         .catchError((onError) {
       if (onError is InternetConnectionException) {
         AppConstants.internetErrorFlushBar.showFlushbar(context);
-        return;
       }
       print('Error editing contacts in edited workshop: ${onError.toString()}');
     });
@@ -244,7 +243,6 @@ class WorkshopCreater {
         .catchError((onError) {
       if (onError is InternetConnectionException) {
         AppConstants.internetErrorFlushBar.showFlushbar(context);
-        return;
       }
       print('Error editing tags in edited workshop: ${onError.toString()}');
     });

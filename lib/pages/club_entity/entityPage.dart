@@ -188,7 +188,6 @@ class _EntityPageState extends State<EntityPage>
           child: Scaffold(
             key: _scaffoldKey,
             resizeToAvoidBottomInset: false,
-            resizeToAvoidBottomPadding: false,
             backgroundColor: ColorConstants.backgroundThemeColor,
             // floatingActionButton: AppConstants.isGuest
             //     ? null

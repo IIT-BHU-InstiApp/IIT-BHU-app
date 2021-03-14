@@ -192,7 +192,6 @@ class _ClubPageState extends State<ClubPage>
         child: Scaffold(
           key: _scaffoldKey,
           resizeToAvoidBottomInset: false,
-          resizeToAvoidBottomPadding: false,
           backgroundColor: ColorConstants.backgroundThemeColor,
           // floatingActionButton: AppConstants.isGuest
           //     ? null
